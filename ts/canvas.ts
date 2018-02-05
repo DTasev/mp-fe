@@ -18,9 +18,9 @@ export class Canvas {
         // this.canvas.addEventListener('touchstart', this.events.touchMove, false);
         // this.canvas.addEventListener('touchend', this.events.mouseUp, false);
         // this.canvas.addEventListener('touchmove', this.events.touchMove, false);
-        this.canvas.addEventListener('pointerdown', this.events.touchMove, false);
+        this.canvas.addEventListener('pointerdown', this.events.mouseDown, false);
         this.canvas.addEventListener('pointerup', this.events.mouseUp, false);
-        this.canvas.addEventListener('pointermove', this.events.touchMove, false);
+        this.canvas.addEventListener('pointermove', this.events.mouseMove, false);
     }
 
     setDOMResolution(width: number, height: number): void {
