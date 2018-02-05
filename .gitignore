@@ -1,0 +1,8 @@
+bootstrap-4.0.0-dist*
+pin_icon.png
+pin_icon.xcf
+pinned_icon.png
+node_modules/
+notes/
+build/
+npm-debug.log

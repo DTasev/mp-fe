@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+- "8.9.4"
+before_install:
+- cd $TRAVIS_BUILD_DIR
+# Add ts-node compiler options, so that test runs. Locally it is in package.json
+- export TS_NODE_COMPILER_OPTIONS={\"module\":\"commonjs\"}
+script:
+- npm run test
