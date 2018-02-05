@@ -9,8 +9,6 @@
 }
 
 .game-canvas{
-    width:1360px;
-    height:768px;
     /* DEBUG only */
     border:1px solid; 
 }

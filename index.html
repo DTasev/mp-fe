@@ -88,17 +88,19 @@
             <span class="w3-button w3-xxlarge w3-hover-text-grey" onclick="Controls.w3_open()">
                 <i class="fas fa-bars"></i>
             </span>
-            <div class="w3-container">
+            <!-- <div class="w3-container">
                 <h1>
                     <b>Stuff</b>
                     <b id="display-repo-name"></b>
                     <span hidden id="loading-icon"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
                 </h1>
-            </div>
+            </div> -->
         </header>
         <!-- Issues list, built dynamically from javascript -->
         <div class="w3-container canvas-holder">
-            <canvas id="tanks-canvas" class="game-canvas"></canvas>
+            <div class="w3-row">
+                <canvas id="tanks-canvas" class="game-canvas"></canvas>
+            </div>
         </div>
         <!-- End page content -->
     </div>
