@@ -55,15 +55,32 @@ export class Draw {
     }
 
     updateMousePosition(e: MouseEvent) {
-        if (!e)
+        if (!e) {
             var e = <MouseEvent>event;
+        }
 
         if (e.offsetX) {
             this.mouse.X = e.offsetX;
             this.mouse.Y = e.offsetY;
         }
-        console.log("Mouse pos", this.mouse.X, " ", this.mouse.Y);
     }
+
+    updateTouchPosition(e: TouchEvent) {
+        if (!e) {
+            var e = <TouchEvent>event;
+        }
+        if (e.touches) {
+            // Only deal with one finger
+            if (e.touches.length == 1) {
+                // Get the information for finger #1
+                const touch: Touch = e.touches[0];
+                // the 'target' will be the canvas element
+                this.mouse.X = touch.pageX - (<HTMLCanvasElement>touch.target).offsetLeft;
+                this.mouse.Y = touch.pageY - (<HTMLCanvasElement>touch.target).offsetTop;
+            }
+        }
+    }
+}
 }
 
 class CartesianCoords {

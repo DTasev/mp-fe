@@ -39,7 +39,15 @@ export default class GameEvents {
         }
     }
 
-    touchStart = (e: MouseEvent) => { }
-    touchEnd = (e: MouseEvent) => { }
-    touchMove = (e: MouseEvent) => { }
+    touchEnd = this.mouseUp;
+    touchMove = (e: TouchEvent) => {
+        // Update the touch co-ordinates
+        this.draw.updateTouchPosition(e);
+
+        // During a touchmove event, unlike a mousemove event, we don't need to check if the touch is engaged, since there will always be contact with the screen by definition.
+        this.draw.line(this.context);
+
+        // Prevent a scrolling action as a result of this touchmove triggering.
+        event.preventDefault();
+    }
 }
