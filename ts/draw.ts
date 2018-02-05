@@ -1,13 +1,55 @@
-export class Draw {
-    public state: DrawState;
-    public mouse: CartesianCoords;
-    public last: CartesianCoords;
+import { CartesianCoords } from "./cartesian-coords";
 
+class Color {
+    red: number = 0;
+    green: number = 0;
+    blue: number = 0;
+    alpha: number = 1.0;
+
+    toRGB() {
+        return "rgb(" + this.red + "," + this.green + "," + this.blue + ")";
+    }
+    toRGBA() {
+        return "rgba(" + this.red + "," + this.green + "," + this.blue + "," + this.alpha + ")";
+    }
+
+    set(red: number, green: number, blue: number): void {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+    }
+    goRed() {
+        this.set(255, 0, 0);
+    }
+    goGreen() {
+        this.set(0, 255, 0);
+    }
+    goBlue() {
+        this.set(0, 0, 255);
+    }
+    next() {
+        if (this.red != 0) {
+            this.goGreen();
+        } else if (this.green != 0) {
+            this.goBlue();
+        } else if (this.blue != 0) {
+            this.goRed();
+        } else {
+            this.goRed();
+        }
+    }
+}
+export class Draw {
+    state: DrawState;
+    mouse: CartesianCoords;
+    last: CartesianCoords;
     width: number = 1;
+    color: Color;
 
     constructor() {
         this.mouse = new CartesianCoords();
         this.last = new CartesianCoords();
+        this.color = new Color();
     }
 
     /**
@@ -17,22 +59,19 @@ export class Draw {
      * @param new_y The new Y position, to which the line will be
      * @param width Width of the stroke
      */
-    line(context) {
+    line(context: CanvasRenderingContext2D) {
         // If lastX is not set, set lastX and lastY to the current position 
         if (this.last.X == -1) {
             this.last.X = this.mouse.X;
             this.last.Y = this.mouse.Y;
         }
 
-        // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
-        const r = 0, g = 0, b = 0, a = 255;
-
         // Select a fill style
-        context.strokeStyle = "rgba(" + r + "," + g + "," + b + "," + (a / 255) + ")";
+        context.strokeStyle = this.color.toRGBA();
 
         // Set the line "cap" style to round, so lines at different angles can join into each other
         context.lineCap = "round";
-        //context.lineJoin = "round";
+        context.lineJoin = "round";
 
         // Draw a filled line
         context.beginPath();
@@ -80,12 +119,6 @@ export class Draw {
             }
         }
     }
-}
-}
-
-class CartesianCoords {
-    public X: number = -1;
-    public Y: number = -1;
 }
 
 export enum DrawState {
