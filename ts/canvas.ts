@@ -15,9 +15,12 @@ export class Canvas {
         // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
         window.addEventListener('mouseup', this.events.mouseUp, false);
 
-        this.canvas.addEventListener('touchstart', this.events.touchMove, false);
-        this.canvas.addEventListener('touchend', this.events.mouseUp, false);
-        this.canvas.addEventListener('touchmove', this.events.touchMove, false);
+        // this.canvas.addEventListener('touchstart', this.events.touchMove, false);
+        // this.canvas.addEventListener('touchend', this.events.mouseUp, false);
+        // this.canvas.addEventListener('touchmove', this.events.touchMove, false);
+        this.canvas.addEventListener('pointerdown', this.events.touchMove, false);
+        this.canvas.addEventListener('pointerup', this.events.mouseUp, false);
+        this.canvas.addEventListener('pointermove', this.events.touchMove, false);
     }
 
     setDOMResolution(width: number, height: number): void {
