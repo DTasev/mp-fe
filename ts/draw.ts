@@ -75,13 +75,11 @@ export class Draw {
         }
     }
     /**
-     * 
+     * Draw a line between the last known position of the mouse, and the current position.
      * @param context The canvas context that we're drawing on
-     * @param new_x The new X position, to which the line will be
-     * @param new_y The new Y position, to which the line will be
-     * @param width Width of the stroke
+     * @param update_last Whether to update the last position of the mouse
      */
-    line(context: CanvasRenderingContext2D) {
+    line(context: CanvasRenderingContext2D, update_last: boolean = true) {
         // If lastX is not set, set lastX and lastY to the current position 
         if (this.last.X == -1) {
             this.last.X = this.mouse.X;
@@ -110,9 +108,11 @@ export class Draw {
 
         context.closePath();
 
-        // Update the last position to reference the current position
-        this.last.X = this.mouse.X;
-        this.last.Y = this.mouse.Y;
+        if (update_last) {
+            // Update the last position to reference the current position
+            this.last.X = this.mouse.X;
+            this.last.Y = this.mouse.Y;
+        }
     }
 
     updateMousePosition(e: MouseEvent) {

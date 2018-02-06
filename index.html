@@ -82,19 +82,22 @@
 
         <!-- Header -->
         <header id="portfolio">
-            <a href="#">
+            <!-- <a href="#">
                 <img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity">
-            </a>
-            <span class="w3-button w3-xxlarge w3-hover-text-grey" onclick="Controls.w3_open()">
-                <i class="fas fa-bars"></i>
-            </span>
-            <!-- <div class="w3-container">
-                <h1>
-                    <b>Stuff</b>
-                    <b id="display-repo-name"></b>
-                    <span hidden id="loading-icon"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-                </h1>
-            </div> -->
+            </a> -->
+            <div class="w3-row">
+                <div class="w3-col s2 m2 l2">
+                    <span class="w3-button w3-xxlarge w3-hover-text-grey" onclick="Controls.w3_open()">
+                        <i class="fas fa-bars"></i>
+                    </span>
+                </div>
+                <div class="w3-col s10 m10 l10">
+                    <h1>
+                        <b id="user-warning"></b>
+                        <span hidden id="loading-icon"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+                    </h1>
+                </div>
+            </div>
         </header>
         <!-- Issues list, built dynamically from javascript -->
         <div class="w3-container canvas-holder">

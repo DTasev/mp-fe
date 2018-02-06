@@ -37,9 +37,8 @@ export class PlacingEvent implements TanksGameEvent {
 
     private addTank = (e) => {
         this.draw.updateMousePosition(e);
-        const tank_width = 12;
-        this.player.tanks.push(new Tank(this.draw.mouse.X, this.draw.mouse.Y, tank_width));
-        this.draw.dot(this.context, this.draw.mouse, tank_width);
+        this.player.tanks.push(new Tank(this.draw.mouse.X, this.draw.mouse.Y, Tank.DEFAULT_WIDTH));
+        this.draw.dot(this.context, this.draw.mouse, Tank.DEFAULT_WIDTH);
         if (!this.turn.action()) {
             this.controller.changeGameState(GameState.TANK_MOVING);
         }

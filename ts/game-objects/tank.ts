@@ -2,6 +2,7 @@ import { Player } from "./player";
 import { CartesianCoords } from "../cartesian-coords";
 
 export class Tank {
+    static DEFAULT_WIDTH = 12;
     health: number;
     player: Player;
     position: CartesianCoords;

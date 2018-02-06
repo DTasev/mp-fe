@@ -5,7 +5,19 @@ import { ActionLimiter } from "../action-limiter";
 import { EventController } from "../event-controller";
 import { Player } from "../game-objects/player";
 import { TanksMath } from "../tanks-math";
+import { CartesianCoords } from "../cartesian-coords";
+import { Tank } from "../game-objects/tank";
 
+class ActiveTank {
+    id: number;
+    position: CartesianCoords;
+    valid_position: boolean = true;
+
+    constructor(id: number, position: CartesianCoords) {
+        this.id = id;
+        this.position = position;
+    }
+}
 enum MovingEventStates {
     // selecting which tank will be moved
     TANK_SELECTION,
@@ -20,6 +32,7 @@ export class MovingEvent implements TanksGameEvent {
     controller: EventController;
     player: Player;
     state: MovingEventStates;
+    active: ActiveTank;
 
     constructor(controller: EventController, context: CanvasRenderingContext2D, player: Player) {
         this.controller = controller;
@@ -58,49 +71,89 @@ export class MovingEvent implements TanksGameEvent {
                 this.highlightTank(e);
                 break;
             case MovingEventStates.TANK_MOVEMENT:
-                // TODO limit the start of the line to be the tank
-                // limit the lenght of the line to the maximum allowed movement
-                // after movement has been made, draw over the original tank
-                // and draw the tank in the new position
-                this.draw.state = DrawState.DRAWING;
-                this.draw.line(this.context);
+                this.moveTank(e);
                 break;
         }
     }
 
-    highlightTank(e: MouseEvent): any {
+    highlightTank(e: MouseEvent): void {
         this.draw.updateMousePosition(e);
 
-        for (const tank of this.player.tanks) {
+        // Check if the user has clicked any tank.
+        for (const [id, tank] of this.player.tanks.entries()) {
             if (TanksMath.point.collide_circle(this.draw.mouse, tank.position, tank.width)) {
                 this.draw.dot(this.context, tank.position, tank.width + 5, true, 5);
-                this.state = MovingEventStates.TANK_MOVEMENT;
+                this.active = new ActiveTank(id, tank.position);
                 // only highlight the first tank
                 break;
             }
         }
     }
 
+    moveTank(e: MouseEvent): void {
+        // limit the start of the line to be the tank
+        this.draw.last = new CartesianCoords(this.active.position.X, this.active.position.Y);
+        // limit the lenght of the line to the maximum allowed movement
+        // after movement has been made, draw over the original tank
+        // and draw the tank in the new position
+        this.draw.state = DrawState.DRAWING;
+        if (this.line.in(this.active.position, this.draw.mouse)) {
+            this.draw.line(this.context);
+        } else {
+            // show user warning that they are trying to move too far
+            document.getElementById("user-warning").innerHTML = "Trying to move too far!"
+        }
+    }
+
+
     mouseUp = (e: MouseEvent) => {
         this.draw.state = DrawState.STOPPED;
 
-        // Reset lastX and lastY to -1 to indicate that they are now invalid, since we have lifted the "pen"
-        this.draw.last.X = -1;
-        this.draw.last.Y = -1;
         this.line.reset();
 
-        // if we're out of actions, change the color
-        if (!this.turn.action()) {
-            this.draw.color.next();
-            this.turn.next();
+        switch (this.state) {
+            case MovingEventStates.TANK_SELECTION:
+                // Reset lastX and lastY to -1 to indicate that they are now invalid, since we have lifted the "pen"
+                this.draw.last.X = -1;
+                this.draw.last.Y = -1;
+                if (this.active) {
+                    this.state = MovingEventStates.TANK_MOVEMENT;
+                }
+                break;
+            case MovingEventStates.TANK_MOVEMENT:
+                // if (!this.turn.action()) {
+                //     this.draw.color.next();
+                //     this.turn.next();
+                //     console.log("DEBUG: Out of actions fort this turn");
+                // } else {
+                // }
+
+                this.state = MovingEventStates.TANK_SELECTION;
+                // only draw if the position is valid
+                if (this.active.valid_position) {
+                    // draw the dot for the new tank
+                    this.draw.dot(this.context, this.draw.mouse, Tank.DEFAULT_WIDTH);
+
+                    // update the position of the tank in the player array
+                    this.player.tanks[this.active.id].position = this.draw.mouse.copy();
+                }
+                // delete the reference to the active tank
+                this.active = null;
+                break;
         }
+        // should probably redraw canvas with all current tanks
     }
 
     mouseMove = (e: MouseEvent) => {
         this.draw.updateMousePosition(e);
         // Draw a dot if the mouse button is currently being pressed
-        if (this.draw.state == DrawState.DRAWING && this.line.add(this.draw.last, this.draw.mouse)) {
-            this.draw.line(this.context);
+        if (this.draw.state == DrawState.DRAWING) {
+            if (this.line.in(this.active.position, this.draw.mouse)) {
+                this.active.valid_position = true;
+                this.draw.line(this.context);
+            } else {
+                this.active.valid_position = false;
+            }
         }
     }
 

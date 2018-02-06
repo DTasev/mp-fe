@@ -20,14 +20,25 @@ export class LineLimiter {
     /**
      * Calculate distance of Cartesian coordinates, and increment the total length of the line.
      * 
-     * @param x X position of the start
-     * @param y Y position of the start
-     * @param x1 X position of the end
-     * @param y1 Y position of the end
+     * @param start Start coordinates
+     * @param end End coordinates
      * @returns true if the line is below the limit, false if the line is longer than the limit
      */
     add(start: CartesianCoords, end: CartesianCoords): boolean {
         this.current += TanksMath.point.dist2d(start, end);
         return this.current <= this.limit;
+    }
+
+    /**
+     * Check if the distance between the two points is greater than the limit.
+     * 
+     * @param start Start coordinates
+     * @param end End coordinates
+     * @returns true if the line is below the limit, false otherwise
+     */
+    in(start: CartesianCoords, end: CartesianCoords): boolean {
+        const distance = TanksMath.point.dist2d(start, end);
+        console.log("Distance between points: ", distance);
+        return distance <= this.limit;
     }
 }

@@ -5,4 +5,8 @@ export class CartesianCoords {
         this.X = x;
         this.Y = y;
     }
+
+    copy() {
+        return new CartesianCoords(this.X, this.Y);
+    }
 }
