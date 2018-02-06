@@ -27,6 +27,9 @@ class Color {
     goBlue() {
         this.set(0, 0, 255);
     }
+    goWhite() {
+        this.set(255, 255, 255);
+    }
     next() {
         if (this.red != 0) {
             this.goGreen();
@@ -43,15 +46,34 @@ export class Draw {
     state: DrawState;
     mouse: CartesianCoords;
     last: CartesianCoords;
-    width: number = 1;
+    width: number;
     color: Color;
 
-    constructor() {
+    constructor(width: number = 1) {
         this.mouse = new CartesianCoords();
         this.last = new CartesianCoords();
         this.color = new Color();
+        this.width = width;
     }
 
+    dot(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number, outline: boolean = false, outline_width: number = 1) {
+        // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
+        // Select a fill style
+        this.color.goRed();
+        context.fillStyle = this.color.toRGBA();
+
+        // Draw a filled circle
+        context.beginPath();
+        context.arc(coords.X, coords.Y, width, 0, Math.PI * 2, true);
+        context.closePath();
+        context.fill();
+        this.color.goGreen();
+        if (outline) {
+            context.lineWidth = outline_width;
+            context.strokeStyle = this.color.toRGBA();
+            context.stroke();
+        }
+    }
     /**
      * 
      * @param context The canvas context that we're drawing on

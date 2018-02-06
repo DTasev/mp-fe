@@ -1,4 +1,4 @@
-export class TurnLimiter {
+export class ActionLimiter {
     private num_actions: number;
     private turns: number;
     limit: number;

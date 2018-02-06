@@ -1,5 +1,5 @@
 import { CartesianCoords } from "./cartesian-coords";
-
+import { TanksMath } from "./tanks-math";
 export class LineLimiter {
     public limit: number;
     current: number;
@@ -27,10 +27,7 @@ export class LineLimiter {
      * @returns true if the line is below the limit, false if the line is longer than the limit
      */
     add(start: CartesianCoords, end: CartesianCoords): boolean {
-        const delta_x = end.X - start.X;
-        const delta_y = end.Y - start.Y;
-
-        this.current += Math.sqrt(Math.abs(delta_x * delta_x + delta_y * delta_y));
+        this.current += TanksMath.point.dist2d(start, end);
         return this.current <= this.limit;
     }
 }

@@ -4,6 +4,7 @@ import { MovingEvent } from "./game-events/tank-moving";
 import { PlacingEvent } from "./game-events/tank-placing";
 import { ShootingEvent } from "./game-events/tank-shooting";
 import { MenuEvent } from "./game-events/menu";
+import { Player } from './game-objects/player';
 
 export enum GameState {
     MENU,
@@ -23,11 +24,11 @@ export enum GameState {
  * For more details: https://github.com/Microsoft/TypeScript/wiki/'this'-in-TypeScript#red-flags-for-this
  */
 export class EventController {
-
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
     state: GameState;
     game_event: TanksGameEvent;
+    player: Player;
 
 
     constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
@@ -36,6 +37,7 @@ export class EventController {
 
         this.game_event = new MenuEvent(this, this.context);
         this.game_event.addEventListeners(this.canvas);
+        this.player = new Player();
     }
 
     changeGameState(new_state: GameState) {
@@ -49,12 +51,12 @@ export class EventController {
                 this.game_event.addEventListeners(this.canvas);
                 break;
             case GameState.TANK_PLACING:
-                this.game_event = new PlacingEvent(this, this.context);
+                this.game_event = new PlacingEvent(this, this.context, this.player);
                 this.game_event.addEventListeners(this.canvas);
                 break;
             case GameState.TANK_MOVING:
                 // save the function that can clear the events for this state
-                this.game_event = new MovingEvent(this, this.context);
+                this.game_event = new MovingEvent(this, this.context, this.player);
                 this.game_event.addEventListeners(this.canvas);
                 break;
             case GameState.TANK_SHOOTING:
