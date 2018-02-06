@@ -1,28 +1,39 @@
-import { Draw, DrawState } from './draw';
-import { LineLimiter } from "./line-limiter";
-import { TurnLimiter } from "./turn-limiter";
+import { TanksGameEvent } from "./event";
+import { Draw, DrawState } from "../draw";
+import { LineLimiter } from "../line-limiter";
+import { TurnLimiter } from "../turn-limiter";
 
-/**
- * Implementation for the actions that will be executed according to player actions.
- * 
- * Functions are wrapped to keep `this` context. This is the (e:MouseEvent) => {...} syntax.
- * 
- * In short, because the methods are added as event listeners (and are not called directly), the `this` reference starts pointing
- * towards the `window` object. The closure keeps the `this` to point towards the proper instance of the object.
- * 
- * For more details: https://github.com/Microsoft/TypeScript/wiki/'this'-in-TypeScript#red-flags-for-this
- */
-export default class GameEvents {
-    draw: Draw;
-    context: CanvasRenderingContext2D;
-    line: LineLimiter;
-    turn: TurnLimiter;
-
-    constructor(context) {
-        this.draw = new Draw();
+export class MovingEvent implements TanksGameEvent {
+    constructor(context: CanvasRenderingContext2D) {
         this.context = context;
+        this.draw = new Draw();
         this.line = new LineLimiter();
         this.turn = new TurnLimiter();
+    }
+    draw: Draw;
+    line: LineLimiter;
+    turn: TurnLimiter;
+    context: CanvasRenderingContext2D;
+
+    addEventListeners(canvas: HTMLCanvasElement) {
+        canvas.addEventListener('mousedown', this.mouseDown, false);
+        canvas.addEventListener('mousemove', this.mouseMove, false);
+        // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
+        window.addEventListener('mouseup', this.mouseUp, false);
+
+        canvas.addEventListener('touchstart', this.touchMove, false);
+        canvas.addEventListener('touchend', this.mouseUp, false);
+        canvas.addEventListener('touchmove', this.touchMove, false);
+    }
+    removeEventListeners(canvas: HTMLCanvasElement) {
+        canvas.removeEventListener('mousedown', this.mouseDown, false);
+        canvas.removeEventListener('mousemove', this.mouseMove, false);
+        // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
+        window.removeEventListener('mouseup', this.mouseUp, false);
+
+        canvas.removeEventListener('touchstart', this.touchMove, false);
+        canvas.removeEventListener('touchend', this.mouseUp, false);
+        canvas.removeEventListener('touchmove', this.touchMove, false);
     }
 
     mouseDown = (e: MouseEvent) => {
