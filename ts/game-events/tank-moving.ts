@@ -2,18 +2,22 @@ import { TanksGameEvent } from "./event";
 import { Draw, DrawState } from "../draw";
 import { LineLimiter } from "../line-limiter";
 import { TurnLimiter } from "../turn-limiter";
+import { EventController } from "../event-controller";
 
 export class MovingEvent implements TanksGameEvent {
-    constructor(context: CanvasRenderingContext2D) {
+    draw: Draw;
+    line: LineLimiter;
+    turn: TurnLimiter;
+    context: CanvasRenderingContext2D;
+    controller: EventController;
+
+    constructor(controller: EventController, context: CanvasRenderingContext2D) {
+        this.controller = controller;
         this.context = context;
         this.draw = new Draw();
         this.line = new LineLimiter();
         this.turn = new TurnLimiter();
     }
-    draw: Draw;
-    line: LineLimiter;
-    turn: TurnLimiter;
-    context: CanvasRenderingContext2D;
 
     addEventListeners(canvas: HTMLCanvasElement) {
         canvas.addEventListener('mousedown', this.mouseDown, false);

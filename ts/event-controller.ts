@@ -1,13 +1,17 @@
 import { Canvas } from './canvas';
 import { TanksGameEvent } from "./game-events/event";
 import { MovingEvent } from "./game-events/tank-moving";
+import { PlacingEvent } from "./game-events/tank-placing";
+import { ShootingEvent } from "./game-events/tank-shooting";
+import { MenuEvent } from "./game-events/menu";
 
-enum GameState {
+export enum GameState {
     MENU,
     TANK_PLACING,
     TANK_MOVING,
     TANK_SHOOTING
 }
+
 /**
  * Implementation for the actions that will be executed according to player actions.
  * 
@@ -30,56 +34,35 @@ export class EventController {
         this.canvas = canvas;
         this.context = context;
 
-        this.changeGameState(GameState.TANK_MOVING);
+        this.game_event = new MenuEvent(this, this.context);
+        this.game_event.addEventListeners(this.canvas);
     }
 
     changeGameState(new_state: GameState) {
         this.state = new_state;
         // clears the old event
-        // this.game_event.removeEventListeners(this.canvas);
+        this.game_event.removeEventListeners(this.canvas);
         switch (new_state) {
             case GameState.MENU:
                 // save the function that can clear the events for this state
-                throw new Error("Not implemented");
+                this.game_event = new MenuEvent(this, this.context);
+                this.game_event.addEventListeners(this.canvas);
                 break;
             case GameState.TANK_PLACING:
-                throw new Error("Not implemented");
+                this.game_event = new PlacingEvent(this, this.context);
+                this.game_event.addEventListeners(this.canvas);
                 break;
             case GameState.TANK_MOVING:
                 // save the function that can clear the events for this state
-                this.game_event = new MovingEvent(this.context);
+                this.game_event = new MovingEvent(this, this.context);
                 this.game_event.addEventListeners(this.canvas);
                 break;
             case GameState.TANK_SHOOTING:
-                // save the function that can clear the events for this state
-                throw new Error("Not implemented");
+                this.game_event = new ShootingEvent(this, this.context);
+                this.game_event.addEventListeners(this.canvas);
                 break;
             default:
                 throw new Error("The game should never be stateless, something has gone terribly wrong");
         }
-    }
-
-    addTankMovingEvents() {
-        throw new Error("Not implemented");
-    }
-    removeTankMovingEvents() {
-        throw new Error("Not implemented");
-    }
-
-    addTankShootingEvents() {
-        throw new Error("Not implemented");
-    }
-    removeTankShootingEvents() {
-        throw new Error("Not implemented");
-    }
-
-    /** 
-     * Mouse events for the menus 
-     */
-    addMenuEvents() {
-        throw new Error("Not implemented");
-    }
-    removeMenuEvents(): any {
-        throw new Error("Method not implemented.");
     }
 }

@@ -13,7 +13,6 @@ var ID_GAME_CANVAS = "tanks-canvas";
 function init() {
     let canvas = new Canvas(ID_GAME_CANVAS);
     canvas.setDOMResolution(window.innerWidth - 32, window.innerHeight * 0.9);
-    canvas.addGameEvents();
 }
 
 init(); 
