@@ -46,14 +46,12 @@ export class Draw {
     state: DrawState;
     mouse: CartesianCoords;
     last: CartesianCoords;
-    width: number;
     color: Color;
 
-    constructor(width: number = 1) {
+    constructor() {
         this.mouse = new CartesianCoords();
         this.last = new CartesianCoords();
         this.color = new Color();
-        this.width = width;
     }
 
     dot(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number, outline: boolean = false, outline_width: number = 1) {
@@ -79,7 +77,7 @@ export class Draw {
      * @param context The canvas context that we're drawing on
      * @param update_last Whether to update the last position of the mouse
      */
-    line(context: CanvasRenderingContext2D, update_last: boolean = true) {
+    line(context: CanvasRenderingContext2D, width: number, update_last: boolean = true) {
         // If lastX is not set, set lastX and lastY to the current position 
         if (this.last.X == -1) {
             this.last.X = this.mouse.X;
@@ -103,7 +101,7 @@ export class Draw {
         context.lineTo(this.mouse.X, this.mouse.Y);
 
         // Set the line thickness and draw the line
-        context.lineWidth = this.width;
+        context.lineWidth = width;
         context.stroke();
 
         context.closePath();

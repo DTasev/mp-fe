@@ -1,8 +1,9 @@
 import { Tank } from "./tank";
+import { IGameObject } from "./igame-object";
 
 export class Player {
-    tanks: Array<Tank>;
+    tanks: Array<IGameObject>;
     constructor() {
-        this.tanks = new Array<Tank>();
+        this.tanks = new Array<IGameObject>();
     };
 }

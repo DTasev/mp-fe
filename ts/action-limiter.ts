@@ -8,9 +8,9 @@ export class ActionLimiter {
         this.num_actions = 0;
         this.num_actions = 0;
     }
-    action(): boolean {
+    end(): boolean {
         this.num_actions += 1;
-        return this.num_actions < this.limit;
+        return this.num_actions >= this.limit;
     }
     next() {
         this.num_actions = 0;

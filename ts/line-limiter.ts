@@ -38,7 +38,6 @@ export class LineLimiter {
      */
     in(start: CartesianCoords, end: CartesianCoords): boolean {
         const distance = TanksMath.point.dist2d(start, end);
-        console.log("Distance between points: ", distance);
         return distance <= this.limit;
     }
 }

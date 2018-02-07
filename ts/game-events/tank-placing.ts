@@ -19,11 +19,10 @@ export class PlacingEvent implements TanksGameEvent {
      * @param player 
      */
     constructor(controller: EventController, context: CanvasRenderingContext2D, player: Player) {
-        const tank_width = 12;
         console.log("Initialising TANK PLACING");
         this.controller = controller;
         this.context = context;
-        this.draw = new Draw(tank_width);
+        this.draw = new Draw();
         this.turn = new ActionLimiter();
         this.player = player;
     }
@@ -37,9 +36,12 @@ export class PlacingEvent implements TanksGameEvent {
 
     private addTank = (e) => {
         this.draw.updateMousePosition(e);
-        this.player.tanks.push(new Tank(this.draw.mouse.X, this.draw.mouse.Y, Tank.DEFAULT_WIDTH));
-        this.draw.dot(this.context, this.draw.mouse, Tank.DEFAULT_WIDTH);
-        if (!this.turn.action()) {
+        const tank = new Tank(this.draw.mouse.X, this.draw.mouse.Y);
+        tank.player = this.player;
+        this.player.tanks.push(tank);
+        tank.draw(this.context, this.draw);
+        // if we've placed as many objects as allowed, then go to next state
+        if (this.turn.end()) {
             this.controller.changeGameState(GameState.TANK_MOVING);
         }
     }
