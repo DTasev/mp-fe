@@ -73,7 +73,7 @@ export class MovingEvent implements TanksGameEvent {
         // redraw canvas with all current tanks
         this.redraw(this.player.tanks);
 
-        // TODO if out of actions, then next state is TANK_SHOOTING
+        // To add: if out of actions, then next state is TANK_SHOOTING
         // come back to moving after selection
         this.controller.shared.next = GameState.TANK_MOVING;
         // go to tank selection state
