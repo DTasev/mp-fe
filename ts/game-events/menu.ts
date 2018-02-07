@@ -6,16 +6,12 @@ export class MenuEvent implements TanksGameEvent {
     controller: EventController;
 
     constructor(controller: EventController, context: CanvasRenderingContext2D) {
-        console.log("Initialising MENU EVENT");
         this.controller = controller;
         this.context = context;
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
-        canvas.addEventListener("mousedown", this.someFunc, false);
-    }
-    removeEventListeners(canvas: HTMLCanvasElement) {
-        canvas.removeEventListener("mousedown", this.someFunc, false);
+        canvas.onmousedown = this.someFunc;
     }
 
     private someFunc = () => {

@@ -17,10 +17,16 @@ export class Tank implements IGameObject {
     }
 
     draw(context: CanvasRenderingContext2D, draw: Draw): any {
-        draw.dot(context, this.position, Tank.DEFAULT_WIDTH);
+        draw.color.goBlack();
+        draw.circle(context, this.position, Tank.DEFAULT_WIDTH);
     }
+
     highlight(context: CanvasRenderingContext2D, draw: Draw): any {
+        draw.color.goRed();
         draw.dot(context, this.position, Tank.DEFAULT_WIDTH + 5, true, 5);
+        draw.color.goGreen();
+        draw.circle(context, this.position, Tank.DEFAULT_MOVEMENT_RANGE);
+        draw.color.goBlack();
     }
 
 }

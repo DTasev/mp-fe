@@ -18,6 +18,9 @@ class Color {
         this.green = green;
         this.blue = blue;
     }
+    goYellow(): any {
+        this.set(255, 255, 0);
+    }
     goRed() {
         this.set(255, 0, 0);
     }
@@ -29,6 +32,9 @@ class Color {
     }
     goWhite() {
         this.set(255, 255, 255);
+    }
+    goBlack() {
+        this.set(0, 0, 0);
     }
     next() {
         if (this.red != 0) {
@@ -57,17 +63,34 @@ export class Draw {
     dot(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number, outline: boolean = false, outline_width: number = 1) {
         // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
         // Select a fill style
-        this.color.goRed();
         context.fillStyle = this.color.toRGBA();
+        context.lineWidth = outline_width;
 
         // Draw a filled circle
         context.beginPath();
         context.arc(coords.X, coords.Y, width, 0, Math.PI * 2, true);
         context.closePath();
         context.fill();
-        this.color.goGreen();
+
         if (outline) {
-            context.lineWidth = outline_width;
+            context.strokeStyle = this.color.toRGBA();
+            context.stroke();
+        }
+    }
+
+    circle(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number, outline: boolean = false, outline_width: number = 1) {
+        // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
+        // Select a fill style
+        context.strokeStyle = this.color.toRGBA();
+        context.lineWidth = outline_width;
+
+        // Draw a filled circle
+        context.beginPath();
+        context.arc(coords.X, coords.Y, width, 0, Math.PI * 2, true);
+        context.closePath();
+        context.stroke();
+
+        if (outline) {
             context.strokeStyle = this.color.toRGBA();
             context.stroke();
         }

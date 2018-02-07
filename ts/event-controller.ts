@@ -3,15 +3,19 @@ import { TanksGameEvent } from "./game-events/event";
 import { MovingEvent } from "./game-events/tank-moving";
 import { PlacingEvent } from "./game-events/tank-placing";
 import { ShootingEvent } from "./game-events/tank-shooting";
+import { SelectionEvent } from "./game-events/tank-selection";
 import { MenuEvent } from "./game-events/menu";
 import { Player } from './game-objects/player';
+import { TanksSharedState } from "./game-events/shared-state";
 
 export enum GameState {
     MENU,
     TANK_PLACING,
     TANK_MOVING,
+    TANK_SELECTION,
     TANK_SHOOTING
 }
+
 
 /**
  * Implementation for the actions that will be executed according to player actions.
@@ -30,6 +34,8 @@ export class EventController {
     game_event: TanksGameEvent;
     player: Player;
 
+    shared: TanksSharedState;
+
 
     constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
         this.canvas = canvas;
@@ -38,33 +44,44 @@ export class EventController {
         this.game_event = new MenuEvent(this, this.context);
         this.game_event.addEventListeners(this.canvas);
         this.player = new Player();
+        this.shared = new TanksSharedState();
     }
 
     changeGameState(new_state: GameState) {
         this.state = new_state;
         // clears the old event
-        this.game_event.removeEventListeners(this.canvas);
+        // this.game_event.removeEventListeners(this.canvas);
+        this.canvas.onmousedown = null;
+        window.onmouseup = null;
+        this.canvas.onmousemove = null;
+
         switch (new_state) {
             case GameState.MENU:
                 // save the function that can clear the events for this state
                 this.game_event = new MenuEvent(this, this.context);
-                this.game_event.addEventListeners(this.canvas);
+                console.log("Initialising MENU EVENT");
                 break;
             case GameState.TANK_PLACING:
                 this.game_event = new PlacingEvent(this, this.context, this.player);
-                this.game_event.addEventListeners(this.canvas);
+                console.log("Initialising TANK PLACING");
+                break;
+            case GameState.TANK_SELECTION:
+                console.log("Initialising TANK SELECTION");
+                this.game_event = new SelectionEvent(this, this.context, this.player);
                 break;
             case GameState.TANK_MOVING:
-                // save the function that can clear the events for this state
+                console.log("Initialising TANK MOVEMENT");
                 this.game_event = new MovingEvent(this, this.context, this.player);
-                this.game_event.addEventListeners(this.canvas);
                 break;
             case GameState.TANK_SHOOTING:
+                throw new Error("Not implemented yet");
                 this.game_event = new ShootingEvent(this, this.context);
-                this.game_event.addEventListeners(this.canvas);
                 break;
             default:
                 throw new Error("The game should never be stateless, something has gone terribly wrong");
         }
+
+        // add the mouse events for the new state
+        this.game_event.addEventListeners(this.canvas);
     }
 }
