@@ -1,4 +1,4 @@
-import { TanksGameEvent } from "./event";
+import { IGameActionState } from "./event";
 import { EventController, GameState } from "../event-controller";
 import { Player } from "../game-objects/player";
 import { TanksMath } from "../tanks-math";
@@ -6,7 +6,7 @@ import { Draw } from "../draw";
 import { Tank } from "../game-objects/tank";
 import { ActiveTank } from "./shared-state";
 
-export class SelectionEvent implements TanksGameEvent {
+export class SelectionState implements IGameActionState {
     context: CanvasRenderingContext2D;
     controller: EventController;
     player: Player;
@@ -34,7 +34,7 @@ export class SelectionEvent implements TanksGameEvent {
                 // highlight the selected tank
                 tank.highlight(this.context, this.draw);
                 // store the details of the active tank
-                this.controller.shared.active = new ActiveTank(id, tank.position);
+                this.controller.shared.active.set(new ActiveTank(id, tank.position));
                 // only highlight the first tank
                 break;
             }
@@ -43,8 +43,8 @@ export class SelectionEvent implements TanksGameEvent {
 
     mouseUp = (e: MouseEvent) => {
         // if the user has clicked on any of the objects, go into movement state
-        if (this.controller.shared.active) {
-            this.controller.changeGameState(this.controller.shared.next);
+        if (this.controller.shared.active.available()) {
+            this.controller.changeGameState(this.controller.shared.next.get());
         }
     }
 }

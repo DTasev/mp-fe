@@ -1,7 +1,7 @@
-import { TanksGameEvent } from "./event";
+import { IGameActionState } from "./event";
 import { EventController, GameState } from "../event-controller";
 
-export class ShootingEvent implements TanksGameEvent {
+export class ShootingState implements IGameActionState {
     context: CanvasRenderingContext2D;
     controller: EventController;
 

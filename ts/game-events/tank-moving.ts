@@ -1,4 +1,4 @@
-import { TanksGameEvent } from "./event";
+import { IGameActionState } from "./event";
 import { Draw, DrawState } from "../draw";
 import { LineLimiter } from "../line-limiter";
 import { ActionLimiter } from "../action-limiter";
@@ -10,7 +10,7 @@ import { Tank } from "../game-objects/tank";
 import { IGameObject } from "../game-objects/igame-object";
 import { ActiveTank } from "./shared-state";
 
-export class MovingEvent implements TanksGameEvent {
+export class MovingState implements IGameActionState {
     context: CanvasRenderingContext2D;
     controller: EventController;
     player: Player;
@@ -27,7 +27,7 @@ export class MovingEvent implements TanksGameEvent {
         this.draw = new Draw();
         this.line = new LineLimiter(Tank.DEFAULT_MOVEMENT_RANGE);
         this.turn = new ActionLimiter();
-        this.active = this.controller.shared.active;
+        this.active = this.controller.shared.active.get();
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
@@ -51,8 +51,13 @@ export class MovingEvent implements TanksGameEvent {
         this.draw.state = DrawState.DRAWING;
         // limit the lenght of the line to the maximum allowed tank movement
         if (this.line.in(this.active.position, this.draw.mouse)) {
-            this.draw.line(this.context, Tank.DEFAULT_MOVEMENT_LINE_WIDTH);
+            this.validMove();
         }
+    }
+
+    private validMove() {
+        this.active.valid_position = true;
+        this.draw.line(this.context, Tank.DEFAULT_MOVEMENT_LINE_WIDTH);
     }
 
     endMovement = (e: MouseEvent) => {
@@ -67,25 +72,13 @@ export class MovingEvent implements TanksGameEvent {
             this.showUserWarning("");
         }
 
-        // delete the reference to the active tank
-        // this.active = null;
-        this.controller.shared.active = null;
         // redraw canvas with all current tanks
         this.redraw(this.player.tanks);
-
         // To add: if out of actions, then next state is TANK_SHOOTING
         // come back to moving after selection
-        this.controller.shared.next = GameState.TANK_MOVING;
+        this.controller.shared.next.set(GameState.TANK_MOVING);
         // go to tank selection state
         this.controller.changeGameState(GameState.TANK_SELECTION);
-
-    }
-
-    redraw(tanks: Array<IGameObject>) {
-        this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
-        for (const tank of tanks) {
-            tank.draw(this.context, this.draw);
-        }
     }
 
     drawMoveLine = (e: MouseEvent) => {
@@ -93,30 +86,36 @@ export class MovingEvent implements TanksGameEvent {
         // draw the movement line if the mouse button is currently being pressed
         if (this.draw.state == DrawState.DRAWING) {
             if (this.line.in(this.active.position, this.draw.mouse)) {
-                this.active.valid_position = true;
-                this.draw.line(this.context, Tank.DEFAULT_MOVEMENT_LINE_WIDTH);
+                this.validMove();
             } else {
                 this.active.valid_position = false;
             }
         }
     }
 
-    touchMove = (e: TouchEvent) => {
-        // Update the touch co-ordinates
-        this.draw.updateTouchPosition(e);
-
-        // During a touchmove event, unlike a mousemove event, we don't need to check if the touch is engaged, since there will always be contact with the screen by definition.
-        this.draw.line(this.context, Tank.DEFAULT_WIDTH);
-
-        // Prevent a scrolling action as a result of this touchmove triggering.
-        event.preventDefault();
-    }
-
-    penMove = (e: PointerEvent) => {
-        this.draw.updateMousePosition(e);
-        if (this.draw.state == DrawState.DRAWING) {
-            this.draw.line(this.context, Tank.DEFAULT_WIDTH);
+    // CONSIDER: Move this into controller? We'll have to redraw all player objects, and the controller will be the one that knows them all
+    redraw(tanks: Array<IGameObject>) {
+        this.controller.clearCanvas();
+        for (const tank of tanks) {
+            tank.draw(this.context, this.draw);
         }
-        event.preventDefault();
     }
+    // touchMove = (e: TouchEvent) => {
+    //     // Update the touch co-ordinates
+    //     this.draw.updateTouchPosition(e);
+
+    //     // During a touchmove event, unlike a mousemove event, we don't need to check if the touch is engaged, since there will always be contact with the screen by definition.
+    //     this.draw.line(this.context, Tank.DEFAULT_WIDTH);
+
+    //     // Prevent a scrolling action as a result of this touchmove triggering.
+    //     event.preventDefault();
+    // }
+
+    // penMove = (e: PointerEvent) => {
+    //     this.draw.updateMousePosition(e);
+    //     if (this.draw.state == DrawState.DRAWING) {
+    //         this.draw.line(this.context, Tank.DEFAULT_WIDTH);
+    //     }
+    //     event.preventDefault();
+    // }
 }

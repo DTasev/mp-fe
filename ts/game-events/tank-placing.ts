@@ -1,11 +1,11 @@
-import { TanksGameEvent } from "./event";
+import { IGameActionState } from "./event";
 import { EventController, GameState } from "../event-controller";
 import { Tank } from "../game-objects/tank";
 import { Draw } from "../draw";
 import { ActionLimiter } from "../action-limiter";
 import { Player } from "../game-objects/player";
 
-export class PlacingEvent implements TanksGameEvent {
+export class PlacingState implements IGameActionState {
     context: CanvasRenderingContext2D;
     controller: EventController;
     draw: Draw;
@@ -38,7 +38,7 @@ export class PlacingEvent implements TanksGameEvent {
         tank.draw(this.context, this.draw);
         // if we've placed as many objects as allowed, then go to next state
         if (this.turn.end()) {
-            this.controller.shared.next = GameState.TANK_MOVING;
+            this.controller.shared.next.set(GameState.TANK_MOVING);
             this.controller.changeGameState(GameState.TANK_SELECTION);
         }
     }
