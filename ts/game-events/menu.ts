@@ -9,11 +9,12 @@ import { Draw } from "../draw";
 class Menu {
     private title: string;
     private options: Array<string>;
-    private selected_item: number;
+    private final_height = -1;
 
     private readonly start_height = 150;
     private readonly height_increment = 70;
-    private final_height = -1;
+
+    selected_item: number;
 
     constructor(title: string, options: Array<string>) {
         this.title = title;
@@ -98,7 +99,7 @@ export class MenuState implements IGameActionState {
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
-        canvas.onmousedown = this.someFunc;
+        canvas.onmousedown = this.activateMenuOption;
         canvas.onmousemove = this.selectMenuitem;
     }
 
@@ -109,9 +110,16 @@ export class MenuState implements IGameActionState {
 
     }
 
-    private someFunc = (e: MouseEvent) => {
+    /**
+     * Activates the selected menu option
+     */
+    private activateMenuOption = (e: MouseEvent) => {
         console.log("Changing state from MENU EVENT to TANK PLACING");
         this.controller.clearCanvas();
-        this.controller.changeGameState(GameState.TANK_PLACING);
+        if (this.menu.selected_item >= 0) {
+            this.controller.changeGameState(GameState.TANK_PLACING);
+        }
+        // handle other events, probably better with a switch statement
+
     }
 }
