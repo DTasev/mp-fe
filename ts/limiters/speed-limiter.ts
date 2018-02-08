@@ -8,7 +8,7 @@ export class SpeedLimiter {
      * 
      * @param limit Maximum length of each line, in canvas pixels
      */
-    constructor(limit: number = 200) {
+    constructor(limit: number = 20) {
         this.limit = limit;
     }
 

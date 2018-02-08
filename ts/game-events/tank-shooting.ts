@@ -62,18 +62,21 @@ export class ShootingState implements IGameActionState {
 
     private continueShooting = (e: MouseEvent) => {
         this.draw.updateMousePosition(e);
-        // draw the movement line if the mouse button is currently being pressed
-        this.controller.showUserWarning("");
 
+        // draw the movement line if the mouse button is currently being pressed
         if (this.draw.state == DrawState.DRAWING) {
             // if the player is just moving about on the tank's space
             if (this.line.in(this.active.position, this.draw.mouse)) {
                 console.log("Roaming in tank space");
+                this.controller.showUserWarning("");
                 this.validRange();
-            } else if (this.speed.enough(this.active.position, this.draw.mouse)) {
+            } // if the player has shot far away start drawing the line
+            else if (this.speed.enough(this.active.position, this.draw.mouse)) {
                 console.log("Shooting!");
-                // or if the player has shot far away
+                this.controller.showUserWarning("");
                 this.validRange();
+
+                // if the shot has reached the max allowed limit we stop the drawing
                 if (!this.shot_line.add(this.active.position, this.draw.mouse)) {
                     console.log("Line too long!");
                     this.draw.state = DrawState.STOPPED;
@@ -89,10 +92,10 @@ export class ShootingState implements IGameActionState {
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
         this.redraw(this.player.tanks);
-
         this.controller.shared.next.set(GameState.TANK_SHOOTING);
         // go to tank selection state
         this.controller.changeGameState(GameState.TANK_SELECTION);
+        // here we will do collision detection along the line
     }
 
     redraw(tanks: Array<IGameObject>) {

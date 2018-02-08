@@ -8,7 +8,7 @@ export class Tank implements IGameObject {
     static MOVEMENT_RANGE = 100;
     static MOVEMENT_LINE_WIDTH = 3;
     static SHOOTING_RANGE = 250;
-    static SHOOTING_SPEED = 50;
+    static SHOOTING_SPEED = 30;
     /** The deadzone allowed for free movement before the player shoots */
     static SHOOTING_DEADZONE = Tank.WIDTH + 2;
 
