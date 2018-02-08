@@ -4,35 +4,34 @@ export class Canvas {
     canvas: HTMLCanvasElement;
     events: EventController;
 
-    constructor(id: string) {
+    constructor(id: string, width: number, height: number) {
         this.canvas = <HTMLCanvasElement>document.getElementById(id);
+        this.setDOMResolution(width, height);
         this.events = new EventController(this.canvas, this.canvas.getContext("2d"));
 
         // initialise as empty removal function 
-        {
-            // Browsers really don't like styluses yet. Only pointermove is called when stylus hovers
-            // and pointerleave is called when the stylus is pressed down
-            //     let down_times: number = 0;
-            //     let up_times: number = 0;
-            //     let move_times: number = 0;
-            //     this.canvas.addEventListener('pointerdown', (e) => { this.showEvent(e, "pointerdown", down_times++); }, false);
-            //     this.canvas.addEventListener('pointerup', (e) => { this.showEvent(e, "pointerup", up_times++); }, false);
-            //     this.canvas.addEventListener('pointermove', (e) => { this.showEvent(e, "pointermove", move_times++); }, false);
-            //     let over_times = 0;
-            //     this.canvas.addEventListener('pointerover', (e) => { this.showEvent(e, "pointerover", over_times++); }, false);
-            //     let leave_times = 0;
-            //     this.canvas.addEventListener('pointerleave', (e) => { this.showEvent(e, "pointerleave", leave_times++); }, false);
-            //     let enter_times = 0;
-            //     this.canvas.addEventListener('pointerenter', (e) => { this.showEvent(e, "pointerenter", enter_times++); }, false);
-            //     let out_times = 0;
-            //     this.canvas.addEventListener('pointerout', (e) => { this.showEvent(e, "pointerout", out_times++); }, false);
-            //     let cancel_times = 0;
-            //     this.canvas.addEventListener('pointercancel', (e) => { this.showEvent(e, "pointercancel", cancel_times++); }, false);
-            //     let capture_times = 0;
-            //     this.canvas.addEventListener('gotpointercapture', (e) => { this.showEvent(e, "gotpointercapture", capture_times++); }, false);
-            //     let lost_capture_times = 0;
-            //     this.canvas.addEventListener('lostpointercapture', (e) => { this.showEvent(e, "lostpointercapture", lost_capture_times++); }, false);
-        }
+        // Browsers really don't like styluses yet. Only pointermove is called when stylus hovers
+        // and pointerleave is called when the stylus is pressed down
+        //     let down_times: number = 0;
+        //     let up_times: number = 0;
+        //     let move_times: number = 0;
+        //     this.canvas.addEventListener('pointerdown', (e) => { this.showEvent(e, "pointerdown", down_times++); }, false);
+        //     this.canvas.addEventListener('pointerup', (e) => { this.showEvent(e, "pointerup", up_times++); }, false);
+        //     this.canvas.addEventListener('pointermove', (e) => { this.showEvent(e, "pointermove", move_times++); }, false);
+        //     let over_times = 0;
+        //     this.canvas.addEventListener('pointerover', (e) => { this.showEvent(e, "pointerover", over_times++); }, false);
+        //     let leave_times = 0;
+        //     this.canvas.addEventListener('pointerleave', (e) => { this.showEvent(e, "pointerleave", leave_times++); }, false);
+        //     let enter_times = 0;
+        //     this.canvas.addEventListener('pointerenter', (e) => { this.showEvent(e, "pointerenter", enter_times++); }, false);
+        //     let out_times = 0;
+        //     this.canvas.addEventListener('pointerout', (e) => { this.showEvent(e, "pointerout", out_times++); }, false);
+        //     let cancel_times = 0;
+        //     this.canvas.addEventListener('pointercancel', (e) => { this.showEvent(e, "pointercancel", cancel_times++); }, false);
+        //     let capture_times = 0;
+        //     this.canvas.addEventListener('gotpointercapture', (e) => { this.showEvent(e, "gotpointercapture", capture_times++); }, false);
+        //     let lost_capture_times = 0;
+        //     this.canvas.addEventListener('lostpointercapture', (e) => { this.showEvent(e, "lostpointercapture", lost_capture_times++); }, false);
     }
 
     /**
@@ -46,10 +45,8 @@ export class Canvas {
         event.preventDefault();
     }
 
-    setDOMResolution(width: number, height: number): void {
+    private setDOMResolution(width: number, height: number): void {
         this.canvas.width = width;
         this.canvas.height = height;
     }
-
-
 }
