@@ -1,11 +1,11 @@
 // Classes added to the `window` object are global, and visible inside the HTML code.
 // Any classes not added to the `window` are invisible (not accessible) from the HTML.
 // Global classes
-import Controls from './build/site-controls';
-window.Controls = Controls;
+import Controls from './site-controls';
+window["Controls"] = Controls;
 
 // Internal classes
-import { Canvas } from "./build/canvas"
+import { Canvas } from "./canvas"
 
 var ID_GAME_CANVAS = "tanks-canvas";
 
