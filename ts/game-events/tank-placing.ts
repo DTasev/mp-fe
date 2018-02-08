@@ -2,7 +2,7 @@ import { IGameActionState } from "./event";
 import { EventController, GameState } from "../event-controller";
 import { Tank } from "../game-objects/tank";
 import { Draw } from "../draw";
-import { ActionLimiter } from "../action-limiter";
+import { ActionLimiter } from "../limiters/action-limiter";
 import { Player } from "../game-objects/player";
 
 export class PlacingState implements IGameActionState {

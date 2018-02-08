@@ -10,6 +10,7 @@ export class ActionLimiter {
     }
     end(): boolean {
         this.num_actions += 1;
+        console.log("Turn ", this.num_actions, " out of ", this.limit);
         return this.num_actions >= this.limit;
     }
     next() {

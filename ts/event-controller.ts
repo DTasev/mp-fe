@@ -75,11 +75,11 @@ export class EventController {
                 this.action = new MovingState(this, this.context, this.player);
                 break;
             case GameState.TANK_SHOOTING:
-                throw new Error("Not implemented yet");
-                this.action = new ShootingState(this, this.context);
+                console.log("Initialising TANK SHOOTING");
+                this.action = new ShootingState(this, this.context, this.player);
                 break;
             default:
-                throw new Error("The game should never be stateless, something has gone terribly wrong");
+                throw new Error("The game should never be in an unknown state, something has gone terribly wrong!");
         }
 
         // add the mouse events for the new state
@@ -88,5 +88,9 @@ export class EventController {
     /** Clears everything from the canvas on the screen. To show anything afterwards it needs to be redrawn. */
     clearCanvas(): void {
         this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+    }
+
+    showUserWarning(message: string) {
+        document.getElementById("user-warning").innerHTML = message;
     }
 }
