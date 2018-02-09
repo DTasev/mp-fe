@@ -44,6 +44,7 @@ export class ShootingState implements IGameActionState {
     }
 
     private startShooting = (e: MouseEvent) => {
+        this.draw.updateMousePosition(e);
         this.draw.last = new CartesianCoords(this.active.position.X, this.active.position.Y);
 
         // the player must start shooting from the tank
@@ -53,6 +54,8 @@ export class ShootingState implements IGameActionState {
             if (this.line.in(this.active.position, this.draw.mouse)) {
                 this.validRange();
             }
+        } else {
+            console.log("Click did not collide with any tank");
         }
     }
 
@@ -88,6 +91,7 @@ export class ShootingState implements IGameActionState {
             }
         }
     }
+
     private stopShooting = (e: MouseEvent) => {
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
