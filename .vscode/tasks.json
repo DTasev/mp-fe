@@ -29,6 +29,26 @@
             "type": "npm",
             "script": "test-current",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "test: unix",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "test:unix",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "test-win",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "test-unix",
+            "problemMatcher": []
         }
     ]
 }
