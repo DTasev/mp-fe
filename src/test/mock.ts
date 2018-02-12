@@ -1,8 +1,3 @@
-function mock() {
-    const m = new Mock();
-    return m.mock;
-}
-
 class CallTracker {
     times: number;
 
@@ -47,24 +42,25 @@ export class Mock {
     private original_function_name: string;
     private original_class: any;
 
-    constructor() {
+    constructor(cls, func, return_value?) {
         this.called = new CallTracker();
         this.original_function = null;
+        this.mock(cls, func, return_value);
     }
 
     /**
      * 
      * @param cls The class which contains the function
      * @param func The function, as would be called, e.g. Issues.retrieve, but without brackets
-     * @param new_action The new action to be executed, by default it will run mock() without parameters
+     * @param return_value The return value when the mock is called, by default it will be void
      */
-    mock(cls, func, new_action?) {
+    mock(cls, func, return_value?) {
         this.original_class = cls;
         this.original_function = func;
         this.original_function_name = func["name"];
 
-        if (new_action) {
-            cls[func["name"]] = new_action;
+        if (return_value) {
+            cls[func["name"]] = () => this.default_callback(return_value);
         } else {
             cls[func["name"]] = () => this.default_callback();
         }
