@@ -86,3 +86,27 @@ export class Mock {
         }
     }
 }
+
+/** Mock that must be called only once, 
+ * because it will automatically restore the mocked function after being called.
+ * 
+ * This class is for convenience.
+ */
+export class SingleCallMock extends Mock {
+    default_callback(return_value?) {
+        if (this.called.once()) {
+            throw new Error("This mock must only be called once! Use normal Mock for more than a single call.");
+        }
+        this.called.increment();
+        if (this.returns && return_value) {
+            throw Error("Mock return value specified more than once!");
+        }
+        if (this.returns) {
+            return this.returns;
+        }
+        if (return_value) {
+            return return_value;
+        }
+        this.restore();
+    }
+}
