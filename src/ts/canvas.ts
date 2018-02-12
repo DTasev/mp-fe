@@ -8,6 +8,7 @@ export class Canvas {
         this.canvas = <HTMLCanvasElement>document.getElementById(id);
         this.setDOMResolution(width, height);
         this.controller = controller;
+        this.controller.initialise(this.canvas, this.canvas.getContext("2d"));
 
         // start the game in Menu state
         this.controller.changeGameState(GameState.MENU);

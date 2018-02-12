@@ -50,7 +50,7 @@ export class MovingState implements IActionState {
         // limit the start of the line to be the tank
         this.draw.last = new CartesianCoords(this.active.position.X, this.active.position.Y);
         this.draw.state = DrawState.DRAWING;
-        // limit the lenght of the line to the maximum allowed tank movement
+        // limit the length of the line to the maximum allowed tank movement
         if (this.line.in(this.active.position, this.draw.mouse)) {
             this.validMove();
         }
@@ -62,7 +62,6 @@ export class MovingState implements IActionState {
     }
 
     endMovement = (e: MouseEvent) => {
-        this.draw.state = DrawState.STOPPED;
         // reset the line limit as the user has let go of the button
         this.line.reset();
 
@@ -71,16 +70,12 @@ export class MovingState implements IActionState {
             // update the position of the tank in the player array
             this.player.tanks[this.active.id].position = this.draw.mouse.copy();
             this.controller.showUserWarning("");
+            this.turn.take();
+        }
 
-            if (this.turn.end()) {
-                // this was the last turn, go to shooting afterwards
-                this.controller.shared.next.set(GameState.TANK_SHOOTING);
-            } else {
-                // come back to moving after selection
-                this.controller.shared.next.set(GameState.TANK_MOVING);
-                // continue the turn the next time this state is accessed
-                this.controller.shared.turn.set(this.turn);
-            }
+        if (this.turn.over()) {
+            // this was the last turn, go to shooting afterwards
+            this.controller.shared.next.set(GameState.TANK_SHOOTING);
         } else {
             // come back to moving after selection
             this.controller.shared.next.set(GameState.TANK_MOVING);
@@ -88,9 +83,9 @@ export class MovingState implements IActionState {
             this.controller.shared.turn.set(this.turn);
         }
 
+        this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
-        this.redraw(this.player.tanks);
-
+        this.controller.redrawCanvas(this.draw);
         // go to tank selection state
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
@@ -107,13 +102,6 @@ export class MovingState implements IActionState {
         }
     }
 
-    // CONSIDER: Move this into controller? We'll have to redraw all player objects, and the controller will be the one that knows them all
-    redraw(tanks: IGameObject[]) {
-        this.controller.clearCanvas();
-        for (const tank of tanks) {
-            tank.draw(this.context, this.draw);
-        }
-    }
     // touchMove = (e: TouchEvent) => {
     //     // Update the touch co-ordinates
     //     this.draw.updateTouchPosition(e);

@@ -3,7 +3,10 @@ import { IGameObject } from "./iGameObject";
 
 export class Player {
     tanks: IGameObject[];
-    constructor() {
+    name: string;
+
+    constructor(name: string) {
+        this.name = name;
         this.tanks = new Array<IGameObject>();
     };
 }

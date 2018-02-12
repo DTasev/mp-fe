@@ -44,7 +44,11 @@ export class SelectionState implements IActionState {
     mouseUp = (e: MouseEvent) => {
         // if the user has clicked on any of the objects, go into movement state
         if (this.controller.shared.active.available()) {
-            this.controller.changeGameState(this.controller.shared.next.get());
+            if (this.controller.shared.next.available()) {
+                this.controller.changeGameState(this.controller.shared.next.get());
+            } else { // this is the first time selec
+                this.controller.changeGameState(GameState.TANK_MOVING);
+            }
         }
     }
 }

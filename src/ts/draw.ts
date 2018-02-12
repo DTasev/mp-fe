@@ -78,11 +78,11 @@ export class Draw {
         }
     }
 
-    circle(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number) {
+    circle(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number, line_width) {
         // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
         // Select a fill style
         context.strokeStyle = this.color.toRGBA();
-        context.lineWidth = width;
+        context.lineWidth = line_width;
 
         // Draw a filled circle
         context.beginPath();

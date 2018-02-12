@@ -5,7 +5,7 @@ import { IGameObject } from './iGameObject'
 
 export class Tank implements IGameObject {
     /** THe width of the dot when drawing the tank */
-    static WIDTH = 5;
+    static WIDTH = 12;
     /** The width of the line when drawing the tank */
     static LINE_WIDTH = 1;
     /** How far can the tank move */
@@ -32,14 +32,14 @@ export class Tank implements IGameObject {
 
     draw(context: CanvasRenderingContext2D, draw: Draw): any {
         draw.color.goBlack();
-        draw.circle(context, this.position, Tank.LINE_WIDTH);
+        draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH);
     }
 
     highlight(context: CanvasRenderingContext2D, draw: Draw): any {
         draw.color.goRed();
         draw.dot(context, this.position, Tank.WIDTH, true);
         draw.color.goGreen();
-        draw.circle(context, this.position, Tank.MOVEMENT_RANGE);
+        draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH);
         draw.color.goBlack();
     }
 
