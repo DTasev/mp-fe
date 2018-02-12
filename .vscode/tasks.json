@@ -24,6 +24,11 @@
             "type": "npm",
             "script": "build-dev",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "test-current",
+            "problemMatcher": []
         }
     ]
 }
