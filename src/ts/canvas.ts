@@ -1,13 +1,16 @@
-import { EventController } from "./event-controller";
+import { GameStateController, GameState } from "./gameStateController";
 
 export class Canvas {
     canvas: HTMLCanvasElement;
-    events: EventController;
+    controller: GameStateController;
 
-    constructor(id: string, width: number, height: number) {
+    constructor(id: string, width: number, height: number, controller: GameStateController) {
         this.canvas = <HTMLCanvasElement>document.getElementById(id);
         this.setDOMResolution(width, height);
-        this.events = new EventController(this.canvas, this.canvas.getContext("2d"));
+        this.controller = controller;
+
+        // start the game in Menu state
+        this.controller.changeGameState(GameState.MENU);
 
         // initialise as empty removal function 
         // Browsers really don't like styluses yet. Only pointermove is called when stylus hovers

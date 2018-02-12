@@ -1,39 +1,37 @@
-import { IGameActionState } from "./event";
-import { EventController, GameState } from "../event-controller";
-import { Player } from "../game-objects/player";
+import { IActionState } from "./iActionState";
+import { GameStateController, GameState } from "../gameStateController";
+import { Player } from "../gameObjects/player";
 import { Draw, DrawState } from "../draw";
-import { LengthLimiter } from "../limiters/line-limiter";
-import { ActionLimiter } from "../limiters/action-limiter";
-import { SpeedLimiter } from "../limiters/speed-limiter";
-import { ActiveTank } from "./shared-state";
-import { Tank } from "../game-objects/tank";
-import { CartesianCoords } from "../cartesian-coords";
-import { IGameObject } from "../game-objects/igame-object";
-import { TanksMath } from "../tanks-math";
+import * as Limit from "../limiters/index";
+import { ActiveTank } from "./sharedState";
+import { Tank } from "../gameObjects/tank";
+import { CartesianCoords } from "../cartesianCoords";
+import { IGameObject } from "../gameObjects/iGameObject";
+import { TanksMath } from "../tanksMath";
 
-export class ShootingState implements IGameActionState {
+export class ShootingState implements IActionState {
 
     context: CanvasRenderingContext2D;
-    controller: EventController;
+    controller: GameStateController;
     player: Player;
 
     draw: Draw;
-    line: LengthLimiter;
-    shot_line: LengthLimiter;
-    speed: SpeedLimiter;
-    turn: ActionLimiter;
+    line: Limit.Length;
+    shot_line: Limit.Length;
+    speed: Limit.Speed;
+    turn: Limit.Actions;
     active: ActiveTank;
 
-    constructor(controller: EventController, context: CanvasRenderingContext2D, player: Player) {
+    constructor(controller: GameStateController, context: CanvasRenderingContext2D, player: Player) {
         this.controller = controller;
         this.context = context;
         this.player = player;
 
         this.draw = new Draw();
-        this.line = new LengthLimiter(Tank.SHOOTING_DEADZONE);
-        this.shot_line = new LengthLimiter(Tank.SHOOTING_RANGE);
-        this.speed = new SpeedLimiter(Tank.SHOOTING_SPEED);
-        this.turn = new ActionLimiter();
+        this.line = new Limit.Length(Tank.SHOOTING_DEADZONE);
+        this.shot_line = new Limit.Length(Tank.SHOOTING_RANGE);
+        this.speed = new Limit.Speed(Tank.SHOOTING_SPEED);
+        this.turn = new Limit.Actions();
         this.active = this.controller.shared.active.get();
     }
 
@@ -102,7 +100,7 @@ export class ShootingState implements IGameActionState {
         // here we will do collision detection along the line
     }
 
-    redraw(tanks: Array<IGameObject>) {
+    redraw(tanks: IGameObject[]) {
         this.controller.clearCanvas();
         for (const tank of tanks) {
             tank.draw(this.context, this.draw);

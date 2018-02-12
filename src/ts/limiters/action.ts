@@ -1,11 +1,10 @@
-export class ActionLimiter {
+export class Actions {
     private num_actions: number;
     private turns: number;
     limit: number;
 
     constructor(limit: number = 5) {
         this.limit = limit;
-        this.num_actions = 0;
         this.num_actions = 0;
     }
     end(): boolean {

@@ -1,15 +1,25 @@
 import { Player } from "./player";
-import { CartesianCoords } from "../cartesian-coords";
+import { CartesianCoords } from "../cartesianCoords";
 import { Draw } from "../draw";
-import { IGameObject } from './igame-object'
+import { IGameObject } from './iGameObject'
 
 export class Tank implements IGameObject {
-    static WIDTH = 12;
+    /** THe width of the dot when drawing the tank */
+    static WIDTH = 5;
+    /** The width of the line when drawing the tank */
+    static LINE_WIDTH = 1;
+    /** How far can the tank move */
     static MOVEMENT_RANGE = 100;
+    /** The width of the movement line */
     static MOVEMENT_LINE_WIDTH = 3;
+    /** How far can the shot line reach */
     static SHOOTING_RANGE = 250;
+    /** How fast must the player move for a valid shot */
     static SHOOTING_SPEED = 30;
-    /** The deadzone allowed for free movement before the player shoots */
+    /** The deadzone allowed for free mouse movement before the player shoots.
+     * This means that the player can wiggle the cursor around in the tank's space
+     * to prepare for the shot.
+     */
     static SHOOTING_DEADZONE = Tank.WIDTH + 2;
 
     health: number;
@@ -22,12 +32,12 @@ export class Tank implements IGameObject {
 
     draw(context: CanvasRenderingContext2D, draw: Draw): any {
         draw.color.goBlack();
-        draw.circle(context, this.position, Tank.WIDTH);
+        draw.circle(context, this.position, Tank.LINE_WIDTH);
     }
 
     highlight(context: CanvasRenderingContext2D, draw: Draw): any {
         draw.color.goRed();
-        draw.dot(context, this.position, Tank.WIDTH, true, 5);
+        draw.dot(context, this.position, Tank.WIDTH, true);
         draw.color.goGreen();
         draw.circle(context, this.position, Tank.MOVEMENT_RANGE);
         draw.color.goBlack();

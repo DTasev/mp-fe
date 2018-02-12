@@ -1,4 +1,4 @@
-import { CartesianCoords } from "./cartesian-coords";
+import { CartesianCoords } from "./cartesianCoords";
 
 class Color {
     red: number = 0;
@@ -60,11 +60,11 @@ export class Draw {
         this.color = new Color();
     }
 
-    dot(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number, outline: boolean = false, outline_width: number = 1) {
+    dot(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number, outline: boolean = false) {
         // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
         // Select a fill style
         context.fillStyle = this.color.toRGBA();
-        context.lineWidth = outline_width;
+        context.lineWidth = width;
 
         // Draw a filled circle
         context.beginPath();
@@ -78,22 +78,17 @@ export class Draw {
         }
     }
 
-    circle(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number, outline: boolean = false, outline_width: number = 1) {
+    circle(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number) {
         // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
         // Select a fill style
         context.strokeStyle = this.color.toRGBA();
-        context.lineWidth = outline_width;
+        context.lineWidth = width;
 
         // Draw a filled circle
         context.beginPath();
         context.arc(coords.X, coords.Y, width, 0, Math.PI * 2, true);
         context.closePath();
         context.stroke();
-
-        if (outline) {
-            context.strokeStyle = this.color.toRGBA();
-            context.stroke();
-        }
     }
     /**
      * Draw a line between the last known position of the mouse, and the current position.
@@ -137,6 +132,7 @@ export class Draw {
     }
 
     updateMousePosition(e: MouseEvent) {
+        // if the browser hasn't passed a parameter, but has set the global event variable
         if (!e) {
             var e = <MouseEvent>event;
         }
@@ -148,6 +144,7 @@ export class Draw {
     }
 
     updateTouchPosition(e: TouchEvent) {
+        // if the browser hasn't passed a parameter, but has set the global event variable
         if (!e) {
             var e = <TouchEvent>event;
         }

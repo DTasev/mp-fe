@@ -1,6 +1,6 @@
-import { CartesianCoords } from "../cartesian-coords";
-import { GameState } from "../event-controller";
-import { ActionLimiter } from "../limiters/action-limiter";
+import { CartesianCoords } from "../cartesianCoords";
+import { GameState } from "../gameStateController";
+import * as Limit from "../limiters/index";
 
 export class ActiveTank {
     id: number;
@@ -16,11 +16,12 @@ export class ActiveTank {
 export class TanksSharedState {
     active: SingleAccess<ActiveTank>;
     next: SingleAccess<GameState>;
-    turn: SingleAccess<ActionLimiter>;
+    turn: SingleAccess<Limit.Actions>;
+
     constructor() {
         this.active = new SingleAccess<ActiveTank>();
         this.next = new SingleAccess<GameState>();
-        this.turn = new SingleAccess<ActionLimiter>();
+        this.turn = new SingleAccess<Limit.Actions>();
     }
 }
 

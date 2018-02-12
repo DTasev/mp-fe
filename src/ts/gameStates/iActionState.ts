@@ -1,4 +1,4 @@
 /** Interface for a playable state of the game. */
-export interface IGameActionState {
+export interface IActionState {
     addEventListeners(canvas: HTMLCanvasElement);
 }

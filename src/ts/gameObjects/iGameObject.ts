@@ -1,5 +1,5 @@
 import { Draw } from "../draw";
-import { CartesianCoords } from "../cartesian-coords";
+import { CartesianCoords } from "../cartesianCoords";
 import { Player } from "./player";
 
 export interface IGameObject {

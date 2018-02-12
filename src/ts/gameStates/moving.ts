@@ -1,35 +1,34 @@
-import { IGameActionState } from "./event";
+import { IActionState } from "./iActionState";
 import { Draw, DrawState } from "../draw";
-import { LengthLimiter } from "../limiters/line-limiter";
-import { ActionLimiter } from "../limiters/action-limiter";
-import { EventController, GameState } from "../event-controller";
-import { Player } from "../game-objects/player";
-import { TanksMath } from "../tanks-math";
-import { CartesianCoords } from "../cartesian-coords";
-import { Tank } from "../game-objects/tank";
-import { IGameObject } from "../game-objects/igame-object";
-import { ActiveTank } from "./shared-state";
+import * as Limit from "../limiters/index";
+import { GameStateController, GameState } from "../gameStateController";
+import { Player } from "../gameObjects/player";
+import { TanksMath } from "../tanksMath";
+import { CartesianCoords } from "../cartesianCoords";
+import { Tank } from "../gameObjects/tank";
+import { IGameObject } from "../gameObjects/iGameObject";
+import { ActiveTank } from "./sharedState";
 
-export class MovingState implements IGameActionState {
+export class MovingState implements IActionState {
     context: CanvasRenderingContext2D;
-    controller: EventController;
+    controller: GameStateController;
     player: Player;
 
     draw: Draw;
-    line: LengthLimiter;
-    turn: ActionLimiter;
+    line: Limit.Length;
+    turn: Limit.Actions;
     active: ActiveTank;
 
-    constructor(controller: EventController, context: CanvasRenderingContext2D, player: Player) {
+    constructor(controller: GameStateController, context: CanvasRenderingContext2D, player: Player) {
         this.controller = controller;
         this.context = context;
         this.player = player;
 
         this.draw = new Draw();
-        this.line = new LengthLimiter(Tank.MOVEMENT_RANGE);
+        this.line = new Limit.Length(Tank.MOVEMENT_RANGE);
         // if this is the first turn
         if (!this.controller.shared.turn.available()) {
-            this.turn = new ActionLimiter();
+            this.turn = new Limit.Actions();
         } else {
             this.turn = this.controller.shared.turn.get();
         }
@@ -109,7 +108,7 @@ export class MovingState implements IGameActionState {
     }
 
     // CONSIDER: Move this into controller? We'll have to redraw all player objects, and the controller will be the one that knows them all
-    redraw(tanks: Array<IGameObject>) {
+    redraw(tanks: IGameObject[]) {
         this.controller.clearCanvas();
         for (const tank of tanks) {
             tank.draw(this.context, this.draw);

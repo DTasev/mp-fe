@@ -1,15 +1,15 @@
-import { IGameActionState } from "./event";
-import { EventController, GameState } from "../event-controller";
-import { Tank } from "../game-objects/tank";
+import { IActionState } from "./iActionState";
+import { GameStateController, GameState } from "../gameStateController";
+import { Tank } from "../gameObjects/tank";
 import { Draw } from "../draw";
-import { ActionLimiter } from "../limiters/action-limiter";
-import { Player } from "../game-objects/player";
+import * as Limit from "../limiters/index";
+import { Player } from "../gameObjects/player";
 
-export class PlacingState implements IGameActionState {
+export class PlacingState implements IActionState {
     context: CanvasRenderingContext2D;
-    controller: EventController;
+    controller: GameStateController;
     draw: Draw;
-    turn: ActionLimiter;
+    turn: Limit.Actions;
     player: Player;
 
     /**
@@ -18,11 +18,11 @@ export class PlacingState implements IGameActionState {
      * @param context Context on which the objects are drawn
      * @param player 
      */
-    constructor(controller: EventController, context: CanvasRenderingContext2D, player: Player) {
+    constructor(controller: GameStateController, context: CanvasRenderingContext2D, player: Player) {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();
-        this.turn = new ActionLimiter();
+        this.turn = new Limit.Actions();
         this.player = player;
     }
 

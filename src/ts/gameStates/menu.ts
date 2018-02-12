@@ -1,14 +1,14 @@
-import { IGameActionState } from "./event";
-import { EventController, GameState } from "../event-controller";
-import { IGameObject } from "../game-objects/igame-object";
-import { CartesianCoords } from "../cartesian-coords";
-import { Player } from "../game-objects/player";
+import { IActionState } from "./iActionState";
+import { GameStateController, GameState } from "../gameStateController";
+import { IGameObject } from "../gameObjects/iGameObject";
+import { CartesianCoords } from "../cartesianCoords";
+import { Player } from "../gameObjects/player";
 import { Draw } from "../draw";
 
 
 class Menu {
     private title: string;
-    private options: Array<string>;
+    private options: string[];
     private final_height = -1;
 
     private readonly start_height = 150;
@@ -16,7 +16,7 @@ class Menu {
 
     selected_item: number;
 
-    constructor(title: string, options: Array<string>) {
+    constructor(title: string, options: string[]) {
         this.title = title;
         this.options = options;
     }
@@ -82,15 +82,15 @@ class Menu {
         }
     }
 }
-export class MenuState implements IGameActionState {
+export class MenuState implements IActionState {
     private menu: Menu;
 
     private context: CanvasRenderingContext2D;
-    private controller: EventController;
+    private controller: GameStateController;
 
     private draw: Draw;
 
-    constructor(controller: EventController, context: CanvasRenderingContext2D) {
+    constructor(controller: GameStateController, context: CanvasRenderingContext2D) {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();

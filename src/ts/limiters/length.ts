@@ -1,6 +1,6 @@
-import { CartesianCoords } from "../cartesian-coords";
-import { TanksMath } from "../tanks-math";
-export class LengthLimiter {
+import { CartesianCoords } from "../cartesianCoords";
+import { TanksMath } from "../tanksMath";
+export class Length {
     private limit: number;
     current: number;
 
@@ -26,7 +26,7 @@ export class LengthLimiter {
      */
     add(start: CartesianCoords, end: CartesianCoords): boolean {
         this.current += TanksMath.point.dist2d(start, end);
-        console.log("Shot distance: ", this.current);
+        console.log("Shot total distance: ", this.current);
         return this.current <= this.limit;
     }
 

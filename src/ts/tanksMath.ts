@@ -1,4 +1,4 @@
-import { CartesianCoords } from "./cartesian-coords";
+import { CartesianCoords } from "./cartesianCoords";
 
 class Point {
     /**

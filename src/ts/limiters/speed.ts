@@ -1,6 +1,6 @@
-import { CartesianCoords } from "../cartesian-coords";
-import { TanksMath } from "../tanks-math";
-export class SpeedLimiter {
+import { CartesianCoords } from "../cartesianCoords";
+import { TanksMath } from "../tanksMath";
+export class Speed {
     private limit: number;
 
     /**
@@ -21,7 +21,6 @@ export class SpeedLimiter {
      */
     enough(start: CartesianCoords, end: CartesianCoords): boolean {
         const distance = TanksMath.point.dist2d(start, end);
-        console.log("Shot distance: ", distance, " required: ", this.limit);
         return distance >= this.limit;
     }
 }

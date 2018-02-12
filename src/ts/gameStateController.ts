@@ -1,12 +1,12 @@
 import { Canvas } from './canvas';
-import { IGameActionState } from "./game-events/event";
-import { MovingState } from "./game-events/tank-moving";
-import { PlacingState } from "./game-events/tank-placing";
-import { ShootingState } from "./game-events/tank-shooting";
-import { SelectionState } from "./game-events/tank-selection";
-import { MenuState } from "./game-events/menu";
-import { Player } from './game-objects/player';
-import { TanksSharedState } from "./game-events/shared-state";
+import { IActionState } from "./gameStates/iActionState";
+import { MovingState } from "./gameStates/moving";
+import { PlacingState } from "./gameStates/placing";
+import { ShootingState } from "./gameStates/shooting";
+import { SelectionState } from "./gameStates/selection";
+import { MenuState } from "./gameStates/menu";
+import { Player } from './gameObjects/player';
+import { TanksSharedState } from "./gameStates/sharedState";
 
 export enum GameState {
     MENU,
@@ -27,27 +27,25 @@ export enum GameState {
  * 
  * For more details: https://github.com/Microsoft/TypeScript/wiki/'this'-in-TypeScript#red-flags-for-this
  */
-export class EventController {
+export class GameStateController {
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
 
     /** The current state of the game */
     private state: GameState;
     /** The current event that carries out the actions for the state */
-    private action: IGameActionState;
+    private action: IActionState;
     private player: Player;
 
     /** Shared state among game states */
     shared: TanksSharedState;
 
-    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+    initialise(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
         this.canvas = canvas;
         this.context = context;
 
         this.player = new Player();
         this.shared = new TanksSharedState();
-
-        this.changeGameState(GameState.MENU);
     }
 
     changeGameState(new_state: GameState) {

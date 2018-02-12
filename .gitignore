@@ -4,5 +4,5 @@ pin_icon.xcf
 pinned_icon.png
 node_modules/
 notes/
-build/
+src/build/
 npm-debug.log
