@@ -5,9 +5,9 @@ import { Color } from "../drawing/color";
 export class Player {
     tanks: IGameObject[];
     name: string;
-    color: Color;
+    color: string;
 
-    constructor(name: string, color: Color) {
+    constructor(name: string, color: string) {
         this.name = name;
         this.tanks = new Array<IGameObject>();
         this.color = color;

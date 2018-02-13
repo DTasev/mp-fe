@@ -5,41 +5,56 @@ export class Draw {
     state: DrawState;
     mouse: CartesianCoords;
     last: CartesianCoords;
-    color: Color;
 
     constructor() {
         this.mouse = new CartesianCoords();
         this.last = new CartesianCoords();
-        this.color = new Color();
     }
 
-    dot(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number, outline: boolean = false) {
+    /** Draw a dot (a filled circle) around the point.
+     * 
+     * @param context Context on which the circle will be drawn
+     * @param coords Coordinates for the origin point of the circle
+     * @param radius Radius of the dot
+     * @param fill_color Color of the fill
+     * @param outline Specify whether an outline will be drawn around the circle
+     * @param stroke_color Specify color for the outline, if not specified the colour will be the same as the fill color
+     */
+    dot(context: CanvasRenderingContext2D, coords: CartesianCoords, radius: number, fill_color: string, outline: boolean = false, stroke_color: string = null) {
         // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
         // Select a fill style
-        context.fillStyle = this.color.toRGBA();
-        context.lineWidth = width;
+        context.fillStyle = fill_color;
+        context.lineWidth = radius;
 
         // Draw a filled circle
         context.beginPath();
-        context.arc(coords.X, coords.Y, width, 0, Math.PI * 2, true);
+        context.arc(coords.X, coords.Y, radius, 0, Math.PI * 2, true);
         context.closePath();
         context.fill();
 
         if (outline) {
-            context.strokeStyle = this.color.toRGBA();
+            context.strokeStyle = stroke_color || fill_color;
             context.stroke();
         }
     }
 
-    circle(context: CanvasRenderingContext2D, coords: CartesianCoords, width: number, line_width) {
+    /** Draw a circle around a point.
+     * 
+     * @param context Context on which the circle will be drawn
+     * @param coords Coordinates for the origin point of the circle
+     * @param radius The radius of the circle
+     * @param line_width The line width of the circle
+     * @param color The color of the line
+     */
+    circle(context: CanvasRenderingContext2D, coords: CartesianCoords, radius: number, line_width: number, color: string) {
         // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
         // Select a fill style
-        context.strokeStyle = this.color.toRGBA();
+        context.strokeStyle = color;
         context.lineWidth = line_width;
 
         // Draw a filled circle
         context.beginPath();
-        context.arc(coords.X, coords.Y, width, 0, Math.PI * 2, true);
+        context.arc(coords.X, coords.Y, radius, 0, Math.PI * 2, true);
         context.closePath();
         context.stroke();
     }
@@ -48,7 +63,7 @@ export class Draw {
      * @param context The canvas context that we're drawing on
      * @param update_last Whether to update the last position of the mouse
      */
-    line(context: CanvasRenderingContext2D, width: number, update_last: boolean = true) {
+    autoLine(context: CanvasRenderingContext2D, width: number, color: string, update_last: boolean = true) {
         // If lastX is not set, set lastX and lastY to the current position 
         if (this.last.X == -1) {
             this.last.X = this.mouse.X;
@@ -56,7 +71,7 @@ export class Draw {
         }
 
         // Select a fill style
-        context.strokeStyle = this.color.toRGBA();
+        context.strokeStyle = color;
 
         // Set the line "cap" style to round, so lines at different angles can join into each other
         context.lineCap = "round";
@@ -84,13 +99,16 @@ export class Draw {
         }
     }
     /**
-     * Draw a line between the last known position of the mouse, and the current position.
+     * Draw a line between the start and end points.
      * @param context The canvas context that we're drawing on
-     * @param update_last Whether to update the last position of the mouse
+     * @param start Start point
+     * @param end End point
+     * @param width Width of the line
+     * @param color Color of the line
      */
-    lineFromPoints(context: CanvasRenderingContext2D, start: CartesianCoords, end: CartesianCoords, width: number) {
+    line(context: CanvasRenderingContext2D, start: CartesianCoords, end: CartesianCoords, width: number, color: string) {
         // Select a fill style
-        context.strokeStyle = this.color.toRGBA();
+        context.strokeStyle = color;
 
         // Set the line "cap" style to round, so lines at different angles can join into each other
         context.lineCap = "round";

@@ -11,6 +11,7 @@ import * as Limit from './limiters/index'
 import { Draw } from './drawing/draw';
 import { Color } from './drawing/color';
 import { LinePath } from './linePath';
+import { LineCache } from './lineCache';
 
 export enum GameState {
     MENU,
@@ -44,17 +45,17 @@ export class GameStateController {
     private players: Player[];
     private turn: Limit.Actions;
 
-    private line_cache: LinePath[];
+    private line_cache: LineCache;
 
-    next_player: boolean;
+    next_player: boolean = false;
     /** Shared state among game states */
     shared: TanksSharedState;
 
     initialise(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
         this.canvas = canvas;
         this.context = context;
-        this.line_cache = [];
-        this.next_player = false;
+        this.line_cache = new LineCache();
+
         this.turn = new Limit.Actions(2);
         this.current_player = 0;
         this.players = [new Player("Player 1", Color.next()), new Player("Player 2", Color.next())];
@@ -138,15 +139,15 @@ export class GameStateController {
         }
 
         // draw the last N lines
-        for (const line_path of this.line_cache) {
+        for (const line_path of this.line_cache.lines()) {
             for (let i = 1; i < line_path.points.length; i++) {
-                draw.lineFromPoints(this.context, line_path.points[i - 1], line_path.points[i], 1);
+                draw.line(this.context, line_path.points[i - 1], line_path.points[i], 1, Color.gray());
             }
         }
     }
 
     cacheLine(path: LinePath) {
-        this.line_cache.push(path);
+        this.line_cache.points.push(path);
     }
 
     showUserWarning(message: string) {

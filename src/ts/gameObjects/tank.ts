@@ -2,6 +2,7 @@ import { Player } from "./player";
 import { CartesianCoords } from "../cartesianCoords";
 import { Draw } from "../drawing/draw";
 import { IGameObject } from './iGameObject'
+import { Color } from "../drawing/color";
 
 export class Tank implements IGameObject {
     /** THe width of the dot when drawing the tank */
@@ -22,6 +23,9 @@ export class Tank implements IGameObject {
      */
     static SHOOTING_DEADZONE = Tank.WIDTH + 2;
 
+    private highlight_color: string = Color.red();
+    private highlight_outline_color: string = Color.green();
+
     health: number;
     player: Player;
     position: CartesianCoords;
@@ -31,15 +35,12 @@ export class Tank implements IGameObject {
     }
 
     draw(context: CanvasRenderingContext2D, draw: Draw): any {
-        draw.color = this.player.color;
-        draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH);
+        draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, this.player.color);
     }
 
     highlight(context: CanvasRenderingContext2D, draw: Draw): any {
-        draw.color.goRed();
-        draw.dot(context, this.position, Tank.WIDTH, true);
-        draw.color.goGreen();
-        draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH);
+        draw.dot(context, this.position, Tank.WIDTH, this.highlight_color);
+        draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH, this.highlight_outline_color);
     }
 
 }

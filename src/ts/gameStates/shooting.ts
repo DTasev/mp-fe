@@ -9,6 +9,7 @@ import { CartesianCoords } from "../cartesianCoords";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { TanksMath } from "../tanksMath";
 import { LinePath } from "../linePath";
+import { Color } from "../drawing/color";
 
 export class ShootingState implements IActionState {
     context: CanvasRenderingContext2D;
@@ -76,7 +77,7 @@ export class ShootingState implements IActionState {
     }
 
     private validRange(): void {
-        this.draw.line(this.context, Tank.MOVEMENT_LINE_WIDTH);
+        this.draw.autoLine(this.context, Tank.MOVEMENT_LINE_WIDTH, Color.black());
     }
 
     private continueShooting = (e: MouseEvent) => {

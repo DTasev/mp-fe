@@ -8,6 +8,7 @@ import { CartesianCoords } from "../cartesianCoords";
 import { Tank } from "../gameObjects/tank";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { ActiveTank } from "./sharedState";
+import { Color } from "../drawing/color";
 
 export class MovingState implements IActionState {
     context: CanvasRenderingContext2D;
@@ -58,7 +59,7 @@ export class MovingState implements IActionState {
 
     private validMove() {
         this.active.valid_position = true;
-        this.draw.line(this.context, Tank.MOVEMENT_LINE_WIDTH);
+        this.draw.autoLine(this.context, Tank.MOVEMENT_LINE_WIDTH, Color.black());
     }
 
     endMovement = (e: MouseEvent) => {
