@@ -83,6 +83,34 @@ export class Draw {
             this.last.Y = this.mouse.Y;
         }
     }
+    /**
+     * Draw a line between the last known position of the mouse, and the current position.
+     * @param context The canvas context that we're drawing on
+     * @param update_last Whether to update the last position of the mouse
+     */
+    lineFromPoints(context: CanvasRenderingContext2D, start: CartesianCoords, end: CartesianCoords, width: number) {
+        // Select a fill style
+        context.strokeStyle = this.color.toRGBA();
+
+        // Set the line "cap" style to round, so lines at different angles can join into each other
+        context.lineCap = "round";
+        context.lineJoin = "round";
+
+        // Draw a filled line
+        context.beginPath();
+
+        // First, move to the old (previous) position
+        context.moveTo(start.X, start.Y);
+
+        // Now draw a line to the current touch/pointer position
+        context.lineTo(end.X, end.Y);
+
+        // Set the line thickness and draw the line
+        context.lineWidth = width;
+        context.stroke();
+
+        context.closePath();
+    }
 
     updateMousePosition(e: MouseEvent) {
         // if the browser hasn't passed a parameter, but has set the global event variable

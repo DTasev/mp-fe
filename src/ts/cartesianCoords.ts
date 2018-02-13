@@ -9,4 +9,8 @@ export class CartesianCoords {
     copy() {
         return new CartesianCoords(this.X, this.Y);
     }
+
+    toString() {
+        return this.X + "," + this.Y;
+    }
 }

@@ -8,6 +8,7 @@ import { Tank } from "../gameObjects/tank";
 import { CartesianCoords } from "../cartesianCoords";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { TanksMath } from "../tanksMath";
+import { LinePath } from "../linePath";
 
 export class ShootingState implements IActionState {
     context: CanvasRenderingContext2D;
@@ -15,22 +16,31 @@ export class ShootingState implements IActionState {
     player: Player;
 
     draw: Draw;
-    line: Limit.Length;
-    shot_line: Limit.Length;
-    speed: Limit.Speed;
     turn: Limit.Actions;
     active: ActiveTank;
+
+    /** The limiter for the deadzone for moving around inside the tank before a shot */
+    tank_roaming_length: Limit.Length;
+    /** The limiter for the total shot length */
+    shot_length: Limit.Length;
+    /** The limiter for the shot's speed */
+    shot_speed: Limit.Speed;
+    /** Whether the shot was successfully fired, will be set to true if the shot is fast enough */
     successful_shot: boolean = false;
+
+    shot_path: LinePath;
 
     constructor(controller: GameStateController, context: CanvasRenderingContext2D, player: Player) {
         this.controller = controller;
         this.context = context;
         this.player = player;
 
+        this.shot_path = new LinePath();
+
         this.draw = new Draw();
-        this.line = new Limit.Length(Tank.SHOOTING_DEADZONE);
-        this.shot_line = new Limit.Length(Tank.SHOOTING_RANGE);
-        this.speed = new Limit.Speed(Tank.SHOOTING_SPEED);
+        this.tank_roaming_length = new Limit.Length(Tank.SHOOTING_DEADZONE);
+        this.shot_length = new Limit.Length(Tank.SHOOTING_RANGE);
+        this.shot_speed = new Limit.Speed(Tank.SHOOTING_SPEED);
         if (!this.controller.shared.turn.available()) {
             this.turn = new Limit.Actions();
         } else {
@@ -53,8 +63,11 @@ export class ShootingState implements IActionState {
         // the player must start shooting from the tank
         const tank = this.player.tanks[this.active.id];
         if (TanksMath.point.collide_circle(this.draw.mouse, tank.position, Tank.WIDTH)) {
-            this.draw.state = DrawState.DRAWING;
-            if (this.line.in(this.active.position, this.draw.mouse)) {
+            // if the mouse is within the tank
+            if (this.tank_roaming_length.in(this.active.position, this.draw.mouse)) {
+                // shot collision starts from the centre of the tank
+                this.shot_path.points.push(this.active.position.copy());
+                this.draw.state = DrawState.DRAWING;
                 this.validRange();
             }
         } else {
@@ -72,18 +85,22 @@ export class ShootingState implements IActionState {
         // draw the movement line if the mouse button is currently being pressed
         if (this.draw.state == DrawState.DRAWING) {
             // if the player is just moving about on the tank's space
-            if (this.line.in(this.active.position, this.draw.mouse)) {
+            if (this.tank_roaming_length.in(this.active.position, this.draw.mouse)) {
                 console.log("Roaming in tank space");
                 this.controller.showUserWarning("");
                 this.validRange();
             } // if the player has shot far away start drawing the line
-            else if (this.speed.enough(this.active.position, this.draw.mouse)) {
+            else if (this.shot_speed.enough(this.active.position, this.draw.mouse)) {
                 console.log("Shooting!");
                 this.controller.showUserWarning("");
                 this.validRange();
 
-                // if the shot has reached the max allowed limit we stop the drawing
-                if (!this.shot_line.add(this.active.position, this.draw.mouse)) {
+                // only add to the shot path if the shot was successful
+                this.shot_path.points.push(this.draw.mouse.copy());
+
+                // if the shot has reached the max allowed limit we stop the drawing, this is an artificial
+                // limitation to stop a shot that goes along the whole screen
+                if (!this.shot_length.add(this.active.position, this.draw.mouse)) {
                     console.log("Successful shot!");
                     this.successful_shot = true;
                     this.draw.state = DrawState.STOPPED;
@@ -97,11 +114,12 @@ export class ShootingState implements IActionState {
     }
 
     private stopShooting = (e: MouseEvent) => {
-        //
-        // here we will do collision detection along the line
-        //
-
         if (this.successful_shot) {
+            this.shot_path.list();
+            this.controller.cacheLine(this.shot_path);
+            //
+            // here we will do collision detection along the line
+            //
             this.turn.take();
         }
         if (this.turn.over()) {
@@ -111,6 +129,7 @@ export class ShootingState implements IActionState {
             this.controller.shared.turn.set(this.turn);
             this.controller.shared.next.set(GameState.TANK_SHOOTING);
         }
+
 
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks

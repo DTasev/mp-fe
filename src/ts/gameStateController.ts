@@ -10,6 +10,7 @@ import { TanksSharedState } from "./gameStates/sharedState";
 import * as Limit from './limiters/index'
 import { Draw } from './drawing/draw';
 import { Color } from './drawing/color';
+import { LinePath } from './linePath';
 
 export enum GameState {
     MENU,
@@ -43,6 +44,8 @@ export class GameStateController {
     private players: Player[];
     private turn: Limit.Actions;
 
+    private line_cache: LinePath[];
+
     next_player: boolean;
     /** Shared state among game states */
     shared: TanksSharedState;
@@ -50,11 +53,11 @@ export class GameStateController {
     initialise(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
         this.canvas = canvas;
         this.context = context;
-
+        this.line_cache = [];
         this.next_player = false;
         this.turn = new Limit.Actions(2);
         this.current_player = 0;
-        this.players = [new Player("Player 1", Color.next()), new Player("Player 2", Color.next()), new Player("Player 3", Color.next())];
+        this.players = [new Player("Player 1", Color.next()), new Player("Player 2", Color.next())];
         this.num_players = this.players.length;
         this.shared = new TanksSharedState();
     }
@@ -127,11 +130,23 @@ export class GameStateController {
     redrawCanvas(draw: Draw): void {
         this.clearCanvas();
 
+        // draw every player for every tank
         for (const player of this.players) {
             for (const tank of player.tanks) {
                 tank.draw(this.context, draw);
             }
         }
+
+        // draw the last N lines
+        for (const line_path of this.line_cache) {
+            for (let i = 1; i < line_path.points.length; i++) {
+                draw.lineFromPoints(this.context, line_path.points[i - 1], line_path.points[i], 1);
+            }
+        }
+    }
+
+    cacheLine(path: LinePath) {
+        this.line_cache.push(path);
     }
 
     showUserWarning(message: string) {
