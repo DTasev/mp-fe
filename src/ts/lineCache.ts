@@ -12,7 +12,7 @@ export class LineCache {
     }
     points: LinePath[];
     color: string = Color.gray();
-    /** How many lines */
+    /** How many lines should be redrawn */
     size: number = 10;
 
     constructor() {
