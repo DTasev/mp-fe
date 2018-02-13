@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { Draw } from "../ts/draw";
+import { Draw } from "../ts/drawing/draw";
 import { SingleCallMock } from "./mocking/mock";
 import { CanvasContextMock } from "./mocking/canvasContextMock";
 import { CartesianCoords } from "../ts/cartesianCoords";
@@ -55,7 +55,7 @@ describe('Drawing', () => {
         expect(mock_context.strokeStyle).to.not.be.empty;
     });
     it('should draw a circle', () => {
-        draw.circle(mock_context as any, test_coords, expected_width);
+        draw.circle(mock_context as any, test_coords, 5, expected_width);
 
         expect(mock_context.mock_beginPath.called.once()).to.be.true;
         expect(mock_context.mock_closePath.called.once()).to.be.true;

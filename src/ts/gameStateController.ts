@@ -8,7 +8,8 @@ import { MenuState } from "./gameStates/menu";
 import { Player } from './gameObjects/player';
 import { TanksSharedState } from "./gameStates/sharedState";
 import * as Limit from './limiters/index'
-import { Draw } from './draw';
+import { Draw } from './drawing/draw';
+import { Color } from './drawing/color';
 
 export enum GameState {
     MENU,
@@ -53,8 +54,8 @@ export class GameStateController {
         this.next_player = false;
         this.turn = new Limit.Actions(2);
         this.current_player = 0;
-        this.num_players = 2;
-        this.players = [new Player("Player 1"), new Player("Player 2")];
+        this.players = [new Player("Player 1", Color.next()), new Player("Player 2", Color.next()), new Player("Player 3", Color.next())];
+        this.num_players = this.players.length;
         this.shared = new TanksSharedState();
     }
 
@@ -78,6 +79,10 @@ export class GameStateController {
         if (this.next_player) {
             if (this.isEveryone()) {
                 console.log("Switching player");
+
+                // this is used to escape from placing forever, when all players have placed their tanks
+                // then the next state will be taken, which will be movement, afterwards this is used to 
+                // keep switching between movement and shooting until the end of the game
                 this.state = this.shared.next.get();
             }
             this.next_player = false;

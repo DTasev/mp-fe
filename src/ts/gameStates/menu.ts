@@ -3,7 +3,7 @@ import { GameStateController, GameState } from "../gameStateController";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { CartesianCoords } from "../cartesianCoords";
 import { Player } from "../gameObjects/player";
-import { Draw } from "../draw";
+import { Draw } from "../drawing/draw";
 
 
 class Menu {

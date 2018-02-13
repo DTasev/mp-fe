@@ -1,7 +1,7 @@
 import { IActionState } from "./iActionState";
 import { GameStateController, GameState } from "../gameStateController";
 import { Tank } from "../gameObjects/tank";
-import { Draw } from "../draw";
+import { Draw } from "../drawing/draw";
 import * as Limit from "../limiters/index";
 import { Player } from "../gameObjects/player";
 

@@ -1,5 +1,5 @@
 import { IActionState } from "./iActionState";
-import { Draw, DrawState } from "../draw";
+import { Draw, DrawState } from "../drawing/draw";
 import * as Limit from "../limiters/index";
 import { GameStateController, GameState } from "../gameStateController";
 import { Player } from "../gameObjects/player";

@@ -1,4 +1,4 @@
-import { Draw } from "../draw";
+import { Draw } from "../drawing/draw";
 import { CartesianCoords } from "../cartesianCoords";
 import { Player } from "./player";
 

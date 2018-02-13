@@ -1,6 +1,6 @@
 import { Player } from "./player";
 import { CartesianCoords } from "../cartesianCoords";
-import { Draw } from "../draw";
+import { Draw } from "../drawing/draw";
 import { IGameObject } from './iGameObject'
 
 export class Tank implements IGameObject {
@@ -31,7 +31,7 @@ export class Tank implements IGameObject {
     }
 
     draw(context: CanvasRenderingContext2D, draw: Draw): any {
-        draw.color.goBlack();
+        draw.color = this.player.color;
         draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH);
     }
 
@@ -40,7 +40,6 @@ export class Tank implements IGameObject {
         draw.dot(context, this.position, Tank.WIDTH, true);
         draw.color.goGreen();
         draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH);
-        draw.color.goBlack();
     }
 
 }

@@ -1,53 +1,6 @@
-import { CartesianCoords } from "./cartesianCoords";
+import { CartesianCoords } from "../cartesianCoords";
+import { Color } from "./color";
 
-class Color {
-    red: number = 0;
-    green: number = 0;
-    blue: number = 0;
-    alpha: number = 1.0;
-
-    toRGB() {
-        return "rgb(" + this.red + "," + this.green + "," + this.blue + ")";
-    }
-    toRGBA() {
-        return "rgba(" + this.red + "," + this.green + "," + this.blue + "," + this.alpha + ")";
-    }
-
-    set(red: number, green: number, blue: number): void {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-    }
-    goYellow(): any {
-        this.set(255, 255, 0);
-    }
-    goRed() {
-        this.set(255, 0, 0);
-    }
-    goGreen() {
-        this.set(0, 255, 0);
-    }
-    goBlue() {
-        this.set(0, 0, 255);
-    }
-    goWhite() {
-        this.set(255, 255, 255);
-    }
-    goBlack() {
-        this.set(0, 0, 0);
-    }
-    next() {
-        if (this.red != 0) {
-            this.goGreen();
-        } else if (this.green != 0) {
-            this.goBlue();
-        } else if (this.blue != 0) {
-            this.goRed();
-        } else {
-            this.goRed();
-        }
-    }
-}
 export class Draw {
     state: DrawState;
     mouse: CartesianCoords;

@@ -2,7 +2,7 @@ import { IActionState } from "./iActionState";
 import { GameStateController, GameState } from "../gameStateController";
 import { Player } from "../gameObjects/player";
 import { TanksMath } from "../tanksMath";
-import { Draw } from "../draw";
+import { Draw } from "../drawing/draw";
 import { Tank } from "../gameObjects/tank";
 import { ActiveTank } from "./sharedState";
 
