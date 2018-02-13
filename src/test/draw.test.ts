@@ -5,6 +5,7 @@ import { Draw } from "../ts/drawing/draw";
 import { SingleCallMock } from "./mocking/mock";
 import { CanvasContextMock } from "./mocking/canvasContextMock";
 import { CartesianCoords } from "../ts/cartesianCoords";
+import { Color } from '../ts/drawing/color';
 
 
 describe('Drawing', () => {
@@ -13,6 +14,8 @@ describe('Drawing', () => {
     let mock_context: CanvasContextMock;
     const test_coords: CartesianCoords = new CartesianCoords(23, 23);
     const expected_width = 11414;
+    const color = Color.red();
+
     beforeEach(() => {
         mock_context = new CanvasContextMock();
         draw = new Draw();
@@ -37,7 +40,7 @@ describe('Drawing', () => {
     });
     it('should draw a dot', () => {
         // as any disables type checking
-        draw.dot(mock_context as any, test_coords, expected_width);
+        draw.dot(mock_context as any, test_coords, expected_width, color);
 
         expect(mock_context.mock_beginPath.called.once()).to.be.true;
         expect(mock_context.mock_closePath.called.once()).to.be.true;
@@ -48,14 +51,14 @@ describe('Drawing', () => {
     });
     it('should draw a dot with outline', () => {
         // set true for the outline
-        draw.dot(mock_context as any, test_coords, expected_width, true);
+        draw.dot(mock_context as any, test_coords, expected_width, color, true);
 
         expect(mock_context.mock_stroke.called.once()).to.be.true;
         expect(mock_context.lineWidth).to.equal(expected_width);
         expect(mock_context.strokeStyle).to.not.be.empty;
     });
     it('should draw a circle', () => {
-        draw.circle(mock_context as any, test_coords, 5, expected_width);
+        draw.circle(mock_context as any, test_coords, 5, expected_width, color);
 
         expect(mock_context.mock_beginPath.called.once()).to.be.true;
         expect(mock_context.mock_closePath.called.once()).to.be.true;
@@ -65,7 +68,7 @@ describe('Drawing', () => {
         expect(mock_context.strokeStyle).to.not.be.empty;
     });
     it('should draw a line, and update the last position of the mouse', () => {
-        draw.line(mock_context as any, expected_width, true);
+        draw.autoLine(mock_context as any, expected_width, color, true);
 
         expect(mock_context.strokeStyle).to.not.be.empty;
         expect(mock_context.lineCap).to.not.be.empty;
@@ -85,7 +88,7 @@ describe('Drawing', () => {
         (mock_event as any).offsetX = new_X;
         (mock_event as any).offsetY = new_Y;
         draw.updateMousePosition(mock_event);
-        draw.line(mock_context as any, expected_width, true);
+        draw.autoLine(mock_context as any, expected_width, color, true);
 
         // tests mouse coords
         expect(draw.last.X).to.equal(draw.mouse.X);
@@ -104,7 +107,7 @@ describe('Drawing', () => {
         // this is necessary, otherwise last coords will also be updated, as they have never been set
         draw.last.X = 1;
         // drawing a line with update_last = false
-        draw.line(mock_context as any, expected_width, false);
+        draw.autoLine(mock_context as any, expected_width, color, false);
 
         // tests mouse coords
         expect(draw.last.X).to.not.equal(draw.mouse.X);
@@ -122,12 +125,25 @@ describe('Drawing', () => {
         draw.updateMousePosition(mock_event);
         // drawing a line with update_last = false, but the last coords have never been set before
         // so they will be updated anyway
-        draw.line(mock_context as any, expected_width, false);
+        draw.autoLine(mock_context as any, expected_width, color, false);
 
         // tests mouse coords
         expect(draw.last.X).to.equal(draw.mouse.X);
         expect(draw.last.X).to.equal(new_X);
         expect(draw.last.Y).to.equal(draw.mouse.Y);
         expect(draw.last.Y).to.equal(new_Y);
+    });
+    it('should be able to draw a line from coordinates', () => {
+        const start = new CartesianCoords(0, 0);
+        const end = new CartesianCoords(1, 1);
+
+        draw.line(mock_context as any, start, end, expected_width, color);
+
+        expect(mock_context.mock_beginPath.called.once()).to.be.true;
+        expect(mock_context.mock_moveTo.called.once()).to.be.true;
+        expect(mock_context.mock_lineTo.called.once()).to.be.true;
+        expect(mock_context.lineWidth).to.equal(expected_width);
+        expect(mock_context.mock_stroke.called.once()).to.be.true;
+        expect(mock_context.mock_closePath.called.once()).to.be.true;
     })
 });
