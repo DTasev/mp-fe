@@ -12,6 +12,8 @@ import { Draw } from './drawing/draw';
 import { Color } from './drawing/color';
 import { LinePath } from './linePath';
 import { LineCache } from './lineCache';
+import { TanksMath } from './tanksMath';
+import { Tank, TankState } from './gameObjects/tank';
 
 export enum GameState {
     MENU,
@@ -36,12 +38,13 @@ export class GameStateController {
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
 
+    private readonly NUM_PLAYERS: number = 2;
+
     /** The current state of the game */
     private state: GameState;
     /** The current event that carries out the actions for the state */
     private action: IActionState;
     private current_player: number;
-    private num_players: number;
     private players: Player[];
     private turn: Limit.Actions;
 
@@ -58,8 +61,10 @@ export class GameStateController {
 
         this.turn = new Limit.Actions(2);
         this.current_player = 0;
-        this.players = [new Player("Player 1", Color.next()), new Player("Player 2", Color.next())];
-        this.num_players = this.players.length;
+        this.players = [];
+        for (let i = 0; i < this.NUM_PLAYERS; i++) {
+            this.players.push(new Player(i, "Player " + (i + 1), Color.next()));
+        }
         this.shared = new TanksSharedState();
     }
 
@@ -146,6 +151,26 @@ export class GameStateController {
         }
     }
 
+    collide(line_path: LinePath) {
+        const num_points_in_line = line_path.points.length;
+        // for every player who isnt the current player
+        for (const player of this.players.filter((p) => p.id !== this.current_player)) {
+            // loop over all their tanks
+            for (const tank of player.tanks) {
+                // check each line for collision with the tank
+                for (let p = 1; p < num_points_in_line; p++) {
+                    // if they collide, mark dead
+                    // TODO return the distance between the centre of the tank and the line. If it is approx == Tank.WIDTH then the tank is disabled, not dead!
+                    if (TanksMath.line.collide_circle(line_path.points[p - 1], line_path.points[p], tank.position, Tank.WIDTH)) {
+                        tank.state = TankState.DEAD;
+                        // the tank's already killed, we can go to the next one
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     cacheLine(path: LinePath) {
         this.line_cache.points.push(path);
     }
@@ -158,7 +183,7 @@ export class GameStateController {
      * @returns false if there are still players to take their turn, true if all players have completed their turns for the state
     */
     isEveryone(): boolean {
-        if (this.current_player === this.num_players - 1) {
+        if (this.current_player === this.NUM_PLAYERS - 1) {
             this.current_player = 0;
             return true;
         }

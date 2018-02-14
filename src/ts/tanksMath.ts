@@ -27,9 +27,18 @@ class Point {
         }
         return true;
     }
+    on_line(point: CartesianCoords, start: CartesianCoords, end: CartesianCoords): boolean {
+        // Initial implementation: https://stackoverflow.com/a/328122/2823526
+        // Optimisation and correction: https://stackoverflow.com/a/328110/2823526
+        // const collinear = (end.X - start.X) * (point.Y - start.Y) === (point.X - start.X) * (end.Y - start.Y);
+        const within = (start: number, point: number, end: number) => (start <= point && point <= end) || (end <= point && point <= start);
+        return start.X === end.X ? within(start.X, point.X, end.X) : within(start.Y, point.Y, end.Y);
+    }
+
 }
 
 class Line {
+
     /** Find the closest point on a line. The closest point to 
      * 
      * @param start Start point of the line
@@ -37,17 +46,18 @@ class Line {
      * @param point Point for which the closest point on the line will be found.
      */
     closest_point(start: CartesianCoords, end: CartesianCoords, point: CartesianCoords): CartesianCoords {
-        // turn the line ito equation of the form Ax + By = C
         const A1 = end.Y - start.Y,
             B1 = start.X - end.X;
 
-        // find the perpendicular lines to the initial line segment
-        const C1 = A1 * start.X + B1 * start.Y,
-            C2 = -B1 * point.X + A1 * point.Y;
+        // turn the line ito equation of the form Ax + By = C
+        const C1 = A1 * start.X + B1 * start.Y;
+        // find the perpendicular line that passes through the outside point, and through the line, forming a +
+        const C2 = -B1 * point.X + A1 * point.Y;
 
-        // use Cramer's Rule to solve for the point of intersection
+        // find the determinant of the two equations algebraically
         const det = A1 * A1 + B1 * B1;
         const closest_point: CartesianCoords = new CartesianCoords();
+        // use Cramer's Rule to solve for the point of intersection
         if (det != 0) {
             closest_point.X = (A1 * C1 - B1 * C2) / det;
             closest_point.Y = (A1 * C2 + B1 * C1) / det;
@@ -61,7 +71,16 @@ class Line {
     collide_circle(start: CartesianCoords, end: CartesianCoords, center: CartesianCoords, radius: number): boolean {
         const closest_point = this.closest_point(start, end, center);
 
-        return TanksMath.point.collide_circle(closest_point, center, radius);
+        if (TanksMath.point.on_line(closest_point, start, end)) {
+            const dist = TanksMath.point.dist2d(closest_point, center);
+
+            if (dist > radius) {
+                return false;
+            }
+            return true;
+        }
+        // the point is not on the line at all
+        return false;
     }
 }
 

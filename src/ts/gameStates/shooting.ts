@@ -117,6 +117,7 @@ export class ShootingState implements IActionState {
     private stopShooting = (e: MouseEvent) => {
         if (this.successful_shot) {
             this.shot_path.list();
+            this.controller.collide(this.shot_path);
             this.controller.cacheLine(this.shot_path);
             //
             // here we will do collision detection along the line

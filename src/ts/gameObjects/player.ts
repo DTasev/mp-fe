@@ -6,8 +6,10 @@ export class Player {
     tanks: IGameObject[];
     name: string;
     color: string;
+    id: number;
 
-    constructor(name: string, color: string) {
+    constructor(id: number, name: string, color: string) {
+        this.id = id;
         this.name = name;
         this.tanks = new Array<IGameObject>();
         this.color = color;

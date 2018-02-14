@@ -7,6 +7,11 @@ W3 template
 Tank icon - https://www.flaticon.com/free-icon/tank_638727, reference html:
 <div>Icons made by <a href="https://www.flaticon.com/authors/those-icons" title="Those Icons">Those Icons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
+Line-circle collision equations:
+    http://ericleong.me/research/circle-line/
+
+Point on line equation:
+    https://stackoverflow.com/a/328110/2823526
 
 # Articles:
 Initial drawing of lines https://zipso.net/a-simple-touchscreen-sketchpad-using-javascript-and-html5/, visited 05/02/18

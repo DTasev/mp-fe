@@ -126,7 +126,19 @@ describe('Tanks Math', () => {
         let start = new CartesianCoords(0, 2);
         let end = new CartesianCoords(2, 4);
         let point = new CartesianCoords(2, 2);
-        let radius = 2;
+        let radius = 3;
+        expect(TanksMath.line.collide_circle(start, end, point, radius)).to.be.true;
+
+        start = new CartesianCoords(171, 465);
+        end = new CartesianCoords(196, 434);
+        point = new CartesianCoords(241, 364);
+        radius = 12;
+        expect(TanksMath.line.collide_circle(start, end, point, radius)).to.be.false;
+
+        start = new CartesianCoords(522, 195);
+        end = new CartesianCoords(493, 153);
+        point = new CartesianCoords(501, 164);
+        radius = 12;
         expect(TanksMath.line.collide_circle(start, end, point, radius)).to.be.true;
     });
 });
