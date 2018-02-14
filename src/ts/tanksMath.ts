@@ -30,7 +30,8 @@ class Point {
     on_line(point: CartesianCoords, start: CartesianCoords, end: CartesianCoords): boolean {
         // Initial implementation: https://stackoverflow.com/a/328122/2823526
         // Optimisation and correction: https://stackoverflow.com/a/328110/2823526
-        // const collinear = (end.X - start.X) * (point.Y - start.Y) === (point.X - start.X) * (end.Y - start.Y);
+
+        // as the point is guaranteed to be on the line by Line::closest_point, we just check if the point is within the line
         const within = (start: number, point: number, end: number) => (start <= point && point <= end) || (end <= point && point <= start);
         return start.X === end.X ? within(start.X, point.X, end.X) : within(start.Y, point.Y, end.Y);
     }
