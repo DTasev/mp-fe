@@ -77,17 +77,16 @@ class Line {
     }
 
     /** 
-     * Return the distance from the line to the circle. 
+     * Return the distance from the line to the center of the circle. 
      * This is done by finding the length of the perpendicular line that passes through the line and circle's center
      * 
      * @param start Start coordinates of the line
      * @param end End coordinates of the line
      * @param center Center of the circle
-     * @param radius Radius of the circle
      * @returns If the circle's center is within the line, then the distance between them will be returned, 
      *          if the circle's center is not within the line, -1 will be returned
      */
-    circle_dist(start: CartesianCoords, end: CartesianCoords, center: CartesianCoords, radius: number): number {
+    circle_center_dist(start: CartesianCoords, end: CartesianCoords, center: CartesianCoords): number | undefined {
         // find the closest point to the circle, on the line
         const closest_point = this.closest_point(start, end, center);
 
@@ -96,7 +95,6 @@ class Line {
         if (TanksMath.point.within(closest_point, start, end)) {
             return TanksMath.point.dist2d(closest_point, center);
         }
-        return -1;
     }
 
     /**
@@ -107,8 +105,9 @@ class Line {
      * @param radius Radius of the circle
      */
     collide_circle(start: CartesianCoords, end: CartesianCoords, center: CartesianCoords, radius: number): boolean {
-        const dist = this.circle_dist(start, end, center, radius);
-        return dist === -1 || dist > radius ? false : true;
+        const dist = this.circle_center_dist(start, end, center);
+        // if distance is undefined, or is further than the radius, return false
+        return !dist || dist > radius ? false : true;
     }
 }
 

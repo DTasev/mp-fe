@@ -4,7 +4,7 @@ import 'mocha';
 import { TanksMath } from "../ts/tanksMath";
 import { CartesianCoords } from '../ts/cartesianCoords';
 
-describe('Tanks Math', () => {
+describe('Tanks Point Math', () => {
     it('should calculate distance between two points', () => {
         // when the end is on the right
         let start = new CartesianCoords(0, 0);
@@ -31,6 +31,8 @@ describe('Tanks Math', () => {
         obj_width = 1;
         expect(TanksMath.point.collide_circle(point, obj_coords, obj_width)).to.be.false;
     });
+});
+describe('Tanks Line Math', () => {
     it('should calculate the closest point on a horizontal line', () => {
         // test horizontal line
         let start = new CartesianCoords(0, 0);
@@ -122,6 +124,8 @@ describe('Tanks Math', () => {
         expect(res.X).to.equal(1);
         expect(res.Y).to.equal(3);
     });
+});
+describe('Tanks Line-Circle Collision', () => {
     it('should check collision of a line with a circle', () => {
         let start = new CartesianCoords(0, 2);
         let end = new CartesianCoords(2, 4);
@@ -140,12 +144,26 @@ describe('Tanks Math', () => {
         point = new CartesianCoords(501, 164);
         radius = 12;
         expect(TanksMath.line.collide_circle(start, end, point, radius)).to.be.true;
-
-        start = new CartesianCoords(542, 289);
-        end = new CartesianCoords(542, 345);
-        point = new CartesianCoords(553, 475);
-        radius = 12;
+    });
+    it('of a vertical line with a circle below', () => {
+        let start = new CartesianCoords(542, 289);
+        let end = new CartesianCoords(542, 345);
+        let point = new CartesianCoords(553, 475);
+        let radius = 12;
         expect(TanksMath.line.collide_circle(start, end, point, radius)).to.be.false;
+    });
+    it("should calculate distance from a line to a circle's center", () => {
+        let start = new CartesianCoords(0, 0);
+        let end = new CartesianCoords(0, 4);
+        let point = new CartesianCoords(2, 2);
+        let dist = TanksMath.line.circle_center_dist(start, end, point);
+        expect(dist).to.equal(2);
 
+        start = new CartesianCoords(0, 0);
+        end = new CartesianCoords(0, 4);
+        point = new CartesianCoords(2, 6);
+
+        dist = TanksMath.line.circle_center_dist(start, end, point);
+        expect(dist).to.be.undefined;
     });
 });
