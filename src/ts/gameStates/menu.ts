@@ -8,7 +8,7 @@ import { Draw } from "../drawing/draw";
 
 class Menu {
     private title: string;
-    private options: string[];
+    private options: ReadonlyArray<string>;
     private final_height = -1;
 
     private readonly start_height = 150;
@@ -16,7 +16,7 @@ class Menu {
 
     selected_item: number;
 
-    constructor(title: string, options: string[]) {
+    constructor(title: string, options: ReadonlyArray<string>) {
         this.title = title;
         this.options = options;
     }
