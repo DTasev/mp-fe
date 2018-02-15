@@ -32,7 +32,7 @@ export class PlacingState implements IActionState {
 
     private addTank = (e) => {
         this.draw.updateMousePosition(e);
-        const tank = new Tank(this.player, this.draw.mouse.X, this.draw.mouse.Y);
+        const tank = new Tank(this.player.tanks.length + 1, this.player, this.draw.mouse.X, this.draw.mouse.Y);
         this.player.tanks.push(tank);
         tank.draw(this.context, this.draw);
         // if we've placed as many objects as allowed, then go to next state

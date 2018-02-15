@@ -14,6 +14,8 @@ import { LinePath } from './linePath';
 import { LineCache } from './lineCache';
 import { TanksMath } from './tanksMath';
 import { Tank, TankState } from './gameObjects/tank';
+import { CartesianCoords } from './cartesianCoords';
+import { IGameObject } from './gameObjects/iGameObject';
 
 export enum GameState {
     MENU,
@@ -146,9 +148,20 @@ export class GameStateController {
         // draw the last N lines
         for (const line_path of this.line_cache.lines()) {
             for (let i = 1; i < line_path.points.length; i++) {
-                draw.line(this.context, line_path.points[i - 1], line_path.points[i], 1, Color.gray());
+                // old lines are currently half-transparent
+                draw.line(this.context, line_path.points[i - 1], line_path.points[i], 1, Color.gray(0.5));
             }
         }
+    }
+
+    debugShot(line_path: LinePath, start: CartesianCoords, end: CartesianCoords, tank: IGameObject, distance: number) {
+        console.log("Starting collision debug...");
+        for (const line of line_path.points) {
+            console.log("(", line.X, ",", -line.Y, ")");
+        }
+        console.log("Collided with line: (" + start.X + "," + -start.Y + ") (" + end.X + "," + -end.Y + ")");
+        console.log("Tank ID: ", tank.id, " (", tank.position.X, ",", -tank.position.Y, ")");
+        console.log("Distance: ", distance);
     }
 
     collide(line_path: LinePath) {
@@ -157,14 +170,27 @@ export class GameStateController {
         for (const player of this.players.filter((p) => p.id !== this.current_player)) {
             // loop over all their tanks
             for (const tank of player.tanks) {
-                // check each line for collision with the tank
-                for (let p = 1; p < num_points_in_line; p++) {
-                    // if they collide, mark dead
-                    // TODO return the distance between the centre of the tank and the line. If it is approx == Tank.WIDTH then the tank is disabled, not dead!
-                    if (TanksMath.line.collide_circle(line_path.points[p - 1], line_path.points[p], tank.position, Tank.WIDTH)) {
-                        tank.state = TankState.DEAD;
-                        // the tank's already killed, we can go to the next one
-                        break;
+                // only do collision detection versus tanks that have not been already killed
+                if (tank.state !== TankState.DEAD) {
+                    // check each line for collision with the tank
+                    for (let p = 1; p < num_points_in_line; p++) {
+                        const dist = TanksMath.line.circle_center_dist(line_path.points[p - 1], line_path.points[p], tank.position);
+                        if (!dist) {
+                            continue;
+                        }
+                        // TODO move out from the controller
+                        // if the line glances the tank, mark as disabled 
+                        if (Tank.WIDTH - Tank.DISABLED_ZONE <= dist && dist <= Tank.WIDTH + Tank.DISABLED_ZONE) {
+                            tank.state = TankState.DISABLED;
+                            this.debugShot(line_path, line_path.points[p - 1], line_path.points[p], tank, Tank.WIDTH);
+                            break;
+                        } // if the line passes through the tank, mark dead
+                        else if (dist < Tank.WIDTH) {
+                            tank.state = TankState.DEAD;
+                            this.debugShot(line_path, line_path.points[p - 1], line_path.points[p], tank, Tank.WIDTH);
+                            break;
+                            // the tank has already been processed, we can go to the next one
+                        }
                     }
                 }
             }

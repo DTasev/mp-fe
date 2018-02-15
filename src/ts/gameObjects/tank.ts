@@ -20,6 +20,9 @@ export class Tank implements IGameObject {
     /** The width of the dot when drawing the tank */
     static WIDTH = 12;
 
+    /** The zone around the tank that will cause it to be disabled instead of killed */
+    static DISABLED_ZONE = 0.5;
+
     /** The width of the line when drawing the tank */
     static LINE_WIDTH = 1;
 
@@ -47,19 +50,32 @@ export class Tank implements IGameObject {
     player: Player;
     position: CartesianCoords;
     state: TankState;
+    id: number;
 
-    constructor(player: Player, x: number, y: number) {
+    constructor(id: number, player: Player, x: number, y: number) {
+        this.id = id;
         this.player = player;
         this.position = new CartesianCoords(x, y);
         this.state = TankState.ALIVE;
     }
 
     draw(context: CanvasRenderingContext2D, draw: Draw): any {
-        if (this.state == TankState.ALIVE) {
-            draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, this.player.color);
-        } else {
-            draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, Color.gray());
+        let color;
+        switch (this.state) {
+            case TankState.ALIVE:
+                color = this.player.color;
+                break;
+            case TankState.DISABLED:
+                color = Color.pink();
+                break;
+            case TankState.DEAD:
+                color = Color.gray();
+                break;
         }
+        draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, color);
+        context.fillStyle = Color.black(0.5);
+        context.font = "18px Calibri";
+        context.fillText(this.id + "", this.position.X, this.position.Y + 5);
     }
 
     highlight(context: CanvasRenderingContext2D, draw: Draw): any {

@@ -4,6 +4,7 @@ import { Player } from "./player";
 import { TankState } from "./tank";
 
 export interface IGameObject {
+    id: number;
     position: CartesianCoords;
     player: Player;
     state: TankState;
