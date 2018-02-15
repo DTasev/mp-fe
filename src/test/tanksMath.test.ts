@@ -140,5 +140,12 @@ describe('Tanks Math', () => {
         point = new CartesianCoords(501, 164);
         radius = 12;
         expect(TanksMath.line.collide_circle(start, end, point, radius)).to.be.true;
+
+        start = new CartesianCoords(542, 289);
+        end = new CartesianCoords(542, 345);
+        point = new CartesianCoords(553, 475);
+        radius = 12;
+        expect(TanksMath.line.collide_circle(start, end, point, radius)).to.be.false;
+
     });
 });
