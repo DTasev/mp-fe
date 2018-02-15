@@ -1,15 +1,18 @@
 import { CartesianCoords } from "../cartesianCoords";
 import { GameState } from "../gameStateController";
 import * as Limit from "../limiters/index";
+import { IGameObject } from "../gameObjects/iGameObject";
 
 export class ActiveTank {
     id: number;
     position: CartesianCoords;
     valid_position: boolean = false;
+    tank: IGameObject;
 
-    constructor(id: number, position: CartesianCoords) {
+    constructor(id: number, position: CartesianCoords, tank: IGameObject) {
         this.id = id;
         this.position = position;
+        this.tank = tank;
     }
 }
 

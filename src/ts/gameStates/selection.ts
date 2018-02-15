@@ -3,7 +3,7 @@ import { GameStateController, GameState } from "../gameStateController";
 import { Player } from "../gameObjects/player";
 import { TanksMath } from "../tanksMath";
 import { Draw } from "../drawing/draw";
-import { Tank } from "../gameObjects/tank";
+import { Tank, TankState } from "../gameObjects/tank";
 import { ActiveTank } from "./sharedState";
 
 export class SelectionState implements IActionState {
@@ -30,11 +30,12 @@ export class SelectionState implements IActionState {
 
         // Check if the user has clicked any tank.
         for (const [id, tank] of this.player.tanks.entries()) {
-            if (TanksMath.point.collide_circle(this.draw.mouse, tank.position, Tank.WIDTH)) {
+            // dead tanks can't be selected
+            if (TanksMath.point.collide_circle(this.draw.mouse, tank.position, Tank.WIDTH) && tank.state !== TankState.DEAD) {
                 // highlight the selected tank
                 tank.highlight(this.context, this.draw);
                 // store the details of the active tank
-                this.controller.shared.active.set(new ActiveTank(id, tank.position));
+                this.controller.shared.active.set(new ActiveTank(id, tank.position, tank));
                 // only highlight the first tank
                 break;
             }
