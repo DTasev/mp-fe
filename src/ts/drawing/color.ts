@@ -17,30 +17,36 @@ export class Color {
         throw new Error("You've used all the available colours!");
     }
 
-    static red(): string {
-        return "rgba(" + 255 + "," + 0 + "," + 0 + "," + 1.0 + ")";
+    static red(alpha: number = 1.0): string {
+        return "rgba(" + 255 + "," + 0 + "," + 0 + "," + alpha + ")";
     }
-    static green(): string {
+    static green(alpha: number = 1.0): string {
 
-        return "rgba(" + 0 + "," + 255 + "," + 0 + "," + 1.0 + ")";
+        return "rgba(" + 0 + "," + 255 + "," + 0 + "," + alpha + ")";
     }
-    static blue(): string {
-        return "rgba(" + 0 + "," + 0 + "," + 255 + "," + 1.0 + ")";
+    static blue(alpha: number = 1.0): string {
+        return "rgba(" + 0 + "," + 0 + "," + 255 + "," + alpha + ")";
     }
-    static black(): string {
-        return "rgba(" + 0 + "," + 0 + "," + 0 + "," + 1.0 + ")";
+    static black(alpha: number = 1.0): string {
+        return "rgba(" + 0 + "," + 0 + "," + 0 + "," + alpha + ")";
     }
-    static white(): string {
-        return "rgba(" + 255 + "," + 255 + "," + 255 + "," + 1.0 + ")";
-
-    }
-    static yellow(): string {
-        return "rgba(" + 255 + "," + 255 + "," + 0 + "," + 1.0 + ")";
+    static white(alpha: number = 1.0): string {
+        return "rgba(" + 255 + "," + 255 + "," + 255 + "," + alpha + ")";
 
     }
-    static gray(): string {
+    static yellow(alpha: number = 1.0): string {
+        return "rgba(" + 255 + "," + 255 + "," + 0 + "," + alpha + ")";
 
-        return "rgba(" + 128 + "," + 128 + "," + 128 + "," + 1.0 + ")";
+    }
+    static gray(alpha: number = 1.0): string {
+        return "rgba(" + 128 + "," + 128 + "," + 128 + "," + alpha + ")";
+    }
+    static pink(alpha: number = 1.0): string {
+        return "rgba(" + 255 + "," + 102 + "," + 203 + "," + alpha + ")";
+    }
+
+    static c(red: number, green: number, blue: Number, alpha: number = 1.0) {
+        return "rgba(" + red + "," + green + "," + blue + "," + alpha + ")";
     }
 
 }
