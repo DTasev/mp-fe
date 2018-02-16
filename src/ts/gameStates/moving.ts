@@ -5,7 +5,7 @@ import { GameStateController, GameState } from "../gameStateController";
 import { Player } from "../gameObjects/player";
 import { TanksMath } from "../tanksMath";
 import { CartesianCoords } from "../cartesianCoords";
-import { Tank, TankState } from "../gameObjects/tank";
+import { Tank, TankHealthState } from "../gameObjects/tank";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { ActiveTank } from "./sharedState";
 import { Color } from "../drawing/color";
@@ -29,7 +29,8 @@ export class MovingState implements IActionState {
         this.line = new Limit.Length(Tank.MOVEMENT_RANGE);
         // if this is the first turn
         if (!this.controller.shared.turn.available()) {
-            this.turn = new Limit.Actions();
+            // limit the number of actions to how many tanks the player has
+            this.turn = new Limit.Actions(this.player.activeTanks());
         } else {
             this.turn = this.controller.shared.turn.get();
         }
@@ -51,7 +52,7 @@ export class MovingState implements IActionState {
         // limit the start of the line to be the tank
         this.draw.last = new CartesianCoords(this.active.position.X, this.active.position.Y);
         // limit the length of the line to the maximum allowed tank movement, and disabled tanks can't be moved
-        if (this.line.in(this.active.position, this.draw.mouse) && this.active.tank.state !== TankState.DISABLED) {
+        if (this.line.in(this.active.position, this.draw.mouse) && this.active.tank.health_state !== TankHealthState.DISABLED) {
             this.draw.state = DrawState.DRAWING;
             this.validMove();
         }

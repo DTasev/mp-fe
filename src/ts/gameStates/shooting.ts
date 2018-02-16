@@ -42,8 +42,10 @@ export class ShootingState implements IActionState {
         this.tank_roaming_length = new Limit.Length(Tank.SHOOTING_DEADZONE);
         this.shot_length = new Limit.Length(Tank.SHOOTING_RANGE);
         this.shot_speed = new Limit.Speed(Tank.SHOOTING_SPEED);
+
         if (!this.controller.shared.turn.available()) {
-            this.turn = new Limit.Actions();
+            // limit the number of actions to how many tanks the player has
+            this.turn = new Limit.Actions(this.player.activeTanks());
         } else {
             this.turn = this.controller.shared.turn.get();
         }

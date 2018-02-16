@@ -1,13 +1,13 @@
 import { Draw } from "../drawing/draw";
 import { CartesianCoords } from "../cartesianCoords";
 import { Player } from "./player";
-import { TankState } from "./tank";
+import { TankHealthState } from "./tank";
 
 export interface IGameObject {
     id: number;
     position: CartesianCoords;
     player: Player;
-    state: TankState;
+    health_state: TankHealthState;
 
     draw(context: CanvasRenderingContext2D, draw: Draw);
     highlight(context: CanvasRenderingContext2D, draw: Draw);

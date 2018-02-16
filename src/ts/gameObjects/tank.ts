@@ -4,8 +4,13 @@ import { Draw } from "../drawing/draw";
 import { IGameObject } from './iGameObject'
 import { Color } from "../drawing/color";
 
-
-export enum TankState {
+export enum TankActState {
+    /** The tank has performed an action this turn, e.g. moved or shot */
+    ACTED,
+    /** The tank hasn't performed an action this turn */
+    NOT_ACTED
+}
+export enum TankHealthState {
     /** Tank can do everything */
     ALIVE,
 
@@ -88,14 +93,15 @@ export class Tank implements IGameObject {
 
     health: number;
     position: CartesianCoords;
-    state: TankState;
+    health_state: TankHealthState;
+    act_state: TankActState;
     label: string;
 
     constructor(id: number, player: Player, x: number, y: number) {
         this.id = id;
         this.player = player;
         this.position = new CartesianCoords(x, y);
-        this.state = TankState.ALIVE;
+        this.health_state = TankHealthState.ALIVE;
         this.label = this.id + ""; // + "" converts to string
 
         // initialise colors for each of the tank's states
@@ -112,15 +118,15 @@ export class Tank implements IGameObject {
     draw(context: CanvasRenderingContext2D, draw: Draw): any {
         let color: string;
         let label = this.label;
-        switch (this.state) {
-            case TankState.ALIVE:
+        switch (this.health_state) {
+            case TankHealthState.ALIVE:
                 color = this.color.alive;
                 break;
-            case TankState.DISABLED:
+            case TankHealthState.DISABLED:
                 color = this.color.disabled;
                 label += "D";
                 break;
-            case TankState.DEAD:
+            case TankHealthState.DEAD:
                 color = this.color.dead;
                 label += "X";
                 break;

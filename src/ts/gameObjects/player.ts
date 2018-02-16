@@ -1,6 +1,7 @@
-import { Tank } from "./tank";
+import { Tank, TankHealthState } from "./tank";
 import { IGameObject } from "./iGameObject";
 import { Color } from "../drawing/color";
+
 
 export class Player {
     readonly id: number;
@@ -14,5 +15,9 @@ export class Player {
         this.name = name;
         this.tanks = new Array<IGameObject>();
         this.color = color;
-    };
+    }
+
+    activeTanks(): number {
+        return this.tanks.filter((tank) => tank.health_state !== TankHealthState.DEAD).length;
+    }
 }
