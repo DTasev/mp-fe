@@ -145,11 +145,12 @@ export class GameStateController {
             }
         }
 
+        const old_lines_color = Color.gray(0.5).toRGBA();
         // draw the last N lines
         for (const line_path of this.line_cache.lines()) {
             for (let i = 1; i < line_path.points.length; i++) {
                 // old lines are currently half-transparent
-                draw.line(this.context, line_path.points[i - 1], line_path.points[i], 1, Color.gray(0.5));
+                draw.line(this.context, line_path.points[i - 1], line_path.points[i], 1, old_lines_color);
             }
         }
     }

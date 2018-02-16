@@ -32,6 +32,9 @@ export class Tank implements IGameObject {
     /** The width of the movement line */
     static MOVEMENT_LINE_WIDTH = 3;
 
+    /** The color of the movement line */
+    static MOVEMENT_LINE_COLOR = Color.black().toRGBA();
+
     /** How far can the shot line reach */
     static SHOOTING_RANGE = 250;
 
@@ -43,14 +46,17 @@ export class Tank implements IGameObject {
      */
     static SHOOTING_DEADZONE = Tank.WIDTH + 2;
 
-    private highlight_color: string = Color.red();
-    private highlight_outline_color: string = Color.green();
+    private highlight_color: string = Color.red().toRGBA();
+    private highlight_outline_color: string = Color.green().toRGBA();
+
+    private label_color: string = Color.black().toRGBA(0.5);
 
     health: number;
     player: Player;
     position: CartesianCoords;
     state: TankState;
     id: number;
+
 
     constructor(id: number, player: Player, x: number, y: number) {
         this.id = id;
@@ -63,17 +69,17 @@ export class Tank implements IGameObject {
         let color;
         switch (this.state) {
             case TankState.ALIVE:
-                color = this.player.color;
+                color = this.player.color.toRGBA();
                 break;
             case TankState.DISABLED:
-                color = Color.pink();
+                color = this.player.color.toRGBA(0.5);
                 break;
             case TankState.DEAD:
                 color = Color.gray();
                 break;
         }
         draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, color);
-        context.fillStyle = Color.black(0.5);
+        context.fillStyle = this.label_color;
         context.font = "18px Calibri";
         context.fillText(this.id + "", this.position.X, this.position.Y + 5);
     }

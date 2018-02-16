@@ -63,7 +63,7 @@ export class Draw {
      * @param context The canvas context that we're drawing on
      * @param update_last Whether to update the last position of the mouse
      */
-    autoLine(context: CanvasRenderingContext2D, width: number, color: string, update_last: boolean = true) {
+    mouseLine(context: CanvasRenderingContext2D, width: number, color: string, update_last: boolean = true) {
         // If lastX is not set, set lastX and lastY to the current position 
         if (this.last.X == -1) {
             this.last.X = this.mouse.X;

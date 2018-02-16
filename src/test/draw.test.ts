@@ -14,7 +14,7 @@ describe('Drawing', () => {
     let mock_context: CanvasContextMock;
     const test_coords: CartesianCoords = new CartesianCoords(23, 23);
     const expected_width = 11414;
-    const color = Color.red();
+    const color = Color.red().toRGBA();
 
     beforeEach(() => {
         mock_context = new CanvasContextMock();
@@ -68,7 +68,7 @@ describe('Drawing', () => {
         expect(mock_context.strokeStyle).to.not.be.empty;
     });
     it('should draw a line, and update the last position of the mouse', () => {
-        draw.autoLine(mock_context as any, expected_width, color, true);
+        draw.mouseLine(mock_context as any, expected_width, color, true);
 
         expect(mock_context.strokeStyle).to.not.be.empty;
         expect(mock_context.lineCap).to.not.be.empty;
@@ -88,7 +88,7 @@ describe('Drawing', () => {
         (mock_event as any).offsetX = new_X;
         (mock_event as any).offsetY = new_Y;
         draw.updateMousePosition(mock_event);
-        draw.autoLine(mock_context as any, expected_width, color, true);
+        draw.mouseLine(mock_context as any, expected_width, color, true);
 
         // tests mouse coords
         expect(draw.last.X).to.equal(draw.mouse.X);
@@ -107,7 +107,7 @@ describe('Drawing', () => {
         // this is necessary, otherwise last coords will also be updated, as they have never been set
         draw.last.X = 1;
         // drawing a line with update_last = false
-        draw.autoLine(mock_context as any, expected_width, color, false);
+        draw.mouseLine(mock_context as any, expected_width, color, false);
 
         // tests mouse coords
         expect(draw.last.X).to.not.equal(draw.mouse.X);
@@ -125,7 +125,7 @@ describe('Drawing', () => {
         draw.updateMousePosition(mock_event);
         // drawing a line with update_last = false, but the last coords have never been set before
         // so they will be updated anyway
-        draw.autoLine(mock_context as any, expected_width, color, false);
+        draw.mouseLine(mock_context as any, expected_width, color, false);
 
         // tests mouse coords
         expect(draw.last.X).to.equal(draw.mouse.X);

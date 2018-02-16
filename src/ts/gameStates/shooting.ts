@@ -77,7 +77,7 @@ export class ShootingState implements IActionState {
     }
 
     private validRange(): void {
-        this.draw.autoLine(this.context, Tank.MOVEMENT_LINE_WIDTH, Color.black());
+        this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, Tank.MOVEMENT_LINE_COLOR);
     }
 
     private continueShooting = (e: MouseEvent) => {

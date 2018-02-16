@@ -59,7 +59,7 @@ export class MovingState implements IActionState {
 
     private validMove() {
         this.active.valid_position = true;
-        this.draw.autoLine(this.context, Tank.MOVEMENT_LINE_WIDTH, Color.black());
+        this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, Tank.MOVEMENT_LINE_COLOR);
     }
 
     endMovement = (e: MouseEvent) => {
