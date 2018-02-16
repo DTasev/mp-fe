@@ -166,6 +166,7 @@ export class GameStateController {
     }
 
     collide(line_path: LinePath) {
+        console.log("-------------------- Starting Collision -------------------");
         const num_points_in_line = line_path.points.length;
         // for every player who isnt the current player
         for (const player of this.players.filter((p) => p.id !== this.current_player)) {
@@ -176,6 +177,7 @@ export class GameStateController {
                     // check each line for collision with the tank
                     for (let p = 1; p < num_points_in_line; p++) {
                         const dist = TanksMath.line.circle_center_dist(line_path.points[p - 1], line_path.points[p], tank.position);
+                        this.debugShot(line_path, line_path.points[p - 1], line_path.points[p], tank, dist);
                         if (!dist) {
                             continue;
                         }
@@ -183,12 +185,12 @@ export class GameStateController {
                         // if the line glances the tank, mark as disabled 
                         if (Tank.WIDTH - Tank.DISABLED_ZONE <= dist && dist <= Tank.WIDTH + Tank.DISABLED_ZONE) {
                             tank.state = TankState.DISABLED;
-                            this.debugShot(line_path, line_path.points[p - 1], line_path.points[p], tank, Tank.WIDTH);
+                            console.log("Tank ", tank.id, " disabled!");
                             break;
                         } // if the line passes through the tank, mark dead
                         else if (dist < Tank.WIDTH) {
                             tank.state = TankState.DEAD;
-                            this.debugShot(line_path, line_path.points[p - 1], line_path.points[p], tank, Tank.WIDTH);
+                            console.log("Tank ", tank.id, " dead!");
                             break;
                             // the tank has already been processed, we can go to the next one
                         }

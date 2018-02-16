@@ -15,77 +15,124 @@ export enum TankState {
     /** Tank can't do anything */
     DEAD
 }
+
+/** Provides grouping for all the Tank's colors */
+class TankColor {
+    /** Color for when the tank is active/selected */
+    readonly active: string;
+    /** Color for the outline that shows the action(movement) range */
+    readonly active_outline: string;
+    /** Color for the label of the tank */
+    readonly label: string;
+    /** Color for the tank, when not selected */
+    readonly alive: string;
+    /** Color for when the tank has been disabled, and is not selected */
+    readonly disabled: string;
+    /** Color for when the tank has been killed */
+    readonly dead: string;
+
+    constructor(active: string, active_outline: string, label: string, alive: string, disabled: string, dead: string) {
+        this.active = active;
+        this.active_outline = active_outline;
+
+        this.label = label;
+
+        this.alive = alive;
+        this.disabled = disabled;
+        this.dead = dead;
+    }
+}
+
 export class Tank implements IGameObject {
 
     /** The width of the dot when drawing the tank */
-    static WIDTH = 12;
+    static readonly WIDTH = 12;
 
     /** The zone around the tank that will cause it to be disabled instead of killed */
-    static DISABLED_ZONE = 0.5;
+    static readonly DISABLED_ZONE = 0.5;
 
     /** The width of the line when drawing the tank */
-    static LINE_WIDTH = 1;
+    static readonly LINE_WIDTH = 1;
 
     /** How far can the tank move */
-    static MOVEMENT_RANGE = 100;
+    static readonly MOVEMENT_RANGE = 100;
 
     /** The width of the movement line */
-    static MOVEMENT_LINE_WIDTH = 3;
+    static readonly MOVEMENT_LINE_WIDTH = 3;
 
     /** The color of the movement line */
-    static MOVEMENT_LINE_COLOR = Color.black().toRGBA();
+    static readonly MOVEMENT_LINE_COLOR = Color.black().toRGBA();
 
     /** How far can the shot line reach */
-    static SHOOTING_RANGE = 250;
+    static readonly SHOOTING_RANGE = 250;
 
     /** How fast must the player move for a valid shot */
-    static SHOOTING_SPEED = 30;
+    static readonly SHOOTING_SPEED = 30;
+
     /** The deadzone allowed for free mouse movement before the player shoots.
      * This means that the player can wiggle the cursor around in the tank's space
      * to prepare for the shot.
      */
-    static SHOOTING_DEADZONE = Tank.WIDTH + 2;
+    static readonly SHOOTING_DEADZONE = Tank.WIDTH + 2;
 
-    private highlight_color: string = Color.red().toRGBA();
-    private highlight_outline_color: string = Color.green().toRGBA();
+    /** Opacity for the tank's label */
+    private readonly LABEL_OPACITY = 0.7;
 
-    private label_color: string = Color.black().toRGBA(0.5);
+    /** Opacity for the player color when the tank is disabled */
+    private readonly DISABLED_OPACITY = 0.7;
+
+    private readonly color: TankColor;
+
+    readonly id: number;
+    readonly player: Player;
 
     health: number;
-    player: Player;
     position: CartesianCoords;
     state: TankState;
-    id: number;
-
+    label: string;
 
     constructor(id: number, player: Player, x: number, y: number) {
         this.id = id;
         this.player = player;
         this.position = new CartesianCoords(x, y);
         this.state = TankState.ALIVE;
+        this.label = this.id + ""; // + "" converts to string
+
+        // initialise colors for each of the tank's states
+        this.color = new TankColor(
+            Color.red().toRGBA(),
+            Color.green().toRGBA(),
+            Color.black().toRGBA(this.LABEL_OPACITY),
+            this.player.color.toRGBA(),
+            this.player.color.toRGBA(this.DISABLED_OPACITY),
+            Color.gray().toRGBA()
+        );
     }
 
     draw(context: CanvasRenderingContext2D, draw: Draw): any {
-        let color;
+        let color: string;
+        let label = this.label;
         switch (this.state) {
             case TankState.ALIVE:
-                color = this.player.color.toRGBA();
+                color = this.color.alive;
                 break;
             case TankState.DISABLED:
-                color = this.player.color.toRGBA(0.5);
+                color = this.color.disabled;
+                label += "D";
                 break;
             case TankState.DEAD:
-                color = Color.gray();
+                color = this.color.dead;
+                label += "X";
                 break;
         }
         draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, color);
-        context.fillStyle = this.label_color;
+        context.fillStyle = this.color.label;
         context.font = "18px Calibri";
-        context.fillText(this.id + "", this.position.X, this.position.Y + 5);
+        context.fillText(label, this.position.X, this.position.Y + 5);
     }
 
     highlight(context: CanvasRenderingContext2D, draw: Draw): any {
-        draw.dot(context, this.position, Tank.WIDTH, this.highlight_color);
-        draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH, this.highlight_outline_color);
+        draw.dot(context, this.position, Tank.WIDTH, this.color.active);
+        draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH, this.color.active_outline);
     }
 }

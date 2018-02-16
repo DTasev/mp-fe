@@ -3,10 +3,11 @@ import { IGameObject } from "./iGameObject";
 import { Color } from "../drawing/color";
 
 export class Player {
-    tanks: IGameObject[];
-    name: string;
-    color: Color;
-    id: number;
+    readonly id: number;
+    readonly name: string;
+
+    readonly tanks: IGameObject[];
+    readonly color: Color;
 
     constructor(id: number, name: string, color: Color) {
         this.id = id;
