@@ -13,9 +13,9 @@ export class Color {
 
     toRGBA(alpha?: number): string {
         if (alpha) {
-            return "rgba(" + this.red + "," + this.green + "," + this.blue + "," + alpha + ");";
+            return "rgba(" + this.red + "," + this.green + "," + this.blue + "," + alpha + ")";
         } else {
-            return "rgba(" + this.red + "," + this.green + "," + this.blue + "," + this.alpha + ");";
+            return "rgba(" + this.red + "," + this.green + "," + this.blue + "," + this.alpha + ")";
 
         }
     }
