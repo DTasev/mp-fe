@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="css/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-<link rel="shortcut icon" type="image/png" href="img/tank.png"/>
+<link rel="shortcut icon" type="image/png" href="img/tank.png" />
 
 <link rel="stylesheet" href="css/style.css">
 <style>
@@ -28,7 +28,9 @@
         <div class="w3-container">
             <div class="w3-row">
                 <div class="w3-col s2 m2 l2 w3-dropdown-click margin-top-1em">
-                    <button onclick="Controls.toggleRepositoryOptions()" class="w3-button w3-white full-width"><i class="fa fa-ellipsis-v fa-2x" aria-hidden="true"></i></button>
+                    <button onclick="Controls.toggleRepositoryOptions()" class="w3-button w3-white full-width">
+                        <i class="fa fa-ellipsis-v fa-2x" aria-hidden="true"></i>
+                    </button>
                     <div id="repository-options" class="w3-dropdown-content w3-bar-block w3-border">
                         <a class="w3-bar-item w3-button" onclick="Controls.showCredentials()">Show credentials</a>
                         <a class="w3-bar-item w3-button" onclick="Controls.toggleRepositoryOptions()">Link 2</a>
@@ -59,8 +61,8 @@
             </div>
             <div id="error-message" class="w3-row"></div>
         </div>
-            <div id="repository-list" class="w3-bar-block">
-            </div>
+        <div id="repository-list" class="w3-bar-block">
+        </div>
         <div class="w3-panel w3-large">
             <a href="https://www.github.com/dtasev/mp-fe" target="_blank" class="out-link">
                 <i class="fab fa-github w3-hover-opacity">
@@ -74,8 +76,7 @@
     </nav>
 
     <!-- Overlay effect when opening sidebar on small screens -->
-    <div class="w3-overlay w3-animate-opacity" onclick="Controls.w3_close()" style="cursor:pointer" title="close side menu"
-        id="myOverlay"></div>
+    <div class="w3-overlay w3-animate-opacity" onclick="Controls.w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
     <!-- !PAGE CONTENT! -->
     <div class="w3-main">
@@ -94,24 +95,31 @@
                 <div class="w3-col s10 m10 l10">
                     <h2>
                         <b id="user-warning"></b>
-                        <span hidden id="loading-icon"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+                        <span hidden id="loading-icon">
+                            <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                        </span>
                     </h2>
                 </div>
             </div>
         </header>
         <!-- Issues list, built dynamically from javascript -->
-        <div class="w3-container canvas-holder">
-            <div class="w3-row">
+        <div class="w3-container canvas-holder container">
+            <div class="w3-row child">
                 <canvas id="tanks-canvas" class="game-canvas"></canvas>
             </div>
-            <div class="w3-row">
-                <p id="debug-status"></p>
+            <div id="tanks-ui" class="w3-row child">
+                <div class="w3-col s11 m11 l11">
+                    <button>I am a button</button>
+                </div>
+                <div class="w3-col s1 m1 l1">
+                    <button style="width:100%">I am a button</button>
+                </div>
             </div>
         </div>
         <!-- End page content -->
     </div>
 
-    <script src="src/dist/bundle.js "></script>
+    <script src="src/dist/bundle.js"></script>
 </body>
 
 </html>

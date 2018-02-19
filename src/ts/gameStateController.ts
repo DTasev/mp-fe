@@ -1,4 +1,3 @@
-import { Canvas } from './canvas';
 import { IActionState } from "./gameStates/iActionState";
 import { MovingState } from "./gameStates/moving";
 import { PlacingState } from "./gameStates/placing";
@@ -16,6 +15,7 @@ import { TanksMath } from './tanksMath';
 import { Tank, TankHealthState } from './gameObjects/tank';
 import { CartesianCoords } from './cartesianCoords';
 import { IGameObject } from './gameObjects/iGameObject';
+import { Ui } from "./ui";
 
 export enum GameState {
     MENU,
@@ -37,37 +37,38 @@ export enum GameState {
  * For more details: https://github.com/Microsoft/TypeScript/wiki/'this'-in-TypeScript#red-flags-for-this
  */
 export class GameStateController {
+    private readonly NUM_PLAYERS: number = 2;
+
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
-
-    private readonly NUM_PLAYERS: number = 2;
+    private ui: Ui;
 
     /** The current state of the game */
     private state: GameState;
     /** The current event that carries out the actions for the state */
     private action: IActionState;
+    /** The position of the current player in the players array */
     private current_player: number;
-    private players: Player[];
-    private turn: Limit.Actions;
+    /** All the players in the game */
+    private readonly players: Player[] = [];
 
-    private line_cache: LineCache;
+    /** Stores the all of the shot lines */
+    private readonly line_cache = new LineCache();
 
+    /** Flag to specify if the current player's turn is over */
     next_player: boolean = false;
     /** Shared state among game states */
-    shared: TanksSharedState;
+    readonly shared = new TanksSharedState();
 
-    initialise(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+    initialise(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui) {
         this.canvas = canvas;
         this.context = context;
-        this.line_cache = new LineCache();
+        this.ui = ui;
 
-        this.turn = new Limit.Actions(2);
         this.current_player = 0;
-        this.players = [];
         for (let i = 0; i < this.NUM_PLAYERS; i++) {
             this.players.push(new Player(i, "Player " + (i + 1), Color.next()));
         }
-        this.shared = new TanksSharedState();
     }
 
     /**
