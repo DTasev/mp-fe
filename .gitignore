@@ -6,3 +6,5 @@ node_modules/
 notes/
 src/build/
 npm-debug.log
+logs/
+package-lock.json
