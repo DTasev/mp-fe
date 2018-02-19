@@ -71,13 +71,13 @@ export class J2H {
     * ```
     * @param dict Dictionary containing the description of the HTML
     */
-    static json2html(dict: {}): HTMLElement {
+    static parse<T = HTMLElement>(dict: {}): T {
         const [parent_elem, props] = J2H.getParent(dict);
 
         Object.keys(props).forEach(function (key) {
             if (key === "children") {
                 for (const p of props["children"]) {
-                    parent_elem.appendChild(J2H.json2html(p));
+                    parent_elem.appendChild(J2H.parse(p));
                 }
             } else if (key === "onclick") {
                 // there's no need to do this for buttons, the onclick attribute is present for them
@@ -95,8 +95,8 @@ export class J2H {
      * @param dict Dictionary with 1 key, and some values
      * @returns HTMLElement of the key in the dictionary, and all of its values
      */
-    private static getParent(dict: {}): [HTMLElement, {}] {
-        let parent_elem: HTMLElement, props: {};
+    private static getParent<T = HTMLElement>(dict: {}): [T, {}] {
+        let parent_elem, props: {};
         // get the first key in the dictionary
         Object.keys(dict).forEach(function (key) {
             parent_elem = document.createElement(key);

@@ -35,8 +35,9 @@ export class PlacingState implements IActionState {
         const tank = new Tank(this.player.tanks.length + 1, this.player, this.draw.mouse.X, this.draw.mouse.Y);
         this.player.tanks.push(tank);
         tank.draw(this.context, this.draw);
+        this.turn.take();
         // if we've placed as many objects as allowed, then go to next state
-        if (this.turn.end()) {
+        if (this.turn.over()) {
             this.controller.shared.next.set(GameState.TANK_SELECTION);
             this.controller.changeGameState(GameState.TANK_PLACING);
         }

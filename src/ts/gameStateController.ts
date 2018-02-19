@@ -118,7 +118,7 @@ export class GameStateController {
                 break;
             case GameState.TANK_MOVING:
                 console.log("Initialising TANK MOVEMENT");
-                this.action = new MovingState(this, this.context, player);
+                this.action = new MovingState(this, this.context, this.ui, player);
                 break;
             case GameState.TANK_SHOOTING:
                 console.log("Initialising TANK SHOOTING");
@@ -182,7 +182,7 @@ export class GameStateController {
                         if (!dist) {
                             continue;
                         }
-                        // TODO move out from the controller
+                        // TODO move out of controller
                         // if the line glances the tank, mark as disabled 
                         if (Tank.WIDTH - Tank.DISABLED_ZONE <= dist && dist <= Tank.WIDTH + Tank.DISABLED_ZONE) {
                             tank.health_state = TankHealthState.DISABLED;

@@ -9,21 +9,36 @@ import { Tank, TankHealthState } from "../gameObjects/tank";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { ActiveTank } from "./sharedState";
 import { Color } from "../drawing/color";
+import { Ui } from "../ui";
+import { J2H } from "../json2html";
+
+class MovingUI {
+    static button_skipTurn(): HTMLButtonElement {
+        return J2H.parse<HTMLButtonElement>({
+            "button": {
+                "style": "width:100%",
+                "textContent": "Skip Turn"
+            }
+        })
+    }
+}
 
 export class MovingState implements IActionState {
     context: CanvasRenderingContext2D;
     controller: GameStateController;
     player: Player;
+    ui: Ui;
 
     draw: Draw;
     line: Limit.Length;
     turn: Limit.Actions;
     active: ActiveTank;
 
-    constructor(controller: GameStateController, context: CanvasRenderingContext2D, player: Player) {
+    constructor(controller: GameStateController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
         this.context = context;
         this.player = player;
+        this.ui = ui;
 
         this.draw = new Draw();
         this.line = new Limit.Length(Tank.MOVEMENT_RANGE);
@@ -35,6 +50,11 @@ export class MovingState implements IActionState {
             this.turn = this.controller.shared.turn.get();
         }
         this.active = this.controller.shared.active.get();
+
+        const button = MovingUI.button_skipTurn();
+        button.onclick = this.endTurnEarly;
+        button.textContent = "Skip turn";
+        this.ui.addRight(button);
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
@@ -74,8 +94,22 @@ export class MovingState implements IActionState {
             this.controller.showUserWarning("");
             this.turn.take();
         }
+        this.endTurn();
+    }
 
+    private endTurnEarly = () => {
+        // mark the turn as over
+        this.turn.end();
+        // run the end of turn action
+        this.endTurn();
+    }
+
+    /** The action to be taken at the end of the turn */
+    private endTurn() {
         if (this.turn.over()) {
+            // remove any turn info, if leftover from skipping a turn
+            // we just get the object, but do not store it anywhere, so that it is cleared
+            this.controller.shared.turn.get();
             // this was the last turn, go to shooting afterwards
             this.controller.shared.next.set(GameState.TANK_SHOOTING);
         } else {
@@ -92,7 +126,7 @@ export class MovingState implements IActionState {
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
 
-    drawMoveLine = (e: MouseEvent) => {
+    private drawMoveLine = (e: MouseEvent) => {
         this.draw.updateMousePosition(e);
         // draw the movement line if the mouse button is currently being pressed
         if (this.draw.state == DrawState.DRAWING) {
