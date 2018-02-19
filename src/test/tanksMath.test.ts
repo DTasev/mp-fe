@@ -3,6 +3,7 @@ import 'mocha';
 
 import { TanksMath } from "../ts/tanksMath";
 import { CartesianCoords } from '../ts/cartesianCoords';
+import { Tank } from '../ts/gameObjects/tank';
 
 describe('Tanks Point Math', () => {
     it('should calculate distance between two points', () => {
@@ -136,21 +137,27 @@ describe('Tanks Line-Circle Collision', () => {
         start = new CartesianCoords(171, 465);
         end = new CartesianCoords(196, 434);
         point = new CartesianCoords(241, 364);
-        radius = 12;
+        radius = Tank.WIDTH;
         expect(TanksMath.line.collide_circle(start, end, point, radius)).to.be.false;
 
         start = new CartesianCoords(522, 195);
         end = new CartesianCoords(493, 153);
         point = new CartesianCoords(501, 164);
-        radius = 12;
+        radius = Tank.WIDTH;
         expect(TanksMath.line.collide_circle(start, end, point, radius)).to.be.true;
     });
     it('of a vertical line with a circle below', () => {
         let start = new CartesianCoords(542, 289);
         let end = new CartesianCoords(542, 345);
         let point = new CartesianCoords(553, 475);
-        let radius = 12;
+        let radius = Tank.WIDTH;
         expect(TanksMath.line.collide_circle(start, end, point, radius)).to.be.false;
+
+        start = new CartesianCoords(356, 210);
+        end = new CartesianCoords(405, 210);
+        point = new CartesianCoords(400, 210);
+        radius = Tank.WIDTH;
+        expect(TanksMath.line.collide_circle(start, end, point, radius)).to.be.true;
     });
     it("should calculate distance from a line to a circle's center", () => {
         let start = new CartesianCoords(0, 0);
@@ -164,6 +171,6 @@ describe('Tanks Line-Circle Collision', () => {
         point = new CartesianCoords(2, 6);
 
         dist = TanksMath.line.circle_center_dist(start, end, point);
-        expect(dist).to.be.undefined;
+        expect(dist).to.equal(-1);
     });
 });

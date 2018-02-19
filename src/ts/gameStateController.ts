@@ -1,6 +1,6 @@
 import { IActionState } from "./gameStates/iActionState";
-import { MovingState } from "./gameStates/moving";
-import { PlacingState } from "./gameStates/placing";
+import { MovingState } from "./gameStates/movement";
+import { PlacingState } from "./gameStates/placement";
 import { ShootingState } from "./gameStates/shooting";
 import { SelectionState } from "./gameStates/selection";
 import { MenuState } from "./gameStates/menu";
@@ -159,12 +159,11 @@ export class GameStateController {
     }
 
     debugShot(line_path: LinePath, start: CartesianCoords, end: CartesianCoords, tank: IGameObject, distance: number) {
-        console.log("Starting collision debug...");
         for (const line of line_path.points) {
-            console.log("(", line.X, ",", -line.Y, ")");
+            console.log(line.X + "," + (-line.Y));
         }
-        console.log("Collided with line: (" + start.X + "," + -start.Y + ") (" + end.X + "," + -end.Y + ")");
-        console.log("Tank ID: ", tank.id, " (", tank.position.X, ",", -tank.position.Y, ")");
+        console.log("Collision versus line:\n", start.X, ",", -start.Y, "\n", end.X, ",", -end.Y);
+        console.log("Tank ID: ", tank.id, "\nPosition: (", tank.position.X, ",", -tank.position.Y, ")");
         console.log("Distance: ", distance);
     }
 
@@ -181,9 +180,10 @@ export class GameStateController {
                     for (let p = 1; p < num_points_in_line; p++) {
                         const dist = TanksMath.line.circle_center_dist(line_path.points[p - 1], line_path.points[p], tank.position);
                         this.debugShot(line_path, line_path.points[p - 1], line_path.points[p], tank, dist);
-                        if (!dist) {
+                        if (dist === -1) {
                             continue;
                         }
+                        console.log("Shot hit the tank.");
                         // TODO move out of controller
                         // if the line glances the tank, mark as disabled 
                         if (Tank.WIDTH - Tank.DISABLED_ZONE <= dist && dist <= Tank.WIDTH + Tank.DISABLED_ZONE) {

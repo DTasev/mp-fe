@@ -86,7 +86,7 @@ class Line {
      * @returns If the circle's center is within the line, then the distance between them will be returned, 
      *          if the circle's center is not within the line, -1 will be returned
      */
-    circle_center_dist(start: CartesianCoords, end: CartesianCoords, center: CartesianCoords): number | undefined {
+    circle_center_dist(start: CartesianCoords, end: CartesianCoords, center: CartesianCoords): number {
         // find the closest point to the circle, on the line
         const closest_point = this.closest_point(start, end, center);
 
@@ -94,6 +94,8 @@ class Line {
         // and not somewhere along its infinite extension
         if (TanksMath.point.within(closest_point, start, end)) {
             return TanksMath.point.dist2d(closest_point, center);
+        } else {
+            return -1;
         }
     }
 
@@ -107,7 +109,7 @@ class Line {
     collide_circle(start: CartesianCoords, end: CartesianCoords, center: CartesianCoords, radius: number): boolean {
         const dist = this.circle_center_dist(start, end, center);
         // if distance is undefined, or is further than the radius, return false
-        return !dist || dist > radius ? false : true;
+        return dist === -1 || dist > radius ? false : true;
     }
 }
 
