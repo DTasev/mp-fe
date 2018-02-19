@@ -1,4 +1,4 @@
-import { Point } from "../ts/utility/point";
+import { Point } from "../../ts/utility/point";
 import { expect } from 'chai';
 import 'mocha';
 
