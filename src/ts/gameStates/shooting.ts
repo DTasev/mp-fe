@@ -128,7 +128,7 @@ export class ShootingState implements IActionState {
         }
         if (this.turn.over()) {
             this.controller.next_player = true;
-            this.controller.shared.next.set(GameState.TANK_SELECTION);
+            this.controller.shared.next.set(GameState.TANK_MOVEMENT);
         } else {
             this.controller.shared.turn.set(this.turn);
             this.controller.shared.next.set(GameState.TANK_SHOOTING);

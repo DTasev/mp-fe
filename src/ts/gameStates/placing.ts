@@ -4,8 +4,11 @@ import { Tank } from "../gameObjects/tank";
 import { Draw } from "../drawing/draw";
 import * as Limit from "../limiters/index";
 import { Player } from "../gameObjects/player";
+import * as Settings from '../gameSettings';
 
 export class PlacingState implements IActionState {
+    private static playerTankPlacement = new Limit.Actions(Settings.NUM_PLAYERS);
+
     context: CanvasRenderingContext2D;
     controller: GameStateController;
     draw: Draw;
@@ -22,7 +25,7 @@ export class PlacingState implements IActionState {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();
-        this.turn = new Limit.Actions(5);
+        this.turn = new Limit.Actions(Settings.NUM_TANKS);
         this.player = player;
     }
 
@@ -37,9 +40,17 @@ export class PlacingState implements IActionState {
         tank.draw(this.context, this.draw);
         this.turn.take();
         // if we've placed as many objects as allowed, then go to next state
+        // next_player doesn't have to be changed here, as it's set in the controller
         if (this.turn.over()) {
-            this.controller.shared.next.set(GameState.TANK_SELECTION);
-            this.controller.changeGameState(GameState.TANK_PLACING);
+            PlacingState.playerTankPlacement.take();
+            // all of the players have placed their tanks, go to moving state
+            if (PlacingState.playerTankPlacement.over()) {
+                this.controller.shared.next.set(GameState.TANK_MOVEMENT);
+                this.controller.changeGameState(GameState.TANK_SELECTION);
+            } else {
+                this.controller.shared.next.set(GameState.TANK_SELECTION);
+                this.controller.changeGameState(GameState.TANK_PLACEMENT);
+            }
         }
     }
 }

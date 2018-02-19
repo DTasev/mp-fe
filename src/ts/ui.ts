@@ -3,6 +3,7 @@ import { J2H } from "./json2html";
 export class Ui {
     static readonly ID_BUTTON_SKIP_TURN = "tanks-ui-button-skipturn";
     private readonly div: HTMLDivElement;
+
     private readonly left: HTMLDivElement;
     private readonly right: HTMLDivElement;
 
@@ -42,5 +43,15 @@ export class Ui {
     }
     addLeft(elem: HTMLElement) {
         this.left.appendChild(elem);
+    }
+    clearLeft() {
+        this.left.innerHTML = "";
+    }
+    clearRight() {
+        this.right.innerHTML = "";
+    }
+    clear() {
+        this.clearLeft();
+        this.clearRight();
     }
 }

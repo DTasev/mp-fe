@@ -117,7 +117,7 @@ export class MenuState implements IActionState {
         console.log("Changing state from MENU EVENT to TANK PLACING");
         this.controller.clearCanvas();
         if (this.menu.selected_item >= 0) {
-            this.controller.changeGameState(GameState.TANK_PLACING);
+            this.controller.changeGameState(GameState.TANK_PLACEMENT);
         }
         // handle other events, probably better with a switch statement
 

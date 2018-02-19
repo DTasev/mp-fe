@@ -61,7 +61,7 @@ export class MovingState implements IActionState {
         canvas.onmousedown = this.startMovement;
         canvas.onmousemove = this.drawMoveLine;
         // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
-        window.onmouseup = this.endMovement;
+        canvas.onmouseup = this.endMovement;
 
         // canvas.addEventListener('touchstart', this.touchMove, false);
         // canvas.addEventListener('touchend', this.mouseUp, false);
@@ -98,6 +98,7 @@ export class MovingState implements IActionState {
     }
 
     private endTurnEarly = () => {
+        console.log("Ending turn early");
         // mark the turn as over
         this.turn.end();
         // run the end of turn action
@@ -107,14 +108,11 @@ export class MovingState implements IActionState {
     /** The action to be taken at the end of the turn */
     private endTurn() {
         if (this.turn.over()) {
-            // remove any turn info, if leftover from skipping a turn
-            // we just get the object, but do not store it anywhere, so that it is cleared
-            this.controller.shared.turn.get();
             // this was the last turn, go to shooting afterwards
             this.controller.shared.next.set(GameState.TANK_SHOOTING);
         } else {
             // come back to moving after selection
-            this.controller.shared.next.set(GameState.TANK_MOVING);
+            this.controller.shared.next.set(GameState.TANK_MOVEMENT);
             // continue the turn the next time this state is accessed
             this.controller.shared.turn.set(this.turn);
         }
@@ -123,6 +121,7 @@ export class MovingState implements IActionState {
         // redraw canvas with all current tanks
         this.controller.redrawCanvas(this.draw);
         // go to tank selection state
+        this.ui.clear();
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
 

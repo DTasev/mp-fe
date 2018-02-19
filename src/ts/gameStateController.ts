@@ -16,15 +16,15 @@ import { Tank, TankHealthState } from './gameObjects/tank';
 import { CartesianCoords } from './cartesianCoords';
 import { IGameObject } from './gameObjects/iGameObject';
 import { Ui } from "./ui";
+import * as Settings from './gameSettings';
 
 export enum GameState {
     MENU,
-    TANK_PLACING,
-    TANK_MOVING,
+    TANK_PLACEMENT,
+    TANK_MOVEMENT,
     TANK_SELECTION,
     TANK_SHOOTING
 }
-
 
 /**
  * Implementation for the actions that will be executed according to player actions.
@@ -37,8 +37,6 @@ export enum GameState {
  * For more details: https://github.com/Microsoft/TypeScript/wiki/'this'-in-TypeScript#red-flags-for-this
  */
 export class GameStateController {
-    private readonly NUM_PLAYERS: number = 2;
-
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private ui: Ui;
@@ -66,7 +64,7 @@ export class GameStateController {
         this.ui = ui;
 
         this.current_player = 0;
-        for (let i = 0; i < this.NUM_PLAYERS; i++) {
+        for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
             this.players.push(new Player(i, "Player " + (i + 1), Color.next()));
         }
     }
@@ -85,6 +83,7 @@ export class GameStateController {
         // clears any old events that were added
         this.canvas.onmousedown = null;
         window.onmouseup = null;
+        this.canvas.onmouseup = null;
         this.canvas.onmousemove = null;
 
         // if the state has marked the end of the player's turn, then we go to the next player
@@ -95,7 +94,7 @@ export class GameStateController {
                 // this is used to escape from placing forever, when all players have placed their tanks
                 // then the next state will be taken, which will be movement, afterwards this is used to 
                 // keep switching between movement and shooting until the end of the game
-                this.state = this.shared.next.get();
+                // this.state = this.shared.next.get();
             }
             this.next_player = false;
         }
@@ -107,16 +106,19 @@ export class GameStateController {
                 this.action = new MenuState(this, this.context);
                 console.log("Initialising MENU");
                 break;
-            case GameState.TANK_PLACING:
+            case GameState.TANK_PLACEMENT:
                 this.action = new PlacingState(this, this.context, player);
+
+                // force the next player after placing tanks
                 this.next_player = true;
+
                 console.log("Initialising TANK PLACING");
                 break;
             case GameState.TANK_SELECTION:
                 console.log("Initialising TANK SELECTION");
                 this.action = new SelectionState(this, this.context, player);
                 break;
-            case GameState.TANK_MOVING:
+            case GameState.TANK_MOVEMENT:
                 console.log("Initialising TANK MOVEMENT");
                 this.action = new MovingState(this, this.context, this.ui, player);
                 break;
@@ -186,12 +188,12 @@ export class GameStateController {
                         // if the line glances the tank, mark as disabled 
                         if (Tank.WIDTH - Tank.DISABLED_ZONE <= dist && dist <= Tank.WIDTH + Tank.DISABLED_ZONE) {
                             tank.health_state = TankHealthState.DISABLED;
-                            console.log("Tank ", tank.id, " disabled!");
+                            console.log("Tank", tank.id, "disabled!");
                             break;
                         } // if the line passes through the tank, mark dead
                         else if (dist < Tank.WIDTH) {
                             tank.health_state = TankHealthState.DEAD;
-                            console.log("Tank ", tank.id, " dead!");
+                            console.log("Tank", tank.id, "dead!");
                             break;
                             // the tank has already been processed, we can go to the next one
                         }
@@ -213,7 +215,7 @@ export class GameStateController {
      * @returns false if there are still players to take their turn, true if all players have completed their turns for the state
     */
     isEveryone(): boolean {
-        if (this.current_player === this.NUM_PLAYERS - 1) {
+        if (this.current_player === Settings.NUM_PLAYERS - 1) {
             this.current_player = 0;
             return true;
         }
