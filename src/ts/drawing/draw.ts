@@ -16,24 +16,24 @@ export class Draw {
      * @param context Context on which the circle will be drawn
      * @param coords Coordinates for the origin point of the circle
      * @param radius Radius of the dot
-     * @param fill_color Color of the fill
+     * @param fillColor Color of the fill
      * @param outline Specify whether an outline will be drawn around the circle
-     * @param stroke_color Specify color for the outline, if not specified the colour will be the same as the fill color
+     * @param strokeColor Specify color for the outline, if not specified the colour will be the same as the fill color
      */
-    dot(context: CanvasRenderingContext2D, coords: Point, radius: number, fill_color: string, outline: boolean = false, stroke_color: string = null) {
+    dot(context: CanvasRenderingContext2D, coords: Point, radius: number, fillColor: string, outline: boolean = false, strokeColor: string = null) {
         // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
         // Select a fill style
-        context.fillStyle = fill_color;
+        context.fillStyle = fillColor;
         context.lineWidth = radius;
 
         // Draw a filled circle
         context.beginPath();
-        context.arc(coords.X, coords.Y, radius, 0, Math.PI * 2, true);
+        context.arc(coords.x, coords.y, radius, 0, Math.PI * 2, true);
         context.closePath();
         context.fill();
 
         if (outline) {
-            context.strokeStyle = stroke_color || fill_color;
+            context.strokeStyle = strokeColor || fillColor;
             context.stroke();
         }
     }
@@ -54,20 +54,20 @@ export class Draw {
 
         // Draw a filled circle
         context.beginPath();
-        context.arc(coords.X, coords.Y, radius, 0, Math.PI * 2, true);
+        context.arc(coords.x, coords.y, radius, 0, Math.PI * 2, true);
         context.closePath();
         context.stroke();
     }
     /**
      * Draw a line between the last known position of the mouse, and the current position.
      * @param context The canvas context that we're drawing on
-     * @param update_last Whether to update the last position of the mouse
+     * @param updateLast Whether to update the last position of the mouse
      */
-    mouseLine(context: CanvasRenderingContext2D, width: number, color: string, update_last: boolean = true) {
+    mouseLine(context: CanvasRenderingContext2D, width: number, color: string, updateLast: boolean = true) {
         // If lastX is not set, set lastX and lastY to the current position 
-        if (this.last.X == -1) {
-            this.last.X = this.mouse.X;
-            this.last.Y = this.mouse.Y;
+        if (this.last.x == -1) {
+            this.last.x = this.mouse.x;
+            this.last.y = this.mouse.y;
         }
 
         // Select a fill style
@@ -81,10 +81,10 @@ export class Draw {
         context.beginPath();
 
         // First, move to the old (previous) position
-        context.moveTo(this.last.X, this.last.Y);
+        context.moveTo(this.last.x, this.last.y);
 
         // Now draw a line to the current touch/pointer position
-        context.lineTo(this.mouse.X, this.mouse.Y);
+        context.lineTo(this.mouse.x, this.mouse.y);
 
         // Set the line thickness and draw the line
         context.lineWidth = width;
@@ -92,10 +92,10 @@ export class Draw {
 
         context.closePath();
 
-        if (update_last) {
+        if (updateLast) {
             // Update the last position to reference the current position
-            this.last.X = this.mouse.X;
-            this.last.Y = this.mouse.Y;
+            this.last.x = this.mouse.x;
+            this.last.y = this.mouse.y;
         }
     }
     /**
@@ -118,10 +118,10 @@ export class Draw {
         context.beginPath();
 
         // First, move to the old (previous) position
-        context.moveTo(start.X, start.Y);
+        context.moveTo(start.x, start.y);
 
         // Now draw a line to the current touch/pointer position
-        context.lineTo(end.X, end.Y);
+        context.lineTo(end.x, end.y);
 
         // Set the line thickness and draw the line
         context.lineWidth = width;
@@ -137,8 +137,8 @@ export class Draw {
         }
 
         if (e.offsetX) {
-            this.mouse.X = e.offsetX;
-            this.mouse.Y = e.offsetY;
+            this.mouse.x = e.offsetX;
+            this.mouse.y = e.offsetY;
         }
     }
 
@@ -153,8 +153,8 @@ export class Draw {
                 // Get the information for finger #1
                 const touch: Touch = e.touches[0];
                 // the 'target' will be the canvas element
-                this.mouse.X = touch.pageX - (<HTMLCanvasElement>touch.target).offsetLeft;
-                this.mouse.Y = touch.pageY - (<HTMLCanvasElement>touch.target).offsetTop;
+                this.mouse.x = touch.pageX - (<HTMLCanvasElement>touch.target).offsetLeft;
+                this.mouse.y = touch.pageY - (<HTMLCanvasElement>touch.target).offsetTop;
             }
         }
     }

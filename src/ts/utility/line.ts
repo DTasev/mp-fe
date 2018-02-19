@@ -1,6 +1,6 @@
 import { Point } from "./point";
 
-export class LinePath {
+export class Line {
     points: Point[];
     constructor() {
         this.points = [];

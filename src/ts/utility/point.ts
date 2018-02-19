@@ -1,16 +1,16 @@
 export class Point {
-    public X: number;
-    public Y: number;
+    public x: number;
+    public y: number;
     constructor(x: number = -1, y: number = -1) {
-        this.X = x;
-        this.Y = y;
+        this.x = x;
+        this.y = y;
     }
 
     copy() {
-        return new Point(this.X, this.Y);
+        return new Point(this.x, this.y);
     }
 
     toString() {
-        return this.X + "," + this.Y;
+        return this.x + "," + this.y;
     }
 }

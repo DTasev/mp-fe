@@ -7,10 +7,10 @@ class PointMath {
      * @param end Second point with 2D coordinates
      */
     dist2d(start: Point, end: Point): number {
-        const delta_x = end.X - start.X;
-        const delta_y = end.Y - start.Y;
+        const deltaX = end.x - start.x;
+        const deltaY = end.y - start.y;
 
-        return Math.sqrt(Math.abs(delta_x * delta_x + delta_y * delta_y));
+        return Math.sqrt(Math.abs(deltaX * deltaX + deltaY * deltaY));
     }
 
     /**
@@ -20,7 +20,7 @@ class PointMath {
      * @param radius The radius of the circle
      * @returns true if there is collision, false otherwise
      */
-    collide_circle(point: Point, center: Point, radius: number): boolean {
+    collideCircle(point: Point, center: Point, radius: number): boolean {
         const distance = this.dist2d(point, center);
         if (distance > radius) {
             return false;
@@ -37,9 +37,9 @@ class PointMath {
         // Initial implementation: https://stackoverflow.com/a/328122/2823526
         // Optimisation and correction: https://stackoverflow.com/a/328110/2823526
 
-        // as the point is guaranteed to be on the line by Line::closest_point, we just check if the point is within the line
+        // as the point is guaranteed to be on the line by Line::closestPoint, we just check if the point is within the line
         const within = (start: number, point: number, end: number) => (start <= point && point <= end) || (end <= point && point <= start);
-        return start.X !== end.X ? within(start.X, point.X, end.X) : within(start.Y, point.Y, end.Y);
+        return start.x !== end.x ? within(start.x, point.x, end.x) : within(start.y, point.y, end.y);
     }
 
 }
@@ -52,28 +52,28 @@ class Line {
      * @param end End point of the line
      * @param point Point for which the closest point on the line will be found.
      */
-    closest_point(start: Point, end: Point, point: Point): Point {
-        const A1 = end.Y - start.Y,
-            B1 = start.X - end.X;
+    closestPoint(start: Point, end: Point, point: Point): Point {
+        const A1 = end.y - start.y,
+            B1 = start.x - end.x;
 
         // turn the line ito equation of the form Ax + By = C
-        const C1 = A1 * start.X + B1 * start.Y;
+        const C1 = A1 * start.x + B1 * start.y;
         // find the perpendicular line that passes through the line and the outside point
-        const C2 = -B1 * point.X + A1 * point.Y;
+        const C2 = -B1 * point.x + A1 * point.y;
 
         // find the determinant of the two equations algebraically
         const det = A1 * A1 + B1 * B1;
-        const closest_point: Point = new Point();
+        const closestPoint: Point = new Point();
         // use Cramer's Rule to solve for the point of intersection
         if (det != 0) {
-            closest_point.X = (A1 * C1 - B1 * C2) / det;
-            closest_point.Y = (A1 * C2 + B1 * C1) / det;
+            closestPoint.x = (A1 * C1 - B1 * C2) / det;
+            closestPoint.y = (A1 * C2 + B1 * C1) / det;
         } else { // the point is on the line already
-            closest_point.X = point.X;
-            closest_point.Y = point.Y;
+            closestPoint.x = point.x;
+            closestPoint.y = point.y;
         }
 
-        return closest_point;
+        return closestPoint;
     }
 
     /** 
@@ -86,14 +86,14 @@ class Line {
      * @returns If the circle's center is within the line, then the distance between them will be returned, 
      *          if the circle's center is not within the line, -1 will be returned
      */
-    circle_center_dist(start: Point, end: Point, center: Point): number {
+    distCircleCenter(start: Point, end: Point, center: Point): number {
         // find the closest point to the circle, on the line
-        const closest_point = this.closest_point(start, end, center);
+        const closestPoint = this.closestPoint(start, end, center);
 
         // check if the closest point is within the start and end of the line, 
         // and not somewhere along its infinite extension
-        if (TanksMath.point.within(closest_point, start, end)) {
-            return TanksMath.point.dist2d(closest_point, center);
+        if (TanksMath.point.within(closestPoint, start, end)) {
+            return TanksMath.point.dist2d(closestPoint, center);
         } else {
             return -1;
         }
@@ -106,8 +106,8 @@ class Line {
      * @param center Center point of the circle
      * @param radius Radius of the circle
      */
-    collide_circle(start: Point, end: Point, center: Point, radius: number): boolean {
-        const dist = this.circle_center_dist(start, end, center);
+    collideCircle(start: Point, end: Point, center: Point, radius: number): boolean {
+        const dist = this.distCircleCenter(start, end, center);
         // if distance is undefined, or is further than the radius, return false
         return dist === -1 || dist > radius ? false : true;
     }

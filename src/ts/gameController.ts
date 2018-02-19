@@ -9,7 +9,7 @@ import { TanksSharedState } from "./gameStates/sharedState";
 import * as Limit from './limiters/index'
 import { Draw } from './drawing/draw';
 import { Color } from './drawing/color';
-import { LinePath } from './utility/linePath';
+import { Line } from './utility/line';
 import { LineCache } from './utility/lineCache';
 import { TanksMath } from './utility/tanksMath';
 import { Tank, TankHealthState } from './gameObjects/tank';
@@ -17,6 +17,7 @@ import { Point } from './utility/point';
 import { IGameObject } from './gameObjects/iGameObject';
 import { Ui } from "./ui";
 import * as Settings from './gameSettings';
+import { Collision } from "./gameCollision";
 
 export enum GameState {
     MENU,
@@ -46,15 +47,15 @@ export class GameController {
     /** The current event that carries out the actions for the state */
     private action: IActionState;
     /** The position of the current player in the players array */
-    private current_player: number;
+    private currentPlayer: number;
     /** All the players in the game */
     private readonly players: Player[] = [];
 
     /** Stores the all of the shot lines */
-    private readonly line_cache = new LineCache();
+    private readonly lineCache = new LineCache();
 
     /** Flag to specify if the current player's turn is over */
-    next_player: boolean = false;
+    nextPlayer: boolean = false;
     /** Shared state among game states */
     readonly shared = new TanksSharedState();
 
@@ -63,7 +64,7 @@ export class GameController {
         this.context = context;
         this.ui = ui;
 
-        this.current_player = 0;
+        this.currentPlayer = 0;
         for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
             this.players.push(new Player(i, "Player " + (i + 1), Color.next()));
         }
@@ -76,10 +77,10 @@ export class GameController {
      * Repeat until game over
      *  Moving, Shooting for P1
      *  Moving, Shooting for P2
-     * @param new_state 
+     * @param newState 
      */
-    changeGameState(new_state: GameState) {
-        this.state = new_state;
+    changeGameState(newState: GameState) {
+        this.state = newState;
         // clears any old events that were added
         this.canvas.onmousedown = null;
         window.onmouseup = null;
@@ -87,7 +88,7 @@ export class GameController {
         this.canvas.onmousemove = null;
 
         // if the state has marked the end of the player's turn, then we go to the next player
-        if (this.next_player) {
+        if (this.nextPlayer) {
             if (this.isEveryone()) {
                 console.log("Switching player");
 
@@ -96,9 +97,9 @@ export class GameController {
                 // keep switching between movement and shooting until the end of the game
                 // this.state = this.shared.next.get();
             }
-            this.next_player = false;
+            this.nextPlayer = false;
         }
-        const player = this.players[this.current_player];
+        const player = this.players[this.currentPlayer];
         console.log("This is", player.name, "playing.");
 
         switch (this.state) {
@@ -110,7 +111,7 @@ export class GameController {
                 this.action = new PlacingState(this, this.context, player);
 
                 // force the next player after placing tanks
-                this.next_player = true;
+                this.nextPlayer = true;
 
                 console.log("Initialising TANK PLACING");
                 break;
@@ -150,7 +151,7 @@ export class GameController {
 
         const old_lines_color = Color.gray(0.5).toRGBA();
         // draw the last N lines
-        for (const line_path of this.line_cache.lines()) {
+        for (const line_path of this.lineCache.lines()) {
             for (let i = 1; i < line_path.points.length; i++) {
                 // old lines are currently half-transparent
                 draw.line(this.context, line_path.points[i - 1], line_path.points[i], 1, old_lines_color);
@@ -158,53 +159,17 @@ export class GameController {
         }
     }
 
-    debugShot(line_path: LinePath, start: Point, end: Point, tank: IGameObject, distance: number) {
-        for (const line of line_path.points) {
-            console.log(line.X + "," + (-line.Y));
-        }
-        console.log("Collision versus line:\n", start.X, ",", -start.Y, "\n", end.X, ",", -end.Y);
-        console.log("Tank ID: ", tank.id, "\nPosition: (", tank.position.X, ",", -tank.position.Y, ")");
-        console.log("Distance: ", distance);
-    }
-
-    collide(line_path: LinePath) {
+    collide(line: Line) {
         console.log("-------------------- Starting Collision -------------------");
-        const num_points_in_line = line_path.points.length;
+        const numPoints = line.points.length;
         // for every player who isnt the current player
-        for (const player of this.players.filter((p) => p.id !== this.current_player)) {
-            // loop over all their tanks
-            for (const tank of player.tanks) {
-                // only do collision detection versus tanks that have not been already killed
-                if (tank.health_state !== TankHealthState.DEAD) {
-                    // check each line for collision with the tank
-                    for (let p = 1; p < num_points_in_line; p++) {
-                        const dist = TanksMath.line.circle_center_dist(line_path.points[p - 1], line_path.points[p], tank.position);
-                        this.debugShot(line_path, line_path.points[p - 1], line_path.points[p], tank, dist);
-                        if (dist === -1) {
-                            continue;
-                        }
-                        console.log("Shot hit the tank.");
-                        // TODO move out of controller
-                        // if the line glances the tank, mark as disabled 
-                        if (Tank.WIDTH - Tank.DISABLED_ZONE <= dist && dist <= Tank.WIDTH + Tank.DISABLED_ZONE) {
-                            tank.health_state = TankHealthState.DISABLED;
-                            console.log("Tank", tank.id, "disabled!");
-                            break;
-                        } // if the line passes through the tank, mark dead
-                        else if (dist < Tank.WIDTH) {
-                            tank.health_state = TankHealthState.DEAD;
-                            console.log("Tank", tank.id, "dead!");
-                            break;
-                            // the tank has already been processed, we can go to the next one
-                        }
-                    }
-                }
-            }
+        for (const player of this.players.filter((p) => p.id !== this.currentPlayer)) {
+            Collision.collide(line, numPoints, player.tanks);
         }
     }
 
-    cacheLine(path: LinePath) {
-        this.line_cache.points.push(path);
+    cacheLine(path: Line) {
+        this.lineCache.points.push(path);
     }
 
     showUserWarning(message: string) {
@@ -215,11 +180,11 @@ export class GameController {
      * @returns false if there are still players to take their turn, true if all players have completed their turns for the state
     */
     isEveryone(): boolean {
-        if (this.current_player === Settings.NUM_PLAYERS - 1) {
-            this.current_player = 0;
+        if (this.currentPlayer === Settings.NUM_PLAYERS - 1) {
+            this.currentPlayer = 0;
             return true;
         }
-        this.current_player += 1;
+        this.currentPlayer += 1;
         return false;
     }
 }

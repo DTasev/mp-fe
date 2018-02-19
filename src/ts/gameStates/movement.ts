@@ -70,9 +70,9 @@ export class MovingState implements IActionState {
 
     startMovement = (e: MouseEvent): void => {
         // limit the start of the line to be the tank
-        this.draw.last = new Point(this.active.position.X, this.active.position.Y);
+        this.draw.last = new Point(this.active.position.x, this.active.position.y);
         // limit the length of the line to the maximum allowed tank movement, and disabled tanks can't be moved
-        if (this.line.in(this.active.position, this.draw.mouse) && this.active.tank.health_state !== TankHealthState.DISABLED) {
+        if (this.line.in(this.active.position, this.draw.mouse) && this.active.tank.healthState !== TankHealthState.DISABLED) {
             this.draw.state = DrawState.DRAWING;
             this.validMove();
         }

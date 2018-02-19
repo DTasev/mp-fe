@@ -1,10 +1,10 @@
 export default class Controls {
 
-    private static toggle_w3_show(html_elem) {
-        if (html_elem.className.indexOf("w3-show") == -1) {
-            html_elem.className += " w3-show";
+    private static toggle_w3_show(elem) {
+        if (elem.className.indexOf("w3-show") == -1) {
+            elem.className += " w3-show";
         } else {
-            html_elem.className = html_elem.className.replace(" w3-show", "");
+            elem.className = elem.className.replace(" w3-show", "");
         }
     }
     static w3_open() {

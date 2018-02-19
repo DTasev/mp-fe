@@ -38,13 +38,13 @@ export class Mock {
     called: CallTracker;
     returns: any;
 
-    private original_function: any;
-    private original_function_name: string;
-    private original_class: any;
+    private originalFunction: any;
+    private originalFunctionName: string;
+    private originalClass: any;
 
     constructor(cls, func, return_value?) {
         this.called = new CallTracker();
-        this.original_function = null;
+        this.originalFunction = null;
         this.mock(cls, func, return_value);
     }
 
@@ -52,37 +52,37 @@ export class Mock {
      * 
      * @param cls The class which contains the function
      * @param func The function, as would be called, e.g. Issues.retrieve, but without brackets
-     * @param return_value The return value when the mock is called, by default it will be void
+     * @param returnValue The return value when the mock is called, by default it will be void
      */
-    mock(cls, func, return_value?) {
-        this.original_class = cls;
-        this.original_function = func;
-        this.original_function_name = func["name"];
+    mock(cls, func, returnValue?) {
+        this.originalClass = cls;
+        this.originalFunction = func;
+        this.originalFunctionName = func["name"];
 
-        if (return_value) {
-            cls[func["name"]] = () => this.default_callback(return_value);
+        if (returnValue) {
+            cls[func["name"]] = () => this.default_callback(returnValue);
         } else {
             cls[func["name"]] = () => this.default_callback();
         }
     }
     restore(): any {
-        this.original_class[this.original_function_name] = this.original_function;
+        this.originalClass[this.originalFunctionName] = this.originalFunction;
     }
 
     /**
      * 
-     * @param return_value The mock function will return this value when executed
+     * @param returnValue The mock function will return this value when executed
      */
-    default_callback(return_value?) {
+    default_callback(returnValue?) {
         this.called.increment();
-        if (this.returns && return_value) {
+        if (this.returns && returnValue) {
             throw Error("Mock return value specified more than once!");
         }
         if (this.returns) {
             return this.returns;
         }
-        if (return_value) {
-            return return_value;
+        if (returnValue) {
+            return returnValue;
         }
     }
 }
@@ -93,19 +93,19 @@ export class Mock {
  * This class is for convenience.
  */
 export class SingleCallMock extends Mock {
-    default_callback(return_value?) {
+    default_callback(returnValue?) {
         if (this.called.once()) {
             throw new Error("This mock must only be called once! Use normal Mock for more than a single call.");
         }
         this.called.increment();
-        if (this.returns && return_value) {
+        if (this.returns && returnValue) {
             throw Error("Mock return value specified more than once!");
         }
         if (this.returns) {
             return this.returns;
         }
-        if (return_value) {
-            return return_value;
+        if (returnValue) {
+            return returnValue;
         }
         this.restore();
     }

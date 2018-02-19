@@ -18,6 +18,6 @@ export class Player {
     }
 
     activeTanks(): number {
-        return this.tanks.filter((tank) => tank.health_state !== TankHealthState.DEAD).length;
+        return this.tanks.filter((tank) => tank.healthState !== TankHealthState.DEAD).length;
     }
 }

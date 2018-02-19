@@ -31,7 +31,7 @@ export class SelectionState implements IActionState {
         // Check if the user has clicked any tank.
         for (const [id, tank] of this.player.tanks.entries()) {
             // dead tanks can't be selected
-            if (TanksMath.point.collide_circle(this.draw.mouse, tank.position, Tank.WIDTH) && tank.health_state !== TankHealthState.DEAD) {
+            if (TanksMath.point.collideCircle(this.draw.mouse, tank.position, Tank.WIDTH) && tank.healthState !== TankHealthState.DEAD) {
                 // highlight the selected tank
                 tank.highlight(this.context, this.draw);
                 // store the details of the active tank

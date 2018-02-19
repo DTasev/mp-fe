@@ -93,15 +93,17 @@ export class Tank implements IGameObject {
 
     health: number;
     position: Point;
-    health_state: TankHealthState;
-    act_state: TankActState;
+
+    healthState: TankHealthState;
+    actionState: TankActState;
+
     label: string;
 
     constructor(id: number, player: Player, x: number, y: number) {
         this.id = id;
         this.player = player;
         this.position = new Point(x, y);
-        this.health_state = TankHealthState.ALIVE;
+        this.healthState = TankHealthState.ALIVE;
         this.label = this.id + ""; // + "" converts to string
 
         // initialise colors for each of the tank's states
@@ -118,7 +120,7 @@ export class Tank implements IGameObject {
     draw(context: CanvasRenderingContext2D, draw: Draw): any {
         let color: string;
         let label = this.label;
-        switch (this.health_state) {
+        switch (this.healthState) {
             case TankHealthState.ALIVE:
                 color = this.color.alive;
                 break;
@@ -134,7 +136,7 @@ export class Tank implements IGameObject {
         draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, color);
         context.fillStyle = this.color.label;
         context.font = "18px Calibri";
-        context.fillText(label, this.position.X, this.position.Y + 5);
+        context.fillText(label, this.position.x, this.position.y + 5);
     }
 
     highlight(context: CanvasRenderingContext2D, draw: Draw): any {

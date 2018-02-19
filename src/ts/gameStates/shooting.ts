@@ -8,7 +8,7 @@ import { Tank } from "../gameObjects/tank";
 import { Point } from "../utility/point";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { TanksMath } from "../utility/tanksMath";
-import { LinePath } from "../utility/linePath";
+import { Line } from "../utility/line";
 import { Color } from "../drawing/color";
 
 export class ShootingState implements IActionState {
@@ -29,14 +29,14 @@ export class ShootingState implements IActionState {
     /** Whether the shot was successfully fired, will be set to true if the shot is fast enough */
     successful_shot: boolean = false;
 
-    shot_path: LinePath;
+    shot_path: Line;
 
     constructor(controller: GameController, context: CanvasRenderingContext2D, player: Player) {
         this.controller = controller;
         this.context = context;
         this.player = player;
 
-        this.shot_path = new LinePath();
+        this.shot_path = new Line();
 
         this.draw = new Draw();
         this.tank_roaming_length = new Limit.Length(Tank.SHOOTING_DEADZONE);
@@ -60,12 +60,12 @@ export class ShootingState implements IActionState {
 
     private startShooting = (e: MouseEvent) => {
         this.draw.updateMousePosition(e);
-        this.draw.last = new Point(this.active.position.X, this.active.position.Y);
+        this.draw.last = new Point(this.active.position.x, this.active.position.y);
         // resets the successful shot flag
         this.successful_shot = false;
         // the player must start shooting from the tank
         const tank = this.player.tanks[this.active.id];
-        if (TanksMath.point.collide_circle(this.draw.mouse, tank.position, Tank.WIDTH)) {
+        if (TanksMath.point.collideCircle(this.draw.mouse, tank.position, Tank.WIDTH)) {
             // if the mouse is within the tank
             if (this.tank_roaming_length.in(this.active.position, this.draw.mouse)) {
                 // shot collision starts from the centre of the tank
@@ -118,7 +118,6 @@ export class ShootingState implements IActionState {
 
     private stopShooting = (e: MouseEvent) => {
         if (this.successful_shot) {
-            this.shot_path.list();
             this.controller.collide(this.shot_path);
             this.controller.cacheLine(this.shot_path);
             //
@@ -127,7 +126,7 @@ export class ShootingState implements IActionState {
             this.turn.take();
         }
         if (this.turn.over()) {
-            this.controller.next_player = true;
+            this.controller.nextPlayer = true;
             this.controller.shared.next.set(GameState.TANK_MOVEMENT);
         } else {
             this.controller.shared.turn.set(this.turn);

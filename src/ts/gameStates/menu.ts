@@ -70,7 +70,7 @@ class Menu {
 
         // check up to the height of the title, there's not going to be anything above it
         while (current_height > this.start_height) {
-            if (mouse.Y > current_height - buffer_space) {
+            if (mouse.y > current_height - buffer_space) {
                 this.selected_item = id;
                 return;
             }
