@@ -89,14 +89,7 @@ export class GameController {
 
         // if the state has marked the end of the player's turn, then we go to the next player
         if (this.nextPlayer) {
-            if (this.isEveryone()) {
-                console.log("Switching player");
-
-                // this is used to escape from placing forever, when all players have placed their tanks
-                // then the next state will be taken, which will be movement, afterwards this is used to 
-                // keep switching between movement and shooting until the end of the game
-                // this.state = this.shared.next.get();
-            }
+            this.changePlayer();
             this.nextPlayer = false;
         }
         const player = this.players[this.currentPlayer];
@@ -179,7 +172,7 @@ export class GameController {
     /** 
      * @returns false if there are still players to take their turn, true if all players have completed their turns for the state
     */
-    isEveryone(): boolean {
+    changePlayer(): boolean {
         if (this.currentPlayer === Settings.NUM_PLAYERS - 1) {
             this.currentPlayer = 0;
             return true;
