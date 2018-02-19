@@ -99,7 +99,7 @@ export class GameStateController {
             this.next_player = false;
         }
         const player = this.players[this.current_player];
-        console.log("This is ", player.name, " playing.");
+        console.log("This is", player.name, "playing.");
 
         switch (this.state) {
             case GameState.MENU:

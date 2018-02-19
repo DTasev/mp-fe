@@ -40,7 +40,7 @@ export class PlacingState implements IActionState {
         tank.draw(this.context, this.draw);
         this.turn.take();
         // if we've placed as many objects as allowed, then go to next state
-        // next_player doesn't have to be changed here, as it's set in the controller
+        // next_player is not changed here, as it's set in the controller
         if (this.turn.over()) {
             PlacingState.playerTankPlacement.take();
             // all of the players have placed their tanks, go to moving state
