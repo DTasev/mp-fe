@@ -1,5 +1,5 @@
 import { Player } from "./player";
-import { CartesianCoords } from "../utility/cartesianCoords";
+import { Point } from "../utility/point";
 import { Draw } from "../drawing/draw";
 import { IGameObject } from './iGameObject'
 import { Color } from "../drawing/color";
@@ -92,7 +92,7 @@ export class Tank implements IGameObject {
     readonly player: Player;
 
     health: number;
-    position: CartesianCoords;
+    position: Point;
     health_state: TankHealthState;
     act_state: TankActState;
     label: string;
@@ -100,7 +100,7 @@ export class Tank implements IGameObject {
     constructor(id: number, player: Player, x: number, y: number) {
         this.id = id;
         this.player = player;
-        this.position = new CartesianCoords(x, y);
+        this.position = new Point(x, y);
         this.health_state = TankHealthState.ALIVE;
         this.label = this.id + ""; // + "" converts to string
 

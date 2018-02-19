@@ -1,7 +1,7 @@
 import { IActionState } from "./iActionState";
 import { GameController, GameState } from "../gameController";
 import { IGameObject } from "../gameObjects/iGameObject";
-import { CartesianCoords } from "../utility/cartesianCoords";
+import { Point } from "../utility/point";
 import { Player } from "../gameObjects/player";
 import { Draw } from "../drawing/draw";
 
@@ -57,7 +57,7 @@ class Menu {
         return this.selected_item === id;
     }
 
-    select(mouse: CartesianCoords): void {
+    select(mouse: Point): void {
         if (this.final_height === -1) {
             throw new Error("The menu hasn't been drawn.");
         }

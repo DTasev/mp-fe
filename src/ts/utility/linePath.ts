@@ -1,7 +1,7 @@
-import { CartesianCoords } from "./cartesianCoords";
+import { Point } from "./point";
 
 export class LinePath {
-    points: CartesianCoords[];
+    points: Point[];
     constructor() {
         this.points = [];
     }

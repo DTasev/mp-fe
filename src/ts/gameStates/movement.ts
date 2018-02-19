@@ -4,7 +4,7 @@ import * as Limit from "../limiters/index";
 import { GameController, GameState } from "../gameController";
 import { Player } from "../gameObjects/player";
 import { TanksMath } from "../utility/tanksMath";
-import { CartesianCoords } from "../utility/cartesianCoords";
+import { Point } from "../utility/point";
 import { Tank, TankHealthState } from "../gameObjects/tank";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { ActiveTank } from "./sharedState";
@@ -70,7 +70,7 @@ export class MovingState implements IActionState {
 
     startMovement = (e: MouseEvent): void => {
         // limit the start of the line to be the tank
-        this.draw.last = new CartesianCoords(this.active.position.X, this.active.position.Y);
+        this.draw.last = new Point(this.active.position.X, this.active.position.Y);
         // limit the length of the line to the maximum allowed tank movement, and disabled tanks can't be moved
         if (this.line.in(this.active.position, this.draw.mouse) && this.active.tank.health_state !== TankHealthState.DISABLED) {
             this.draw.state = DrawState.DRAWING;

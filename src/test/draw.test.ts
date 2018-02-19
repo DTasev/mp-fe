@@ -4,7 +4,7 @@ import 'mocha';
 import { Draw } from "../ts/drawing/draw";
 import { SingleCallMock } from "./mocking/mock";
 import { CanvasContextMock } from "./mocking/canvasContextMock";
-import { CartesianCoords } from "../ts/utility/cartesianCoords";
+import { Point } from "../ts/utility/point";
 import { Color } from '../ts/drawing/color';
 
 
@@ -12,7 +12,7 @@ describe('Drawing', () => {
     let draw: Draw;
     // In tests marking as any disables the type checking errors from TS
     let mock_context: CanvasContextMock;
-    const test_coords: CartesianCoords = new CartesianCoords(23, 23);
+    const test_coords: Point = new Point(23, 23);
     const expected_width = 11414;
     const color = Color.red().toRGBA();
 
@@ -134,8 +134,8 @@ describe('Drawing', () => {
         expect(draw.last.Y).to.equal(new_Y);
     });
     it('should be able to draw a line from coordinates', () => {
-        const start = new CartesianCoords(0, 0);
-        const end = new CartesianCoords(1, 1);
+        const start = new Point(0, 0);
+        const end = new Point(1, 1);
 
         draw.line(mock_context as any, start, end, expected_width, color);
 

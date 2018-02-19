@@ -1,4 +1,4 @@
-import { CartesianCoords } from "../utility/cartesianCoords";
+import { Point } from "../utility/point";
 import { TanksMath } from "../utility/tanksMath";
 export class Length {
     private limit: number;
@@ -24,7 +24,7 @@ export class Length {
      * @param end End coordinates
      * @returns true if the line is below the limit, false if the line is longer than the limit
      */
-    add(start: CartesianCoords, end: CartesianCoords): boolean {
+    add(start: Point, end: Point): boolean {
         this.current += TanksMath.point.dist2d(start, end);
         console.log("Shot total distance: ", this.current);
         return this.current <= this.limit;
@@ -37,7 +37,7 @@ export class Length {
      * @param end End coordinates
      * @returns true if the line is below the limit, false otherwise
      */
-    in(start: CartesianCoords, end: CartesianCoords): boolean {
+    in(start: Point, end: Point): boolean {
         const distance = TanksMath.point.dist2d(start, end);
         return distance <= this.limit;
     }

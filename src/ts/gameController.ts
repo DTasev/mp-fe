@@ -13,7 +13,7 @@ import { LinePath } from './utility/linePath';
 import { LineCache } from './utility/lineCache';
 import { TanksMath } from './utility/tanksMath';
 import { Tank, TankHealthState } from './gameObjects/tank';
-import { CartesianCoords } from './utility/cartesianCoords';
+import { Point } from './utility/point';
 import { IGameObject } from './gameObjects/iGameObject';
 import { Ui } from "./ui";
 import * as Settings from './gameSettings';
@@ -158,7 +158,7 @@ export class GameController {
         }
     }
 
-    debugShot(line_path: LinePath, start: CartesianCoords, end: CartesianCoords, tank: IGameObject, distance: number) {
+    debugShot(line_path: LinePath, start: Point, end: Point, tank: IGameObject, distance: number) {
         for (const line of line_path.points) {
             console.log(line.X + "," + (-line.Y));
         }

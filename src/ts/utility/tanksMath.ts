@@ -1,12 +1,12 @@
-import { CartesianCoords } from "./cartesianCoords";
+import { Point } from "./point";
 
-class Point {
+class PointMath {
     /**
      * Calculate the distance between two points, on a 2D plane using Pythogorean Theorem
      * @param start First point with 2D coordinates
      * @param end Second point with 2D coordinates
      */
-    dist2d(start: CartesianCoords, end: CartesianCoords): number {
+    dist2d(start: Point, end: Point): number {
         const delta_x = end.X - start.X;
         const delta_y = end.Y - start.Y;
 
@@ -20,7 +20,7 @@ class Point {
      * @param radius The radius of the circle
      * @returns true if there is collision, false otherwise
      */
-    collide_circle(point: CartesianCoords, center: CartesianCoords, radius: number): boolean {
+    collide_circle(point: Point, center: Point, radius: number): boolean {
         const distance = this.dist2d(point, center);
         if (distance > radius) {
             return false;
@@ -33,7 +33,7 @@ class Point {
      * @param start Start coordinates of a line
      * @param end End coordinates of a line
      */
-    within(point: CartesianCoords, start: CartesianCoords, end: CartesianCoords): boolean {
+    within(point: Point, start: Point, end: Point): boolean {
         // Initial implementation: https://stackoverflow.com/a/328122/2823526
         // Optimisation and correction: https://stackoverflow.com/a/328110/2823526
 
@@ -52,7 +52,7 @@ class Line {
      * @param end End point of the line
      * @param point Point for which the closest point on the line will be found.
      */
-    closest_point(start: CartesianCoords, end: CartesianCoords, point: CartesianCoords): CartesianCoords {
+    closest_point(start: Point, end: Point, point: Point): Point {
         const A1 = end.Y - start.Y,
             B1 = start.X - end.X;
 
@@ -63,7 +63,7 @@ class Line {
 
         // find the determinant of the two equations algebraically
         const det = A1 * A1 + B1 * B1;
-        const closest_point: CartesianCoords = new CartesianCoords();
+        const closest_point: Point = new Point();
         // use Cramer's Rule to solve for the point of intersection
         if (det != 0) {
             closest_point.X = (A1 * C1 - B1 * C2) / det;
@@ -86,7 +86,7 @@ class Line {
      * @returns If the circle's center is within the line, then the distance between them will be returned, 
      *          if the circle's center is not within the line, -1 will be returned
      */
-    circle_center_dist(start: CartesianCoords, end: CartesianCoords, center: CartesianCoords): number {
+    circle_center_dist(start: Point, end: Point, center: Point): number {
         // find the closest point to the circle, on the line
         const closest_point = this.closest_point(start, end, center);
 
@@ -106,7 +106,7 @@ class Line {
      * @param center Center point of the circle
      * @param radius Radius of the circle
      */
-    collide_circle(start: CartesianCoords, end: CartesianCoords, center: CartesianCoords, radius: number): boolean {
+    collide_circle(start: Point, end: Point, center: Point, radius: number): boolean {
         const dist = this.circle_center_dist(start, end, center);
         // if distance is undefined, or is further than the radius, return false
         return dist === -1 || dist > radius ? false : true;
@@ -114,6 +114,6 @@ class Line {
 }
 
 export class TanksMath {
-    static point: Point = new Point();
+    static point: PointMath = new PointMath();
     static line: Line = new Line();
 }

@@ -5,7 +5,7 @@ import { Draw, DrawState } from "../drawing/draw";
 import * as Limit from "../limiters/index";
 import { ActiveTank } from "./sharedState";
 import { Tank } from "../gameObjects/tank";
-import { CartesianCoords } from "../utility/cartesianCoords";
+import { Point } from "../utility/point";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { TanksMath } from "../utility/tanksMath";
 import { LinePath } from "../utility/linePath";
@@ -60,7 +60,7 @@ export class ShootingState implements IActionState {
 
     private startShooting = (e: MouseEvent) => {
         this.draw.updateMousePosition(e);
-        this.draw.last = new CartesianCoords(this.active.position.X, this.active.position.Y);
+        this.draw.last = new Point(this.active.position.X, this.active.position.Y);
         // resets the successful shot flag
         this.successful_shot = false;
         // the player must start shooting from the tank

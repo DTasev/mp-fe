@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 
 import { Actions } from '../../ts/limiters/action'
-import { CartesianCoords } from '../../ts/utility/cartesianCoords';
+import { Point } from '../../ts/utility/point';
 
 describe('Action limiter', () => {
     const number_of_turns = 3;

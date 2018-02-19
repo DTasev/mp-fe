@@ -1,4 +1,4 @@
-import { CartesianCoords } from "../utility/cartesianCoords";
+import { Point } from "../utility/point";
 import { TanksMath } from "../utility/tanksMath";
 export class Speed {
     private limit: number;
@@ -19,7 +19,7 @@ export class Speed {
      * @param end End coordinates
      * @returns true if the distance is greater than the limit, false otherwise
      */
-    enough(start: CartesianCoords, end: CartesianCoords): boolean {
+    enough(start: Point, end: Point): boolean {
         const distance = TanksMath.point.dist2d(start, end);
         return distance >= this.limit;
     }

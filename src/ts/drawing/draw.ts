@@ -1,14 +1,14 @@
-import { CartesianCoords } from "../utility/cartesianCoords";
+import { Point } from "../utility/point";
 import { Color } from "./color";
 
 export class Draw {
     state: DrawState;
-    mouse: CartesianCoords;
-    last: CartesianCoords;
+    mouse: Point;
+    last: Point;
 
     constructor() {
-        this.mouse = new CartesianCoords();
-        this.last = new CartesianCoords();
+        this.mouse = new Point();
+        this.last = new Point();
     }
 
     /** Draw a dot (a filled circle) around the point.
@@ -20,7 +20,7 @@ export class Draw {
      * @param outline Specify whether an outline will be drawn around the circle
      * @param stroke_color Specify color for the outline, if not specified the colour will be the same as the fill color
      */
-    dot(context: CanvasRenderingContext2D, coords: CartesianCoords, radius: number, fill_color: string, outline: boolean = false, stroke_color: string = null) {
+    dot(context: CanvasRenderingContext2D, coords: Point, radius: number, fill_color: string, outline: boolean = false, stroke_color: string = null) {
         // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
         // Select a fill style
         context.fillStyle = fill_color;
@@ -46,7 +46,7 @@ export class Draw {
      * @param line_width The line width of the circle
      * @param color The color of the line
      */
-    circle(context: CanvasRenderingContext2D, coords: CartesianCoords, radius: number, line_width: number, color: string) {
+    circle(context: CanvasRenderingContext2D, coords: Point, radius: number, line_width: number, color: string) {
         // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
         // Select a fill style
         context.strokeStyle = color;
@@ -106,7 +106,7 @@ export class Draw {
      * @param width Width of the line
      * @param color Color of the line
      */
-    line(context: CanvasRenderingContext2D, start: CartesianCoords, end: CartesianCoords, width: number, color: string) {
+    line(context: CanvasRenderingContext2D, start: Point, end: Point, width: number, color: string) {
         // Select a fill style
         context.strokeStyle = color;
 

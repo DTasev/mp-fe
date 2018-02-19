@@ -1,4 +1,4 @@
-export class CartesianCoords {
+export class Point {
     public X: number;
     public Y: number;
     constructor(x: number = -1, y: number = -1) {
@@ -7,7 +7,7 @@ export class CartesianCoords {
     }
 
     copy() {
-        return new CartesianCoords(this.X, this.Y);
+        return new Point(this.X, this.Y);
     }
 
     toString() {
