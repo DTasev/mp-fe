@@ -1,5 +1,5 @@
 import { LinePath } from "./linePath";
-import { Color } from "./drawing/color";
+import { Color } from "../drawing/color";
 
 export class LineCache {
     points: LinePath[];

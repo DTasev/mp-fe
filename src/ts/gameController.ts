@@ -9,11 +9,11 @@ import { TanksSharedState } from "./gameStates/sharedState";
 import * as Limit from './limiters/index'
 import { Draw } from './drawing/draw';
 import { Color } from './drawing/color';
-import { LinePath } from './linePath';
-import { LineCache } from './lineCache';
-import { TanksMath } from './tanksMath';
+import { LinePath } from './utility/linePath';
+import { LineCache } from './utility/lineCache';
+import { TanksMath } from './utility/tanksMath';
 import { Tank, TankHealthState } from './gameObjects/tank';
-import { CartesianCoords } from './cartesianCoords';
+import { CartesianCoords } from './utility/cartesianCoords';
 import { IGameObject } from './gameObjects/iGameObject';
 import { Ui } from "./ui";
 import * as Settings from './gameSettings';
@@ -36,7 +36,7 @@ export enum GameState {
  * 
  * For more details: https://github.com/Microsoft/TypeScript/wiki/'this'-in-TypeScript#red-flags-for-this
  */
-export class GameStateController {
+export class GameController {
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private ui: Ui;

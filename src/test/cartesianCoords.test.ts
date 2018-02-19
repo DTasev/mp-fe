@@ -1,4 +1,4 @@
-import { CartesianCoords } from "../ts/cartesianCoords";
+import { CartesianCoords } from "../ts/utility/cartesianCoords";
 import { expect } from 'chai';
 import 'mocha';
 

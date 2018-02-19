@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { TanksMath } from "../ts/tanksMath";
-import { CartesianCoords } from '../ts/cartesianCoords';
+import { TanksMath } from "../ts/utility/tanksMath";
+import { CartesianCoords } from '../ts/utility/cartesianCoords';
 import { Tank } from '../ts/gameObjects/tank';
 
 describe('Tanks Point Math', () => {

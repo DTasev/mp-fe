@@ -1,19 +1,19 @@
 import { IActionState } from "./iActionState";
-import { GameStateController, GameState } from "../gameStateController";
+import { GameController, GameState } from "../gameController";
 import { Player } from "../gameObjects/player";
 import { Draw, DrawState } from "../drawing/draw";
 import * as Limit from "../limiters/index";
 import { ActiveTank } from "./sharedState";
 import { Tank } from "../gameObjects/tank";
-import { CartesianCoords } from "../cartesianCoords";
+import { CartesianCoords } from "../utility/cartesianCoords";
 import { IGameObject } from "../gameObjects/iGameObject";
-import { TanksMath } from "../tanksMath";
-import { LinePath } from "../linePath";
+import { TanksMath } from "../utility/tanksMath";
+import { LinePath } from "../utility/linePath";
 import { Color } from "../drawing/color";
 
 export class ShootingState implements IActionState {
     context: CanvasRenderingContext2D;
-    controller: GameStateController;
+    controller: GameController;
     player: Player;
 
     draw: Draw;
@@ -31,7 +31,7 @@ export class ShootingState implements IActionState {
 
     shot_path: LinePath;
 
-    constructor(controller: GameStateController, context: CanvasRenderingContext2D, player: Player) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, player: Player) {
         this.controller = controller;
         this.context = context;
         this.player = player;

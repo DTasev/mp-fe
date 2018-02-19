@@ -1,4 +1,4 @@
-import { CartesianCoords } from "../cartesianCoords";
+import { CartesianCoords } from "../utility/cartesianCoords";
 import { Color } from "./color";
 
 export class Draw {

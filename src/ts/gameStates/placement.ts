@@ -1,5 +1,5 @@
 import { IActionState } from "./iActionState";
-import { GameStateController, GameState } from "../gameStateController";
+import { GameController, GameState } from "../gameController";
 import { Tank } from "../gameObjects/tank";
 import { Draw } from "../drawing/draw";
 import * as Limit from "../limiters/index";
@@ -10,7 +10,7 @@ export class PlacingState implements IActionState {
     private static playerTankPlacement = new Limit.Actions(Settings.NUM_PLAYERS);
 
     context: CanvasRenderingContext2D;
-    controller: GameStateController;
+    controller: GameController;
     draw: Draw;
     turn: Limit.Actions;
     player: Player;
@@ -21,7 +21,7 @@ export class PlacingState implements IActionState {
      * @param context Context on which the objects are drawn
      * @param player 
      */
-    constructor(controller: GameStateController, context: CanvasRenderingContext2D, player: Player) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, player: Player) {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();

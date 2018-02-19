@@ -6,14 +6,14 @@ window["Controls"] = Controls;
 
 // Internal classes
 import { Ui } from "./ui";
-import { GameStateController, GameState } from './gameStateController';
+import { GameController, GameState } from './gameController';
 
 const ID_GAME_CANVAS = "tanks-canvas";
 const ID_GAME_UI = "tanks-ui";
 
 // Set-up the canvas and add our event handlers after the page has loaded
 function init() {
-    const controller = new GameStateController();
+    const controller = new GameController();
     const width = window.innerWidth - 32;
     // take 90% of the window, leave a bit of gap on the right
     const height = window.innerHeight * 0.9;

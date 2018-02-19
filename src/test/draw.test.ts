@@ -4,7 +4,7 @@ import 'mocha';
 import { Draw } from "../ts/drawing/draw";
 import { SingleCallMock } from "./mocking/mock";
 import { CanvasContextMock } from "./mocking/canvasContextMock";
-import { CartesianCoords } from "../ts/cartesianCoords";
+import { CartesianCoords } from "../ts/utility/cartesianCoords";
 import { Color } from '../ts/drawing/color';
 
 

@@ -1,7 +1,7 @@
 import { IActionState } from "./iActionState";
-import { GameStateController, GameState } from "../gameStateController";
+import { GameController, GameState } from "../gameController";
 import { IGameObject } from "../gameObjects/iGameObject";
-import { CartesianCoords } from "../cartesianCoords";
+import { CartesianCoords } from "../utility/cartesianCoords";
 import { Player } from "../gameObjects/player";
 import { Draw } from "../drawing/draw";
 
@@ -86,11 +86,11 @@ export class MenuState implements IActionState {
     private menu: Menu;
 
     private context: CanvasRenderingContext2D;
-    private controller: GameStateController;
+    private controller: GameController;
 
     private draw: Draw;
 
-    constructor(controller: GameStateController, context: CanvasRenderingContext2D) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D) {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();

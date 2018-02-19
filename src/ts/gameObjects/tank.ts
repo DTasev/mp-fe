@@ -1,5 +1,5 @@
 import { Player } from "./player";
-import { CartesianCoords } from "../cartesianCoords";
+import { CartesianCoords } from "../utility/cartesianCoords";
 import { Draw } from "../drawing/draw";
 import { IGameObject } from './iGameObject'
 import { Color } from "../drawing/color";

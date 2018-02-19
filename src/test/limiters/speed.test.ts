@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 
 import { Speed } from '../../ts/limiters/speed'
-import { CartesianCoords } from '../../ts/cartesianCoords';
+import { CartesianCoords } from '../../ts/utility/cartesianCoords';
 
 describe('Speed limiter', () => {
     const distance = 25;

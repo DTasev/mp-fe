@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 
 import { Length } from '../../ts/limiters/length'
-import { CartesianCoords } from '../../ts/cartesianCoords';
+import { CartesianCoords } from '../../ts/utility/cartesianCoords';
 
 describe('Action limiter', () => {
     const length = 150;

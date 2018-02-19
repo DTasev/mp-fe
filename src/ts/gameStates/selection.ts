@@ -1,18 +1,18 @@
 import { IActionState } from "./iActionState";
-import { GameStateController, GameState } from "../gameStateController";
+import { GameController, GameState } from "../gameController";
 import { Player } from "../gameObjects/player";
-import { TanksMath } from "../tanksMath";
+import { TanksMath } from "../utility/tanksMath";
 import { Draw } from "../drawing/draw";
 import { Tank, TankHealthState } from "../gameObjects/tank";
 import { ActiveTank } from "./sharedState";
 
 export class SelectionState implements IActionState {
     context: CanvasRenderingContext2D;
-    controller: GameStateController;
+    controller: GameController;
     player: Player;
     draw: Draw;
 
-    constructor(controller: GameStateController, context: CanvasRenderingContext2D, player: Player) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, player: Player) {
         this.controller = controller;
         this.context = context;
         this.player = player;

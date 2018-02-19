@@ -1,10 +1,10 @@
 import { IActionState } from "./iActionState";
 import { Draw, DrawState } from "../drawing/draw";
 import * as Limit from "../limiters/index";
-import { GameStateController, GameState } from "../gameStateController";
+import { GameController, GameState } from "../gameController";
 import { Player } from "../gameObjects/player";
-import { TanksMath } from "../tanksMath";
-import { CartesianCoords } from "../cartesianCoords";
+import { TanksMath } from "../utility/tanksMath";
+import { CartesianCoords } from "../utility/cartesianCoords";
 import { Tank, TankHealthState } from "../gameObjects/tank";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { ActiveTank } from "./sharedState";
@@ -25,7 +25,7 @@ class MovingUI {
 
 export class MovingState implements IActionState {
     context: CanvasRenderingContext2D;
-    controller: GameStateController;
+    controller: GameController;
     player: Player;
     ui: Ui;
 
@@ -34,7 +34,7 @@ export class MovingState implements IActionState {
     turn: Limit.Actions;
     active: ActiveTank;
 
-    constructor(controller: GameStateController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
         this.context = context;
         this.player = player;

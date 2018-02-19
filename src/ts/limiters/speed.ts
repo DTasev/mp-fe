@@ -1,5 +1,5 @@
-import { CartesianCoords } from "../cartesianCoords";
-import { TanksMath } from "../tanksMath";
+import { CartesianCoords } from "../utility/cartesianCoords";
+import { TanksMath } from "../utility/tanksMath";
 export class Speed {
     private limit: number;
 

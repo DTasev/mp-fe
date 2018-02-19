@@ -1,5 +1,5 @@
 import { Draw } from "../drawing/draw";
-import { CartesianCoords } from "../cartesianCoords";
+import { CartesianCoords } from "../utility/cartesianCoords";
 import { Player } from "./player";
 import { TankHealthState } from "./tank";
 

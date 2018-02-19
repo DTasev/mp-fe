@@ -1,5 +1,5 @@
-import { CartesianCoords } from "../cartesianCoords";
-import { GameState } from "../gameStateController";
+import { CartesianCoords } from "../utility/cartesianCoords";
+import { GameState } from "../gameController";
 import * as Limit from "../limiters/index";
 import { IGameObject } from "../gameObjects/iGameObject";
 
