@@ -37,7 +37,6 @@ export class Ui {
         // the width + 2 removes the small gap left on the right, which is there for an unknown reason
         (this.div as any).style = "width:" + (width + 2) + "px";
     }
-
     addRight(elem: HTMLElement) {
         this.right.appendChild(elem);
     }

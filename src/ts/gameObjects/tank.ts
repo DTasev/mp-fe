@@ -104,6 +104,7 @@ export class Tank implements IGameObject {
         this.player = player;
         this.position = new Point(x, y);
         this.healthState = TankHealthState.ALIVE;
+        this.actionState = TankActState.NOT_ACTED;
         this.label = this.id + ""; // + "" converts to string
 
         // initialise colors for each of the tank's states
@@ -142,5 +143,9 @@ export class Tank implements IGameObject {
     highlight(context: CanvasRenderingContext2D, draw: Draw): any {
         draw.dot(context, this.position, Tank.WIDTH, this.color.active);
         draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH, this.color.active_outline);
+    }
+
+    active() {
+        return this.actionState === TankActState.NOT_ACTED;
     }
 }

@@ -4,7 +4,7 @@ import { Player } from "../gameObjects/player";
 import { Draw, DrawState } from "../drawing/draw";
 import * as Limit from "../limiters/index";
 import { ActiveTank } from "./sharedState";
-import { Tank } from "../gameObjects/tank";
+import { Tank, TankActState } from "../gameObjects/tank";
 import { Point } from "../utility/point";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { TanksMath } from "../utility/tanksMath";
@@ -45,7 +45,7 @@ export class ShootingState implements IActionState {
 
         if (!this.controller.shared.turn.available()) {
             // limit the number of actions to how many tanks the player has
-            this.turn = new Limit.Actions(this.player.activeTanks());
+            this.turn = new Limit.Actions(this.player.activeTanks().length);
         } else {
             this.turn = this.controller.shared.turn.get();
         }
@@ -120,14 +120,13 @@ export class ShootingState implements IActionState {
         if (this.successful_shot) {
             this.controller.collide(this.shot_path);
             this.controller.cacheLine(this.shot_path);
-            //
-            // here we will do collision detection along the line
-            //
             this.turn.take();
+            this.active.tank.actionState = TankActState.ACTED;
         }
         if (this.turn.over()) {
             this.controller.nextPlayer = true;
             this.controller.shared.next.set(GameState.TANK_MOVEMENT);
+            this.player.resetTanksActStates();
         } else {
             this.controller.shared.turn.set(this.turn);
             this.controller.shared.next.set(GameState.TANK_SHOOTING);

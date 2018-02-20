@@ -5,7 +5,7 @@ import { GameController, GameState } from "../gameController";
 import { Player } from "../gameObjects/player";
 import { TanksMath } from "../utility/tanksMath";
 import { Point } from "../utility/point";
-import { Tank, TankHealthState } from "../gameObjects/tank";
+import { Tank, TankHealthState, TankActState } from "../gameObjects/tank";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { ActiveTank } from "./sharedState";
 import { Color } from "../drawing/color";
@@ -45,7 +45,7 @@ export class MovingState implements IActionState {
         // if this is the first turn
         if (!this.controller.shared.turn.available()) {
             // limit the number of actions to how many tanks the player has
-            this.turn = new Limit.Actions(this.player.activeTanks());
+            this.turn = new Limit.Actions(this.player.activeTanks().length);
         } else {
             this.turn = this.controller.shared.turn.get();
         }
@@ -90,7 +90,10 @@ export class MovingState implements IActionState {
         // only act if the position is valid
         if (this.active.valid_position) {
             // update the position of the tank in the player array
-            this.player.tanks[this.active.id].position = this.draw.mouse.copy();
+            const tank = this.player.tanks[this.active.id]
+            tank.position = this.draw.mouse.copy();
+            tank.actionState = TankActState.ACTED;
+
             this.controller.showUserWarning("");
             this.turn.take();
         }
@@ -110,6 +113,7 @@ export class MovingState implements IActionState {
         if (this.turn.over()) {
             // this was the last turn, go to shooting afterwards
             this.controller.shared.next.set(GameState.TANK_SHOOTING);
+            this.player.resetTanksActStates();
         } else {
             // come back to moving after selection
             this.controller.shared.next.set(GameState.TANK_MOVEMENT);

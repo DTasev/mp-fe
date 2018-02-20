@@ -1,4 +1,4 @@
-import { Tank, TankHealthState } from "./tank";
+import { Tank, TankHealthState, TankActState } from "./tank";
 import { IGameObject } from "./iGameObject";
 import { Color } from "../drawing/color";
 
@@ -17,7 +17,12 @@ export class Player {
         this.color = color;
     }
 
-    activeTanks(): number {
-        return this.tanks.filter((tank) => tank.healthState !== TankHealthState.DEAD).length;
+    activeTanks(): IGameObject[] {
+        return this.tanks.filter((tank) => tank.healthState !== TankHealthState.DEAD);
+    }
+    resetTanksActStates(): any {
+        for (const tank of this.tanks) {
+            tank.actionState = TankActState.NOT_ACTED;
+        }
     }
 }
