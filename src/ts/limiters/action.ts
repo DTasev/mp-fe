@@ -17,4 +17,7 @@ export class Actions {
     over(): boolean {
         return this.num_actions >= this.limit;
     }
+    reset() {
+        this.num_actions = 0;
+    }
 }

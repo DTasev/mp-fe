@@ -1,19 +1,24 @@
-import { IActionState } from "./iActionState";
+import { IPlayState } from "./iActionState";
 import { GameController, GameState } from "../gameController";
 import { Tank } from "../gameObjects/tank";
 import { Draw } from "../drawing/draw";
-import * as Limit from "../limiters/index";
 import { Player } from "../gameObjects/player";
-import * as Settings from '../gameSettings';
+import { Ui } from "../ui";
 
-export class PlacingState implements IActionState {
-    private static playerTankPlacement = new Limit.Actions(Settings.NUM_PLAYERS);
+import * as Settings from '../gameSettings';
+import * as Limit from "../limiters/index";
+
+export class PlacingState implements IPlayState {
+    // keeps track of how many players have placed their tanks IN TOTAL
+    private static playersTankPlacement = new Limit.Actions(Settings.NUM_PLAYERS);
 
     context: CanvasRenderingContext2D;
     controller: GameController;
     draw: Draw;
-    turn: Limit.Actions;
     player: Player;
+    ui: Ui;
+
+    tanksPlaced: Limit.Actions;
 
     /**
      * 
@@ -21,12 +26,13 @@ export class PlacingState implements IActionState {
      * @param context Context on which the objects are drawn
      * @param player 
      */
-    constructor(controller: GameController, context: CanvasRenderingContext2D, player: Player) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();
-        this.turn = new Limit.Actions(Settings.NUM_TANKS);
+        this.tanksPlaced = new Limit.Actions(Settings.NUM_TANKS);
         this.player = player;
+        this.ui = ui;
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
@@ -35,20 +41,20 @@ export class PlacingState implements IActionState {
 
     private addTank = (e) => {
         this.draw.updateMousePosition(e);
-        const tank = new Tank(this.player.tanks.length + 1, this.player, this.draw.mouse.x, this.draw.mouse.y);
+        // if the future will check if it collides with another tank or terrain
+        const tank = new Tank(this.player.tanks.length, this.player, this.draw.mouse.x, this.draw.mouse.y);
         this.player.tanks.push(tank);
         tank.draw(this.context, this.draw);
-        this.turn.take();
+        // player has placed a tank
+        this.tanksPlaced.take();
         // if we've placed as many objects as allowed, then go to next state
         // next_player is not changed here, as it's set in the controller
-        if (this.turn.over()) {
-            PlacingState.playerTankPlacement.take();
+        if (this.tanksPlaced.over()) {
+            PlacingState.playersTankPlacement.take();
             // all of the players have placed their tanks, go to moving state
-            if (PlacingState.playerTankPlacement.over()) {
-                this.controller.shared.next.set(GameState.TANK_MOVEMENT);
+            if (PlacingState.playersTankPlacement.over()) {
                 this.controller.changeGameState(GameState.TANK_SELECTION);
             } else {
-                this.controller.shared.next.set(GameState.TANK_SELECTION);
                 this.controller.changeGameState(GameState.TANK_PLACEMENT);
             }
         }

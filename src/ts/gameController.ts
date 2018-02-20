@@ -1,12 +1,10 @@
-import { IActionState } from "./gameStates/iActionState";
+import { IPlayState, IActionState } from "./gameStates/iActionState";
 import { MovingState } from "./gameStates/movement";
 import { PlacingState } from "./gameStates/placement";
 import { ShootingState } from "./gameStates/shooting";
 import { SelectionState } from "./gameStates/selection";
 import { MenuState } from "./gameStates/menu";
 import { Player } from './gameObjects/player';
-import { TanksSharedState } from "./gameStates/sharedState";
-import * as Limit from './limiters/index'
 import { Draw } from './drawing/draw';
 import { Color } from './drawing/color';
 import { Line } from './utility/line';
@@ -16,8 +14,10 @@ import { Tank, TankHealthState } from './gameObjects/tank';
 import { Point } from './utility/point';
 import { IGameObject } from './gameObjects/iGameObject';
 import { Ui } from "./ui";
-import * as Settings from './gameSettings';
 import { Collision } from "./gameCollision";
+
+import * as Limit from './limiters/index'
+import * as Settings from './gameSettings';
 
 export enum GameState {
     MENU,
@@ -56,8 +56,6 @@ export class GameController {
 
     /** Flag to specify if the current player's turn is over */
     nextPlayer: boolean = false;
-    /** Shared state among game states */
-    readonly shared = new TanksSharedState();
 
     initialise(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui) {
         this.canvas = canvas;
@@ -83,7 +81,6 @@ export class GameController {
         this.state = newState;
         // clears any old events that were added
         this.canvas.onmousedown = null;
-        window.onmouseup = null;
         this.canvas.onmouseup = null;
         this.canvas.onmousemove = null;
 
@@ -101,16 +98,16 @@ export class GameController {
                 console.log("Initialising MENU");
                 break;
             case GameState.TANK_PLACEMENT:
-                this.action = new PlacingState(this, this.context, player);
+                console.log("Initialising TANK PLACING");
+                this.action = new PlacingState(this, this.context, this.ui, player);
 
                 // force the next player after placing tanks
                 this.nextPlayer = true;
 
-                console.log("Initialising TANK PLACING");
                 break;
             case GameState.TANK_SELECTION:
                 console.log("Initialising TANK SELECTION");
-                this.action = new SelectionState(this, this.context, player);
+                this.action = new SelectionState(this, this.context, this.ui, player);
                 break;
             case GameState.TANK_MOVEMENT:
                 console.log("Initialising TANK MOVEMENT");
@@ -118,7 +115,7 @@ export class GameController {
                 break;
             case GameState.TANK_SHOOTING:
                 console.log("Initialising TANK SHOOTING");
-                this.action = new ShootingState(this, this.context, player);
+                this.action = new ShootingState(this, this.context, this.ui, player);
                 break;
             default:
                 throw new Error("The game should never be in an unknown state, something has gone terribly wrong!");

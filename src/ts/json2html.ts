@@ -74,10 +74,15 @@ export class J2H {
     static parse<T = HTMLElement>(dict: {}): T {
         const [parent, props] = J2H.getParent(dict);
 
-        Object.keys(props).forEach(function (key) {
+        for (const key in props) {
             if (key === "children") {
-                for (const p of props["children"]) {
-                    parent.appendChild(J2H.parse(p));
+                const children = props["children"];
+                if (children instanceof Array) {
+                    for (const p of children) {
+                        parent.appendChild(J2H.parse(p));
+                    }
+                } else {
+                    parent.appendChild(J2H.parse(children));
                 }
             } else if (key === "onclick") {
                 // there's no need to do this for buttons, the onclick attribute is present for them
@@ -85,7 +90,7 @@ export class J2H {
             } else {
                 parent[key] = props[key];
             }
-        });
+        }
 
         return parent;
     }
@@ -98,10 +103,10 @@ export class J2H {
     private static getParent<T = HTMLElement>(dict: {}): [T, {}] {
         let parent, props: {};
         // get the first key in the dictionary
-        Object.keys(dict).forEach(function (key) {
+        for (const key in dict) {
             parent = document.createElement(key);
             props = dict[key];
-        });
+        }
         return [parent, props];
     }
 }

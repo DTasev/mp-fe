@@ -1,4 +1,4 @@
-import { IActionState } from "./iActionState";
+import { IActionState, IPlayState } from "./iActionState";
 import { Draw, DrawState } from "../drawing/draw";
 import * as Limit from "../limiters/index";
 import { GameController, GameState } from "../gameController";
@@ -7,12 +7,11 @@ import { TanksMath } from "../utility/tanksMath";
 import { Point } from "../utility/point";
 import { Tank, TankHealthState, TankTurnState } from "../gameObjects/tank";
 import { IGameObject } from "../gameObjects/iGameObject";
-import { ActiveTank } from "./sharedState";
 import { Color } from "../drawing/color";
 import { Ui } from "../ui";
 import { J2H } from "../json2html";
 
-class MovingUI {
+class MovingUi {
     static button_skipTurn(): HTMLButtonElement {
         return J2H.parse<HTMLButtonElement>({
             "button": {
@@ -21,9 +20,22 @@ class MovingUI {
             }
         })
     }
+
+    static button_goToShooting(): HTMLButtonElement {
+        return J2H.parse<HTMLButtonElement>({
+            "button": {
+                "style": "width:100%",
+                "children": {
+                    "i": {
+                        "className": "fas fa-rocket"
+                    }
+                }
+            }
+        });
+    }
 }
 
-export class MovingState implements IActionState {
+export class MovingState implements IPlayState {
     context: CanvasRenderingContext2D;
     controller: GameController;
     player: Player;
@@ -31,8 +43,8 @@ export class MovingState implements IActionState {
 
     draw: Draw;
     line: Limit.Length;
-    turn: Limit.Actions;
-    active: ActiveTank;
+    active: IGameObject;
+    tankValidPosition: boolean;
 
     constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
@@ -42,25 +54,17 @@ export class MovingState implements IActionState {
 
         this.draw = new Draw();
         this.line = new Limit.Length(Tank.MOVEMENT_RANGE);
-        // if this is the first turn
-        if (!this.controller.shared.turn.available()) {
-            // limit the number of actions to how many tanks the player has
-            this.turn = new Limit.Actions(this.player.activeTanks().length);
-        } else {
-            this.turn = this.controller.shared.turn.get();
-        }
-        this.active = this.controller.shared.active.get();
+        this.active = this.player.activeTank.get();
 
-        const button = MovingUI.button_skipTurn();
-        button.onclick = this.endTurnEarly;
-        button.textContent = "Skip turn";
-        this.ui.addRight(button);
+        const button_goToShooting = MovingUi.button_goToShooting();
+        button_goToShooting.onclick = this.goToShooting;
+        this.ui.addLeft(button_goToShooting);
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
         canvas.onmousedown = this.startMovement;
         canvas.onmousemove = this.drawMoveLine;
-        // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
+        // the mouseup is only on the canvas, otherwise none of the UI buttons can be clicked
         canvas.onmouseup = this.endMovement;
 
         // canvas.addEventListener('touchstart', this.touchMove, false);
@@ -72,14 +76,14 @@ export class MovingState implements IActionState {
         // limit the start of the line to be the tank
         this.draw.last = new Point(this.active.position.x, this.active.position.y);
         // limit the length of the line to the maximum allowed tank movement, and disabled tanks can't be moved
-        if (this.line.in(this.active.position, this.draw.mouse) && this.active.tank.healthState !== TankHealthState.DISABLED) {
+        if (this.line.in(this.active.position, this.draw.mouse) && this.active.healthState !== TankHealthState.DISABLED) {
             this.draw.state = DrawState.DRAWING;
             this.validMove();
         }
     }
 
     private validMove() {
-        this.active.valid_position = true;
+        this.tankValidPosition = true;
         this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, Tank.MOVEMENT_LINE_COLOR);
     }
 
@@ -88,39 +92,39 @@ export class MovingState implements IActionState {
         this.line.reset();
 
         // only act if the position is valid
-        if (this.active.valid_position) {
+        if (this.tankValidPosition) {
             // update the position of the tank in the player array
             const tank = this.player.tanks[this.active.id]
             tank.position = this.draw.mouse.copy();
-            tank.actionState = TankTurnState.ACTED;
+            tank.actionState = TankTurnState.MOVED;
 
             this.controller.showUserWarning("");
-            this.turn.take();
         }
         this.endTurn();
     }
 
     private endTurnEarly = () => {
         console.log("Ending turn early");
-        // mark the turn as over
-        this.turn.end();
+        // set the active tank to be the one that was originally selected
+        // this will tell the selection state to go to shooting without a new selection
+        this.player.activeTank.set(this.active);
         // run the end of turn action
         this.endTurn();
     }
 
+    private goToShooting = () => {
+        this.player.tanks[this.active.id].actionState = TankTurnState.MOVED;
+        this.player.activeTank.set(this.player.tanks[this.active.id]);
+        this.draw.state = DrawState.STOPPED;
+        // redraw canvas with all current tanks
+        this.controller.redrawCanvas(this.draw);
+        this.ui.clear();
+        // go to tank selection state
+        this.controller.changeGameState(GameState.TANK_SELECTION);
+    }
+
     /** The action to be taken at the end of the turn */
     private endTurn() {
-        if (this.turn.over()) {
-            // this was the last turn, go to shooting afterwards
-            this.controller.shared.next.set(GameState.TANK_SHOOTING);
-            this.player.resetTanksActStates();
-        } else {
-            // come back to moving after selection
-            this.controller.shared.next.set(GameState.TANK_MOVEMENT);
-            // continue the turn the next time this state is accessed
-            this.controller.shared.turn.set(this.turn);
-        }
-
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
         this.controller.redrawCanvas(this.draw);
@@ -136,7 +140,7 @@ export class MovingState implements IActionState {
             if (this.line.in(this.active.position, this.draw.mouse)) {
                 this.validMove();
             } else {
-                this.active.valid_position = false;
+                this.tankValidPosition = false;
             }
         }
     }

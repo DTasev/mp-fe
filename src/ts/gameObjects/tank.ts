@@ -6,7 +6,8 @@ import { Color } from "../drawing/color";
 
 export enum TankTurnState {
     /** The tank has performed an action this turn, e.g. moved or shot */
-    ACTED,
+    SHOT,
+    MOVED,
     /** The tank hasn't performed an action this turn */
     NOT_ACTED
 }
@@ -26,7 +27,7 @@ class TankColor {
     /** Color for when the tank is active/selected */
     readonly active: string;
     /** Color for the outline that shows the action(movement) range */
-    readonly active_outline: string;
+    readonly activeOutline: string;
     /** Color for the label of the tank */
     readonly label: string;
     /** Color for the tank, when not selected */
@@ -38,7 +39,7 @@ class TankColor {
 
     constructor(active: string, active_outline: string, label: string, alive: string, disabled: string, dead: string) {
         this.active = active;
-        this.active_outline = active_outline;
+        this.activeOutline = active_outline;
 
         this.label = label;
 
@@ -105,7 +106,8 @@ export class Tank implements IGameObject {
         this.position = new Point(x, y);
         this.healthState = TankHealthState.ALIVE;
         this.actionState = TankTurnState.NOT_ACTED;
-        this.label = this.id + ""; // + "" converts to string
+        this.label = ""; // + "" converts to string
+        // this.label = this.id + ""; // + "" converts to string
 
         // initialise colors for each of the tank's states
         this.color = new TankColor(
@@ -119,11 +121,23 @@ export class Tank implements IGameObject {
     }
 
     draw(context: CanvasRenderingContext2D, draw: Draw): any {
+        let [label, color] = this.uiElements();
+        draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, color);
+        context.fillStyle = this.color.label;
+        context.font = "16px Calibri";
+        // put the text in the middle of the tank
+        context.fillText(label, this.position.x, this.position.y + 5);
+    }
+
+    private uiElements(): [string, string] {
         let color: string;
         let label = this.label;
         switch (this.actionState) {
-            case TankTurnState.ACTED:
-                label += "A";
+            case TankTurnState.SHOT:
+                label += "🚀";
+                break;
+            case TankTurnState.MOVED:
+                label += "⚓";
                 break;
         }
         switch (this.healthState) {
@@ -132,26 +146,22 @@ export class Tank implements IGameObject {
                 break;
             case TankHealthState.DISABLED:
                 color = this.color.disabled;
-                label += "D";
+                label += "♿";
                 break;
             case TankHealthState.DEAD:
                 color = this.color.dead;
-                label += "X";
+                label += "💀";
                 break;
         }
-        draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, color);
-        context.fillStyle = this.color.label;
-        context.font = "18px Calibri";
-        // put the text in the middle of the tank
-        context.fillText(label, this.position.x, this.position.y + 5);
+        return [label, color];
     }
 
     highlight(context: CanvasRenderingContext2D, draw: Draw): any {
         draw.dot(context, this.position, Tank.WIDTH, this.color.active);
-        draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH, this.color.active_outline);
+        draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH, this.color.activeOutline);
     }
 
     active() {
-        return this.actionState === TankTurnState.NOT_ACTED;
+        return this.actionState !== TankTurnState.SHOT;
     }
 }
