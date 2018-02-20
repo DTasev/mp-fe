@@ -4,7 +4,7 @@ import { Player } from "../gameObjects/player";
 import { Draw, DrawState } from "../drawing/draw";
 import * as Limit from "../limiters/index";
 import { ActiveTank } from "./sharedState";
-import { Tank, TankActState } from "../gameObjects/tank";
+import { Tank, TankTurnState } from "../gameObjects/tank";
 import { Point } from "../utility/point";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { TanksMath } from "../utility/tanksMath";
@@ -121,7 +121,7 @@ export class ShootingState implements IActionState {
             this.controller.collide(this.shot_path);
             this.controller.cacheLine(this.shot_path);
             this.turn.take();
-            this.active.tank.actionState = TankActState.ACTED;
+            this.active.tank.actionState = TankTurnState.ACTED;
         }
         if (this.turn.over()) {
             this.controller.nextPlayer = true;

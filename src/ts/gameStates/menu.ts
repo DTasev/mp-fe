@@ -114,9 +114,8 @@ export class MenuState implements IActionState {
      * Activates the selected menu option
      */
     private activateMenuOption = (e: MouseEvent) => {
-        console.log("Changing state from MENU EVENT to TANK PLACING");
-        this.controller.clearCanvas();
         if (this.menu.selected_item >= 0) {
+            this.controller.clearCanvas();
             this.controller.changeGameState(GameState.TANK_PLACEMENT);
         }
         // handle other events, probably better with a switch statement

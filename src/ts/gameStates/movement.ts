@@ -5,7 +5,7 @@ import { GameController, GameState } from "../gameController";
 import { Player } from "../gameObjects/player";
 import { TanksMath } from "../utility/tanksMath";
 import { Point } from "../utility/point";
-import { Tank, TankHealthState, TankActState } from "../gameObjects/tank";
+import { Tank, TankHealthState, TankTurnState } from "../gameObjects/tank";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { ActiveTank } from "./sharedState";
 import { Color } from "../drawing/color";
@@ -92,7 +92,7 @@ export class MovingState implements IActionState {
             // update the position of the tank in the player array
             const tank = this.player.tanks[this.active.id]
             tank.position = this.draw.mouse.copy();
-            tank.actionState = TankActState.ACTED;
+            tank.actionState = TankTurnState.ACTED;
 
             this.controller.showUserWarning("");
             this.turn.take();

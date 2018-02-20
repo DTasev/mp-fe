@@ -4,7 +4,7 @@ import { Draw } from "../drawing/draw";
 import { IGameObject } from './iGameObject'
 import { Color } from "../drawing/color";
 
-export enum TankActState {
+export enum TankTurnState {
     /** The tank has performed an action this turn, e.g. moved or shot */
     ACTED,
     /** The tank hasn't performed an action this turn */
@@ -95,7 +95,7 @@ export class Tank implements IGameObject {
     position: Point;
 
     healthState: TankHealthState;
-    actionState: TankActState;
+    actionState: TankTurnState;
 
     label: string;
 
@@ -104,7 +104,7 @@ export class Tank implements IGameObject {
         this.player = player;
         this.position = new Point(x, y);
         this.healthState = TankHealthState.ALIVE;
-        this.actionState = TankActState.NOT_ACTED;
+        this.actionState = TankTurnState.NOT_ACTED;
         this.label = this.id + ""; // + "" converts to string
 
         // initialise colors for each of the tank's states
@@ -121,6 +121,11 @@ export class Tank implements IGameObject {
     draw(context: CanvasRenderingContext2D, draw: Draw): any {
         let color: string;
         let label = this.label;
+        switch (this.actionState) {
+            case TankTurnState.ACTED:
+                label += "A";
+                break;
+        }
         switch (this.healthState) {
             case TankHealthState.ALIVE:
                 color = this.color.alive;
@@ -137,6 +142,7 @@ export class Tank implements IGameObject {
         draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, color);
         context.fillStyle = this.color.label;
         context.font = "18px Calibri";
+        // put the text in the middle of the tank
         context.fillText(label, this.position.x, this.position.y + 5);
     }
 
@@ -146,6 +152,6 @@ export class Tank implements IGameObject {
     }
 
     active() {
-        return this.actionState === TankActState.NOT_ACTED;
+        return this.actionState === TankTurnState.NOT_ACTED;
     }
 }

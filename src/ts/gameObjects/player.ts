@@ -1,4 +1,4 @@
-import { Tank, TankHealthState, TankActState } from "./tank";
+import { Tank, TankHealthState, TankTurnState } from "./tank";
 import { IGameObject } from "./iGameObject";
 import { Color } from "../drawing/color";
 
@@ -22,7 +22,7 @@ export class Player {
     }
     resetTanksActStates(): any {
         for (const tank of this.tanks) {
-            tank.actionState = TankActState.NOT_ACTED;
+            tank.actionState = TankTurnState.NOT_ACTED;
         }
     }
 }
