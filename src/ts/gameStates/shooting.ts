@@ -68,7 +68,7 @@ export class ShootingState implements IPlayState {
 
         const button_skipTurn = ShootingUi.button_skipTurn();
         button_skipTurn.onclick = this.skipTurn;
-        ui.addLeft(button_skipTurn);
+        ui.left.add(button_skipTurn);
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
@@ -158,7 +158,6 @@ export class ShootingState implements IPlayState {
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
         this.controller.redrawCanvas(this.draw);
-        this.ui.clear();
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
     private skipTurn = () => {
@@ -170,7 +169,6 @@ export class ShootingState implements IPlayState {
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
         this.controller.redrawCanvas(this.draw);
-        this.ui.clear();
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
 }

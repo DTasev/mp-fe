@@ -18,6 +18,7 @@ import { Collision } from "./gameCollision";
 
 import * as Limit from './limiters/index'
 import * as Settings from './gameSettings';
+import { J2H } from "./json2html";
 
 export enum GameState {
     MENU,
@@ -78,6 +79,7 @@ export class GameController {
      * @param newState 
      */
     changeGameState(newState: GameState) {
+        this.ui.clear();
         this.state = newState;
         // clears any old events that were added
         this.canvas.onmousedown = null;
@@ -91,6 +93,7 @@ export class GameController {
         }
         const player = this.players[this.currentPlayer];
         console.log("This is", player.name, "playing.");
+        this.ui.setPlayer(player.name);
 
         switch (this.state) {
             case GameState.MENU:

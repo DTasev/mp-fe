@@ -58,7 +58,7 @@ export class MovingState implements IPlayState {
 
         const button_goToShooting = MovingUi.button_goToShooting();
         button_goToShooting.onclick = this.goToShooting;
-        this.ui.addLeft(button_goToShooting);
+        this.ui.left.add(button_goToShooting);
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
@@ -118,7 +118,6 @@ export class MovingState implements IPlayState {
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
         this.controller.redrawCanvas(this.draw);
-        this.ui.clear();
         // go to tank selection state
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
@@ -129,7 +128,6 @@ export class MovingState implements IPlayState {
         // redraw canvas with all current tanks
         this.controller.redrawCanvas(this.draw);
         // go to tank selection state
-        this.ui.clear();
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
 
