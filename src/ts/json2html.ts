@@ -91,7 +91,6 @@ export class J2H {
                 parent[key] = props[key];
             }
         }
-
         return parent;
     }
 
