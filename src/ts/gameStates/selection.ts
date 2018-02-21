@@ -33,7 +33,7 @@ export class SelectionState implements IPlayState {
         } else {
             canvas.onmousedown = this.highlightTank;
             // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
-            canvas.onmouseup = this.mouseUp;
+            window.onmouseup = this.mouseUp;
         }
     }
 

@@ -84,6 +84,7 @@ export class GameController {
         // clears any old events that were added
         this.canvas.onmousedown = null;
         this.canvas.onmouseup = null;
+        window.onmouseup = null;
         this.canvas.onmousemove = null;
 
         // if the state has marked the end of the player's turn, then we go to the next player
@@ -91,6 +92,7 @@ export class GameController {
             this.changePlayer();
             this.nextPlayer = false;
         }
+
         const player = this.players[this.currentPlayer];
         console.log("This is", player.name, "playing.");
         this.ui.setPlayer(player.name);

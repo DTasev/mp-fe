@@ -25,6 +25,7 @@ class ShootingUi {
         });
     }
 }
+
 export class ShootingState implements IPlayState {
     context: CanvasRenderingContext2D;
     controller: GameController;
@@ -67,14 +68,14 @@ export class ShootingState implements IPlayState {
         this.active = this.player.activeTank.get();
 
         const button_skipTurn = ShootingUi.button_skipTurn();
-        button_skipTurn.onclick = this.skipTurn;
+        button_skipTurn.onmousedown = this.skipTurn;
         ui.left.add(button_skipTurn);
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
         canvas.onmousedown = this.startShooting;
         canvas.onmousemove = this.continueShooting;
-        canvas.onmouseup = this.stopShooting;
+        window.onmouseup = this.stopShooting;
     }
 
     private startShooting = (e: MouseEvent) => {

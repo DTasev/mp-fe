@@ -24,6 +24,7 @@ class UiSection implements IUiSection {
         return this.parent;
     }
 }
+
 export class Ui {
     static readonly ID_BUTTON_SKIP_TURN = "tanks-ui-button-skipturn";
     private readonly div: HTMLDivElement;
