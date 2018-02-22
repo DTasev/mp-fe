@@ -3,6 +3,7 @@ import { MovingState } from "./gameStates/movement";
 import { PlacingState } from "./gameStates/placement";
 import { ShootingState } from "./gameStates/shooting";
 import { SelectionState } from "./gameStates/selection";
+import { GameEndState } from "./gameStates/gameEnd";
 import { MenuState } from "./gameStates/menu";
 import { Player } from './gameObjects/player';
 import { Draw } from './drawing/draw';
@@ -25,7 +26,8 @@ export enum GameState {
     TANK_PLACEMENT,
     TANK_MOVEMENT,
     TANK_SELECTION,
-    TANK_SHOOTING
+    TANK_SHOOTING,
+    GAME_END
 }
 
 /**
@@ -94,6 +96,10 @@ export class GameController {
         }
 
         const player = this.players[this.currentPlayer];
+        if (this.state !== GameState.MENU && this.state !== GameState.TANK_PLACEMENT && player.activeTanks().length === 0) {
+            this.state = GameState.GAME_END;
+        }
+
         console.log("This is", player.name, "playing.");
         this.ui.setPlayer(player.name);
 
@@ -122,6 +128,10 @@ export class GameController {
                 console.log("Initialising TANK SHOOTING");
                 this.action = new ShootingState(this, this.context, this.ui, player);
                 break;
+            case GameState.GAME_END:
+                console.log("Initialising GAME END");
+                this.action = new GameEndState(this, this.context, player);
+                break
             default:
                 throw new Error("The game should never be in an unknown state, something has gone terribly wrong!");
         }

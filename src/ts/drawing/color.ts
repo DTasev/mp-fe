@@ -1,3 +1,5 @@
+import { S } from "../utility/stringFormat";
+
 export class Color {
     private red: number;
     private green: number;
@@ -12,12 +14,8 @@ export class Color {
     }
 
     toRGBA(alpha?: number): string {
-        if (alpha) {
-            return "rgba(" + this.red + "," + this.green + "," + this.blue + "," + alpha + ")";
-        } else {
-            return "rgba(" + this.red + "," + this.green + "," + this.blue + "," + this.alpha + ")";
-
-        }
+        alpha = alpha !== undefined ? alpha : this.alpha;
+        return S.format("rgba(%s,%s,%s,%s)", this.red, this.green, this.blue, alpha);
     }
 
     static color = 0;

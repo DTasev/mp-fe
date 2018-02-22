@@ -3,14 +3,17 @@ import { TankHealthState, Tank } from "./gameObjects/tank";
 import { Line } from "./utility/line";
 import { TanksMath } from "./utility/tanksMath";
 import { Point } from "./utility/point";
+import { S } from "./utility/stringFormat";
 
 export class Collision {
     static debugShot(line: Line, start: Point, end: Point, tank: IGameObject, distance: number) {
         for (const segment of line.points) {
-            console.log(segment.x + "," + (-segment.y));
+            console.log(S.format("%s,%s", segment.x, -segment.y));
+
         }
-        console.log("Collision versus line:\n", start.x, ",", -start.y, "\n", end.x, ",", -end.y);
-        console.log("Tank ID: ", tank.id, "\nPosition: (", tank.position.x, ",", -tank.position.y, ")");
+
+        console.log(S.format("Collision versus line:\n%s,%s\n%s,%s", start.x, -start.y, end.x, -end.y));
+        console.log(S.format("Tank ID: %s\n%sPosition: (%s,%s)", tank.id, tank.position.x, -tank.position.y));
         console.log("Distance: ", distance);
     }
     static collide(line: Line, numPoints: number, tanks: IGameObject[]) {
