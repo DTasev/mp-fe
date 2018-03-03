@@ -5,6 +5,7 @@ import { Point } from "../utility/point";
 import { Player } from "../gameObjects/player";
 import { Draw } from "../drawing/draw";
 import { S } from "../utility/stringFormat";
+import { Viewport } from "../gameMap/viewport";
 
 
 class Menu {
@@ -88,12 +89,14 @@ export class GameEndState implements IActionState {
 
     private draw: Draw;
 
-    constructor(controller: GameController, context: CanvasRenderingContext2D, player: Player) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, player: Player, viewport: Viewport) {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();
         const numTanks = player.activeTanks().length + 1;
         const tanksStr = numTanks === 1 ? " tank" : " tanks";
+
+        viewport.middle();
         this.menu = new Menu("End of Game", [S.format("Player %s Wins!", player.id), S.format("With %s %s", numTanks, tanksStr)]);
         this.menu.draw(this.context, this.draw);
     }

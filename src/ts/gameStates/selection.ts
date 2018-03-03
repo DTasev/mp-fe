@@ -6,6 +6,7 @@ import { Draw } from "../drawing/draw";
 import { Tank, TankHealthState, TankTurnState } from "../gameObjects/tank";
 import { Ui } from "../ui";
 import { IGameObject } from "../gameObjects/iGameObject";
+import { Viewport } from "../gameMap/viewport";
 
 export class SelectionState implements IPlayState {
     context: CanvasRenderingContext2D;
@@ -16,12 +17,13 @@ export class SelectionState implements IPlayState {
 
     active: IGameObject;
 
-    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player, viewport: Viewport) {
         this.controller = controller;
         this.context = context;
         this.player = player;
         this.draw = new Draw();
         this.ui = ui;
+        viewport.goTo(player.viewportPosition);
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {

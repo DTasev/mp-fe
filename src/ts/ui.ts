@@ -26,16 +26,17 @@ class UiSection implements IUiSection {
 }
 
 export class Ui {
+
     static readonly ID_BUTTON_SKIP_TURN = "tanks-ui-button-skipturn";
-    private readonly div: HTMLDivElement;
+    private readonly container: HTMLDivElement;
 
     readonly left: UiSection;
     readonly middle: UiSection;
     readonly right: UiSection;
 
     constructor(id: string, width: number) {
-        this.div = <HTMLDivElement>document.getElementById(id);
-        if (!this.div) {
+        this.container = <HTMLDivElement>document.getElementById(id);
+        if (!this.container) {
             throw new Error("The UI DOM element was not found!");
         }
 
@@ -61,14 +62,14 @@ export class Ui {
         };
         this.right = new UiSection(J2H.parse(right));
 
-        this.div.appendChild(this.left.html());
-        this.div.appendChild(this.middle.html());
-        this.div.appendChild(this.right.html());
+        this.container.appendChild(this.left.html());
+        this.container.appendChild(this.middle.html());
+        this.container.appendChild(this.right.html());
     }
     setWidth(width: number) {
         // as any ignores the read-only "style" warning, as we need to write the width of the canvas to the width of the UI element
         // the width + 2 removes the small gap left on the right, which is there for an unknown reason
-        (this.div as any).style = "width:" + (width + 2) + "px";
+        (this.container as any).style = "width:" + (width + 2) + "px";
     }
 
     clear() {
@@ -84,5 +85,9 @@ export class Ui {
                 "className": "fa-2x"
             }
         }));
+    }
+    update(e: Event): void {
+        this.container.left = window.visualViewport.pageLeft;
+        this.container.top = window.visualViewport.pageTop;
     }
 }

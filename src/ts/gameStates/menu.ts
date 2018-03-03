@@ -4,6 +4,7 @@ import { IGameObject } from "../gameObjects/iGameObject";
 import { Point } from "../utility/point";
 import { Player } from "../gameObjects/player";
 import { Draw } from "../drawing/draw";
+import { Viewport } from "../gameMap/viewport";
 
 
 class Menu {
@@ -90,12 +91,13 @@ export class MenuState implements IActionState {
 
     private draw: Draw;
 
-    constructor(controller: GameController, context: CanvasRenderingContext2D) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, viewport: Viewport) {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();
         this.menu = new Menu("Tanks", ["Start game", "Potatoes", "Apples", "I", "Choose", "You", "Pikachu"]);
         this.menu.draw(this.context, this.draw);
+        viewport.middle();
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {

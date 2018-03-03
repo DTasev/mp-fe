@@ -7,6 +7,7 @@ import { Ui } from "../ui";
 
 import * as Settings from '../gameSettings';
 import * as Limit from "../limiters/index";
+import { Viewport } from "../gameMap/viewport";
 
 export class PlacingState implements IPlayState {
     // keeps track of how many players have placed their tanks IN TOTAL
@@ -26,13 +27,14 @@ export class PlacingState implements IPlayState {
      * @param context Context on which the objects are drawn
      * @param player 
      */
-    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player, viewport: Viewport) {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();
         this.tanksPlaced = new Limit.Actions(Settings.NUM_TANKS);
         this.player = player;
         this.ui = ui;
+        viewport.goTo(player.viewportPosition);
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {

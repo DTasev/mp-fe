@@ -10,6 +10,7 @@ import { IGameObject } from "../gameObjects/iGameObject";
 import { Color } from "../drawing/color";
 import { Ui } from "../ui";
 import { J2H } from "../json2html";
+import { Viewport } from "../gameMap/viewport";
 
 class MovingUi {
     static button_skipTurn(): HTMLButtonElement {
@@ -46,7 +47,7 @@ export class MovingState implements IPlayState {
     active: IGameObject;
     tankValidPosition: boolean;
 
-    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player, viewport: Viewport) {
         this.controller = controller;
         this.context = context;
         this.player = player;
@@ -55,6 +56,8 @@ export class MovingState implements IPlayState {
         this.draw = new Draw();
         this.line = new Limit.Length(Tank.MOVEMENT_RANGE);
         this.active = this.player.activeTank.get();
+
+        viewport.goTo(player.viewportPosition);
 
         const button_goToShooting = MovingUi.button_goToShooting();
         button_goToShooting.onclick = this.goToShooting;

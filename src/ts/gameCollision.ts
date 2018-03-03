@@ -13,7 +13,7 @@ export class Collision {
         }
 
         console.log(S.format("Collision versus line:\n%s,%s\n%s,%s", start.x, -start.y, end.x, -end.y));
-        console.log(S.format("Tank ID: %s\n%sPosition: (%s,%s)", tank.id, tank.position.x, -tank.position.y));
+        console.log(S.format("Tank ID: %s\nPosition: (%s,%s)", tank.id, tank.position.x, -tank.position.y));
         console.log("Distance: ", distance);
     }
     static collide(line: Line, numPoints: number, tanks: IGameObject[]) {

@@ -14,6 +14,7 @@ import { Ui } from "../ui";
 
 import * as Settings from '../gameSettings';
 import * as Limit from "../limiters/index";
+import { Viewport } from "../gameMap/viewport";
 
 class ShootingUi {
     static button_skipTurn(): HTMLButtonElement {
@@ -48,7 +49,7 @@ export class ShootingState implements IPlayState {
     /** The line of the last shot */
     shotPath: Line;
 
-    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player, viewport: Viewport) {
         this.controller = controller;
         this.context = context;
         this.player = player;
@@ -66,6 +67,8 @@ export class ShootingState implements IPlayState {
         }
 
         this.active = this.player.activeTank.get();
+
+        viewport.goTo(player.viewportPosition);
 
         const button_skipTurn = ShootingUi.button_skipTurn();
         button_skipTurn.onmousedown = this.skipTurn;

@@ -70,7 +70,7 @@ export class Tank implements IGameObject {
     static readonly MOVEMENT_LINE_COLOR = Color.black().toRGBA();
 
     /** How far can the shot line reach */
-    static readonly SHOOTING_RANGE = 250;
+    static readonly SHOOTING_RANGE = 409;
 
     /** How fast must the player move for a valid shot */
     static readonly SHOOTING_SPEED = 30;

@@ -3,6 +3,7 @@ import { IGameObject } from "./iGameObject";
 import { Color } from "../drawing/color";
 import * as Limit from '../limiters/index'
 import { SingleAccess } from "../utility/singleAccess";
+import { Point } from "../utility/point";
 
 
 export class Player {
@@ -15,14 +16,16 @@ export class Player {
     /** Keeps track of how many of the player's tanks have already shot */
     tanksShot: SingleAccess<Limit.Actions>;
     activeTank: SingleAccess<IGameObject>
+    viewportPosition: Point;
 
-    constructor(id: number, name: string, color: Color) {
+    constructor(id: number, name: string, color: Color, viewportPosition: Point) {
         this.id = id;
         this.name = name;
         this.tanks = new Array<IGameObject>();
         this.color = color;
         this.tanksShot = new SingleAccess();
         this.activeTank = new SingleAccess();
+        this.viewportPosition = viewportPosition;
     }
 
     activeTanks(): IGameObject[] {

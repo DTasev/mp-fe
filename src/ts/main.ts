@@ -7,25 +7,34 @@ window["Controls"] = Controls;
 // Internal classes
 import { Ui } from "./ui";
 import { GameController, GameState } from './gameController';
+import { Viewport } from './gameMap/viewport';
 
 const ID_GAME_CANVAS = "tanks-canvas";
 const ID_GAME_UI = "tanks-ui";
 
 // Set-up the canvas and add our event handlers after the page has loaded
 function init() {
-    const controller = new GameController();
-    const width = window.innerWidth - 32;
+    // const width = window.innerWidth - 32;
+    const width = 4096;
     // take 90% of the window, leave a bit of gap on the right
-    const height = window.innerHeight * 0.9;
+    // const height = window.innerHeight * 0.9;
+    const height = 4096;
     const ui = new Ui(ID_GAME_UI, width);
+
     const canvas = <HTMLCanvasElement>document.getElementById(ID_GAME_CANVAS);
     canvas.width = width;
     canvas.height = height;
+    window.onscroll = (e: Event) => {
+        ui.update(e);
+    };
 
-    controller.initialise(canvas, canvas.getContext("2d"), ui);
+    const viewport = new Viewport(canvas.width, canvas.height);
+    viewport.middle();
+    const controller = new GameController(canvas, canvas.getContext("2d"), ui, viewport);
 
     // start the game in Menu state
     controller.changeGameState(GameState.MENU);
+    canvas.scrollIntoView();
 }
 
 init(); 

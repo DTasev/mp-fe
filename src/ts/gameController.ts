@@ -16,6 +16,7 @@ import { Point } from './utility/point';
 import { IGameObject } from './gameObjects/iGameObject';
 import { Ui } from "./ui";
 import { Collision } from "./gameCollision";
+import { Viewport } from "./gameMap/viewport";
 
 import * as Limit from './limiters/index'
 import * as Settings from './gameSettings';
@@ -41,9 +42,10 @@ export enum GameState {
  * For more details: https://github.com/Microsoft/TypeScript/wiki/'this'-in-TypeScript#red-flags-for-this
  */
 export class GameController {
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
-    private ui: Ui;
+    private readonly canvas: HTMLCanvasElement;
+    private readonly context: CanvasRenderingContext2D;
+    private readonly ui: Ui;
+    private readonly viewport: Viewport;
 
     /** The current state of the game */
     private state: GameState;
@@ -55,19 +57,26 @@ export class GameController {
     private readonly players: Player[] = [];
 
     /** Stores the all of the shot lines */
-    private readonly lineCache = new LineCache();
+    private readonly lineCache: LineCache;
 
     /** Flag to specify if the current player's turn is over */
     nextPlayer: boolean = false;
 
-    initialise(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui) {
+    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui, viewport: Viewport) {
         this.canvas = canvas;
         this.context = context;
         this.ui = ui;
+        this.viewport = viewport;
 
+        this.lineCache = new LineCache();
+
+        let playerPositions = [
+            new Point(0, 0),
+            new Point(4096, 4096)
+        ];
         this.currentPlayer = 0;
         for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
-            this.players.push(new Player(i, "Player " + (i + 1), Color.next()));
+            this.players.push(new Player(i, "Player " + (i + 1), Color.next(), playerPositions[i]));
         }
     }
 
@@ -105,12 +114,12 @@ export class GameController {
 
         switch (this.state) {
             case GameState.MENU:
-                this.action = new MenuState(this, this.context);
+                this.action = new MenuState(this, this.context, this.viewport);
                 console.log("Initialising MENU");
                 break;
             case GameState.TANK_PLACEMENT:
                 console.log("Initialising TANK PLACING");
-                this.action = new PlacingState(this, this.context, this.ui, player);
+                this.action = new PlacingState(this, this.context, this.ui, player, this.viewport);
 
                 // force the next player after placing tanks
                 this.nextPlayer = true;
@@ -118,19 +127,19 @@ export class GameController {
                 break;
             case GameState.TANK_SELECTION:
                 console.log("Initialising TANK SELECTION");
-                this.action = new SelectionState(this, this.context, this.ui, player);
+                this.action = new SelectionState(this, this.context, this.ui, player, this.viewport);
                 break;
             case GameState.TANK_MOVEMENT:
                 console.log("Initialising TANK MOVEMENT");
-                this.action = new MovingState(this, this.context, this.ui, player);
+                this.action = new MovingState(this, this.context, this.ui, player, this.viewport);
                 break;
             case GameState.TANK_SHOOTING:
                 console.log("Initialising TANK SHOOTING");
-                this.action = new ShootingState(this, this.context, this.ui, player);
+                this.action = new ShootingState(this, this.context, this.ui, player, this.viewport);
                 break;
             case GameState.GAME_END:
                 console.log("Initialising GAME END");
-                this.action = new GameEndState(this, this.context, player);
+                this.action = new GameEndState(this, this.context, player, this.viewport);
                 break
             default:
                 throw new Error("The game should never be in an unknown state, something has gone terribly wrong!");
@@ -141,7 +150,7 @@ export class GameController {
     }
     /** Clears everything from the canvas on the screen. To show anything afterwards it needs to be redrawn. */
     clearCanvas(): void {
-        this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     redrawCanvas(draw: Draw): void {
