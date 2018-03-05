@@ -19,7 +19,8 @@ function init() {
     // take 90% of the window, leave a bit of gap on the right
     // const height = window.innerHeight * 0.9;
     const height = 4096;
-    const ui = new Ui(ID_GAME_UI, width);
+    const viewportWidth = window.visualViewport.width;
+    const ui = new Ui(ID_GAME_UI, viewportWidth);
 
     const canvas = <HTMLCanvasElement>document.getElementById(ID_GAME_CANVAS);
     canvas.width = width;

@@ -39,7 +39,6 @@ export class Ui {
         if (!this.container) {
             throw new Error("The UI DOM element was not found!");
         }
-
         this.setWidth(width);
         const left = {
             "div": {
@@ -69,7 +68,7 @@ export class Ui {
     setWidth(width: number) {
         // as any ignores the read-only "style" warning, as we need to write the width of the canvas to the width of the UI element
         // the width + 2 removes the small gap left on the right, which is there for an unknown reason
-        (this.container as any).style = "width:" + (width + 2) + "px";
+        this.container.style.width = (width + 2) + "px";
     }
 
     clear() {
@@ -87,7 +86,11 @@ export class Ui {
         }));
     }
     update(e: Event): void {
-        this.container.left = window.visualViewport.pageLeft;
-        this.container.top = window.visualViewport.pageTop;
+        const newLeft = window.visualViewport.pageLeft;
+        const newTop = window.visualViewport.pageTop;
+        console.log("Trying to set UI to", newLeft, newTop);
+        this.container.style.left = newLeft + "px";
+        this.container.style.top = newTop + "px";
+        console.log("Actual values", this.container.style.left, this.container.style.top);
     }
 }
