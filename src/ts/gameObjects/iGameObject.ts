@@ -14,7 +14,7 @@ export interface IGameObject {
      * How to draw the game object on the canvas. 
      * Used in the redraw loop to draw every object 
      */
-    draw(context: CanvasRenderingContext2D, draw: Draw): void;
+    draw(context: CanvasRenderingContext2D): void;
 
     /** How to highlight the game object on the canvas, when selected */
     highlight(context: CanvasRenderingContext2D, draw: Draw): void;

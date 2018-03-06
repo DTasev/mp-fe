@@ -1,6 +1,7 @@
 import { Point } from "../utility/point";
 
 export class Viewport {
+
     private readonly canvasWidth: number;
     private readonly canvasHeight: number;
 
@@ -14,10 +15,13 @@ export class Viewport {
     }
 
     go(x: number, y: number) {
-        console.log("Trying to scroll to", x, y);
+        console.log("Scrolling to", x, y);
         window.scroll(x, y);
     }
     goTo(point: Point) {
         this.go(point.x, point.y);
+    }
+    static current(): Point {
+        return new Point(window.pageXOffset, window.pageYOffset);
     }
 }

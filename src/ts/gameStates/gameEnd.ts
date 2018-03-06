@@ -1,11 +1,12 @@
 import { IActionState } from "./iActionState";
-import { GameController, GameState } from "../gameController";
+import { GameController, GameState } from "../controller";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { Point } from "../utility/point";
 import { Player } from "../gameObjects/player";
 import { Draw } from "../drawing/draw";
 import { S } from "../utility/stringFormat";
 import { Viewport } from "../gameMap/viewport";
+import { Ui } from "../ui/ui";
 
 
 class Menu {
@@ -89,20 +90,22 @@ export class GameEndState implements IActionState {
 
     private draw: Draw;
 
-    constructor(controller: GameController, context: CanvasRenderingContext2D, player: Player, viewport: Viewport) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, player: Player) {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();
-        const numTanks = player.activeTanks().length + 1;
+        const numTanks = player.activeTanks().length;
         const tanksStr = numTanks === 1 ? " tank" : " tanks";
 
-        viewport.middle();
-        this.menu = new Menu("End of Game", [S.format("Player %s Wins!", player.id), S.format("With %s %s", numTanks, tanksStr)]);
+        this.menu = new Menu("End of Game", [S.format("%s Won!", player.name), S.format("With %s %s", numTanks, tanksStr)]);
         this.menu.draw(this.context, this.draw);
     }
 
-    addEventListeners(canvas: HTMLCanvasElement) {
+    addEventListeners(canvas: HTMLCanvasElement) { }
 
+    view(viewport: Viewport) {
+        viewport.middle();
     }
 
+    setUpUi(ui: Ui) { }
 }

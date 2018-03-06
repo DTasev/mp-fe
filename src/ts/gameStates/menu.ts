@@ -1,10 +1,11 @@
 import { IActionState } from "./iActionState";
-import { GameController, GameState } from "../gameController";
+import { GameController, GameState } from "../controller";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { Point } from "../utility/point";
 import { Player } from "../gameObjects/player";
 import { Draw } from "../drawing/draw";
 import { Viewport } from "../gameMap/viewport";
+import { Ui } from "../ui/ui";
 
 
 class Menu {
@@ -91,18 +92,25 @@ export class MenuState implements IActionState {
 
     private draw: Draw;
 
-    constructor(controller: GameController, context: CanvasRenderingContext2D, viewport: Viewport) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D) {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();
         this.menu = new Menu("Tanks", ["Start game", "Potatoes", "Apples", "I", "Choose", "You", "Pikachu"]);
         this.menu.draw(this.context, this.draw);
-        viewport.middle();
     }
 
+    // IActionsState interface methods
     addEventListeners(canvas: HTMLCanvasElement) {
         canvas.onmousedown = this.activateMenuOption;
         canvas.onmousemove = this.selectMenuitem;
+    }
+
+    view(viewport: Viewport) {
+        viewport.middle();
+    }
+    setUpUi(ui: Ui) {
+
     }
 
     private selectMenuitem = (e: MouseEvent) => {

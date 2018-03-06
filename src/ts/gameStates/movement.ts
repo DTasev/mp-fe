@@ -1,40 +1,17 @@
 import { IActionState, IPlayState } from "./iActionState";
 import { Draw, DrawState } from "../drawing/draw";
 import * as Limit from "../limiters/index";
-import { GameController, GameState } from "../gameController";
+import { GameController, GameState } from "../controller";
 import { Player } from "../gameObjects/player";
 import { TanksMath } from "../utility/tanksMath";
 import { Point } from "../utility/point";
 import { Tank, TankHealthState, TankTurnState } from "../gameObjects/tank";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { Color } from "../drawing/color";
-import { Ui } from "../ui";
+import { Ui } from "../ui/ui";
 import { J2H } from "../json2html";
 import { Viewport } from "../gameMap/viewport";
-
-class MovingUi {
-    static button_skipTurn(): HTMLButtonElement {
-        return J2H.parse<HTMLButtonElement>({
-            "button": {
-                "style": "width:100%",
-                "textContent": "Skip Turn"
-            }
-        })
-    }
-
-    static button_goToShooting(): HTMLButtonElement {
-        return J2H.parse<HTMLButtonElement>({
-            "button": {
-                "style": "width:100%",
-                "children": {
-                    "i": {
-                        "className": "fas fa-rocket"
-                    }
-                }
-            }
-        });
-    }
-}
+import { MovementUi } from "../ui/movement";
 
 export class MovingState implements IPlayState {
     context: CanvasRenderingContext2D;
@@ -47,7 +24,7 @@ export class MovingState implements IPlayState {
     active: IGameObject;
     tankValidPosition: boolean;
 
-    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player, viewport: Viewport) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
         this.context = context;
         this.player = player;
@@ -56,12 +33,6 @@ export class MovingState implements IPlayState {
         this.draw = new Draw();
         this.line = new Limit.Length(Tank.MOVEMENT_RANGE);
         this.active = this.player.activeTank.get();
-
-        viewport.goTo(player.viewportPosition);
-
-        const button_goToShooting = MovingUi.button_goToShooting();
-        button_goToShooting.onclick = this.goToShooting;
-        this.ui.left.add(button_goToShooting);
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
@@ -75,7 +46,20 @@ export class MovingState implements IPlayState {
         // canvas.addEventListener('touchmove', this.touchMove, false);
     }
 
+    view(viewport: Viewport) { }
+
+    setUpUi(ui: Ui, viewport: Viewport) {
+        const button_goToShooting = MovementUi.button_goToShooting();
+        button_goToShooting.onclick = this.goToShooting;
+        ui.right.add(button_goToShooting);
+        ui.addHome(viewport, this.player);
+    }
+
     startMovement = (e: MouseEvent): void => {
+        // if the button clicked is not the left button, do nothing
+        if (e.button != 0) {
+            return;
+        }
         // limit the start of the line to be the tank
         this.draw.last = new Point(this.active.position.x, this.active.position.y);
         // limit the length of the line to the maximum allowed tank movement, and disabled tanks can't be moved
@@ -91,8 +75,13 @@ export class MovingState implements IPlayState {
     }
 
     endMovement = (e: MouseEvent) => {
+        // if the button clicked is not the left button, do nothing
+        if (e.button != 0) {
+            return;
+        }
         // reset the line limit as the user has let go of the button
         this.line.reset();
+
 
         // only act if the position is valid
         if (this.tankValidPosition) {
@@ -101,17 +90,11 @@ export class MovingState implements IPlayState {
             tank.position = this.draw.mouse.copy();
             tank.actionState = TankTurnState.MOVED;
 
-            this.controller.showUserWarning("");
-        }
-        this.endTurn();
-    }
+            this.ui.warning("");
 
-    private endTurnEarly = () => {
-        console.log("Ending turn early");
-        // set the active tank to be the one that was originally selected
-        // this will tell the selection state to go to shooting without a new selection
-        this.player.activeTank.set(this.active);
-        // run the end of turn action
+            // set the player's viewport position to the last position they were looking at
+            this.player.viewportPosition = Viewport.current();
+        }
         this.endTurn();
     }
 
@@ -120,7 +103,7 @@ export class MovingState implements IPlayState {
         this.player.activeTank.set(this.player.tanks[this.active.id]);
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
-        this.controller.redrawCanvas(this.draw);
+        this.controller.redrawCanvas();
         // go to tank selection state
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
@@ -129,7 +112,7 @@ export class MovingState implements IPlayState {
     private endTurn() {
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
-        this.controller.redrawCanvas(this.draw);
+        this.controller.redrawCanvas();
         // go to tank selection state
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }

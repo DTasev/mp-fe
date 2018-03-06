@@ -14,13 +14,14 @@ import { TanksMath } from './utility/tanksMath';
 import { Tank, TankHealthState } from './gameObjects/tank';
 import { Point } from './utility/point';
 import { IGameObject } from './gameObjects/iGameObject';
-import { Ui } from "./ui";
-import { Collision } from "./gameCollision";
+import { Ui } from "./ui/ui";
+import { Collision } from "./collision";
 import { Viewport } from "./gameMap/viewport";
 
 import * as Limit from './limiters/index'
-import * as Settings from './gameSettings';
+import * as Settings from './settings';
 import { J2H } from "./json2html";
+import { CommonUi } from "./ui/common";
 
 export enum GameState {
     MENU,
@@ -72,7 +73,8 @@ export class GameController {
 
         let playerPositions = [
             new Point(0, 0),
-            new Point(4096, 4096)
+            new Point(0, 0),
+            new Point(0, 0)
         ];
         this.currentPlayer = 0;
         for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
@@ -91,6 +93,7 @@ export class GameController {
      */
     changeGameState(newState: GameState) {
         this.ui.clear();
+
         this.state = newState;
         // clears any old events that were added
         this.canvas.onmousedown = null;
@@ -99,67 +102,92 @@ export class GameController {
         this.canvas.onmousemove = null;
 
         // if the state has marked the end of the player's turn, then we go to the next player
-        if (this.nextPlayer) {
-            this.changePlayer();
+        const gameWinner = this.gameOver();
+
+        if (!gameWinner && this.nextPlayer) {
+            this.nextActivePlayer();
             this.nextPlayer = false;
         }
 
-        const player = this.players[this.currentPlayer];
-        if (this.state !== GameState.MENU && this.state !== GameState.TANK_PLACEMENT && player.activeTanks().length === 0) {
+        if (gameWinner) {
             this.state = GameState.GAME_END;
         }
+
+        // select either the winner or the current player
+        const player = <Player>gameWinner || this.players[this.currentPlayer];
 
         console.log("This is", player.name, "playing.");
         this.ui.setPlayer(player.name);
 
         switch (this.state) {
             case GameState.MENU:
-                this.action = new MenuState(this, this.context, this.viewport);
                 console.log("Initialising MENU");
+                this.action = new MenuState(this, this.context);
                 break;
             case GameState.TANK_PLACEMENT:
                 console.log("Initialising TANK PLACING");
-                this.action = new PlacingState(this, this.context, this.ui, player, this.viewport);
-
-                // force the next player after placing tanks
-                this.nextPlayer = true;
-
+                this.action = new PlacingState(this, this.context, player);
                 break;
             case GameState.TANK_SELECTION:
                 console.log("Initialising TANK SELECTION");
-                this.action = new SelectionState(this, this.context, this.ui, player, this.viewport);
+                this.action = new SelectionState(this, this.context, this.ui, player);
                 break;
             case GameState.TANK_MOVEMENT:
                 console.log("Initialising TANK MOVEMENT");
-                this.action = new MovingState(this, this.context, this.ui, player, this.viewport);
+                this.action = new MovingState(this, this.context, this.ui, player);
                 break;
             case GameState.TANK_SHOOTING:
                 console.log("Initialising TANK SHOOTING");
-                this.action = new ShootingState(this, this.context, this.ui, player, this.viewport);
+                this.action = new ShootingState(this, this.context, this.ui, player);
                 break;
             case GameState.GAME_END:
                 console.log("Initialising GAME END");
-                this.action = new GameEndState(this, this.context, player, this.viewport);
+                this.action = new GameEndState(this, this.context, player);
                 break
             default:
                 throw new Error("The game should never be in an unknown state, something has gone terribly wrong!");
         }
 
         // add the mouse events for the new state
+        this.action.setUpUi(this.ui, this.viewport);
+        this.action.view(this.viewport);
         this.action.addEventListeners(this.canvas);
+    }
+    private gameOver(): boolean | Player {
+        if (this.state !== GameState.MENU && this.state !== GameState.TANK_PLACEMENT) {
+            let onePlayerHasTanks = false;
+            let winner: Player;
+            for (const player of this.players) {
+                if (player.activeTanks().length > 0) {
+
+                    // make note of the first player that has tanks, if no one else has tanks, then he is the winner
+                    // if more than one person has tanks then no one has won yet
+                    if (!onePlayerHasTanks) {
+                        onePlayerHasTanks = true;
+                        // store the potential winner, if no one else has tanks
+                        winner = player;
+                    } else {
+                        // more than one player has more than 0 tanks, therefore the game is not over
+                        return false;
+                    }
+                }
+            }
+
+            return winner;
+        }
     }
     /** Clears everything from the canvas on the screen. To show anything afterwards it needs to be redrawn. */
     clearCanvas(): void {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    redrawCanvas(draw: Draw): void {
+    redrawCanvas(): void {
         this.clearCanvas();
 
         // draw every player for every tank
         for (const player of this.players) {
             for (const tank of player.tanks) {
-                tank.draw(this.context, draw);
+                tank.draw(this.context);
             }
         }
 
@@ -168,16 +196,24 @@ export class GameController {
         for (const line_path of this.lineCache.lines()) {
             for (let i = 1; i < line_path.points.length; i++) {
                 // old lines are currently half-transparent
-                draw.line(this.context, line_path.points[i - 1], line_path.points[i], 1, old_lines_color);
+                Draw.line(this.context, line_path.points[i - 1], line_path.points[i], 1, old_lines_color);
             }
         }
     }
 
-    collide(line: Line) {
+    /**
+     * Collide the line with all tanks that are not the current player's tanks.
+     * @param line The line of the shot for collision
+     * @param friendlyFire Whether the player's own tanks can be collided with
+     */
+    collide(line: Line, friendlyFire = false) {
         console.log("-------------------- Starting Collision -------------------");
         const numPoints = line.points.length;
-        // for every player who isnt the current player
-        for (const player of this.players.filter((p) => p.id !== this.currentPlayer)) {
+        if (friendlyFire) {
+            throw new Error("Not implemented");
+        }
+        const playersForCollision = friendlyFire ? this.players : this.players.filter((p) => p.id !== this.currentPlayer);
+        for (const player of playersForCollision) {
             Collision.collide(line, numPoints, player.tanks);
         }
     }
@@ -186,19 +222,17 @@ export class GameController {
         this.lineCache.points.push(path);
     }
 
-    showUserWarning(message: string) {
-        document.getElementById("user-warning").innerHTML = message;
-    }
-
-    /** 
-     * @returns false if there are still players to take their turn, true if all players have completed their turns for the state
-    */
-    changePlayer(): boolean {
-        if (this.currentPlayer === Settings.NUM_PLAYERS - 1) {
-            this.currentPlayer = 0;
-            return true;
+    /** Change the current player to the next active player. 
+     * For States after placement, it takes into account how many tanks the player has.
+     * If the player has no tanks alive, then their turn will be skipped.
+     */
+    nextActivePlayer(): void {
+        if (this.state === GameState.TANK_PLACEMENT) {
+            this.currentPlayer += 1;
+        } else {
+            do {
+                this.currentPlayer = this.currentPlayer === Settings.NUM_PLAYERS - 1 ? 0 : this.currentPlayer + 1;
+            } while (this.players[this.currentPlayer].activeTanks().length === 0);
         }
-        this.currentPlayer += 1;
-        return false;
     }
 }

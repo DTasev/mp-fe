@@ -1,7 +1,7 @@
 import { J2H } from "../json2html";
 
 import { IPlayState } from "./iActionState";
-import { GameController, GameState } from "../gameController";
+import { GameController, GameState } from "../controller";
 import { Player } from "../gameObjects/player";
 import { Draw, DrawState } from "../drawing/draw";
 import { Tank, TankTurnState } from "../gameObjects/tank";
@@ -10,22 +10,12 @@ import { IGameObject } from "../gameObjects/iGameObject";
 import { TanksMath } from "../utility/tanksMath";
 import { Line } from "../utility/line";
 import { Color } from "../drawing/color";
-import { Ui } from "../ui";
-
-import * as Settings from '../gameSettings';
-import * as Limit from "../limiters/index";
+import { Ui } from "../ui/ui";
 import { Viewport } from "../gameMap/viewport";
+import { ShootingUi } from "../ui/shooting";
 
-class ShootingUi {
-    static button_skipTurn(): HTMLButtonElement {
-        return J2H.parse({
-            "button": {
-                "style": "width:100%",
-                "textContent": "Skip"
-            }
-        });
-    }
-}
+import * as Settings from '../settings';
+import * as Limit from "../limiters/index";
 
 export class ShootingState implements IPlayState {
     context: CanvasRenderingContext2D;
@@ -49,7 +39,7 @@ export class ShootingState implements IPlayState {
     /** The line of the last shot */
     shotPath: Line;
 
-    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player, viewport: Viewport) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
         this.context = context;
         this.player = player;
@@ -67,12 +57,6 @@ export class ShootingState implements IPlayState {
         }
 
         this.active = this.player.activeTank.get();
-
-        viewport.goTo(player.viewportPosition);
-
-        const button_skipTurn = ShootingUi.button_skipTurn();
-        button_skipTurn.onmousedown = this.skipTurn;
-        ui.left.add(button_skipTurn);
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
@@ -81,7 +65,20 @@ export class ShootingState implements IPlayState {
         window.onmouseup = this.stopShooting;
     }
 
+    view(viewport: Viewport) { }
+
+    setUpUi(ui: Ui, viewport: Viewport) {
+        ui.addHome(viewport, this.player);
+        const button_skipTurn = ShootingUi.button_skipTurn();
+        button_skipTurn.onmousedown = this.skipTurn;
+        ui.right.add(button_skipTurn);
+    }
+
     private startShooting = (e: MouseEvent) => {
+        // if the button clicked is not the left button, do nothing
+        if (e.button != 0) {
+            return;
+        }
         this.draw.updateMousePosition(e);
         this.draw.last = new Point(this.active.position.x, this.active.position.y);
         // resets the successful shot flag
@@ -113,12 +110,12 @@ export class ShootingState implements IPlayState {
             // if the player is just moving about on the tank's space
             if (this.tankRoamingLength.in(this.active.position, this.draw.mouse)) {
                 console.log("Roaming in tank space");
-                this.controller.showUserWarning("");
+                this.ui.warning("");
                 this.validRange();
             } // if the player has shot far away start drawing the line
             else if (this.shotSpeed.enough(this.active.position, this.draw.mouse)) {
                 console.log("Shooting!");
-                this.controller.showUserWarning("");
+                this.ui.warning("");
                 this.validRange();
 
                 // only add to the shot path if the shot was successful
@@ -132,7 +129,7 @@ export class ShootingState implements IPlayState {
                     this.draw.state = DrawState.STOPPED;
                 }
             } else {
-                this.controller.showUserWarning("Shooting too slow!");
+                this.ui.warning("Shooting too slow!");
                 console.log("Shooting too slow!");
                 this.draw.state = DrawState.STOPPED;
             }
@@ -140,12 +137,20 @@ export class ShootingState implements IPlayState {
     }
 
     private stopShooting = (e: MouseEvent) => {
+        // if the button clicked is not the left button, do nothing
+        if (e.button != 0) {
+            return;
+        }
         const playerTanksShot = this.player.tanksShot.get();
         if (this.successfulShot) {
             this.controller.collide(this.shotPath);
             this.controller.cacheLine(this.shotPath);
             playerTanksShot.take();
             this.active.actionState = TankTurnState.SHOT;
+
+            // when the shot was successful
+            // set the player's viewport position to the last position they were looking at
+            this.player.viewportPosition = Viewport.current();
         }
 
         // if all the player's tank have shot
@@ -161,7 +166,7 @@ export class ShootingState implements IPlayState {
 
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
-        this.controller.redrawCanvas(this.draw);
+        this.controller.redrawCanvas();
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
     private skipTurn = () => {
@@ -169,10 +174,12 @@ export class ShootingState implements IPlayState {
         this.player.resetTanksActStates();
         // change to the next player when the state is next changed
         this.controller.nextPlayer = true;
+        // if the player skips the turn, set the player's viewport position to the last position they were looking at
+        this.player.viewportPosition = Viewport.current();
 
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
-        this.controller.redrawCanvas(this.draw);
+        this.controller.redrawCanvas();
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
 }

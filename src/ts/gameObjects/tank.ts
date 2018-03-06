@@ -120,9 +120,9 @@ export class Tank implements IGameObject {
         );
     }
 
-    draw(context: CanvasRenderingContext2D, draw: Draw): any {
+    draw(context: CanvasRenderingContext2D): any {
         let [label, color] = this.uiElements();
-        draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, color);
+        Draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, color);
         context.fillStyle = this.color.label;
         context.font = "16px Calibri";
         // put the text in the middle of the tank
@@ -156,9 +156,9 @@ export class Tank implements IGameObject {
         return [label, color];
     }
 
-    highlight(context: CanvasRenderingContext2D, draw: Draw): any {
-        draw.dot(context, this.position, Tank.WIDTH, this.color.active);
-        draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH, this.color.activeOutline);
+    highlight(context: CanvasRenderingContext2D): any {
+        Draw.dot(context, this.position, Tank.WIDTH, this.color.active);
+        Draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH, this.color.activeOutline);
     }
 
     active() {

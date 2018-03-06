@@ -1,10 +1,10 @@
 import { IPlayState } from "./iActionState";
-import { GameController, GameState } from "../gameController";
+import { GameController, GameState } from "../controller";
 import { Player } from "../gameObjects/player";
 import { TanksMath } from "../utility/tanksMath";
 import { Draw } from "../drawing/draw";
 import { Tank, TankHealthState, TankTurnState } from "../gameObjects/tank";
-import { Ui } from "../ui";
+import { Ui } from "../ui/ui";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { Viewport } from "../gameMap/viewport";
 
@@ -17,20 +17,20 @@ export class SelectionState implements IPlayState {
 
     active: IGameObject;
 
-    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player, viewport: Viewport) {
+    constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
         this.context = context;
         this.player = player;
         this.draw = new Draw();
         this.ui = ui;
-        viewport.goTo(player.viewportPosition);
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
-        // cheat and keep the current active tank, while switching to the next state
+        // keep the current active tank, then switch to the next state
         if (this.player.activeTank.available()) {
             this.active = this.player.activeTank.get();
             this.successfulSelection(this.active);
+            // switch to the next state
             this.mouseUp();
         } else {
             canvas.onmousedown = this.highlightTank;
@@ -39,7 +39,19 @@ export class SelectionState implements IPlayState {
         }
     }
 
+    view(viewport: Viewport) {
+        viewport.goTo(this.player.viewportPosition);
+    }
+
+    setUpUi(ui: Ui, viewport: Viewport) {
+        ui.addHome(viewport, this.player);
+    }
+
     highlightTank = (e: MouseEvent): void => {
+        // if the button clicked is not the left button, do nothing
+        if (e.button != 0) {
+            return;
+        }
         this.draw.updateMousePosition(e);
 
         // Check if the user has clicked any tank.
