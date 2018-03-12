@@ -84,7 +84,7 @@ export class J2H {
                 } else {
                     parent.appendChild(J2H.parse(children));
                 }
-            } else if (key === "onclick") {
+            } else if (key === "onclick" && !(parent instanceof HTMLButtonElement)) {
                 // there's no need to do this for buttons, the onclick attribute is present for them
                 parent.setAttribute("onclick", props[key]);
             } else {
