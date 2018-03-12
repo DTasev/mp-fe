@@ -121,12 +121,13 @@ export class Tank implements IGameObject {
     }
 
     draw(context: CanvasRenderingContext2D): any {
+
         let [label, color] = this.uiElements();
         Draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, color);
         context.fillStyle = this.color.label;
         context.font = "16px Calibri";
         // put the text in the middle of the tank
-        context.fillText(label, this.position.x, this.position.y + 5);
+        context.fillText(label, this.position.x - 11, this.position.y + 5);
     }
 
     private uiElements(): [string, string] {
