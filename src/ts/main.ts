@@ -28,13 +28,14 @@ function init() {
 
     // TODO don't subtract if there is no scrollbar
     const viewportWidth = window.innerWidth - SCROLLBAR_WIDTH;
-    const ui = new Ui(ID_GAME_UI, viewportWidth);
+    const viewportHeight = window.innerHeight;
+    const ui = new Ui(ID_GAME_UI, viewportWidth, viewportHeight);
 
     const canvas = <HTMLCanvasElement>document.getElementById(ID_GAME_CANVAS);
     canvas.width = width;
     canvas.height = height;
     window.onscroll = (e: Event) => {
-        ui.update(e);
+        ui.moveToFitView(e);
     };
 
     const viewport = new Viewport(canvas.width, canvas.height);

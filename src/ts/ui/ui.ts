@@ -17,13 +17,17 @@ export class Ui {
     readonly heading: UiHeading;
     readonly body: UiBody;
 
-    constructor(id: string, width: number) {
+    constructor(id: string, width: number, height: number) {
         this.container = <HTMLDivElement>document.getElementById(id);
         if (!this.container) {
             throw new Error("The UI DOM element was not found!");
         }
 
         this.setWidth(width);
+
+        // Setting the height allows this element to hide the canvas.
+        // This is undone when changing back to a play state, so that the canvas is visible.
+        this.setHeight(height);
 
         const rowHeading = J2H.parse<HTMLDivElement>({
             "div": {
@@ -50,8 +54,16 @@ export class Ui {
         this.container.style.width = width + "px";
     }
 
+    setHeight(height: number): void {
+        this.container.style.height = height + "px";
+    }
+
     clear() {
         this.heading.clear();
+        this.body.clear();
+    }
+    showCanvas() {
+        this.setHeight(0);
     }
 
     setPlayer(name) {
@@ -62,7 +74,11 @@ export class Ui {
             }
         }));
     }
-    update(e: Event): void {
+    /**
+     * Adjusts the Ui container to fit the currently viewed part of the page.
+     * @param e The window event that is triggered
+     */
+    moveToFitView(e: Event): void {
         this.container.style.left = window.pageXOffset + "px";
         this.container.style.top = window.pageYOffset + "px";
     }
@@ -78,5 +94,8 @@ export class Ui {
 
     background(color: Color) {
         this.container.style.backgroundColor = color.toRGBA();
+    }
+    textColor(color: Color) {
+        this.container.style.color = color.toRGBA();
     }
 }

@@ -122,7 +122,7 @@ export class GameController {
         switch (this.state) {
             case GameState.MENU:
                 console.log("Initialising MENU");
-                this.action = new MenuState(this, this.context);
+                this.action = new MenuState(this, this.ui);
                 break;
             case GameState.TANK_PLACEMENT:
                 console.log("Initialising TANK PLACING");

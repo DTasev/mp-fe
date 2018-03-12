@@ -3,22 +3,9 @@ import { Viewport } from "../gameMap/viewport";
 import { Player } from "../gameObjects/player";
 import { CommonUi } from "./common";
 import { UiSection } from "./uiSection";
+import { Color } from "../drawing/color";
 
 export class UiHeading {
-
-    addHome(viewport: Viewport, player: Player): any {
-        const button_home = CommonUi.button_home();
-        button_home.onclick = () => {
-            viewport.goTo(player.viewportPosition);
-        }
-    }
-
-    clear(): void {
-        this.left.clear();
-        this.playerTurn.clear();
-        this.message.clear();
-        this.right.clear();
-    }
     private readonly left: UiSection;
     readonly playerTurn: UiSection;
     readonly message: UiSection;
@@ -66,5 +53,27 @@ export class UiHeading {
         rowHeading.appendChild(this.playerTurn.html());
         rowHeading.appendChild(this.message.html());
         rowHeading.appendChild(this.right.html());
+    }
+
+    background(color: Color) {
+        this.htmlElement.style.backgroundColor = color.toRGBA();
+    }
+
+    textColor(color: Color) {
+        this.htmlElement.style.color = color.toRGBA();
+    }
+
+    addHome(viewport: Viewport, player: Player): any {
+        const button_home = CommonUi.button_home();
+        button_home.onclick = () => {
+            viewport.goTo(player.viewportPosition);
+        }
+    }
+
+    clear(): void {
+        this.left.clear();
+        this.playerTurn.clear();
+        this.message.clear();
+        this.right.clear();
     }
 }

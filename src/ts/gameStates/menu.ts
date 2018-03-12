@@ -6,129 +6,127 @@ import { Player } from "../gameObjects/player";
 import { Draw } from "../drawing/draw";
 import { Viewport } from "../gameMap/viewport";
 import { Ui } from "../ui/ui";
+import { Color } from "../drawing/color";
+import { J2H } from "../json2html";
 
+class MenuUi {
+    constructor(htmlElement: HTMLDivElement) {
 
-class Menu {
-    private title: string;
-    private options: ReadonlyArray<string>;
-    private final_height = -1;
-
-    private readonly start_height = 150;
-    private readonly height_increment = 70;
-
-    selected_item: number;
-
-    constructor(title: string, options: ReadonlyArray<string>) {
-        this.title = title;
-        this.options = options;
-    }
-
-    draw(context: CanvasRenderingContext2D, draw: Draw) {
-        const width = context.canvas.width;
-        const height = context.canvas.height;
-
-        context.fillStyle = "Black";
-        context.fillRect(0, 0, width, height);
-
-        context.textAlign = "center";
-        context.fillStyle = "rgb(135,206,250)";
-        context.font = "60px Georgia";
-
-        let text_height = this.start_height;
-        const centre = width / 2;
-        context.fillText(this.title, centre, text_height);
-        context.fillStyle = "White";
-        context.font = "30px Georgia";
-
-
-        for (const [id, option] of this.options.entries()) {
-            text_height += this.height_increment;
-            if (this.selected(id)) {
-                context.fillStyle = "Yellow";
-                context.font = "40px Georgia";
-            } else {
-                context.fillStyle = "White";
-                context.font = "30px Georgia";
-            }
-            context.fillText(option, centre, text_height);
-        }
-        this.final_height = text_height;
-    }
-
-    private selected(id): boolean {
-        return this.selected_item === id;
-    }
-
-    select(mouse: Point): void {
-        if (this.final_height === -1) {
-            throw new Error("The menu hasn't been drawn.");
-        }
-
-        // adds some buffer space around each option, this makes it easier to select each option
-        const buffer_space = this.height_increment / 2;
-
-        let current_height = this.final_height;
-        let id = this.options.length - 1;
-
-        // check up to the height of the title, there's not going to be anything above it
-        while (current_height > this.start_height) {
-            if (mouse.y > current_height - buffer_space) {
-                this.selected_item = id;
-                return;
-            }
-
-            // lower the height that we are checking on, this has the effect of moving the
-            // menu item's hitbox higher on the screen
-            current_height -= this.height_increment;
-            id -= 1;
-        }
     }
 }
 export class MenuState implements IActionState {
-    private menu: Menu;
+    static readonly CLASS_MENU_BUTTON = "w3-padding-32 w3-button tanks-ui-menu-button";
+    static readonly CLASS_MENU_TITLE = "tanks-ui-menu-title";
 
-    private context: CanvasRenderingContext2D;
+
     private controller: GameController;
+    private ui: Ui;
 
-    private draw: Draw;
-
-    constructor(controller: GameController, context: CanvasRenderingContext2D) {
+    constructor(controller: GameController, ui: Ui) {
         this.controller = controller;
-        this.context = context;
-        this.draw = new Draw();
-        this.menu = new Menu("Tanks", ["Start game", "Potatoes", "Apples", "I", "Choose", "You", "Pikachu"]);
-        this.menu.draw(this.context, this.draw);
+        this.ui = ui;
     }
 
     // IActionsState interface methods
     addEventListeners(canvas: HTMLCanvasElement) {
-        canvas.onmousedown = this.activateMenuOption;
-        canvas.onmousemove = this.selectMenuitem;
     }
 
-    view(viewport: Viewport) {
-        viewport.middle();
+    view(viewport: Viewport) { }
+    setUpUi = (ui: Ui, viewport: Viewport) => {
+        this.ui.body.clear();
+        this.ui.background(Color.black());
+        this.ui.body.textColor(Color.white());
+        this.ui.body.textAlign("center");
+
+        const { left, middle, right } = this.addColumns();
+
+        const titleDescription = {
+            "h1": {
+                "className": MenuState.CLASS_MENU_TITLE,
+                "textContent": "Tanks"
+            }
+        };
+
+        middle.appendChild(J2H.parse(titleDescription));
+
+        const button_startGameDescription = {
+            "button": {
+                "className": MenuState.CLASS_MENU_BUTTON,
+                "textContent": "Start Game",
+                "onclick": this.actionStartGame
+            }
+        };
+
+        const button_startGame = J2H.parse(button_startGameDescription);
+        const button_options = <HTMLButtonElement>button_startGame.cloneNode();
+        button_options.textContent = "Options";
+        button_options.onclick = this.showOptions;
+        middle.appendChild(button_startGame);
+        middle.appendChild(button_options);
+
+        this.ui.body.htmlElement.appendChild(left);
+        this.ui.body.htmlElement.appendChild(middle);
+        this.ui.body.htmlElement.appendChild(right);
     }
-    setUpUi(ui: Ui) {
 
-    }
-
-    private selectMenuitem = (e: MouseEvent) => {
-        this.draw.updateMousePosition(e);
-        this.menu.select(this.draw.mouse);
-        this.menu.draw(this.context, this.draw);
-
+    private addColumns() {
+        // these are on the side of the menu buttons, to pad it out so that it can be in the middle
+        const sideDescription = {
+            "div": {
+                "className": "w3-col s1 m2 l2",
+                // tells the browser to render a whitespace and respect the CSS styling classes
+                "innerHTML": "&nbsp;"
+            }
+        };
+        const middleDescription = {
+            "div": {
+                "className": "w3-col s10 m8 l8"
+            }
+        };
+        const left = J2H.parse<HTMLDivElement>(sideDescription);
+        const right = J2H.parse<HTMLDivElement>(sideDescription);
+        const middle = J2H.parse<HTMLDivElement>(middleDescription);
+        return { left, middle, right };
     }
 
     /**
      * Activates the selected menu option
      */
-    private activateMenuOption = (e: MouseEvent) => {
-        if (this.menu.selected_item >= 0) {
-            this.controller.clearCanvas();
-            this.controller.changeGameState(GameState.TANK_PLACEMENT);
-        }
-        // handle other events, probably better with a switch statement
-
+    private actionStartGame = (e: MouseEvent) => {
+        this.ui.showCanvas();
+        this.controller.changeGameState(GameState.TANK_PLACEMENT);
     }
+    private showOptions = (e: MouseEvent) => {
+        this.ui.body.clear();
+        const { left, middle, right } = this.addColumns();
+
+        const button_emptyOptionDescription = {
+            "button": {
+                "className": MenuState.CLASS_MENU_BUTTON,
+                "textContent": "Option",
+                "onclick": () => { throw new Error("Menu option not implemented"); }
+            }
+        };
+
+        for (let i = 0; i < 5; i++) {
+            const button_emptyOption = J2H.parse(button_emptyOptionDescription);
+            button_emptyOption.textContent += " " + i;
+            middle.appendChild(button_emptyOption);
+        }
+
+        const button_backDescription = {
+            "button": {
+                "className": MenuState.CLASS_MENU_BUTTON,
+                "textContent": "Back",
+                "onclick": this.setUpUi
+            }
+        };
+        const button_back = J2H.parse(button_backDescription);
+        middle.appendChild(button_back);
+
+        this.ui.body.htmlElement.appendChild(left);
+        this.ui.body.htmlElement.appendChild(middle);
+        this.ui.body.htmlElement.appendChild(right);
+    }
+
 }
