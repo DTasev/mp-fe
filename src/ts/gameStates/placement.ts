@@ -43,7 +43,7 @@ export class PlacingState implements IPlayState {
         viewport.goTo(this.player.viewportPosition);
     }
     setUpUi(ui: Ui, viewport: Viewport) {
-        ui.addHome(viewport, this.player);
+        ui.heading.addHome(viewport, this.player);
     }
     private addTank = (e) => {
         // if the button clicked is not the left button, do nothing

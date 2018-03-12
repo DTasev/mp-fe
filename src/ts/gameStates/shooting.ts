@@ -68,10 +68,10 @@ export class ShootingState implements IPlayState {
     view(viewport: Viewport) { }
 
     setUpUi(ui: Ui, viewport: Viewport) {
-        ui.addHome(viewport, this.player);
+        ui.heading.addHome(viewport, this.player);
         const button_skipTurn = ShootingUi.button_skipTurn();
         button_skipTurn.onmousedown = this.skipTurn;
-        ui.right.add(button_skipTurn);
+        ui.heading.right.add(button_skipTurn);
     }
 
     private startShooting = (e: MouseEvent) => {

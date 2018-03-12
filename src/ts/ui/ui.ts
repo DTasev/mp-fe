@@ -2,44 +2,20 @@ import { J2H } from "../json2html";
 import { Viewport } from "../gameMap/viewport";
 import { Player } from "../gameObjects/player";
 import { CommonUi } from "./common";
+import { Color } from "../drawing/color";
+import { UiHeading } from "./uiHeading";
+import { UiBody } from "./uiBody";
 
-interface IUiSection {
-    add(elem: HTMLElement);
-    clear();
-}
-
-class UiSection implements IUiSection {
-    private readonly element: HTMLElement;
-
-    constructor(elem: HTMLElement) {
-        this.element = elem;
-    }
-
-    add(elem: HTMLElement) {
-        if (this.element.innerHTML === "&nbsp;") {
-            this.element.innerHTML = "";
-        }
-        this.element.appendChild(elem);
-    }
-    clear() {
-        this.element.innerHTML = "&nbsp;";
-    }
-    html(): HTMLElement {
-        return this.element;
-    }
-    innerHTML(content: string) {
-        this.element.innerHTML = content;
-    }
-}
 
 export class Ui {
     static readonly ID_BUTTON_SKIP_TURN = "tanks-ui-button-skipturn";
+    static readonly ID_HEADING = "tanks-ui-heading";
+    static readonly ID_BODY = "tanks-ui-body";
+
     private readonly container: HTMLDivElement;
 
-    private readonly left: UiSection;
-    readonly playerTurn: UiSection;
-    readonly message: UiSection;
-    readonly right: UiSection;
+    readonly heading: UiHeading;
+    readonly body: UiBody;
 
     constructor(id: string, width: number) {
         this.container = <HTMLDivElement>document.getElementById(id);
@@ -49,48 +25,37 @@ export class Ui {
 
         this.setWidth(width);
 
-        const left = {
+        const rowHeading = J2H.parse<HTMLDivElement>({
             "div": {
-                "className": "w3-col s1 m1 l1"
+                "className": "w3-row",
+                "id": Ui.ID_HEADING
             }
-        };
-        this.left = new UiSection(J2H.parse(left));
+        });
 
-        const middleSections = {
+        const rowBody = J2H.parse<HTMLDivElement>({
             "div": {
-                "className": "w3-col s5 m5 l5",
-                "style": "text-align:center;"
+                "className": "w3-row",
+                "id": Ui.ID_BODY
             }
-        };
+        });
 
-        this.playerTurn = new UiSection(J2H.parse(middleSections));
-        this.message = new UiSection(J2H.parse(middleSections));
+        this.heading = new UiHeading(rowHeading);
+        this.heading.addTo(rowHeading);
+        this.body = new UiBody(rowBody);
 
-        const right = {
-            "div": {
-                "className": "w3-col s1 m1 l1"
-            }
-        };
-        this.right = new UiSection(J2H.parse(right));
-
-        this.container.appendChild(this.left.html());
-        this.container.appendChild(this.playerTurn.html());
-        this.container.appendChild(this.message.html());
-        this.container.appendChild(this.right.html());
+        this.container.appendChild(rowHeading);
+        this.container.appendChild(rowBody);
     }
     setWidth(width: number) {
         this.container.style.width = width + "px";
     }
 
     clear() {
-        this.left.clear();
-        this.playerTurn.clear();
-        this.message.clear();
-        this.right.clear();
+        this.heading.clear();
     }
 
     setPlayer(name) {
-        this.playerTurn.add(J2H.parse({
+        this.heading.playerTurn.add(J2H.parse({
             "b": {
                 "textContent": name + "'s turn.",
                 "className": "fa-2x"
@@ -103,7 +68,7 @@ export class Ui {
     }
     warning(msg: string) {
         console.log("Adding warning message", msg);
-        this.message.add(J2H.parse({
+        this.heading.message.add(J2H.parse({
             "b": {
                 "textContent": msg,
                 "className": "fa-2x"
@@ -111,11 +76,7 @@ export class Ui {
         }));
     }
 
-    addHome(viewport: Viewport, player: Player): void {
-        const button_home = CommonUi.button_home();
-        button_home.onclick = () => {
-            viewport.goTo(player.viewportPosition);
-        }
-        this.left.add(button_home);
+    background(color: Color) {
+        this.container.style.backgroundColor = color.toRGBA();
     }
 }

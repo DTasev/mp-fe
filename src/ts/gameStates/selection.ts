@@ -44,7 +44,7 @@ export class SelectionState implements IPlayState {
     }
 
     setUpUi(ui: Ui, viewport: Viewport) {
-        ui.addHome(viewport, this.player);
+        ui.heading.addHome(viewport, this.player);
     }
 
     highlightTank = (e: MouseEvent): void => {

@@ -51,8 +51,8 @@ export class MovingState implements IPlayState {
     setUpUi(ui: Ui, viewport: Viewport) {
         const button_goToShooting = MovementUi.button_goToShooting();
         button_goToShooting.onclick = this.goToShooting;
-        ui.right.add(button_goToShooting);
-        ui.addHome(viewport, this.player);
+        ui.heading.right.add(button_goToShooting);
+        ui.heading.addHome(viewport, this.player);
     }
 
     startMovement = (e: MouseEvent): void => {
