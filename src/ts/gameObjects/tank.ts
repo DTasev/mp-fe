@@ -127,7 +127,7 @@ export class Tank implements IGameObject {
         context.fillStyle = this.color.label;
         context.font = "16px Calibri";
         // put the text in the middle of the tank
-        context.fillText(label, this.position.x - 11, this.position.y + 5);
+        context.fillText(label, this.position.x - 10.5, this.position.y + 5);
     }
 
     private uiElements(): [string, string] {
