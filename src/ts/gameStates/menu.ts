@@ -33,12 +33,13 @@ export class MenuState implements IActionState {
 
     view(viewport: Viewport) { }
     setUpUi = (ui: Ui, viewport: Viewport) => {
+        this.ui.hideCanvas();
         this.ui.body.clear();
         this.ui.background(Color.black());
         this.ui.body.textColor(Color.white());
         this.ui.body.textAlign("center");
 
-        const { left, middle, right } = this.addColumns();
+        const { left, middle, right } = this.ui.body.addColumns();
 
         const titleDescription = {
             "h1": {
@@ -69,26 +70,6 @@ export class MenuState implements IActionState {
         this.ui.body.htmlElement.appendChild(right);
     }
 
-    private addColumns() {
-        // these are on the side of the menu buttons, to pad it out so that it can be in the middle
-        const sideDescription = {
-            "div": {
-                "className": "w3-col s1 m2 l2",
-                // tells the browser to render a whitespace and respect the CSS styling classes
-                "innerHTML": "&nbsp;"
-            }
-        };
-        const middleDescription = {
-            "div": {
-                "className": "w3-col s10 m8 l8"
-            }
-        };
-        const left = J2H.parse<HTMLDivElement>(sideDescription);
-        const right = J2H.parse<HTMLDivElement>(sideDescription);
-        const middle = J2H.parse<HTMLDivElement>(middleDescription);
-        return { left, middle, right };
-    }
-
     /**
      * Activates the selected menu option
      */
@@ -98,7 +79,7 @@ export class MenuState implements IActionState {
     }
     private showOptions = (e: MouseEvent) => {
         this.ui.body.clear();
-        const { left, middle, right } = this.addColumns();
+        const { left, middle, right } = this.ui.body.addColumns();
 
         const button_emptyOptionDescription = {
             "button": {

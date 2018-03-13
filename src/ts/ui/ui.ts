@@ -13,6 +13,8 @@ export class Ui {
     static readonly ID_BODY = "tanks-ui-body";
 
     private readonly container: HTMLDivElement;
+    private readonly canvasWidth: number;
+    private readonly canvasHeight: number;
 
     readonly heading: UiHeading;
     readonly body: UiBody;
@@ -23,11 +25,10 @@ export class Ui {
             throw new Error("The UI DOM element was not found!");
         }
 
-        this.setWidth(width);
+        this.canvasWidth = width;
+        this.canvasHeight = height;
 
-        // Setting the height allows this element to hide the canvas.
-        // This is undone when changing back to a play state, so that the canvas is visible.
-        this.setHeight(height);
+        this.setWidth(width);
 
         const rowHeading = J2H.parse<HTMLDivElement>({
             "div": {
@@ -54,7 +55,7 @@ export class Ui {
         this.container.style.width = width + "px";
     }
 
-    setHeight(height: number): void {
+    private setHeight(height: number): void {
         this.container.style.height = height + "px";
     }
 
@@ -62,8 +63,16 @@ export class Ui {
         this.heading.clear();
         this.body.clear();
     }
+
     showCanvas() {
         this.setHeight(0);
+    }
+
+    /**
+     * Hides the canvas with the Ui element
+     */
+    hideCanvas() {
+        this.setHeight(this.canvasHeight);
     }
 
     setPlayer(name) {

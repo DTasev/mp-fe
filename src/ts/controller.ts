@@ -142,7 +142,7 @@ export class GameController {
                 break;
             case GameState.GAME_END:
                 console.log("Initialising GAME END");
-                this.action = new GameEndState(this, this.context, player);
+                this.action = new GameEndState(this, this.ui, player);
                 break
             default:
                 throw new Error("The game should never be in an unknown state, something has gone terribly wrong!");

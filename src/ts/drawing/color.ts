@@ -64,4 +64,7 @@ export class Color {
     static c(red: number, green: number, blue: number, alpha: number = 1.0) {
         return new Color(red, green, blue, alpha);
     }
+    static transparent(): Color {
+        return new Color(0, 0, 0, 0);
+    }
 }
