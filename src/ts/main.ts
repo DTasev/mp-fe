@@ -18,16 +18,18 @@ const SCROLLBAR_WIDTH = 17;
 // Set-up the canvas and add our event handlers after the page has loaded
 function init() {
     const height = window.innerHeight * 0.995;
-    // const width = 2048;
+    // const height = 2048;
     // take 90% of the window, leave a bit of gap on the right
     const width = window.innerWidth;
-    // const height = 2048;
+    // const width = 2048;
     // const viewportWidth = window.visualViewport.width;
 
     // subtracting the scrollbar width prevents unlimited X scrolling to the right
 
-    // TODO don't subtract if there is no scrollbar
-    const viewportWidth = window.innerWidth - SCROLLBAR_WIDTH;
+    const hasVerticalScroll = window.innerWidth > document.documentElement.clientWidth;
+    // Don't subtract if there is no scrollbar
+    const viewportWidth = hasVerticalScroll ? window.innerWidth - SCROLLBAR_WIDTH : window.innerWidth;
+
     const viewportHeight = window.innerHeight;
     const ui = new Ui(ID_GAME_UI, viewportWidth, viewportHeight);
 

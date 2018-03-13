@@ -44,3 +44,9 @@
     padding-bottom: 64px;
     text-decoration: none;
 }
+
+/* Sidebar classes */
+
+#button-submit>button {
+    width: 100%
+}

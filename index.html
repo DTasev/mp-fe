@@ -28,7 +28,7 @@
     <nav class="w3-sidebar w3-white w3-animate-left" style="z-index:3;width:300px;display:none" id="mySidebar">
         <div class="w3-container">
             <div class="w3-row">
-                <div class="w3-col s2 m2 l2 w3-dropdown-click margin-top-1em">
+                <div class="w3-col s2 m2 l2 w3-dropdown-click w3-margin-top">
                     <button onclick="Controls.toggleRepositoryOptions()" class="w3-button w3-white full-width">
                         <i class="fa fa-ellipsis-v fa-2x" aria-hidden="true"></i>
                     </button>
@@ -40,38 +40,31 @@
                 </div>
                 <div class="w3-col s10 m10 l10">
                     <h1>
-                        <b>Repositories</b>
+                        <b>User account</b>
                     </h1>
                 </div>
             </div>
         </div>
         <div class="w3-container">
-            <form id="user-credential-form" action="">
+            <form id="user-credential-form" action="post">
                 <div id="username">
                     <input class="w3-input w3-border" type="text" placeholder="Username" value="DTasev" name="username" />
                 </div>
-                <div id="api-key">
-                    <input class="w3-input w3-border" type="password" placeholder="API Key" name="api-key" value="" />
+                <div id="password">
+                    <input class="w3-input w3-border" type="password" placeholder="Password" name="password" value="" />
                 </div>
-                <a href="https://github.com/settings/tokens/new" target="_blank">Get API token</a>
+                <div id="button-submit">
+                    <button class="w3-button w3-white w3-border" type="submit">Login</button>
+                </div>
             </form>
-            <div class="w3-row">
-                <div id="repo-filter" class="w3-col">
-                    <input class="w3-input w3-border" type="text" placeholder="Filter repository names" />
-                </div>
-            </div>
             <div id="error-message" class="w3-row"></div>
-        </div>
-        <div id="repository-list" class="w3-bar-block">
         </div>
         <div class="w3-panel w3-large">
             <a href="https://www.github.com/dtasev/mp-fe" target="_blank" class="out-link">
-                <i class="fab fa-github w3-hover-opacity">
-                </i>
+                <i class="fab fa-github w3-hover-opacity"></i>
             </a>
             <a href="https://www.linkedin.com/in/dtasev/" target="_blank" class="out-link">
-                <i class="fab fa-linkedin w3-hover-opacity">
-                </i>
+                <i class="fab fa-linkedin w3-hover-opacity"></i>
             </a>
         </div>
     </nav>

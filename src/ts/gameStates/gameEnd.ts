@@ -40,7 +40,7 @@ export class GameEndState implements IActionState {
         const winnerNameDescription = {
             "h1": {
                 "className": "w3-padding-64",
-                "textContent": "Winner " + this.player.id + " with " + numTanks + " tanks."
+                "textContent": "Winner " + this.player.name + " with " + numTanks + " tanks."
             }
         };
 

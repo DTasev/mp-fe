@@ -8,6 +8,7 @@ import { Viewport } from "../gameMap/viewport";
 import { Ui } from "../ui/ui";
 import { Color } from "../drawing/color";
 import { J2H } from "../json2html";
+import Controls from "../siteControls";
 
 class MenuUi {
     constructor(htmlElement: HTMLDivElement) {
@@ -62,8 +63,12 @@ export class MenuState implements IActionState {
         const button_options = <HTMLButtonElement>button_startGame.cloneNode();
         button_options.textContent = "Options";
         button_options.onclick = this.showOptions;
+        const button_account = <HTMLButtonElement>button_startGame.cloneNode();
+        button_account.textContent = "Account";
+        button_account.onclick = Controls.w3_open;
         middle.appendChild(button_startGame);
         middle.appendChild(button_options);
+        middle.appendChild(button_account);
 
         this.ui.body.htmlElement.appendChild(left);
         this.ui.body.htmlElement.appendChild(middle);
