@@ -40,7 +40,7 @@ describe('Drawing', () => {
     });
     it('should draw a dot', () => {
         // as any disables type checking
-        draw.dot(mock_context as any, test_coords, expected_width, color);
+        Draw.dot(mock_context as any, test_coords, expected_width, color);
 
         expect(mock_context.mock_beginPath.called.once()).to.be.true;
         expect(mock_context.mock_closePath.called.once()).to.be.true;
@@ -51,14 +51,14 @@ describe('Drawing', () => {
     });
     it('should draw a dot with outline', () => {
         // set true for the outline
-        draw.dot(mock_context as any, test_coords, expected_width, color, true);
+        Draw.dot(mock_context as any, test_coords, expected_width, color, true);
 
         expect(mock_context.mock_stroke.called.once()).to.be.true;
         expect(mock_context.lineWidth).to.equal(expected_width);
         expect(mock_context.strokeStyle).to.not.be.empty;
     });
     it('should draw a circle', () => {
-        draw.circle(mock_context as any, test_coords, 5, expected_width, color);
+        Draw.circle(mock_context as any, test_coords, 5, expected_width, color);
 
         expect(mock_context.mock_beginPath.called.once()).to.be.true;
         expect(mock_context.mock_closePath.called.once()).to.be.true;
@@ -137,7 +137,7 @@ describe('Drawing', () => {
         const start = new Point(0, 0);
         const end = new Point(1, 1);
 
-        draw.line(mock_context as any, start, end, expected_width, color);
+        Draw.line(mock_context as any, start, end, expected_width, color);
 
         expect(mock_context.mock_beginPath.called.once()).to.be.true;
         expect(mock_context.mock_moveTo.called.once()).to.be.true;
