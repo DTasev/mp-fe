@@ -71,14 +71,15 @@ export class GameController {
 
         this.lineCache = new LineCache();
 
-        let playerPositions = [
-            new Point(0, 0),
-            new Point(0, 0),
-            new Point(0, 0)
-        ];
+        // TODO automatically determine viewport position based on number of player
+        // let playerPositions = [
+        //     new Point(0, 0),
+        //     new Point(0, 0),
+        //     new Point(0, 0)
+        // ];
         this.currentPlayer = 0;
         for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
-            this.players.push(new Player(i, "Player " + (i + 1), Color.next(), playerPositions[i]));
+            this.players.push(new Player(i, "Player " + (i + 1), Color.next(), new Point(0, 0)));
         }
     }
 

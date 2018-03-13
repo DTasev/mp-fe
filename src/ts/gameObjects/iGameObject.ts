@@ -2,6 +2,7 @@ import { Draw } from "../drawing/draw";
 import { Point } from "../utility/point";
 import { Player } from "./player";
 import { TankHealthState, TankTurnState } from "./tank";
+import { GameState } from "../controller";
 
 export interface IGameObject {
     id: number;
@@ -23,4 +24,5 @@ export interface IGameObject {
      * @returns true if the object can act, false if the object cannot act this turn
      */
     active(): boolean;
+    nextState(): GameState;
 }

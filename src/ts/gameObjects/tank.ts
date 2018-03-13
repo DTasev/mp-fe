@@ -3,6 +3,7 @@ import { Point } from "../utility/point";
 import { Draw } from "../drawing/draw";
 import { IGameObject } from './iGameObject'
 import { Color } from "../drawing/color";
+import { GameState } from "../controller";
 
 export enum TankTurnState {
     /** The tank has performed an action this turn, e.g. moved or shot */
@@ -121,9 +122,12 @@ export class Tank implements IGameObject {
     }
 
     draw(context: CanvasRenderingContext2D): any {
-
         let [label, color] = this.uiElements();
         Draw.circle(context, this.position, Tank.WIDTH, Tank.LINE_WIDTH, color);
+        this.showStatus(context, label);
+    }
+
+    private showStatus(context: CanvasRenderingContext2D, label: string) {
         context.fillStyle = this.color.label;
         context.font = "16px Calibri";
         // put the text in the middle of the tank
@@ -160,9 +164,26 @@ export class Tank implements IGameObject {
     highlight(context: CanvasRenderingContext2D): any {
         Draw.dot(context, this.position, Tank.WIDTH, this.color.active);
         Draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH, this.color.activeOutline);
+        let [label, color] = this.uiElements();
+        this.showStatus(context, label);
     }
 
     active() {
         return this.actionState !== TankTurnState.SHOT;
+    }
+
+    nextState(): GameState {
+        // if the tank is disabled, then movement will be forcefully skipped
+        if (this.healthState == TankHealthState.DISABLED) {
+            this.actionState = TankTurnState.MOVED;
+        }
+        switch (this.actionState) {
+            case TankTurnState.NOT_ACTED:
+                return GameState.TANK_MOVEMENT;
+            case TankTurnState.MOVED:
+                return GameState.TANK_SHOOTING;
+            case TankTurnState.SHOT:
+                return GameState.TANK_SELECTION;
+        }
     }
 }

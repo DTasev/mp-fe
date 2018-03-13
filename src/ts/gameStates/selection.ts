@@ -15,7 +15,7 @@ export class SelectionState implements IPlayState {
     draw: Draw;
     ui: Ui;
 
-    active: IGameObject;
+    currentActiveTank: IGameObject;
 
     constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
@@ -28,12 +28,12 @@ export class SelectionState implements IPlayState {
     addEventListeners(canvas: HTMLCanvasElement) {
         // keep the current active tank, then switch to the next state
         if (this.player.activeTank.available()) {
-            this.active = this.player.activeTank.get();
-            this.successfulSelection(this.active);
+            this.currentActiveTank = this.player.activeTank.get();
+            this.successfulSelection(this.currentActiveTank);
             // switch to the next state
             this.mouseUp();
         } else {
-            canvas.onmousedown = this.highlightTank;
+            canvas.onmousedown = this.mouseDown;
             // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
             window.onmouseup = this.mouseUp;
         }
@@ -47,7 +47,7 @@ export class SelectionState implements IPlayState {
         ui.heading.addHome(viewport, this.player);
     }
 
-    highlightTank = (e: MouseEvent): void => {
+    mouseDown = (e: MouseEvent): void => {
         // if the button clicked is not the left button, do nothing
         if (e.button != 0) {
             return;
@@ -72,22 +72,10 @@ export class SelectionState implements IPlayState {
     }
 
     mouseUp = () => {
-        // if the user has clicked on any of the objects, go into movement state
+        // if the use has clicked a valid tank on mouseDown then go to the appropriate next state
+        // based on the tanks' own state, i.e. tank that has moved will go into shooting
         if (this.player.activeTank.available()) {
-            let nextState: GameState;
-            switch (this.active.actionState) {
-                case TankTurnState.NOT_ACTED:
-                    nextState = GameState.TANK_MOVEMENT;
-                    break;
-                case TankTurnState.MOVED:
-                    nextState = GameState.TANK_SHOOTING;
-                    break;
-                case TankTurnState.SHOT:
-                    nextState = GameState.TANK_SELECTION;
-                    break;
-            }
-
-            this.controller.changeGameState(nextState);
+            this.controller.changeGameState(this.currentActiveTank.nextState());
         }
     }
 
@@ -95,6 +83,6 @@ export class SelectionState implements IPlayState {
         tank.highlight(this.context, this.draw);
         // store the details of the active tank
         this.player.activeTank.set(tank);
-        this.active = tank;
+        this.currentActiveTank = tank;
     }
 }
