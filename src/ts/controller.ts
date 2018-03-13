@@ -71,7 +71,6 @@ export class GameController {
 
         this.lineCache = new LineCache();
 
-        // TODO automatically determine viewport position based on number of player
         // let playerPositions = [
         //     new Point(0, 0),
         //     new Point(0, 0),
