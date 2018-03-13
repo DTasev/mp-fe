@@ -10,11 +10,6 @@ import { Color } from "../drawing/color";
 import { J2H } from "../json2html";
 import Controls from "../siteControls";
 
-class MenuUi {
-    constructor(htmlElement: HTMLDivElement) {
-
-    }
-}
 export class MenuState implements IActionState {
     static readonly CLASS_MENU_BUTTON = "w3-padding-32 w3-button tanks-ui-menu-button";
     static readonly CLASS_MENU_TITLE = "tanks-ui-menu-title";
