@@ -1,3 +1,5 @@
+import { expect } from 'chai';
+
 class CallTracker {
     times: number;
 
@@ -6,6 +8,9 @@ class CallTracker {
     }
     increment() {
         this.times += 1;
+    }
+    never() {
+        return this.times === 0;
     }
     // I don't know how to do fancy language chains
     once() {
@@ -34,8 +39,48 @@ class CallTracker {
     }
 }
 
+class CallAsserter {
+    times: number;
+
+    constructor() {
+        this.times = 0;
+    }
+    increment() {
+        this.times += 1;
+    }
+    never() {
+        expect(this.times).to.eq(0);
+    }
+    // I don't know how to do fancy language chains
+    once() {
+        expect(this.times).to.eq(1);
+    }
+    twice() {
+        expect(this.times).to.eq(2);
+    }
+    thrice() {
+        expect(this.times).to.eq(3);
+    }
+    quadrice() {
+        expect(this.times).to.eq(4);
+    }
+    manyTimes() {
+        expect(this.times).to.be.greaterThan(0);
+    }
+    atLeast(times: number = 1) {
+        expect(this.times).to.be.at.least(times);
+    }
+    atMost(times: number = 1) {
+        expect(this.times).to.be.at.most(times);
+    }
+    exactly(times: number = 1) {
+        expect(this.times).to.eq(times);
+    }
+}
+
 export class Mock {
     called: CallTracker;
+    expect_called: CallAsserter;
     returns: any;
 
     private originalFunction: any;
@@ -44,6 +89,7 @@ export class Mock {
 
     constructor(cls, func, return_value?) {
         this.called = new CallTracker();
+        this.expect_called = new CallAsserter();
         this.originalFunction = null;
         this.mock(cls, func, return_value);
     }
@@ -75,6 +121,7 @@ export class Mock {
      */
     default_callback(returnValue?) {
         this.called.increment();
+        this.expect_called.increment();
         if (this.returns && returnValue) {
             throw Error("Mock return value specified more than once!");
         }
@@ -98,6 +145,8 @@ export class SingleCallMock extends Mock {
             throw new Error("This mock must only be called once! Use normal Mock for more than a single call.");
         }
         this.called.increment();
+        this.expect_called.increment();
+
         if (this.returns && returnValue) {
             throw Error("Mock return value specified more than once!");
         }

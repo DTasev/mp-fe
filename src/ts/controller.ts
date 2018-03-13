@@ -154,7 +154,7 @@ export class GameController {
         this.action.view(this.viewport);
         this.action.addEventListeners(this.canvas);
     }
-    private gameOver(): boolean | Player {
+    private gameOver(): Player | boolean {
         if (this.state !== GameState.MENU && this.state !== GameState.TANK_PLACEMENT) {
             let onePlayerHasTanks = false;
             let winner: Player;
@@ -232,6 +232,7 @@ export class GameController {
             this.currentPlayer += 1;
         } else {
             do {
+                // if this is the last player, it will revert back to zero, otherwise just increment
                 this.currentPlayer = this.currentPlayer === Settings.NUM_PLAYERS - 1 ? 0 : this.currentPlayer + 1;
             } while (this.players[this.currentPlayer].activeTanks().length === 0);
         }

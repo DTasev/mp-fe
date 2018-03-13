@@ -8,6 +8,8 @@ import { UiBody } from "./uiBody";
 
 
 export class Ui {
+    static readonly ID_GAME_UI = "tanks-ui";
+
     static readonly ID_BUTTON_SKIP_TURN = "tanks-ui-button-skipturn";
     static readonly ID_HEADING = "tanks-ui-heading";
     static readonly ID_BODY = "tanks-ui-body";

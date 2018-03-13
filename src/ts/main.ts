@@ -10,7 +10,7 @@ import { GameController, GameState } from './controller';
 import { Viewport } from './gameMap/viewport';
 
 const ID_GAME_CANVAS = "tanks-canvas";
-const ID_GAME_UI = "tanks-ui";
+
 // Scrollbar Width for browsers
 // Source: https://www.textfixer.com/tutorials/browser-scrollbar-width.php
 const SCROLLBAR_WIDTH = 17;
@@ -31,7 +31,7 @@ function init() {
     const viewportWidth = hasVerticalScroll ? window.innerWidth - SCROLLBAR_WIDTH : window.innerWidth;
 
     const viewportHeight = window.innerHeight;
-    const ui = new Ui(ID_GAME_UI, viewportWidth, viewportHeight);
+    const ui = new Ui(Ui.ID_GAME_UI, viewportWidth, viewportHeight);
 
     const canvas = <HTMLCanvasElement>document.getElementById(ID_GAME_CANVAS);
     canvas.width = width;
