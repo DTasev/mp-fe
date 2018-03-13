@@ -35,7 +35,7 @@ export class MenuState implements IActionState {
         this.ui.body.textColor(Color.white());
         this.ui.body.textAlign("center");
 
-        const { left, middle, right } = this.ui.body.addColumns();
+        const [left, middle, right] = this.ui.body.addColumns();
 
         const titleDescription = {
             "h1": {
@@ -79,7 +79,7 @@ export class MenuState implements IActionState {
     }
     private showOptions = (e: MouseEvent) => {
         this.ui.body.clear();
-        const { left, middle, right } = this.ui.body.addColumns();
+        const [left, middle, right] = this.ui.body.addColumns();
 
         const button_emptyOptionDescription = {
             "button": {

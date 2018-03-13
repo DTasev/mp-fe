@@ -20,7 +20,7 @@ export class UiBody {
     clear(): void {
         this.htmlElement.innerHTML = "";
     }
-    addColumns() {
+    addColumns(): [HTMLDivElement, HTMLDivElement, HTMLDivElement] {
         // these are on the side of the menu buttons, to pad it out so that it can be in the middle
         const sideDescription = {
             "div": {
@@ -37,6 +37,6 @@ export class UiBody {
         const left = J2H.parse<HTMLDivElement>(sideDescription);
         const right = J2H.parse<HTMLDivElement>(sideDescription);
         const middle = J2H.parse<HTMLDivElement>(middleDescription);
-        return { left, middle, right };
+        return [left, middle, right];
     }
 }

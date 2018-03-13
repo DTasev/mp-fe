@@ -68,6 +68,7 @@ export class UiHeading {
         button_home.onclick = () => {
             viewport.goTo(player.viewportPosition);
         }
+        this.left.add(button_home);
     }
 
     clear(): void {

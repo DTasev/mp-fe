@@ -71,15 +71,12 @@ export class GameController {
 
         this.lineCache = new LineCache();
 
-        // let playerPositions = [
-        //     new Point(0, 0),
-        //     new Point(0, 0),
-        //     new Point(0, 0)
-        // ];
+        const playerPositions = this.generatePlayerViews(canvas.width, canvas.height);
         this.currentPlayer = 0;
         for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
-            this.players.push(new Player(i, "Player " + (i + 1), Color.next(), new Point(0, 0)));
+            this.players.push(new Player(i, "Player " + (i + 1), Color.next(), playerPositions[i]));
         }
+        this.clearCanvas();
     }
 
     /**
@@ -178,7 +175,9 @@ export class GameController {
     }
     /** Clears everything from the canvas on the screen. To show anything afterwards it needs to be redrawn. */
     clearCanvas(): void {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.context.fillStyle = Color.black().toRGBA();
+        this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     redrawCanvas(): void {
@@ -235,5 +234,15 @@ export class GameController {
                 this.currentPlayer = this.currentPlayer === Settings.NUM_PLAYERS - 1 ? 0 : this.currentPlayer + 1;
             } while (this.players[this.currentPlayer].activeTanks().length === 0);
         }
+    }
+    generatePlayerViews(canvasWidth: number, canvasHeight: number): Point[] {
+        const points: Point[] = [];
+        const N = Settings.NUM_PLAYERS + 1;
+        for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
+            const point = new Point(i * (canvasWidth / N), i % 2 == 0 ? 0 : canvasHeight);
+            console.log("Player viewport position, X:", point.x, "Y:", point.y);
+            points.push(point);
+        }
+        return points;
     }
 }

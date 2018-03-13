@@ -36,7 +36,7 @@ export class GameEndState implements IActionState {
         const numTanks = this.player.activeTanks().length;
         const tanksStr = numTanks === 1 ? " tank" : " tanks";
 
-        const { left, middle, right } = this.ui.body.addColumns();
+        const [left, middle, right] = this.ui.body.addColumns();
         const winnerNameDescription = {
             "h1": {
                 "className": "w3-padding-64",
