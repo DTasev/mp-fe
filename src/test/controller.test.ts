@@ -12,6 +12,7 @@ import * as Settings from '../ts/settings';
 import { Line } from '../ts/utility/line';
 import { Point } from '../ts/utility/point';
 import { Tank } from '../ts/gameObjects/tank';
+import { DarkTheme } from '../ts/gameThemes/dark';
 
 class CanvasMock {
     onmousedown() { }
@@ -51,8 +52,9 @@ describe('Game Controller', () => {
     let contextMock: CanvasContextMock;
     let ui: Ui;
     let viewport: Viewport;
+    let theme = new DarkTheme();
     // override the color return as it doesn't matter here
-    Color.next = () => { return Color.red(); }
+    // Color.next = () => { return Color.red(); }
     beforeEach(() => {
         canvasMock = new CanvasMock();
         contextMock = canvasMock.getContext();
@@ -70,7 +72,8 @@ describe('Game Controller', () => {
         const controller = new GameController(canvasMock as any, contextMock as any, ui, viewport);
         controller.clearCanvas();
 
-        contextMock.mock_clearRect.expect_called.once();
+        contextMock.mock_fillRect.expect_called.once();
+        contextMock.mock_clearRect.expect_called.never();
 
         expect(controller["currentPlayer"]).to.eq(0);
         canvasMock.mock_onmousedown.expect_called.never();
@@ -101,8 +104,8 @@ describe('Game Controller', () => {
         const controller = new GameController(canvasMock as any, contextMock as any, ui, viewport);
 
         // set up a tank for each player
-        controller["players"][0].tanks.push(new Tank(0, controller["players"][0], 10, 10));
-        controller["players"][1].tanks.push(new Tank(0, controller["players"][1], 10, 10));
+        controller["players"][0].tanks.push(new Tank(0, controller["players"][0], 10, 10, theme));
+        controller["players"][1].tanks.push(new Tank(0, controller["players"][1], 10, 10, theme));
 
         expect(controller["currentPlayer"]).to.eq(0);
         controller.nextActivePlayer();
@@ -115,10 +118,10 @@ describe('Game Controller', () => {
         const controller = new GameController(canvasMock as any, contextMock as any, ui, viewport);
 
         // set up a tank for each player
-        const tank = new Tank(0, controller["players"][0], 10, 10);
+        const tank = new Tank(0, controller["players"][0], 10, 10, theme);
         const mock_tank = new SingleCallMock(tank, tank.draw);
 
-        const tank2 = new Tank(0, controller["players"][1], 10, 10);
+        const tank2 = new Tank(0, controller["players"][1], 10, 10, theme);
         const mock_tank2 = new SingleCallMock(tank2, tank2.draw);
 
         controller["players"][0].tanks.push(tank);
@@ -133,6 +136,8 @@ describe('Game Controller', () => {
         const mock_windowScroll = new SingleCallMock(window, window.scroll);
         window.scroll = () => { mock_windowScroll.default_callback() };
         controller.changeGameState(GameState.TANK_PLACEMENT);
+
+        // expect that the viewport was scrolled to the player's view
         mock_windowScroll.expect_called.once();
     })
 });

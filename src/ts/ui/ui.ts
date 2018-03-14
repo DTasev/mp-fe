@@ -6,6 +6,7 @@ import { Color } from "../drawing/color";
 import { UiHeading } from "./uiHeading";
 import { UiBody } from "./uiBody";
 import { GameController } from "../controller";
+import { ITheme } from "../gameThemes/iTheme";
 
 
 export class Ui {
@@ -79,11 +80,11 @@ export class Ui {
         this.setHeight(this.canvasHeight);
     }
 
-    setPlayer(name) {
+    setPlayer(name: string, theme: ITheme) {
         this.heading.playerTurn.add(J2H.parse({
             "b": {
                 "textContent": name + "'s turn.",
-                "className": "fa-2x " + this.controller.theme.playerTurnTextClass()
+                "className": "fa-2x " + theme.playerTurnTextClass()
             }
         }));
     }

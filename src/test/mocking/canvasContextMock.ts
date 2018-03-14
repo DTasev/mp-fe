@@ -17,6 +17,7 @@ export class CanvasContextMock {
     mock_moveTo: SingleCallMock;
     mock_lineTo: SingleCallMock;
     mock_clearRect: SingleCallMock;
+    mock_fillRect: SingleCallMock;
     mock_fillText: SingleCallMock;
 
     constructor() {
@@ -28,6 +29,7 @@ export class CanvasContextMock {
         this.mock_moveTo = new SingleCallMock(this, this.moveTo);
         this.mock_lineTo = new SingleCallMock(this, this.lineTo);
         this.mock_clearRect = new SingleCallMock(this, this.clearRect);
+        this.mock_fillRect = new SingleCallMock(this, this.fillRect);
         this.mock_fillText = new SingleCallMock(this, this.fillText);
     }
 
@@ -40,4 +42,5 @@ export class CanvasContextMock {
     lineTo() { }
     clearRect() { }
     fillText() { }
+    fillRect() { }
 }

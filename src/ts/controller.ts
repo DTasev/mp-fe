@@ -121,7 +121,7 @@ export class GameController {
         // only display the player's name if there is a player
         if (this.state !== GameState.MENU && this.state !== GameState.GAME_END) {
             console.log("This is", player.name, "playing.");
-            this.ui.setPlayer(player.name);
+            this.ui.setPlayer(player.name, this.theme);
         }
 
         switch (this.state) {
