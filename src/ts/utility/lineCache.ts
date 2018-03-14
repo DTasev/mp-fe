@@ -1,9 +1,7 @@
 import { Line } from "./line";
-import { Color } from "../drawing/color";
 
 export class LineCache {
     points: Line[];
-    color: string = Color.gray().toRGBA();
     /** How many lines should be redrawn */
     size: number = 10;
 

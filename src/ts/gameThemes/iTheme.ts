@@ -1,33 +1,35 @@
 import { Color } from "../drawing/color";
 
-// TODO might have to add classes
-interface Theme {
+export interface ITheme {
     // Menu colors
     menuBackground(): Color;
     menuTitle(): Color;
-    menuEntry(): Color;
+    menuText(): Color;
 
     // End game colors
-    endGameTitle(): Color;
+    endGameBackground(): Color;
+    endGameTitleClass(): string;
     endGameText(): Color;
 
-    // Game UI colors
-    home(): Color;
-    skipShooting(): Color;
-    skipTurn(): Color;
-    playerTurnText(): Color;
-    playerMessage(): Color;
+    // Game UI color classes
+    homeButtonClass(): string;
+    skipShootingButtonClass(): string;
+    skipTurnButtonClass(): string;
+    playerTurnTextClass(): string;
+    playerMessageClass(): string;
+
+    nextPlayerColor(): Color;
 
     // Game colors
     canvasBackground(): Color;
-    // should provide a different colour on each call
-    tank(): Color;
+    tankActive(): Color;
+    tankActiveOutline(): Color;
+    tankLabel(): Color;
+    tankDead(): Color;
     tankMovementLine(): Color;
     tankMovementArea(): Color;
     tankShootingLine(): Color;
-    tankHighlight(): Color;
-    oldShotLine(): Color;
+    oldLinesColor(): Color;
 
-    // TODO functions for every type of obstacle?
     mapObstacle(): Color;
 }

@@ -5,13 +5,14 @@ import { GameController, GameState } from "../controller";
 import { Player } from "../gameObjects/player";
 import { TanksMath } from "../utility/tanksMath";
 import { Point } from "../utility/point";
-import { Tank, TankHealthState, TankTurnState } from "../gameObjects/tank";
+import { Tank, TankHealthState, TankTurnState, TankColor } from "../gameObjects/tank";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { Color } from "../drawing/color";
 import { Ui } from "../ui/ui";
 import { J2H } from "../json2html";
 import { Viewport } from "../gameMap/viewport";
 import { MovementUi } from "../ui/movement";
+import { ITheme } from "../gameThemes/iTheme";
 
 export class MovingState implements IPlayState {
     context: CanvasRenderingContext2D;
@@ -48,11 +49,11 @@ export class MovingState implements IPlayState {
 
     view(viewport: Viewport) { }
 
-    setUpUi(ui: Ui, viewport: Viewport) {
-        const button_goToShooting = MovementUi.button_goToShooting();
+    setUpUi(ui: Ui, viewport: Viewport, theme: ITheme) {
+        ui.heading.addHome(viewport, this.player, theme);
+        const button_goToShooting = MovementUi.button_goToShooting(theme);
         button_goToShooting.onclick = this.goToShooting;
         ui.heading.right.add(button_goToShooting);
-        ui.heading.addHome(viewport, this.player);
     }
 
     startMovement = (e: MouseEvent): void => {
@@ -65,13 +66,13 @@ export class MovingState implements IPlayState {
         // limit the length of the line to the maximum allowed tank movement, and disabled tanks can't be moved
         if (this.line.in(this.active.position, this.draw.mouse) && this.active.healthState !== TankHealthState.DISABLED) {
             this.draw.state = DrawState.DRAWING;
-            this.validMove();
+            this.validMove(this.active.color);
         }
     }
 
-    private validMove() {
+    private validMove(tankColors: TankColor) {
         this.tankValidPosition = true;
-        this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, Tank.MOVEMENT_LINE_COLOR);
+        this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, tankColors.movementLine);
     }
 
     endMovement = (e: MouseEvent) => {
@@ -90,7 +91,7 @@ export class MovingState implements IPlayState {
             tank.position = this.draw.mouse.copy();
             tank.actionState = TankTurnState.MOVED;
 
-            this.ui.warning("");
+            this.ui.message("");
 
             // set the player's viewport position to the last position they were looking at
             this.player.viewportPosition = Viewport.current();
@@ -122,7 +123,7 @@ export class MovingState implements IPlayState {
         // draw the movement line if the mouse button is currently being pressed
         if (this.draw.state == DrawState.DRAWING) {
             if (this.line.in(this.active.position, this.draw.mouse)) {
-                this.validMove();
+                this.validMove(this.active.color);
             } else {
                 this.tankValidPosition = false;
             }

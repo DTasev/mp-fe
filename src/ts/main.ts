@@ -26,7 +26,6 @@ function determineMapSize(): [number, number] {
     // take 90% of the window, leave a bit of gap on the right
     // const width = window.innerWidth;
 
-    // TODO move to ENUM
     const mapSize = MapSize.MEDIUM;
     const width = 1024 * Settings.NUM_PLAYERS;
     const height = width / 2;
@@ -56,7 +55,9 @@ function init() {
 
     const viewport = new Viewport(canvas.width, canvas.height);
     viewport.middle();
+
     const controller = new GameController(canvas, canvas.getContext("2d"), ui, viewport);
+    ui.setController(controller);
 
     // start the game in Menu state
     controller.changeGameState(GameState.MENU);

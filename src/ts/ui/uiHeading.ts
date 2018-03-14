@@ -4,6 +4,7 @@ import { Player } from "../gameObjects/player";
 import { CommonUi } from "./common";
 import { UiSection } from "./uiSection";
 import { Color } from "../drawing/color";
+import { ITheme } from "../gameThemes/iTheme";
 
 export class UiHeading {
     private readonly left: UiSection;
@@ -63,8 +64,8 @@ export class UiHeading {
         this.htmlElement.style.color = color.toRGBA();
     }
 
-    addHome(viewport: Viewport, player: Player): any {
-        const button_home = CommonUi.button_home();
+    addHome(viewport: Viewport, player: Player, theme: ITheme): any {
+        const button_home = CommonUi.button_home(theme);
         button_home.onclick = () => {
             viewport.goTo(player.viewportPosition);
         }

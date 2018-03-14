@@ -17,6 +17,8 @@ import { IGameObject } from './gameObjects/iGameObject';
 import { Ui } from "./ui/ui";
 import { Collision } from "./collision";
 import { Viewport } from "./gameMap/viewport";
+import { ITheme } from "./gameThemes/iTheme";
+import { DarkTheme } from "./gameThemes/dark";
 
 import * as Limit from './limiters/index'
 import * as Settings from './settings';
@@ -35,7 +37,7 @@ export enum GameState {
 /**
  * Implementation for the actions that will be executed according to player actions.
  * 
- * Functions are wrapped to keep `this` context. This is the (e:MouseEvent) => {...} syntax.
+ * Mouse event functions are wrapped to keep `this` context. This is the (e:MouseEvent) => {...} syntax.
  * 
  * In short, because the methods are added as event listeners (and are not called directly), the `this` reference starts pointing
  * towards the `window` object. The closure keeps the `this` to point towards the proper instance of the object.
@@ -63,6 +65,9 @@ export class GameController {
     /** Flag to specify if the current player's turn is over */
     nextPlayer: boolean = false;
 
+    /** The current color theme of the game */
+    theme: ITheme = new DarkTheme();
+
     constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui, viewport: Viewport) {
         this.canvas = canvas;
         this.context = context;
@@ -74,7 +79,7 @@ export class GameController {
         const playerPositions = this.generatePlayerViews(canvas.width, canvas.height);
         this.currentPlayer = 0;
         for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
-            this.players.push(new Player(i, "Player " + (i + 1), Color.next(), playerPositions[i]));
+            this.players.push(new Player(i, "Player " + (i + 1), this.theme.nextPlayerColor(), playerPositions[i]));
         }
         this.clearCanvas();
     }
@@ -113,8 +118,11 @@ export class GameController {
         // select either the winner or the current player
         const player = <Player>gameWinner || this.players[this.currentPlayer];
 
-        console.log("This is", player.name, "playing.");
-        this.ui.setPlayer(player.name);
+        // only display the player's name if there is a player
+        if (this.state !== GameState.MENU && this.state !== GameState.GAME_END) {
+            console.log("This is", player.name, "playing.");
+            this.ui.setPlayer(player.name);
+        }
 
         switch (this.state) {
             case GameState.MENU:
@@ -146,7 +154,7 @@ export class GameController {
         }
 
         // add the mouse events for the new state
-        this.action.setUpUi(this.ui, this.viewport);
+        this.action.setUpUi(this.ui, this.viewport, this.theme);
         this.action.view(this.viewport);
         this.action.addEventListeners(this.canvas);
     }
@@ -175,7 +183,7 @@ export class GameController {
     }
     /** Clears everything from the canvas on the screen. To show anything afterwards it needs to be redrawn. */
     clearCanvas(): void {
-        this.context.fillStyle = Color.black().toRGBA();
+        this.context.fillStyle = this.theme.canvasBackground().toRGBA();
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
         // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -190,12 +198,12 @@ export class GameController {
             }
         }
 
-        const old_lines_color = Color.gray(0.5).toRGBA();
+        const oldLinesColor = this.theme.oldLinesColor().toRGBA();
         // draw the last N lines
         for (const line_path of this.lineCache.lines()) {
             for (let i = 1; i < line_path.points.length; i++) {
                 // old lines are currently half-transparent
-                Draw.line(this.context, line_path.points[i - 1], line_path.points[i], 1, old_lines_color);
+                Draw.line(this.context, line_path.points[i - 1], line_path.points[i], 1, oldLinesColor);
             }
         }
     }

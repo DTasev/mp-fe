@@ -9,6 +9,7 @@ import { Ui } from "../ui/ui";
 import { Color } from "../drawing/color";
 import { J2H } from "../json2html";
 import Controls from "../siteControls";
+import { ITheme } from "../gameThemes/iTheme";
 
 export class MenuState implements IActionState {
     static readonly CLASS_MENU_BUTTON = "w3-padding-32 w3-button tanks-ui-menu-button";
@@ -28,11 +29,11 @@ export class MenuState implements IActionState {
     }
 
     view(viewport: Viewport) { }
-    setUpUi = (ui: Ui, viewport: Viewport) => {
+    setUpUi = (ui: Ui, viewport: Viewport, theme: ITheme) => {
         this.ui.hideCanvas();
         this.ui.body.clear();
-        this.ui.background(Color.black());
-        this.ui.body.textColor(Color.white());
+        this.ui.background(theme.menuBackground());
+        this.ui.body.textColor(theme.menuText());
         this.ui.body.textAlign("center");
 
         const [left, middle, right] = this.ui.body.addColumns();

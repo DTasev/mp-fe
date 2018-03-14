@@ -4,7 +4,7 @@ import { IPlayState } from "./iActionState";
 import { GameController, GameState } from "../controller";
 import { Player } from "../gameObjects/player";
 import { Draw, DrawState } from "../drawing/draw";
-import { Tank, TankTurnState } from "../gameObjects/tank";
+import { Tank, TankTurnState, TankColor } from "../gameObjects/tank";
 import { Point } from "../utility/point";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { TanksMath } from "../utility/tanksMath";
@@ -16,6 +16,7 @@ import { ShootingUi } from "../ui/shooting";
 
 import * as Settings from '../settings';
 import * as Limit from "../limiters/index";
+import { ITheme } from "../gameThemes/iTheme";
 
 export class ShootingState implements IPlayState {
     context: CanvasRenderingContext2D;
@@ -67,9 +68,9 @@ export class ShootingState implements IPlayState {
 
     view(viewport: Viewport) { }
 
-    setUpUi(ui: Ui, viewport: Viewport) {
-        ui.heading.addHome(viewport, this.player);
-        const button_skipTurn = ShootingUi.button_skipTurn();
+    setUpUi(ui: Ui, viewport: Viewport, theme: ITheme) {
+        ui.heading.addHome(viewport, this.player, theme);
+        const button_skipTurn = ShootingUi.button_skipTurn(theme);
         button_skipTurn.onmousedown = this.skipTurn;
         ui.heading.right.add(button_skipTurn);
     }
@@ -91,15 +92,15 @@ export class ShootingState implements IPlayState {
                 // shot collision starts from the centre of the tank
                 this.shotPath.points.push(this.active.position.copy());
                 this.draw.state = DrawState.DRAWING;
-                this.validRange();
+                this.validRange(this.active.color);
             }
         } else {
             console.log("Click did not collide with the active tank");
         }
     }
 
-    private validRange(): void {
-        this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, Tank.MOVEMENT_LINE_COLOR);
+    private validRange(tankColors: TankColor): void {
+        this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, tankColors.shootingLine);
     }
 
     private continueShooting = (e: MouseEvent) => {
@@ -110,13 +111,13 @@ export class ShootingState implements IPlayState {
             // if the player is just moving about on the tank's space
             if (this.tankRoamingLength.in(this.active.position, this.draw.mouse)) {
                 console.log("Roaming in tank space");
-                this.ui.warning("");
-                this.validRange();
+                this.ui.message("");
+                this.validRange(this.active.color);
             } // if the player has shot far away start drawing the line
             else if (this.shotSpeed.enough(this.active.position, this.draw.mouse)) {
                 console.log("Shooting!");
-                this.ui.warning("");
-                this.validRange();
+                this.ui.message("");
+                this.validRange(this.active.color);
 
                 // only add to the shot path if the shot was successful
                 this.shotPath.points.push(this.draw.mouse.copy());
@@ -129,7 +130,7 @@ export class ShootingState implements IPlayState {
                     this.draw.state = DrawState.STOPPED;
                 }
             } else {
-                this.ui.warning("Shooting too slow!");
+                this.ui.message("Shooting too slow!");
                 console.log("Shooting too slow!");
                 this.draw.state = DrawState.STOPPED;
             }
@@ -141,16 +142,16 @@ export class ShootingState implements IPlayState {
         if (e.button != 0) {
             return;
         }
+
+        // set the player's viewport position to the last position they were looking at
+        this.player.viewportPosition = Viewport.current();
+
         const playerTanksShot = this.player.tanksShot.get();
         if (this.successfulShot) {
             this.controller.collide(this.shotPath);
             this.controller.cacheLine(this.shotPath);
             playerTanksShot.take();
             this.active.actionState = TankTurnState.SHOT;
-
-            // when the shot was successful
-            // set the player's viewport position to the last position they were looking at
-            this.player.viewportPosition = Viewport.current();
         }
 
         // if all the player's tank have shot

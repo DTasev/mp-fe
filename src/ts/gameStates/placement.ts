@@ -9,6 +9,7 @@ import * as Settings from '../settings';
 import * as Limit from "../limiters/index";
 import { Viewport } from "../gameMap/viewport";
 import { CommonUi } from "../ui/common";
+import { ITheme } from "../gameThemes/iTheme";
 
 export class PlacingState implements IPlayState {
     // keeps track of how many players have placed their tanks IN TOTAL
@@ -42,8 +43,8 @@ export class PlacingState implements IPlayState {
     view(viewport: Viewport) {
         viewport.goTo(this.player.viewportPosition);
     }
-    setUpUi(ui: Ui, viewport: Viewport) {
-        ui.heading.addHome(viewport, this.player);
+    setUpUi(ui: Ui, viewport: Viewport, theme: ITheme) {
+        ui.heading.addHome(viewport, this.player, theme);
     }
     private addTank = (e) => {
         // if the button clicked is not the left button, do nothing
@@ -52,7 +53,7 @@ export class PlacingState implements IPlayState {
         }
         this.draw.updateMousePosition(e);
         // if the future will check if it collides with another tank or terrain
-        const tank = new Tank(this.player.tanks.length, this.player, this.draw.mouse.x, this.draw.mouse.y);
+        const tank = new Tank(this.player.tanks.length, this.player, this.draw.mouse.x, this.draw.mouse.y, this.controller.theme);
         this.player.tanks.push(tank);
         tank.draw(this.context);
         // player has placed a tank

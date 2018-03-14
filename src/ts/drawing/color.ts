@@ -18,24 +18,6 @@ export class Color {
         return S.format("rgba(%s,%s,%s,%s)", this.red, this.green, this.blue, alpha);
     }
 
-    static color = 0;
-    static next() {
-        if (Color.color == 0) {
-            Color.color++;
-            return Color.red();
-        } else if (Color.color == 1) {
-            Color.color++;
-            return Color.blue();
-        } else if (Color.color == 2) {
-            Color.color++;
-            return Color.green();
-        } else if (Color.color == 3) {
-            Color.color++;
-            return Color.yellow();
-        }
-        throw new Error("You've used all the available colours!");
-    }
-
     static red(alpha: number = 1.0): Color {
         return new Color(255, 0, 0, alpha);
     }

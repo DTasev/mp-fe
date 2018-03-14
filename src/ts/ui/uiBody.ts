@@ -8,9 +8,6 @@ export class UiBody {
         this.htmlElement = htmlElement;
     }
 
-    background(color: Color) {
-        this.htmlElement.style.backgroundColor = color.toRGBA();
-    }
     textColor(color: Color) {
         this.htmlElement.style.color = color.toRGBA();
     }

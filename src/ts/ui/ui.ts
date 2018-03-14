@@ -5,6 +5,7 @@ import { CommonUi } from "./common";
 import { Color } from "../drawing/color";
 import { UiHeading } from "./uiHeading";
 import { UiBody } from "./uiBody";
+import { GameController } from "../controller";
 
 
 export class Ui {
@@ -17,6 +18,7 @@ export class Ui {
     private readonly container: HTMLDivElement;
     private readonly canvasWidth: number;
     private readonly canvasHeight: number;
+    private controller: GameController;
 
     readonly heading: UiHeading;
     readonly body: UiBody;
@@ -81,7 +83,7 @@ export class Ui {
         this.heading.playerTurn.add(J2H.parse({
             "b": {
                 "textContent": name + "'s turn.",
-                "className": "fa-2x"
+                "className": "fa-2x " + this.controller.theme.playerTurnTextClass()
             }
         }));
     }
@@ -93,12 +95,11 @@ export class Ui {
         this.container.style.left = window.pageXOffset + "px";
         this.container.style.top = window.pageYOffset + "px";
     }
-    warning(msg: string) {
-        console.log("Adding warning message", msg);
+    message(msg: string) {
         this.heading.message.add(J2H.parse({
             "b": {
                 "textContent": msg,
-                "className": "fa-2x"
+                "className": "fa-2x " + this.controller.theme.playerMessageClass()
             }
         }));
     }
@@ -108,5 +109,8 @@ export class Ui {
     }
     textColor(color: Color) {
         this.container.style.color = color.toRGBA();
+    }
+    setController(controller: GameController): void {
+        this.controller = controller;
     }
 }

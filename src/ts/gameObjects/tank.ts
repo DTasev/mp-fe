@@ -4,6 +4,7 @@ import { Draw } from "../drawing/draw";
 import { IGameObject } from './iGameObject'
 import { Color } from "../drawing/color";
 import { GameState } from "../controller";
+import { ITheme } from "../gameThemes/iTheme";
 
 export enum TankTurnState {
     /** The tank has performed an action this turn, e.g. moved or shot */
@@ -24,7 +25,7 @@ export enum TankHealthState {
 }
 
 /** Provides grouping for all the Tank's colors */
-class TankColor {
+export class TankColor {
     /** Color for when the tank is active/selected */
     readonly active: string;
     /** Color for the outline that shows the action(movement) range */
@@ -37,16 +38,23 @@ class TankColor {
     readonly disabled: string;
     /** Color for when the tank has been killed */
     readonly dead: string;
+    /** Color for the tank's shot line */
+    readonly shootingLine: string;
+    /** Color for the tank's movement line */
+    readonly movementLine: string;
 
-    constructor(active: string, active_outline: string, label: string, alive: string, disabled: string, dead: string) {
+    constructor(active: string, activeOutline: string, label: string, alive: string, disabled: string, dead: string, shootingLine: string, movementLine: string) {
         this.active = active;
-        this.activeOutline = active_outline;
+        this.activeOutline = activeOutline;
 
         this.label = label;
 
         this.alive = alive;
         this.disabled = disabled;
         this.dead = dead;
+
+        this.shootingLine = shootingLine;
+        this.movementLine = movementLine;
     }
 }
 
@@ -67,9 +75,6 @@ export class Tank implements IGameObject {
     /** The width of the movement line */
     static readonly MOVEMENT_LINE_WIDTH = 3;
 
-    /** The color of the movement line */
-    static readonly MOVEMENT_LINE_COLOR = Color.black().toRGBA();
-
     /** How far can the shot line reach */
     static readonly SHOOTING_RANGE = 409;
 
@@ -88,7 +93,7 @@ export class Tank implements IGameObject {
     /** Opacity for the player color when the tank is disabled */
     private readonly DISABLED_OPACITY = 0.7;
 
-    private readonly color: TankColor;
+    readonly color: TankColor;
 
     readonly id: number;
     readonly player: Player;
@@ -101,7 +106,7 @@ export class Tank implements IGameObject {
 
     label: string;
 
-    constructor(id: number, player: Player, x: number, y: number) {
+    constructor(id: number, player: Player, x: number, y: number, theme: ITheme) {
         this.id = id;
         this.player = player;
         this.position = new Point(x, y);
@@ -112,12 +117,14 @@ export class Tank implements IGameObject {
 
         // initialise colors for each of the tank's states
         this.color = new TankColor(
-            Color.red().toRGBA(),
-            Color.green().toRGBA(),
-            Color.black().toRGBA(this.LABEL_OPACITY),
+            theme.tankActive().toRGBA(),
+            theme.tankActiveOutline().toRGBA(),
+            theme.tankLabel().toRGBA(this.LABEL_OPACITY),
             this.player.color.toRGBA(),
             this.player.color.toRGBA(this.DISABLED_OPACITY),
-            Color.gray().toRGBA()
+            theme.tankDead().toRGBA(),
+            theme.tankShootingLine().toRGBA(),
+            theme.tankMovementLine().toRGBA()
         );
     }
 

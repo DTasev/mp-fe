@@ -9,6 +9,7 @@ import { Viewport } from "../gameMap/viewport";
 import { Ui } from "../ui/ui";
 import { J2H } from "../json2html";
 import { Color } from "../drawing/color";
+import { ITheme } from "../gameThemes/iTheme";
 
 
 export class GameEndState implements IActionState {
@@ -28,10 +29,10 @@ export class GameEndState implements IActionState {
 
     view(viewport: Viewport) { }
 
-    setUpUi(ui: Ui) {
+    setUpUi(ui: Ui, viewport: Viewport, theme: ITheme) {
         this.ui.hideCanvas();
-        this.ui.background(Color.transparent());
-        this.ui.body.textColor(Color.black());
+        this.ui.background(theme.endGameBackground());
+        this.ui.body.textColor(theme.endGameText());
 
         const numTanks = this.player.activeTanks().length;
         const tanksStr = numTanks === 1 ? " tank" : " tanks";
@@ -39,7 +40,7 @@ export class GameEndState implements IActionState {
         const [left, middle, right] = this.ui.body.addColumns();
         const winnerNameDescription = {
             "h1": {
-                "className": "w3-padding-64",
+                "className": "w3-padding-64 " + theme.endGameTitleClass(),
                 "textContent": "Winner " + this.player.name + " with " + numTanks + " tanks."
             }
         };

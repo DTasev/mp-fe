@@ -1,7 +1,7 @@
 import { Draw } from "../drawing/draw";
 import { Point } from "../utility/point";
 import { Player } from "./player";
-import { TankHealthState, TankTurnState } from "./tank";
+import { TankHealthState, TankTurnState, TankColor } from "./tank";
 import { GameState } from "../controller";
 
 export interface IGameObject {
@@ -10,7 +10,7 @@ export interface IGameObject {
     player: Player;
     healthState: TankHealthState;
     actionState: TankTurnState;
-
+    color: TankColor;
     /**
      * How to draw the game object on the canvas. 
      * Used in the redraw loop to draw every object 

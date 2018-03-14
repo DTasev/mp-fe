@@ -7,6 +7,7 @@ import { Tank, TankHealthState, TankTurnState } from "../gameObjects/tank";
 import { Ui } from "../ui/ui";
 import { IGameObject } from "../gameObjects/iGameObject";
 import { Viewport } from "../gameMap/viewport";
+import { ITheme } from "../gameThemes/iTheme";
 
 export class SelectionState implements IPlayState {
     context: CanvasRenderingContext2D;
@@ -43,8 +44,8 @@ export class SelectionState implements IPlayState {
         viewport.goTo(this.player.viewportPosition);
     }
 
-    setUpUi(ui: Ui, viewport: Viewport) {
-        ui.heading.addHome(viewport, this.player);
+    setUpUi(ui: Ui, viewport: Viewport, theme: ITheme) {
+        ui.heading.addHome(viewport, this.player, theme);
     }
 
     mouseDown = (e: MouseEvent): void => {
