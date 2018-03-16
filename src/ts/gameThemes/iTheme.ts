@@ -1,4 +1,5 @@
 import { Color } from "../drawing/color";
+import { ObstacleType } from "../gameMap/obstacle";
 
 export interface ITheme {
     // Menu colors
@@ -31,5 +32,5 @@ export interface ITheme {
     tankShootingLine(): Color;
     oldLinesColor(): Color;
 
-    mapObstacle(): Color;
+    mapObstacle(obstacleType: ObstacleType): Color;
 }

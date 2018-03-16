@@ -24,6 +24,7 @@ import * as Limit from './limiters/index'
 import * as Settings from './settings';
 import { J2H } from "./json2html";
 import { CommonUi } from "./ui/common";
+import { Map } from "./gameMap/map";
 
 export enum GameState {
     MENU,
@@ -61,6 +62,7 @@ export class GameController {
 
     /** Stores the all of the shot lines */
     private readonly lineCache: LineCache;
+    private readonly map: Map = new Map("apple");
 
     /** Flag to specify if the current player's turn is over */
     nextPlayer: boolean = false;
@@ -81,7 +83,7 @@ export class GameController {
         for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
             this.players.push(new Player(i, "Player " + (i + 1), this.theme.nextPlayerColor(), playerPositions[i]));
         }
-        this.clearCanvas();
+        this.redrawCanvas();
     }
 
     /**
@@ -185,11 +187,14 @@ export class GameController {
     clearCanvas(): void {
         this.context.fillStyle = this.theme.canvasBackground().toRGBA();
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        // this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     redrawCanvas(): void {
         this.clearCanvas();
+
+        // draw the terrain
+        debugger
+        this.map.draw(this.context, this.theme);
 
         // draw every player for every tank
         for (const player of this.players) {
@@ -221,7 +226,7 @@ export class GameController {
         }
         const playersForCollision = friendlyFire ? this.players : this.players.filter((p) => p.id !== this.currentPlayer);
         for (const player of playersForCollision) {
-            Collision.collide(line, numPoints, player.tanks);
+            Collision.shooting(line, numPoints, player.tanks);
         }
     }
 
@@ -252,5 +257,9 @@ export class GameController {
             points.push(point);
         }
         return points;
+    }
+
+    collidingWithTerrain(point: Point, radius: number): boolean {
+        return Collision.terrain(point, radius, this.map.obstacles);
     }
 }

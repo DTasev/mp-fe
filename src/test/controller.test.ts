@@ -85,7 +85,7 @@ describe('Game Controller', () => {
         (Settings.NUM_TANKS as any) = 2;
         (Settings.NUM_PLAYERS as any) = 2;
 
-        const mock_collision = new Mock(Collision, Collision.collide);
+        const mock_collision = new Mock(Collision, Collision.shooting);
         const controller = new GameController(canvasMock as any, contextMock as any, ui, viewport);
 
         const line = new Line();

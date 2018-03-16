@@ -20,7 +20,7 @@ export class Speed {
      * @returns true if the distance is greater than the limit, false otherwise
      */
     enough(start: Point, end: Point): boolean {
-        const distance = TanksMath.point.dist2d(start, end);
+        const distance = TanksMath.point.dist(start, end);
         return distance >= this.limit;
     }
 }

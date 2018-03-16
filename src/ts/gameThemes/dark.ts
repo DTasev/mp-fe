@@ -80,6 +80,6 @@ export class DarkTheme implements ITheme {
         return Color.gray();
     }
     mapObstacle(): Color {
-        throw new Error("Method not implemented.");
+        return Color.white();
     }
 }

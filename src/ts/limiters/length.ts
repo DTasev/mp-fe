@@ -25,7 +25,7 @@ export class Length {
      * @returns true if the line is below the limit, false if the line is longer than the limit
      */
     add(start: Point, end: Point): boolean {
-        this.current += TanksMath.point.dist2d(start, end);
+        this.current += TanksMath.point.dist(start, end);
         console.log("Shot total distance: ", this.current);
         return this.current <= this.limit;
     }
@@ -38,7 +38,7 @@ export class Length {
      * @returns true if the line is below the limit, false otherwise
      */
     in(start: Point, end: Point): boolean {
-        const distance = TanksMath.point.dist2d(start, end);
+        const distance = TanksMath.point.dist(start, end);
         return distance <= this.limit;
     }
 }

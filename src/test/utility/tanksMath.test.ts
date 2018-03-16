@@ -5,21 +5,21 @@ import { TanksMath } from "../../ts/utility/tanksMath";
 import { Point } from '../../ts/utility/point';
 import { Tank } from '../../ts/gameObjects/tank';
 
-describe('Tanks Point Math', () => {
+describe('Tanks Math - Point', () => {
     it('should calculate distance between two points', () => {
         // when the end is on the right
         let start = new Point(0, 0);
         let end = new Point(1, 1);
-        expect(TanksMath.point.dist2d(start, end)).to.equal(Math.SQRT2);
+        expect(TanksMath.point.dist(start, end)).to.equal(Math.SQRT2);
 
         // when the end is on the left
         start = new Point(1, 1);
         end = new Point(0, 0);
-        expect(TanksMath.point.dist2d(start, end)).to.equal(Math.SQRT2);
+        expect(TanksMath.point.dist(start, end)).to.equal(Math.SQRT2);
 
         start = new Point(10, 10);
         end = new Point(15, 15);
-        expect(TanksMath.point.dist2d(start, end)).to.equal(7.0710678118654755);
+        expect(TanksMath.point.dist(start, end)).to.equal(7.0710678118654755);
     });
     it('should be able to check circle-point collision', () => {
         const point = new Point(2, 5);
@@ -33,8 +33,75 @@ describe('Tanks Point Math', () => {
         expect(TanksMath.point.collideCircle(point, obj_coords, obj_width)).to.be.false;
     });
 });
-describe('Tanks Line Math', () => {
-    it('should calculate the closest point on a horizontal line', () => {
+describe('Tanks Math - Closest Points', () => {
+    it('closest two points from obstacle', () => {
+        const point = new Point(2, 3);
+        const expectedClosestPoint1 = new Point(1.5, 2);
+        const expectedClosestPoint2 = new Point(1, 2.5);
+        const center = new Point(0.9, 1.7);
+        const points = [
+            new Point(1, 1),
+            new Point(0, 1.5),
+            new Point(0.5, 2),
+            expectedClosestPoint2,
+            expectedClosestPoint1,
+        ];
+
+        const [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(expectedClosestPoint1);
+        expect(p2).to.eq(expectedClosestPoint2);
+    });
+
+    let point = new Point(590, 650);
+    const center = new Point(500, 600);
+    const points = [
+        new Point(500, 500), // 0
+        new Point(500, 700), // 1
+        new Point(550, 550), // 2
+        new Point(450, 650), // 3
+    ];
+    it('point on the right of obstacle', () => {
+        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(points[1]);
+        expect(p2).to.eq(points[2]);
+    });
+    it('point on the left of obstacle', () => {
+        point = new Point(400, 650);
+        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(points[3]);
+        expect(p2).to.eq(points[1]);
+
+    });
+    it('point below the center of obstacle', () => {
+        point = new Point(530, 500);
+        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(points[0]);
+        expect(p2).to.eq(points[2]);
+    });
+
+    it('point closer to point on the other side of the obstacle', () => {
+        point = new Point(540, 650);
+        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(points[1]);
+        expect(p2).to.eq(points[2]);
+    });
+    it('point on the same X position as center', () => {
+        point = new Point(center.x, 750);
+        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(points[1]);
+        expect(p2).to.eq(points[3]);
+    });
+    it('point closer on the left', () => {
+        point = new Point(480, 530);
+        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(points[0]);
+        expect(p2).to.eq(points[3]);
+    });
+    // it('point on the same Y position as center', () => {
+    // });
+});
+describe('Tanks Math - Line', () => {
+    it('calculate the closest point on a horizontal line', () => {
         // test horizontal line
         let start = new Point(0, 0);
         let end = new Point(4, 0);
@@ -57,7 +124,7 @@ describe('Tanks Line Math', () => {
         expect(res.x).to.equal(250);
         expect(res.y).to.equal(0);
     });
-    it('should calculate the closest point on a diagonal line, up to the right', () => {
+    it('calculate the closest point on a diagonal line, up to the right', () => {
         // test diagonal line / pointing up and to the right
         let start = new Point(0, 0);
         let end = new Point(2, 2);
@@ -79,7 +146,7 @@ describe('Tanks Line Math', () => {
         expect(res.x).to.equal(1);
         expect(res.y).to.equal(1);
     });
-    it('should calculate the closest point on a vertical line', () => {
+    it('calculate the closest point on a vertical line', () => {
         // test vertical line
         let start = new Point(0, 0);
         let end = new Point(0, 2);
@@ -91,7 +158,7 @@ describe('Tanks Line Math', () => {
         expect(res.x).to.equal(0);
         expect(res.y).to.equal(1);
     });
-    it('should calculate the closest point on a diagonal line, up to the left', () => {
+    it('calculate the closest point on a diagonal line, up to the left', () => {
         // test diagonal line \, up and to the left
         let start = new Point(0, 2);
         let end = new Point(2, 0);
@@ -113,7 +180,7 @@ describe('Tanks Line Math', () => {
         expect(res.x).to.equal(2);
         expect(res.y).to.equal(2);
     });
-    it('should calculate the closest point on a line, when the point is on the line', () => {
+    it('calculate the closest point on a line, when the point is on the line', () => {
         // test diagonal line \, up and to the left
         let start = new Point(0, 2);
         let end = new Point(2, 4);
@@ -126,8 +193,8 @@ describe('Tanks Line Math', () => {
         expect(res.y).to.equal(3);
     });
 });
-describe('Tanks Line-Circle Collision', () => {
-    it('should check collision of a line with a circle', () => {
+describe('Tanks Math - Line-Circle Collision', () => {
+    it('check collision of a line with a circle', () => {
         let start = new Point(0, 2);
         let end = new Point(2, 4);
         let point = new Point(2, 2);
@@ -146,7 +213,7 @@ describe('Tanks Line-Circle Collision', () => {
         radius = Tank.WIDTH;
         expect(TanksMath.line.collideCircle(start, end, point, radius)).to.be.true;
     });
-    it('of a vertical line with a circle below', () => {
+    it('check collision of a vertical line with a circle below', () => {
         let start = new Point(542, 289);
         let end = new Point(542, 345);
         let point = new Point(553, 475);
@@ -159,7 +226,7 @@ describe('Tanks Line-Circle Collision', () => {
         radius = Tank.WIDTH;
         expect(TanksMath.line.collideCircle(start, end, point, radius)).to.be.true;
     });
-    it("should calculate distance from a line to a circle's center", () => {
+    it("calculate distance from a line to a circle's center", () => {
         let start = new Point(0, 0);
         let end = new Point(0, 4);
         let point = new Point(2, 2);
@@ -172,5 +239,14 @@ describe('Tanks Line-Circle Collision', () => {
 
         dist = TanksMath.line.distCircleCenter(start, end, point);
         expect(dist).to.equal(-1);
+    });
+});
+describe('Tanks Math - Line-Line Collision', () => {
+    test('collide with another line', () => {
+        let start1 = new Point(100, 100),
+            end1 = new Point(200, 200),
+            start2 = new Point(100, 200),
+            end2 = new Point(200, 100);
+        expect(TanksMath.line.collide(start1, end1, start2, end2)).to.be.true;
     });
 });

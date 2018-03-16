@@ -52,21 +52,24 @@ export class PlacingState implements IPlayState {
             return;
         }
         this.draw.updateMousePosition(e);
-        // if the future will check if it collides with another tank or terrain
-        const tank = new Tank(this.player.tanks.length, this.player, this.draw.mouse.x, this.draw.mouse.y, this.controller.theme);
-        this.player.tanks.push(tank);
-        tank.draw(this.context);
-        // player has placed a tank
-        this.tanksPlaced.take();
-        // if we've placed as many objects as allowed, then go to next state
-        if (this.tanksPlaced.over()) {
-            PlacingState.playersTankPlacement.take();
-            this.controller.nextPlayer = true;
-            // all of the players have placed their tanks, go to moving state
-            if (PlacingState.playersTankPlacement.over()) {
-                this.controller.changeGameState(GameState.TANK_SELECTION);
-            } else {
-                this.controller.changeGameState(GameState.TANK_PLACEMENT);
+
+        // if the position of the tank does not collide with existing terrain, then the tank can be placed
+        if (!this.controller.collidingWithTerrain(this.draw.mouse, Tank.WIDTH)) {
+            const tank = new Tank(this.player.tanks.length, this.player, this.draw.mouse.x, this.draw.mouse.y, this.controller.theme);
+            this.player.tanks.push(tank);
+            tank.draw(this.context);
+            // player has placed a tank
+            this.tanksPlaced.take();
+            // if we've placed as many objects as allowed, then go to next state
+            if (this.tanksPlaced.over()) {
+                PlacingState.playersTankPlacement.take();
+                this.controller.nextPlayer = true;
+                // all of the players have placed their tanks, go to moving state
+                if (PlacingState.playersTankPlacement.over()) {
+                    this.controller.changeGameState(GameState.TANK_SELECTION);
+                } else {
+                    this.controller.changeGameState(GameState.TANK_PLACEMENT);
+                }
             }
         }
     }
