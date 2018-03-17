@@ -15,7 +15,7 @@ import { Tank, TankHealthState } from './gameObjects/tank';
 import { Point } from './utility/point';
 import { IGameObject } from './gameObjects/iGameObject';
 import { Ui } from "./ui/ui";
-import { Collision } from "./collision";
+import { Collision } from "./utility/collision";
 import { Viewport } from "./gameMap/viewport";
 import { ITheme } from "./gameThemes/iTheme";
 import { DarkTheme } from "./gameThemes/dark";

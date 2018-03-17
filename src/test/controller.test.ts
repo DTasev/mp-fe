@@ -7,7 +7,7 @@ import { CanvasContextMock } from './mocking/canvasContextMock';
 import { Ui } from '../ts/ui/ui';
 import { Viewport } from '../ts/gameMap/viewport';
 import { Color } from '../ts/drawing/color';
-import { Collision } from '../ts/collision';
+import { Collision } from '../ts/utility/collision';
 import * as Settings from '../ts/settings';
 import { Line } from '../ts/utility/line';
 import { Point } from '../ts/utility/point';

@@ -1,10 +1,8 @@
-// Imports module-only classes
-/// <reference path="dataInterfaces.ts" />
-
 import { Point } from "../utility/point";
 import { Color } from "../drawing/color";
 import { ITheme } from "../gameThemes/iTheme";
 import { Draw } from "../drawing/draw";
+import { IObstacleData } from "./dataInterfaces";
 
 export enum ObstacleType {
     SOLID,
@@ -33,6 +31,8 @@ export class Obstacle {
         for (let i = 1; i < length; i++) {
             Draw.line(context, this.points[i - 1], this.points[i], 1, theme.mapObstacle(this.type).toRGBA());
         }
+        // connect the last one to the first one
+        Draw.line(context, this.points[length - 1], this.points[0], 1, theme.mapObstacle(this.type).toRGBA());
     }
 
     typeFromString(obstacleType: string): ObstacleType {

@@ -1,10 +1,10 @@
-import { IGameObject } from "./gameObjects/iGameObject";
-import { TankHealthState, Tank } from "./gameObjects/tank";
-import { Line } from "./utility/line";
-import { TanksMath } from "./utility/tanksMath";
-import { Point } from "./utility/point";
-import { S } from "./utility/stringFormat";
-import { Obstacle } from "./gameMap/obstacle";
+import { IGameObject } from "../gameObjects/iGameObject";
+import { TankHealthState, Tank } from "../gameObjects/tank";
+import { Line } from "./line";
+import { TanksMath } from "./tanksMath";
+import { Point } from "./point";
+import { S } from "./stringFormat";
+import { Obstacle } from "../gameMap/obstacle";
 
 export class Collision {
     static debugShot(line: Line, start: Point, end: Point, tank: IGameObject, distance: number) {
@@ -54,18 +54,14 @@ export class Collision {
     }
 
     static terrain(point: Point, radius: number, obstacles: Obstacle[]): boolean {
-        debugger
         for (const obstacle of obstacles) {
             // find closest two points of obstacle to point
             const [left, right] = TanksMath.point.closestTwo(point, obstacle.center, obstacle.points);
             // the tank is inside the circle
             if (!left && !right) {
-                console.log("Tank is inside the circle.");
                 return true;
             }
-            console.log("Line from center intersects obstacle.")
             if (TanksMath.line.collideCircle(left, right, point, radius)) {
-                console.log("Line collides with tank.")
                 return true;
             }
         }

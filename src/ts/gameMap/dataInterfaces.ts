@@ -5,14 +5,14 @@
  * Any additional fields will still be accessible with array access (e.g. `obstacleData["newKeyNameHere"]`)
  */
 
-interface IObstacleData {
+export interface IObstacleData {
     type: string;
     centerX: number;
     centerY: number;
     data: number[];
 }
 
-interface IMapData {
+export interface IMapData {
     name: string;
     creator: string;
     createdDate: string;

@@ -6,6 +6,7 @@ import { Draw } from "../drawing/draw";
 import { Color } from "../drawing/color";
 import { ITheme } from "../gameThemes/iTheme";
 import { Obstacle } from "./obstacle";
+import { IMapData } from "./dataInterfaces";
 
 const exampleMap = {
     "name": "Map",
@@ -21,8 +22,7 @@ const exampleMap = {
                 500, 500,
                 550, 550,
                 500, 700,
-                450, 650,
-                500, 500 // TODO remove this point, it should be made implicit by connecting data[-1] to data[0]
+                450, 650
             ], // etc, must be even number of points or data is corrupted!
             "centerX": 500,
             "centerY": 600
