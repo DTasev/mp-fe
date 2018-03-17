@@ -53,7 +53,7 @@ class PointMath {
             }
         }
 
-        // TODO
+        // TODO if the line from center to p doesn't intersect anything, then the tank should be inside the obstacle itself!
         throw new Error("Closest two did not find any points! This should not be possible for convex shapes.\nAll points in shape (X,Y...):" + points);
     }
     /**

@@ -242,7 +242,7 @@ describe('Tanks Math - Line-Circle Collision', () => {
     });
 });
 describe('Tanks Math - Line-Line Collision', () => {
-    test('collide with another line', () => {
+    it('collide with another line', () => {
         let start1 = new Point(100, 100),
             end1 = new Point(200, 200),
             start2 = new Point(100, 200),
