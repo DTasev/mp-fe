@@ -48,7 +48,8 @@
                 "--colors",
                 "${file}"
             ],
-            "internalConsoleOptions": "openOnSessionStart"
+            "internalConsoleOptions": "openOnSessionStart",
+            "protocol": "inspector"
         }
     ]
 }
