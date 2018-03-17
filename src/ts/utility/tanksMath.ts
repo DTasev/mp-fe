@@ -1,60 +1,60 @@
+
 import { Point } from "./point";
 
 class PointMath {
-    closestTwo(p: Point, c: Point, points: Point[]): [Point, Point] {
-        let dist: number,
-            minDistance1 = Number.MAX_SAFE_INTEGER, minDistance2 = Number.MAX_SAFE_INTEGER,
-            closestPoint1: Point = null, closestPoint2: Point = null,
-            assigningPointOne = true,
-            minIndex1: number, minIndex2: number;
+    closestTwo(p: Point, center: Point, points: Point[]): [Point, Point] {
+        // // This stores the filter function that will be used to filter the point list. 
+        // // This allows us to only once do the branching for the function selection
+        // let filterFunction;
 
-        // find out where the external point is in relation to the center
-        let filterFunction;
-        // if the points are not exactly above/below each other
-        if (p.x !== c.x) {
-            // then compare the x axis values
-            if (p.x < c.x) {
-                // the point is on the LEFT of the center
-                filterFunction = (point: Point) => point.x <= c.x;
-            } else {
-                // the point is on the RIGHT of the center
-                filterFunction = (point: Point) => c.x <= point.x;
-            }
-        } else {
-            // if the points are on the same X position, then compare the Y values
-            // check if the point is above the center, i.e. y is larger
-            if (p.y > c.y) {
-                // the point is on the TOP of the center
-                filterFunction = (point: Point) => c.y <= point.y;
-            } else {
-                // the point is on the BOTTOM of the center
-                filterFunction = (point: Point) => point.y <= c.y;
-            }
-        }
+        // // find out where the external point is in relation to the center
+        // // if the points are not exactly above/below each other
+        // if (p.x !== center.x) {
+        //     // then compare the x axis values
+        //     if (p.x < center.x) {
+        //         // the point is on the LEFT of the center
+        //         filterFunction = (point: Point) => point.x <= center.x;
+        //     } else {
+        //         // the point is on the RIGHT of the center
+        //         filterFunction = (point: Point) => center.x <= point.x;
+        //     }
+        // } else {
+        //     // if the points are on the same X position, then compare the Y values
+        //     // check if the point is above the center, i.e. y is larger
+        //     if (p.y > center.y) {
+        //         // the point is on the TOP of the center
+        //         filterFunction = (point: Point) => center.y <= point.y;
+        //     } else {
+        //         // the point is on the BOTTOM of the center
+        //         filterFunction = (point: Point) => point.y <= center.y;
+        //     }
+        // }
+
         // filter out ONLY the points that are between the center and the external point p
-        const relevantPoints = points.filter(filterFunction);
+        // const relevantPoints = points.filter(filterFunction);
+        const length = points.length;
+        let p1: Point, p2: Point;
 
-        for (const [i, point] of relevantPoints.entries()) {
-            // find the two smallest differences
-            dist = this.dist(p, point);
-            if (dist <= minDistance1) {
-                if (closestPoint1 && minDistance1 < minDistance2) {
-                    closestPoint2 = closestPoint1;
-                    minDistance2 = minDistance1;
-                }
-                minDistance1 = dist;
-                closestPoint1 = point;
-                minIndex1 = i;
+        for (let i = 0, j: number; i < length; i++) {
+            // this condition will set j to 0 on the last indice, so that the
+            // line from the last to the first point is also checked
+            j = i == length - 1 ? 0 : i + 1;
+            // find the which obstacle line is intersected by the 
+            // line from the centre point to the external point
+            p1 = points[i];
+            p2 = points[j];
+            // make sure that the line does NOT go through the center
+            if (p1.x == p2.x && p1.x == center.x
+                || p1.y == p2.y && p1.y == center.y) {
                 continue;
             }
-            if (dist <= minDistance2) {
-                minDistance2 = dist;
-                closestPoint2 = point;
-                minIndex2 = i;
+            if (TanksMath.line.intersect(center, p, p1, p2)) {
+                return [p1, p2];
             }
         }
 
-        return [closestPoint1, closestPoint2];
+        // TODO
+        throw new Error("Closest two did not find any points! This should not be possible for convex shapes.\nAll points in shape (X,Y...):" + points);
     }
     /**
      * Calculate the distance between two points, on a 2D plane using Pythogorean Theorem
@@ -111,7 +111,7 @@ class LineMath {
         const A1 = end.y - start.y,
             B1 = start.x - end.x;
 
-        // turn the line ito equation of the form Ax + By = C
+        // turn the line into equation of the form Ax + By = C
         const C1 = A1 * start.x + B1 * start.y;
         // find the perpendicular line that passes through the line and the outside point
         const C2 = -B1 * point.x + A1 * point.y;
@@ -160,34 +160,93 @@ class LineMath {
      * @param end End coordinates of the line
      * @param center Center point of the circle
      * @param radius Radius of the circle
+     * @returns true if the circle is colliding with the line, false otherwise
      */
     collideCircle(start: Point, end: Point, center: Point, radius: number): boolean {
         const dist = this.distCircleCenter(start, end, center);
-        // if distance is undefined, or is further than the radius, return false
+        // if distance is -1, or is further than the radius, return false
         return dist === -1 || dist > radius ? false : true;
     }
-    collide(start1: Point, end1: Point, start2: Point, end2: Point): boolean {
-        // http://ericleong.me/research/circle-line/
-        const A1 = end1.x - start1.y,
-            B1 = start1.x - start1.y,
-            C1 = A1 * start1.x + B1 * start1.y,
-            A2 = end2.x - start2.y,
-            B2 = start2.x - start2.y,
-            C2 = A2 * start2.x + B2 * start2.y,
-            det = A1 * B2 - A2 * B1;
 
-        if (det != 0) {
-            const x = (B2 * C1 - B1 * C2) / det,
-                y = (A1 * C2 - A2 * C1) / det;
-            if (x >= Math.min(start1.x, end1.x) && x <= Math.max(start1.x, end1.x)
-                && x >= Math.min(start2.x, end2.x) && x <= Math.max(start2.x, end2.x)
-                && y >= Math.min(start1.y, end1.y) && y <= Math.max(start1.y, end1.y)
-                && y >= Math.min(start2.y, end2.y) && y <= Math.max(start2.y, end2.y)) {
-                return true;
+    /**
+     * Checks if the two lines described by their start/end points intersect
+     * @param start1 Start of the first line
+     * @param end1 End of the first line
+     * @param start2 Start of the second line
+     * @param end2 End of the second line
+     * @returns true if th lines intersect, false otherwise
+     */
+    intersect(start1: Point, end1: Point, start2: Point, end2: Point): boolean {
+        // https://stackoverflow.com/a/35457290/2823526
+        const dx1 = end1.x - start1.x;
+        const dy1 = end1.y - start1.y;
+        const dx2 = end2.x - start2.x;
+        const dy2 = end2.y - start2.y;
+        const dx3 = start1.x - start2.x;
+        const dy3 = start1.y - start2.y;
+        const det = dx1 * dy2 - dx2 * dy1;
+
+        if (det !== 0) {
+            const s = dx1 * dy3 - dx3 * dy1;
+            if ((s <= 0 && det < 0 && s >= det) || (s >= 0 && det > 0 && s <= det)) {
+                const t = dx2 * dy3 - dx3 * dy2;
+                if ((t <= 0 && det < 0 && t > det) || (t >= 0 && det > 0 && t < det)) {
+                    return true;
+                    // t = t / d;
+                    // collisionDetected = 1;
+                    // ix = p0x + t * dx1;
+                    // iy = p0y + t * dy1;
+                }
             }
         }
         return false;
     }
+
+    // intersectPoint(start1: Point, end1: Point, start2: Point, end2: Point): Point {
+    //     // https://stackoverflow.com/a/35457290/2823526
+    //     const dx1 = end1.x - start1.x;
+    //     const dy1 = end1.y - start1.y;
+    //     const dx2 = end2.x - start2.x;
+    //     const dy2 = end2.y - start2.y;
+    //     const dx3 = start1.x - start2.x;
+    //     const dy3 = start1.y - start2.y;
+    //     const det = dx1 * dy2 - dx2 * dy1;
+
+    //     if (det !== 0) {
+    //         const s = dx1 * dy3 - dx3 * dy1;
+    //         if ((s <= 0 && det < 0 && s >= det) || (s >= 0 && det > 0 && s <= det)) {
+    //             let t = dx2 * dy3 - dx3 * dy2;
+    //             if ((t <= 0 && det < 0 && t > det) || (t >= 0 && det > 0 && t < det)) {
+    //                 t = t / det;
+    //                 return new Point(start1.x + t * dx1, start1.y + t * dy1);
+    //             }
+    //         }
+    //     }
+    //     return null;
+    // }
+    // intersect(start1: Point, end1: Point, start2: Point, end2: Point): boolean {
+    //     // http://ericleong.me/research/circle-line/
+    //     const A1 = end1.y - start1.y,
+    //         B1 = start1.x - end1.x,
+    //         C1 = A1 * start1.x + B1 * start1.y,
+    //         A2 = end2.y - start2.y,
+    //         B2 = start2.x - end2.x,
+    //         C2 = A2 * start2.x + B2 * start2.y,
+    //         det = A1 * B2 - A2 * B1;
+
+    //     if (det != 0) {
+    //         const x = (B2 * C1 - B1 * C2) / det;
+    //         if (x >= Math.min(start1.x, end1.x) && x <= Math.max(start1.x, end1.x)
+    //             && x >= Math.min(start2.x, end2.x) && x <= Math.max(start2.x, end2.x)) {
+    //             const y = (A1 * C2 - A2 * C1) / det;
+    //             if (y >= Math.min(start1.y, end1.y) && y <= Math.max(start1.y, end1.y)
+    //                 && y >= Math.min(start2.y, end2.y) && y <= Math.max(start2.y, end2.y)) {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // }
 }
 
 export class TanksMath {

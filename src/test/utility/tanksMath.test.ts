@@ -48,16 +48,16 @@ describe('Tanks Math - Closest Points', () => {
         ];
 
         const [p1, p2] = TanksMath.point.closestTwo(point, center, points);
-        expect(p1).to.eq(expectedClosestPoint1);
-        expect(p2).to.eq(expectedClosestPoint2);
+        expect(p1).to.eq(expectedClosestPoint2);
+        expect(p2).to.eq(expectedClosestPoint1);
     });
 
-    let point = new Point(590, 650);
+    let point = new Point(540, 640);
     const center = new Point(500, 600);
     const points = [
         new Point(500, 500), // 0
-        new Point(500, 700), // 1
-        new Point(550, 550), // 2
+        new Point(550, 550), // 1
+        new Point(500, 700), // 2
         new Point(450, 650), // 3
     ];
     it('point on the right of obstacle', () => {
@@ -69,14 +69,14 @@ describe('Tanks Math - Closest Points', () => {
         point = new Point(400, 650);
         let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
         expect(p1).to.eq(points[3]);
-        expect(p2).to.eq(points[1]);
+        expect(p2).to.eq(points[0]);
 
     });
     it('point below the center of obstacle', () => {
         point = new Point(530, 500);
         let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
         expect(p1).to.eq(points[0]);
-        expect(p2).to.eq(points[2]);
+        expect(p2).to.eq(points[1]);
     });
 
     it('point closer to point on the other side of the obstacle', () => {
@@ -89,13 +89,13 @@ describe('Tanks Math - Closest Points', () => {
         point = new Point(center.x, 750);
         let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
         expect(p1).to.eq(points[1]);
-        expect(p2).to.eq(points[3]);
+        expect(p2).to.eq(points[2]);
     });
     it('point closer on the left', () => {
         point = new Point(480, 530);
         let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
-        expect(p1).to.eq(points[0]);
-        expect(p2).to.eq(points[3]);
+        expect(p1).to.eq(points[3]);
+        expect(p2).to.eq(points[0]);
     });
     // it('point on the same Y position as center', () => {
     // });
@@ -247,6 +247,6 @@ describe('Tanks Math - Line-Line Collision', () => {
             end1 = new Point(200, 200),
             start2 = new Point(100, 200),
             end2 = new Point(200, 100);
-        expect(TanksMath.line.collide(start1, end1, start2, end2)).to.be.true;
+        expect(TanksMath.line.intersect(start1, end1, start2, end2)).to.be.true;
     });
 });
