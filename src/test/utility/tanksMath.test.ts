@@ -97,6 +97,51 @@ describe('Tanks Math - Closest Points', () => {
         expect(p1).to.eq(points[3]);
         expect(p2).to.eq(points[0]);
     });
+    it('point inside the obstacle, right of center', () => {
+        point = new Point(520, 629);
+        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(null);
+        expect(p2).to.eq(null);
+        point = new Point(525, 570);
+        [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(null);
+        expect(p2).to.eq(null);
+        point = new Point(525, 600);
+        [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(null);
+        expect(p2).to.eq(null);
+    });
+    it('point inside the obstacle, left of center', () => {
+        point = new Point(465, 629);
+        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(null);
+        expect(p2).to.eq(null);
+        point = new Point(480, 600);
+        [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(null);
+        expect(p2).to.eq(null);
+    });
+    it('point inside the obstacle, top of center', () => {
+        point = new Point(480, 630);
+        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(null);
+        expect(p2).to.eq(null);
+
+        point = new Point(515, 630);
+        [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(null);
+        expect(p2).to.eq(null);
+    });
+    it('point inside the obstacle, bottom of center', () => {
+        point = new Point(500, 570);
+        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(null);
+        expect(p2).to.eq(null);
+        point = new Point(500, 570);
+        [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        expect(p1).to.eq(null);
+        expect(p2).to.eq(null);
+    });
     // it('point on the same Y position as center', () => {
     // });
 });

@@ -54,21 +54,19 @@ export class Collision {
     }
 
     static terrain(point: Point, radius: number, obstacles: Obstacle[]): boolean {
+        debugger
         for (const obstacle of obstacles) {
             // find closest two points of obstacle to point
-            const [left, right] = TanksMath.point.closestTwo(point, obstacle.points);
-            // calculate D (distance) from obstacle.center to point
-            // TODO optimise to account for the circle's radius, this might eliminate the need
-            // for the else branch that does line collision
-            const distToPoint = TanksMath.point.dist(obstacle.center, point);
-            // calculate D from obstacle.center to the two end points
-            // if the distance is smaller, then the circle's center is inside the obstacle, thus it is colliding
-            if (distToPoint < TanksMath.point.dist(obstacle.center, left) ||
-                distToPoint < TanksMath.point.dist(obstacle.center, right)) {
+            const [left, right] = TanksMath.point.closestTwo(point, obstacle.center, obstacle.points);
+            // the tank is inside the circle
+            if (!left && !right) {
+                console.log("Tank is inside the circle.");
                 return true;
-            } else {
-                // the center circle is outside the obstacle, but check if its radius collides
-                // TODO this check might be removed if we account for the radius when calculating the distance
+            }
+            console.log("Line from center intersects obstacle.")
+            if (TanksMath.line.collideCircle(left, right, point, radius)) {
+                console.log("Line collides with tank.")
+                return true;
             }
         }
         return false;

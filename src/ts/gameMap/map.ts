@@ -19,10 +19,13 @@ const exampleMap = {
             // will be processed two at a time forming a new point
             "data": [
                 500, 500,
-                500, 700,
                 550, 550,
+                500, 700,
+                450, 650,
                 500, 500 // TODO remove this point, it should be made implicit by connecting data[-1] to data[0]
-            ] // etc, must be even number of points or data is corrupted!
+            ], // etc, must be even number of points or data is corrupted!
+            "centerX": 500,
+            "centerY": 600
         }
     ]
 };

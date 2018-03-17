@@ -193,7 +193,6 @@ export class GameController {
         this.clearCanvas();
 
         // draw the terrain
-        debugger
         this.map.draw(this.context, this.theme);
 
         // draw every player for every tank

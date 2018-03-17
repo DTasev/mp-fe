@@ -53,8 +53,7 @@ class PointMath {
             }
         }
 
-        // TODO if the line from center to p doesn't intersect anything, then the tank should be inside the obstacle itself!
-        throw new Error("Closest two did not find any points! This should not be possible for convex shapes.\nAll points in shape (X,Y...):" + points);
+        return [null, null];
     }
     /**
      * Calculate the distance between two points, on a 2D plane using Pythogorean Theorem
