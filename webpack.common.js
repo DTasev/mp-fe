@@ -9,8 +9,7 @@ module.exports = [{
         output: {
             filename: 'bundle.js',
             path: path.resolve(__dirname, 'src/dist'),
-        },
-        devtool: 'inline-source-map'
+        }
     },
     {
         entry: './src/build/mc/main.js',
@@ -20,7 +19,6 @@ module.exports = [{
         output: {
             filename: 'bundle.js',
             path: path.resolve(__dirname, 'src/dist/mc'),
-        },
-        devtool: 'inline-source-map'
+        }
     }
 ];
