@@ -311,6 +311,5 @@ describe('Collision - Shot line with Terrain', () => {
         const [collides, lineIdx] = Collision.lineWithTerrain(line, obstacles);
         expect(collides).to.be.false;
         expect(lineIdx).to.eq(-1);
-
-    })
+    });
 });
