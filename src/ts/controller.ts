@@ -204,7 +204,7 @@ export class GameController {
 
         const oldLinesColor = this.theme.oldLinesColor().toRGBA();
         // draw the last N lines
-        for (const line_path of this.lineCache.lines()) {
+        for (const line_path of this.lineCache.active()) {
             for (let i = 1; i < line_path.points.length; i++) {
                 // old lines are currently half-transparent
                 Draw.line(this.context, line_path.points[i - 1], line_path.points[i], 1, oldLinesColor);
@@ -213,7 +213,7 @@ export class GameController {
     }
 
     /**
-     * Collide the line with all tanks that are not the current player's tanks.
+     * Collide the shot line with all valid target tanks.
      * @param line The line of the shot for collision
      * @param friendlyFire Whether the player's own tanks can be collided with
      */
@@ -230,7 +230,7 @@ export class GameController {
     }
 
     cacheLine(path: Line) {
-        this.lineCache.points.push(path);
+        this.lineCache.lines.push(path);
     }
 
     /** Change the current player to the next active player. 
@@ -260,5 +260,8 @@ export class GameController {
 
     collidingWithTerrain(point: Point, radius: number): boolean {
         return Collision.terrain(point, radius, this.map.obstacles);
+    }
+    lineCollidingWithTerrain(line: Line): [boolean, number] {
+        return Collision.lineWithTerrain(line, this.map.obstacles);
     }
 }

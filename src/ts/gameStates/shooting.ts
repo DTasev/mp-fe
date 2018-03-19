@@ -147,11 +147,19 @@ export class ShootingState implements IPlayState {
         this.player.viewportPosition = Viewport.current();
 
         const playerTanksShot = this.player.tanksShot.get();
+        // the shot must be sucessfull - (i.e. fast enough), and must not collide with any terrain
         if (this.successfulShot) {
-            this.controller.collide(this.shotPath);
-            this.controller.cacheLine(this.shotPath);
             playerTanksShot.take();
             this.active.actionState = TankTurnState.SHOT;
+            const [collides, lineCollisionIndex] = this.controller.lineCollidingWithTerrain(this.shotPath);
+            if (collides) {
+                // if the shot collided with the obstacle, trim the shot line to stop at the collision
+                this.shotPath.points = this.shotPath.points.slice(0, lineCollisionIndex);
+            } else {
+                // if the shot DID NOT collide with an obstacle, then collide versus the tanks
+                this.controller.collide(this.shotPath);
+            }
+            this.controller.cacheLine(this.shotPath);
         }
 
         // if all the player's tank have shot

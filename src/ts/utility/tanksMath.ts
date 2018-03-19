@@ -2,59 +2,6 @@
 import { Point } from "./point";
 
 class PointMath {
-    closestTwo(p: Point, center: Point, points: Point[]): [Point, Point] {
-        // // This stores the filter function that will be used to filter the point list. 
-        // // This allows us to only once do the branching for the function selection
-        // let filterFunction;
-
-        // // find out where the external point is in relation to the center
-        // // if the points are not exactly above/below each other
-        // if (p.x !== center.x) {
-        //     // then compare the x axis values
-        //     if (p.x < center.x) {
-        //         // the point is on the LEFT of the center
-        //         filterFunction = (point: Point) => point.x <= center.x;
-        //     } else {
-        //         // the point is on the RIGHT of the center
-        //         filterFunction = (point: Point) => center.x <= point.x;
-        //     }
-        // } else {
-        //     // if the points are on the same X position, then compare the Y values
-        //     // check if the point is above the center, i.e. y is larger
-        //     if (p.y > center.y) {
-        //         // the point is on the TOP of the center
-        //         filterFunction = (point: Point) => center.y <= point.y;
-        //     } else {
-        //         // the point is on the BOTTOM of the center
-        //         filterFunction = (point: Point) => point.y <= center.y;
-        //     }
-        // }
-
-        // filter out ONLY the points that are between the center and the external point p
-        // const relevantPoints = points.filter(filterFunction);
-        const length = points.length;
-        let p1: Point, p2: Point;
-
-        for (let i = 0, j: number; i < length; i++) {
-            // this condition will set j to 0 on the last indice, so that the
-            // line from the last to the first point is also checked
-            j = i == length - 1 ? 0 : i + 1;
-            // find the which obstacle line is intersected by the 
-            // line from the centre point to the external point
-            p1 = points[i];
-            p2 = points[j];
-            // make sure that the line does NOT go through the center
-            if (p1.x == p2.x && p1.x == center.x
-                || p1.y == p2.y && p1.y == center.y) {
-                continue;
-            }
-            if (TanksMath.line.intersect(center, p, p1, p2)) {
-                return [p1, p2];
-            }
-        }
-
-        return [null, null];
-    }
     /**
      * Calculate the distance between two points, on a 2D plane using Pythogorean Theorem
      * @param start First point with 2D coordinates
@@ -129,7 +76,76 @@ class LineMath {
 
         return closestPoint;
     }
+    /**
+     * Check if a line intersects the lines formed by every two poitns from the points list.
+     * This is used to check if a tank intersects an obstacle during placement and movement.
+     * 
+     * The approach is to collide the line from the center of the obstacle to the tank, against each 
+     * line formed by every two points of the obstacle. If that line collides with ANY of the lines 
+     * formed by the points, then the tank is outside of the obstacle. 
+     * The line that has collided is also the closest line to the tank.
+     * 
+     * If no line collides with the line from the center of obstacle to the tank, then the tank is 
+     * inside the obstacle. In this case this function returns [null, null]
+     * 
+     * @param start Start point of line 
+     * @param end End point of line
+     * @param points List of points that form a convex shape
+     */
+    closestTwo(start: Point, end: Point, points: Point[]): [Point, Point] {
+        // TODO this should be moved into an external function
+        // This stores the filter function that will be used to filter the point list. 
+        // This allows us to only once do the branching for the function selection
+        // let filterFunction;
 
+        // find out where the external point is in relation to the center
+        // if the points are not exactly above/below each other
+        // if (p.x !== center.x) {
+        //     // then compare the x axis values
+        //     if (p.x < center.x) {
+        //         // the point is on the LEFT of the center
+        //         filterFunction = (point: Point) => point.x <= center.x;
+        //     } else {
+        //         // the point is on the RIGHT of the center
+        //         filterFunction = (point: Point) => center.x <= point.x;
+        //     }
+        // } else {
+        //     // if the points are on the same X position, then compare the Y values
+        //     // check if the point is above the center, i.e. y is larger
+        //     if (p.y > center.y) {
+        //         // the point is on the TOP of the center
+        //         filterFunction = (point: Point) => center.y <= point.y;
+        //     } else {
+        //         // the point is on the BOTTOM of the center
+        //         filterFunction = (point: Point) => point.y <= center.y;
+        //     }
+        // }
+
+        // filter out ONLY the points that are between the center and the external point p
+        // const relevantPoints = points.filter(filterFunction);
+        const length = points.length;
+        let p1: Point, p2: Point;
+
+        for (let i = 0, j: number; i < length; i++) {
+            // this condition will set j to 0 on the last indice, so that the
+            // line from the last to the first point is also checked
+            j = i == length - 1 ? 0 : i + 1;
+            // find the which obstacle line is intersected by the 
+            // line from the centre point to the external point
+            p1 = points[i];
+            p2 = points[j];
+            // make sure that the line does NOT go through the center
+            if (p1.x == p2.x && p1.x == end.x
+                || p1.y == p2.y && p1.y == end.y) {
+                continue;
+            }
+            if (TanksMath.line.intersect(end, start, p1, p2)) {
+                return [p1, p2];
+            }
+        }
+
+        return [null, null];
+    }
     /** 
      * Return the distance from the line to the center of the circle. 
      * This is done by finding the length of the perpendicular line that passes through the line and circle's center

@@ -83,9 +83,8 @@ export class MovingState implements IPlayState {
         // reset the line limit as the user has let go of the button
         this.line.reset();
 
-
         // only act if the position is valid
-        if (this.tankValidPosition) {
+        if (this.tankValidPosition && !this.controller.collidingWithTerrain(this.draw.mouse, Tank.WIDTH)) {
             // update the position of the tank in the player array
             const tank = this.player.tanks[this.active.id]
             tank.position = this.draw.mouse.copy();

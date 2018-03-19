@@ -47,7 +47,7 @@ describe('Tanks Math - Closest Points', () => {
             expectedClosestPoint1,
         ];
 
-        const [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        const [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(expectedClosestPoint2);
         expect(p2).to.eq(expectedClosestPoint1);
     });
@@ -61,84 +61,84 @@ describe('Tanks Math - Closest Points', () => {
         new Point(450, 650), // 3
     ];
     it('point on the right of obstacle', () => {
-        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        let [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(points[1]);
         expect(p2).to.eq(points[2]);
     });
     it('point on the left of obstacle', () => {
         point = new Point(400, 650);
-        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        let [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(points[3]);
         expect(p2).to.eq(points[0]);
 
     });
     it('point below the center of obstacle', () => {
         point = new Point(530, 500);
-        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        let [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(points[0]);
         expect(p2).to.eq(points[1]);
     });
 
     it('point closer to point on the other side of the obstacle', () => {
         point = new Point(540, 650);
-        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        let [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(points[1]);
         expect(p2).to.eq(points[2]);
     });
     it('point on the same X position as center', () => {
         point = new Point(center.x, 750);
-        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        let [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(points[1]);
         expect(p2).to.eq(points[2]);
     });
     it('point closer on the left', () => {
         point = new Point(480, 530);
-        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        let [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(points[3]);
         expect(p2).to.eq(points[0]);
     });
     it('point inside the obstacle, right of center', () => {
         point = new Point(520, 629);
-        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        let [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(null);
         expect(p2).to.eq(null);
         point = new Point(525, 570);
-        [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(null);
         expect(p2).to.eq(null);
         point = new Point(525, 600);
-        [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(null);
         expect(p2).to.eq(null);
     });
     it('point inside the obstacle, left of center', () => {
         point = new Point(465, 629);
-        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        let [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(null);
         expect(p2).to.eq(null);
         point = new Point(480, 600);
-        [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(null);
         expect(p2).to.eq(null);
     });
     it('point inside the obstacle, top of center', () => {
         point = new Point(480, 630);
-        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        let [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(null);
         expect(p2).to.eq(null);
 
         point = new Point(515, 630);
-        [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(null);
         expect(p2).to.eq(null);
     });
     it('point inside the obstacle, bottom of center', () => {
         point = new Point(500, 570);
-        let [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        let [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(null);
         expect(p2).to.eq(null);
         point = new Point(500, 570);
-        [p1, p2] = TanksMath.point.closestTwo(point, center, points);
+        [p1, p2] = TanksMath.line.closestTwo(point, center, points);
         expect(p1).to.eq(null);
         expect(p2).to.eq(null);
     });
