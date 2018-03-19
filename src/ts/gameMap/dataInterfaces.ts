@@ -5,11 +5,15 @@
  * Any additional fields will still be accessible with array access (e.g. `obstacleData["newKeyNameHere"]`)
  */
 
+export interface ITerrainData {
+    x: number;
+    y: number;
+}
 export interface IObstacleData {
     type: string;
     centerX: number;
     centerY: number;
-    data: number[];
+    points: ITerrainData[];
 }
 
 export interface IMapData {

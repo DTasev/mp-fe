@@ -259,9 +259,9 @@ export class GameController {
     }
 
     collidingWithTerrain(point: Point, radius: number): boolean {
-        return Collision.terrain(point, radius, this.map.obstacles);
+        return Collision.terrain(point, radius, this.map.terrain);
     }
     lineCollidingWithTerrain(line: Line): [boolean, number] {
-        return Collision.lineWithTerrain(line, this.map.obstacles);
+        return Collision.lineWithTerrain(line, this.map.terrain);
     }
 }

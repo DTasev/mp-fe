@@ -9,34 +9,17 @@ import { Ui } from "./ui/ui";
 import { GameController, GameState } from './controller';
 import { Viewport } from './gameMap/viewport';
 import * as Settings from './settings';
-
-const ID_GAME_CANVAS = "tanks-canvas";
+import { determineMapSize } from "./gameMap/mapSize";
 
 // Scrollbar Width for browsers
 // Source: https://www.textfixer.com/tutorials/browser-scrollbar-width.php
 const SCROLLBAR_WIDTH = 17;
 
-enum MapSize {
-    SMALL,
-    MEDIUM,
-    LARGE
-}
-function determineMapSize(): [number, number] {
-    // const height = window.innerHeight * 0.995;
-    // take 90% of the window, leave a bit of gap on the right
-    // const width = window.innerWidth;
-
-    const mapSize = MapSize.MEDIUM;
-    const width = 1024 * Settings.NUM_PLAYERS;
-    const height = width / 2;
-    console.log("Players:", Settings.NUM_PLAYERS, "Canvas size width:", width, "height:", height);
-    return [width, height];
-}
 // Set-up the canvas and add our event handlers after the page has loaded
 function init() {
     const [canvasWidth, canvasHeight] = determineMapSize();
 
-    const canvas = <HTMLCanvasElement>document.getElementById(ID_GAME_CANVAS);
+    const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     window.onscroll = (e: Event) => {
@@ -44,7 +27,6 @@ function init() {
     };
 
     // subtracting the scrollbar width prevents unlimited X scrolling to the right
-
     const hasVerticalScroll = window.innerWidth > document.documentElement.clientWidth;
     console.log("Window vertical scroll:", hasVerticalScroll);
     // Don't subtract if there is no scrollbar

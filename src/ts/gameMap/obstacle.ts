@@ -18,11 +18,11 @@ export class Obstacle {
         this.center = new Point(obstacleDescription.centerX, obstacleDescription.centerY);
         this.points = []
 
-        const obstacleData = obstacleDescription.data;
+        const obstacleData = obstacleDescription.points;
         const length = obstacleData.length;
         // traverse two at a time
-        for (let i = 0; i < length - 1; i += 2) {
-            this.points.push(new Point(obstacleData[i], obstacleData[i + 1]));
+        for (const obstacle of obstacleData) {
+            this.points.push(new Point(obstacle.x, obstacle.y));
         }
     }
 
