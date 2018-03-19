@@ -91,6 +91,8 @@ export class Collision {
                 }
             }
         }
+        console.log("Line that did NOT collide:", line.points);
+
         return [false, -1];
     }
 }

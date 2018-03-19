@@ -6,32 +6,33 @@ import { Tank } from '../../ts/gameObjects/tank';
 import { Collision } from '../../ts/utility/collision';
 import { IObstacleData } from "../../ts/gameMap/dataInterfaces";
 import { Obstacle } from '../../ts/gameMap/obstacle';
+import { Line } from '../../ts/utility/line';
 
-describe('Collision - Terrain', () => {
+const exampleMap = {
+    "name": "Map",
+    "creator": "DT",
+    "createdDate": "2018-03-13T02:00:00Z",
+    "updatedDate": "2018-03-13T03:00:00Z",
+    "downloadedDate": "2018-03-14T05:00:00Z",
+    "terrain": [
+        {
+            "type": "solid",
+            "data": [
+                500, 500,
+                550, 550,
+                500, 700,
+                450, 650
+            ],
+            "centerX": 500,
+            "centerY": 600
+        }
+    ]
+};
+const obstacles: Obstacle[] = [
+    new Obstacle(exampleMap.terrain[0])
+];
+describe('Collision - Tank with Terrain', () => {
 
-    const exampleMap = {
-        "name": "Map",
-        "creator": "DT",
-        "createdDate": "2018-03-13T02:00:00Z",
-        "updatedDate": "2018-03-13T03:00:00Z",
-        "downloadedDate": "2018-03-14T05:00:00Z",
-        "terrain": [
-            {
-                "type": "solid",
-                "data": [
-                    500, 500,
-                    550, 550,
-                    500, 700,
-                    450, 650
-                ],
-                "centerX": 500,
-                "centerY": 600
-            }
-        ]
-    };
-    const obstacles: Obstacle[] = [
-        new Obstacle(exampleMap.terrain[0])
-    ];
     const tankRadius = 12;
     it('tank inside obstacle', () => {
         // below are a bunch of points inside the obstacle
@@ -225,4 +226,91 @@ describe('Collision - Terrain', () => {
         const tankPos = new Point(500, 450);
         expect(Collision.terrain(tankPos, tankRadius, obstacles)).to.be.false;
     });
+});
+describe('Collision - Shot line with Terrain', () => {
+    // glancing shot - at a large angle [160-180) deg
+    it('glancing shot from the right', () => {
+        // this is exported shot line data from Chrome by right click > store as global variable > JSON.stringify(tempN)
+        const pointsJson = '[{"x":568,"y":539},{"x":546,"y":567},{"x":526,"y":608},{"x":496,"y":692},{"x":489,"y":720}]';
+        const line = new Line();
+        line.points = JSON.parse(pointsJson);
+        const [collides, lineIdx] = Collision.lineWithTerrain(line, obstacles);
+        expect(collides).to.be.true;
+        expect(lineIdx).to.eq(3);
+    });
+    it('shot from the left', () => {
+        const line = new Line();
+        line.points = [
+            new Point(441, 629),
+            new Point(479, 587),
+            new Point(505, 552),
+            new Point(551, 472),
+            new Point(574, 426)
+        ];
+
+        const [collides, lineIdx] = Collision.lineWithTerrain(line, obstacles);
+        expect(collides).to.be.true;
+        expect(lineIdx).to.eq(2);
+    });
+    it('glancing shot from the left', () => {
+        // this is exported shot line data from Chrome by right click > store as global variable > JSON.stringify(tempN)
+        const pointsJson = '[{"x":425,"y":689},{"x":441,"y":660},{"x":478,"y":579},{"x":508,"y":525},{"x":521,"y":506}]';
+        const line = new Line();
+        line.points = JSON.parse(pointsJson);
+        const [collides, lineIdx] = Collision.lineWithTerrain(line, obstacles);
+        expect(collides).to.be.true;
+        expect(lineIdx).to.eq(3);
+    });
+    it('longer glancing shot from the left', () => {
+        // this is exported shot line data from Chrome by right click > store as global variable > JSON.stringify(tempN)
+        const pointsJson = '[{"x":425,"y":689},{"x":442,"y":652},{"x":464,"y":604},{"x":500,"y":531},{"x":520,"y":482}]';
+        const line = new Line();
+        line.points = JSON.parse(pointsJson);
+        const [collides, lineIdx] = Collision.lineWithTerrain(line, obstacles);
+        expect(collides).to.be.true;
+        expect(lineIdx).to.eq(4);
+    });
+    it('shot from the top', () => {
+        // this is exported shot line data from Chrome by right click > store as global variable > JSON.stringify(tempN)
+        const pointsJson = '[{"x":535,"y":508},{"x":532,"y":545},{"x":524,"y":589},{"x":505,"y":656},{"x":494,"y":686}]';
+        const line = new Line();
+        line.points = JSON.parse(pointsJson);
+        const [collides, lineIdx] = Collision.lineWithTerrain(line, obstacles);
+        expect(collides).to.be.true;
+        expect(lineIdx).to.eq(2);
+    });
+    it('shot from the bottom', () => {
+        // this is exported shot line data from Chrome by right click > store as global variable > JSON.stringify(tempN)
+        const pointsJson = '[{"x":469,"y":709},{"x":488,"y":656},{"x":532,"y":548},{"x":580,"y":454}]';
+        const line = new Line();
+        line.points = JSON.parse(pointsJson);
+        const [collides, lineIdx] = Collision.lineWithTerrain(line, obstacles);
+        expect(collides).to.be.true;
+        expect(lineIdx).to.eq(2);
+    });
+    it('close to diagonal point', () => {
+        const pointsJson = '[{"x":498,"y":753},{"x":500,"y":722},{"x":502,"y":643},{"x":504,"y":601},{"x":504,"y":556}]';
+        const line = new Line();
+        line.points = JSON.parse(pointsJson);
+        const [collides, lineIdx] = Collision.lineWithTerrain(line, obstacles);
+        expect(collides).to.be.true;
+        expect(lineIdx).to.eq(3);
+    })
+    it('shot across obstacle', () => {
+        const pointsJson = '[{"x":429,"y":685},{"x":456,"y":651},{"x":487,"y":614},{"x":564,"y":520},{"x":605,"y":478}]';
+        const line = new Line();
+        line.points = JSON.parse(pointsJson);
+        const [collides, lineIdx] = Collision.lineWithTerrain(line, obstacles);
+        expect(collides).to.be.true;
+        expect(lineIdx).to.eq(2);
+    });
+    it('shot that does NOT collide with obstacle', () => {
+        const pointsJson = '[{"x":544,"y":750},{"x":544,"y":720},{"x":551,"y":617},{"x":565,"y":506},{"x":574,"y":465}]';
+        const line = new Line();
+        line.points = JSON.parse(pointsJson);
+        const [collides, lineIdx] = Collision.lineWithTerrain(line, obstacles);
+        expect(collides).to.be.false;
+        expect(lineIdx).to.eq(-1);
+
+    })
 });
