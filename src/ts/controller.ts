@@ -224,15 +224,14 @@ export class GameController {
      * @param line The line of the shot for collision
      * @param friendlyFire Whether the player's own tanks can be collided with
      */
-    collide(line: Line, friendlyFire = false) {
+    collide(start: Point, end: Point, friendlyFire = false) {
         console.log("-------------------- Starting Collision -------------------");
-        const numPoints = line.points.length;
         if (friendlyFire) {
             throw new Error("Not implemented");
         }
         const playersForCollision = friendlyFire ? this.players : this.players.filter((p) => p.id !== this.currentPlayer);
         for (const player of playersForCollision) {
-            Collision.shooting(line, numPoints, player.tanks);
+            Collision.shooting(start, end, player.tanks);
         }
     }
 
@@ -268,7 +267,8 @@ export class GameController {
     collidingWithTerrain(point: Point, radius: number): boolean {
         return Collision.terrain(point, radius, this.map.terrain);
     }
-    lineCollidingWithTerrain(line: Line): [boolean, number] {
-        return Collision.lineWithTerrain(line, this.map.terrain);
+
+    lineCollidingWithTerrain(start: Point, end: Point): Point {
+        return Collision.lineWithTerrain(start, end, this.map.terrain);
     }
 }

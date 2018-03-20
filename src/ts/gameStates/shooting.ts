@@ -151,31 +151,32 @@ export class ShootingState implements IPlayState {
         if (this.successfulShot) {
             playerTanksShot.take();
             this.active.actionState = TankTurnState.SHOT;
-            // for (let i = 0; i < this.shotPath.points.length - 1; i++) {
-            //     const start = this.shotPath[i];
-            //     const end = this.shotPath[i + 1];
-            //     // if the shot segment is not colliding with any terrain do tank collision
-            //     // TODO return the collision point from lineCollidingWithTerrain -> this is the new line with which
-            //     // the this.controller.collide should be run! This means we can check for tanks that are hit next to the
-            //     // obstacle
-            //     const shotTerrainCollisionPoint: Point = this.controller.lineCollidingWithTerrain(start, end);
-            //     if (shotTerrainCollisionPoint) {
-            //         // the NEW END is the collision point of the shot with the obstacle
-            //         this.controller.collide(start, shotTerrainCollisionPoint);
-            //         // this is also the last collision, any further shot segments will be INSIDE the obstacle
-            //         break;
-            //     } else {
-            //         // the shot DOES NOT collide with an obstacle
-            //         this.controller.collide(start, end);
-            //     }
-            // }
-            const [collides, lineCollisionIndex] = this.controller.lineCollidingWithTerrain(this.shotPath);
-            if (collides) {
-                // if the shot collided with the obstacle, trim the shot line to stop at the collision
-                this.shotPath.points = this.shotPath.points.slice(0, lineCollisionIndex);
-            } else {
-                // if the shot DID NOT collide with an obstacle, then collide versus the tanks
-                this.controller.collide(this.shotPath);
+
+            // for each segment of the path, perform collision
+            const shotPathLength = this.shotPath.points.length;
+            let i: number;
+            for (i = 0; i < shotPathLength - 1; i++) {
+                const start = this.shotPath.points[i];
+                const end = this.shotPath.points[i + 1];
+                // if the shot segment is not colliding with any terrain do tank collision
+                // TODO return the collision point from lineCollidingWithTerrain -> this is the new line with which
+                // the this.controller.collide should be run! This means we can check for tanks that are hit next to the
+                // obstacle
+                const shotTerrainCollisionPoint: Point = this.controller.lineCollidingWithTerrain(start, end);
+                if (shotTerrainCollisionPoint) {
+                    // the NEW END is the collision point of the shot with the obstacle
+                    this.controller.collide(start, shotTerrainCollisionPoint);
+                    // this is also the last collision, any further shot segments will be INSIDE the obstacle
+                    break;
+                } else {
+                    // the shot DOES NOT collide with an obstacle
+                    this.controller.collide(start, end);
+                }
+            }
+            // trim the path if it collided with an obstacle, two is added because the lines must be
+            // trimmed after the end point (i + 1), and slice trims in range [start, end)
+            if (i + 2 < shotPathLength) {
+                this.shotPath.points = this.shotPath.points.slice(0, i + 2);
             }
             this.controller.cacheLine(this.shotPath);
         }

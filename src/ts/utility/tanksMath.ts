@@ -92,7 +92,7 @@ class LineMath {
      * @param end End point of line
      * @param points List of points that form a convex shape
      */
-    closestTwo(start: Point, end: Point, points: Point[]): [Point, Point] {
+    closestTwo(start: Point, end: Point, points: Point[]): [Point, Point, Point] {
         // TODO this should be moved into an external function
         // This stores the filter function that will be used to filter the point list. 
         // This allows us to only once do the branching for the function selection
@@ -139,12 +139,13 @@ class LineMath {
                 || p1.y == p2.y && p1.y == end.y) {
                 continue;
             }
-            if (TanksMath.line.intersect(end, start, p1, p2)) {
-                return [p1, p2];
+            const intersection = TanksMath.line.intersectPoint(end, start, p1, p2)
+            if (intersection) {
+                return [p1, p2, intersection];
             }
         }
 
-        return [null, null];
+        return [null, null, null];
     }
     /** 
      * Return the distance from the line to the center of the circle. 
@@ -217,28 +218,36 @@ class LineMath {
         return false;
     }
 
-    // intersectPoint(start1: Point, end1: Point, start2: Point, end2: Point): Point {
-    //     // https://stackoverflow.com/a/35457290/2823526
-    //     const dx1 = end1.x - start1.x;
-    //     const dy1 = end1.y - start1.y;
-    //     const dx2 = end2.x - start2.x;
-    //     const dy2 = end2.y - start2.y;
-    //     const dx3 = start1.x - start2.x;
-    //     const dy3 = start1.y - start2.y;
-    //     const det = dx1 * dy2 - dx2 * dy1;
+    /**
+     * Checks if the two lines described by their start/end points intersect
+     * @param start1 Start of the first line
+     * @param end1 End of the first line
+     * @param start2 Start of the second line
+     * @param end2 End of the second line
+     * @returns intersection point, if present, otherwise null
+     */
+    intersectPoint(start1: Point, end1: Point, start2: Point, end2: Point): Point {
+        // https://stackoverflow.com/a/35457290/2823526
+        const dx1 = end1.x - start1.x;
+        const dy1 = end1.y - start1.y;
+        const dx2 = end2.x - start2.x;
+        const dy2 = end2.y - start2.y;
+        const dx3 = start1.x - start2.x;
+        const dy3 = start1.y - start2.y;
+        const det = dx1 * dy2 - dx2 * dy1;
+        if (det !== 0) {
+            const s = dx1 * dy3 - dx3 * dy1;
+            if ((s <= 0 && det < 0 && s >= det) || (s >= 0 && det > 0 && s <= det)) {
+                let t = dx2 * dy3 - dx3 * dy2;
+                if ((t <= 0 && det < 0 && t > det) || (t >= 0 && det > 0 && t < det)) {
+                    t = t / det;
+                    return new Point(start1.x + t * dx1, start1.y + t * dy1);
+                }
+            }
+        }
+        return null;
+    }
 
-    //     if (det !== 0) {
-    //         const s = dx1 * dy3 - dx3 * dy1;
-    //         if ((s <= 0 && det < 0 && s >= det) || (s >= 0 && det > 0 && s <= det)) {
-    //             let t = dx2 * dy3 - dx3 * dy2;
-    //             if ((t <= 0 && det < 0 && t > det) || (t >= 0 && det > 0 && t < det)) {
-    //                 t = t / det;
-    //                 return new Point(start1.x + t * dx1, start1.y + t * dy1);
-    //             }
-    //         }
-    //     }
-    //     return null;
-    // }
     // intersect(start1: Point, end1: Point, start2: Point, end2: Point): boolean {
     //     // http://ericleong.me/research/circle-line/
     //     const A1 = end1.y - start1.y,
