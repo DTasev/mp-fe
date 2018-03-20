@@ -43,6 +43,9 @@ export class Color {
     static pink(alpha: number = 1.0): Color {
         return new Color(255, 102, 203, alpha);
     }
+    static sand(alpha: number = 1.0): Color {
+        return new Color(253, 245, 230, alpha);
+    }
     static c(red: number, green: number, blue: number, alpha: number = 1.0) {
         return new Color(red, green, blue, alpha);
     }

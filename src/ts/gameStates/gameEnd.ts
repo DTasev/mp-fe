@@ -38,10 +38,21 @@ export class GameEndState implements IActionState {
         const tanksStr = numTanks === 1 ? " tank" : " tanks";
 
         const [left, middle, right] = this.ui.body.addColumns();
+        // the elapsed time will be in total microseconds, divide by 1000 so we get seconds
+        const elapsedTime = (Date.now() - <any>this.controller.timeStart) / 1000;
         const winnerNameDescription = {
-            "h1": {
+            "div": {
                 "className": "w3-padding-64 " + theme.endGameTitleClass(),
-                "textContent": "Winner " + this.player.name + " with " + numTanks + " tanks."
+                "children": [{
+                    "h1": {
+                        "textContent": "Winner " + this.player.name + " with " + numTanks + " tanks."
+                    }
+                }, {
+                    "h1": {
+                        "textContent": "Time elapsed: " + elapsedTime + " seconds."
+
+                    }
+                }]
             }
         };
 

@@ -19,6 +19,8 @@ import { Collision } from "./utility/collision";
 import { Viewport } from "./gameMap/viewport";
 import { ITheme } from "./gameThemes/iTheme";
 import { DarkTheme } from "./gameThemes/dark";
+import { LightTheme } from "./gameThemes/light";
+import { SepiaTheme } from "./gameThemes/sepia";
 
 import * as Limit from './limiters/index'
 import * as Settings from './settings';
@@ -68,7 +70,11 @@ export class GameController {
     nextPlayer: boolean = false;
 
     /** The current color theme of the game */
-    theme: ITheme = new DarkTheme();
+    // theme: ITheme = new DarkTheme();
+    // theme: ITheme = new LightTheme();
+    theme: ITheme = new SepiaTheme();
+
+    readonly timeStart: Date;
 
     constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui, viewport: Viewport) {
         this.canvas = canvas;
@@ -77,6 +83,7 @@ export class GameController {
         this.viewport = viewport;
 
         this.lineCache = new LineCache();
+        this.timeStart = new Date();
 
         const playerPositions = this.generatePlayerViews(canvas.width, canvas.height);
         this.currentPlayer = 0;

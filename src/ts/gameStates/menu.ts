@@ -58,7 +58,7 @@ export class MenuState implements IActionState {
         const button_startGame = J2H.parse(button_startGameDescription);
         const button_options = <HTMLButtonElement>button_startGame.cloneNode();
         button_options.textContent = "Options";
-        button_options.onclick = this.showOptions;
+        button_options.onclick = (e: MouseEvent) => this.showOptions(theme, e);
         const button_account = <HTMLButtonElement>button_startGame.cloneNode();
         button_account.textContent = "Account";
         button_account.onclick = Controls.w3_open;
@@ -78,7 +78,7 @@ export class MenuState implements IActionState {
         this.ui.showCanvas();
         this.controller.changeGameState(GameState.TANK_PLACEMENT);
     }
-    private showOptions = (e: MouseEvent) => {
+    private showOptions(theme: ITheme, e: MouseEvent) {
         this.ui.body.clear();
         const [left, middle, right] = this.ui.body.addColumns();
 
@@ -100,7 +100,7 @@ export class MenuState implements IActionState {
             "button": {
                 "className": MenuState.CLASS_MENU_BUTTON,
                 "textContent": "Back",
-                "onclick": this.setUpUi
+                "onclick": () => this.setUpUi(null, null, theme)
             }
         };
         const button_back = J2H.parse(button_backDescription);
