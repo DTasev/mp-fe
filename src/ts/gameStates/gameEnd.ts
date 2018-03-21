@@ -39,7 +39,7 @@ export class GameEndState implements IActionState {
 
         const [left, middle, right] = this.ui.body.addColumns();
         // the elapsed time will be in total microseconds, divide by 1000 so we get seconds
-        const elapsedTime = (Date.now() - <any>this.controller.timeStart) / 1000;
+        const elapsedTime = (Date.now() - <any>this.controller.timeStart.get()) / 1000;
         const winnerNameDescription = {
             "div": {
                 "className": "w3-padding-64 " + theme.endGameTitleClass(),

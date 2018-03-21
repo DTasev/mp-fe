@@ -18,14 +18,14 @@ export class Player {
     activeTank: SingleAccess<IGameObject>
     viewportPosition: Point;
 
-    constructor(id: number, name: string, color: Color, viewportPosition: Point) {
+    constructor(id: number, name: string, color: Color) {
         this.id = id;
         this.name = name;
         this.tanks = new Array<IGameObject>();
         this.color = color;
         this.tanksShot = new SingleAccess();
         this.activeTank = new SingleAccess();
-        this.viewportPosition = viewportPosition;
+        this.viewportPosition = new Point(0, 0);
     }
 
     activeTanks(): IGameObject[] {
@@ -35,5 +35,8 @@ export class Player {
         for (const tank of this.tanks) {
             tank.actionState = TankTurnState.NOT_ACTED;
         }
+    }
+    setViewportPosition(viewportPosition: Point): void {
+        this.viewportPosition = viewportPosition;
     }
 }

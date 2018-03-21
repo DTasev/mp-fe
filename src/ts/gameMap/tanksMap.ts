@@ -1,6 +1,3 @@
-// Imports module-only classes
-/// <reference path="dataInterfaces.ts" />
-
 import { Point } from "../utility/point";
 import { Draw } from "../drawing/draw";
 import { Color } from "../drawing/color";
@@ -9,7 +6,7 @@ import { Obstacle } from "./obstacle";
 import { IMapData } from "./dataInterfaces";
 
 
-export class Map {
+export class TanksMap {
     terrain: Obstacle[];
     id: number;
     name: string;

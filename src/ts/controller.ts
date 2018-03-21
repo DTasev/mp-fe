@@ -18,15 +18,15 @@ import { Ui } from "./ui/ui";
 import { Collision } from "./utility/collision";
 import { Viewport } from "./gameMap/viewport";
 import { ITheme } from "./gameThemes/iTheme";
-import { DarkTheme } from "./gameThemes/dark";
-import { LightTheme } from "./gameThemes/light";
-import { SepiaTheme } from "./gameThemes/sepia";
+import { IPlayer } from "./gameObjects/iPlayer";
 
 import * as Limit from './limiters/index'
 import * as Settings from './settings';
 import { J2H } from "./json2html";
 import { CommonUi } from "./ui/common";
-import { Map } from "./gameMap/map";
+import { TanksMap } from "./gameMap/tanksMap";
+import { SingleAccess } from "./utility/singleAccess";
+import { SepiaTheme } from "./gameThemes/sepia";
 
 export enum GameState {
     MENU,
@@ -64,7 +64,7 @@ export class GameController {
 
     /** Stores the all of the shot lines */
     private readonly lineCache: LineCache;
-    private readonly map: Map = new Map("apple");
+    private map: TanksMap;
 
     /** Flag to specify if the current player's turn is over */
     nextPlayer: boolean = false;
@@ -72,9 +72,9 @@ export class GameController {
     /** The current color theme of the game */
     // theme: ITheme = new DarkTheme();
     // theme: ITheme = new LightTheme();
-    theme: ITheme = new SepiaTheme();
+    theme: ITheme;
 
-    readonly timeStart: Date;
+    timeStart: SingleAccess<Date>;
 
     constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui, viewport: Viewport) {
         this.canvas = canvas;
@@ -83,13 +83,20 @@ export class GameController {
         this.viewport = viewport;
 
         this.lineCache = new LineCache();
-        this.timeStart = new Date();
-
-        const playerPositions = this.generatePlayerViews(canvas.width, canvas.height);
+        this.timeStart = new SingleAccess<Date>();
         this.currentPlayer = 0;
-        for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
-            this.players.push(new Player(i, "Player " + (i + 1), this.theme.nextPlayerColor(), playerPositions[i]));
+
+        this.theme = new SepiaTheme();
+    }
+    initialise(map: TanksMap, players: Player[]) {
+        this.map = map;
+
+        const playerPositions = this.generatePlayerViews(this.canvas.width, this.canvas.height);
+        for (const [id, player] of players.entries()) {
+            player.setViewportPosition(playerPositions[id]);
         }
+        (<any>this.players) = players;
+
         this.redrawCanvas();
     }
 
@@ -100,7 +107,7 @@ export class GameController {
      * Repeat until game over
      *  Moving, Shooting for P1
      *  Moving, Shooting for P2
-     * @param newState 
+     * @param newState The new state that the game will enter
      */
     changeGameState(newState: GameState) {
         this.ui.clear();
@@ -191,7 +198,7 @@ export class GameController {
         }
     }
     /** Clears everything from the canvas on the screen. To show anything afterwards it needs to be redrawn. */
-    clearCanvas(): void {
+    private clearCanvas(): void {
         this.context.fillStyle = this.theme.canvasBackground().toRGBA();
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -243,7 +250,7 @@ export class GameController {
      * For States after placement, it takes into account how many tanks the player has.
      * If the player has no tanks alive, then their turn will be skipped.
      */
-    nextActivePlayer(): void {
+    private nextActivePlayer(): void {
         if (this.state === GameState.TANK_PLACEMENT) {
             this.currentPlayer += 1;
         } else {
@@ -253,7 +260,7 @@ export class GameController {
             } while (this.players[this.currentPlayer].activeTanks().length === 0);
         }
     }
-    generatePlayerViews(canvasWidth: number, canvasHeight: number): Point[] {
+    private generatePlayerViews(canvasWidth: number, canvasHeight: number): Point[] {
         const points: Point[] = [];
         const N = Settings.NUM_PLAYERS + 1;
         for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
