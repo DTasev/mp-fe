@@ -17,6 +17,120 @@ import { LightTheme } from "../gameThemes/light";
 import { SepiaTheme } from "../gameThemes/sepia";
 import * as Settings from '../settings';
 
+class MenuStartGame {
+
+
+    static addMapChoices(middle: HTMLDivElement) {
+        const map_description = {
+            "div": {
+                "className": "w3-row",
+                "children": (() => {
+                    const e = {
+                        "div": {
+                            "className": "w3-col s3 m3 l3 w3-padding-64 w3-hover-gray",
+                            "textContent": "Map choice"
+                        }
+                    };
+                    const children = [];
+                    for (let i = 0; i < 4; i++) {
+                        children.push(e);
+                    }
+                    return children;
+                })()
+            }
+        };
+        middle.appendChild(J2H.parse(map_description));
+    }
+
+    static addPlayerSettings(middle: HTMLDivElement) {
+        const playerSettingsDescription = {
+            "div": {
+                "className": "w3-row",
+                "id": MenuState.ID_PLAYER_SETTINGS
+            }
+        };
+        middle.appendChild(J2H.parse(playerSettingsDescription));
+    }
+
+    static addPlayerNumberDisplay(middle: HTMLDivElement) {
+        const slider_valueDescription = {
+            "h1": {
+                "id": MenuState.ID_SLIDER_PLAYERS,
+                "textContent": "Players: 2"
+            }
+        };
+        middle.appendChild(J2H.parse(slider_valueDescription));
+    }
+
+    static addPlayerSlider(middle: HTMLDivElement) {
+        const sliderInput_description = {
+            "input": {
+                "type": "range",
+                "min": 2,
+                "max": 8,
+                "value": "2",
+                "className": "slider",
+                "id": MenuState.ID_SLIDER,
+                "oninput": MenuStartGame.chnageNumberOfPlayerSettings
+            }
+        };
+        const sliderInput = J2H.parse<HTMLInputElement>(sliderInput_description);
+        sliderInput.value = "2";
+        const slider_description = {
+            "div": {
+                "className": "slidecontainer"
+            }
+        };
+        const slider = J2H.parse(slider_description);
+        slider.appendChild(sliderInput);
+        middle.appendChild(slider);
+    }
+
+    static createPlayers(numPlayers: number, theme: ITheme) {
+        let players: Player[] = [];
+        for (let i = 0; i < numPlayers; i++) {
+            players.push(new Player(i, "Player " + (i + 1), theme.nextPlayerColor()));
+        }
+        return players;
+    }
+
+    static chnageNumberOfPlayerSettings(e: Event) {
+        const numPlayers = parseInt((<HTMLInputElement>document.getElementById(MenuState.ID_SLIDER)).value);
+        // update the visual for number of players
+
+        document.getElementById(MenuState.ID_SLIDER_PLAYERS).innerHTML = "Players: " + numPlayers
+        // add a new block of player options
+
+        const playerSettingsElement = document.getElementById(MenuState.ID_PLAYER_SETTINGS);
+        playerSettingsElement.innerHTML = "";
+        const generateSettingsDescription = (id: number) => {
+            return {
+                "div": {
+                    "className": "w3-col s3 m3 l3",
+                    "children": [{
+                        "div": {
+                            "className": "w3-row",
+                            "children": [{
+                                "label": {
+                                    "textContent": "Name: "
+                                }
+                            }, {
+                                "input": {
+                                    "value": "Player " + (id + 1),
+                                    "id": "player-settings-name-" + id
+                                }
+                            }]
+                        }
+                    }]
+                }
+            };
+        }
+
+        for (let i = 0; i < numPlayers; i++) {
+            playerSettingsElement.appendChild(J2H.parse(generateSettingsDescription(i)));
+        }
+    }
+}
 export class MenuState implements IActionState {
     static readonly CLASS_MENU_BUTTON = "w3-padding-32 w3-button tanks-ui-menu-button";
     static readonly CLASS_MENU_TITLE = "tanks-ui-menu-title";
@@ -86,103 +200,28 @@ export class MenuState implements IActionState {
 
     private quickStart = (e: MouseEvent) => {
         let map = new TanksMap("apples");
-        let players: Player[] = this.createPlayers(Settings.NUM_PLAYERS);
+        let players: Player[] = MenuStartGame.createPlayers(Settings.NUM_PLAYERS, this.controller.theme);
         this.startGame(map, players, e);
     }
 
-    private sliderPlayerChange = (e: Event) => {
-        const numPlayers = parseInt((<HTMLInputElement>document.getElementById(MenuState.ID_SLIDER)).value);
-        // update the visual for number of players
-
-        document.getElementById(MenuState.ID_SLIDER_PLAYERS).innerHTML = "Players: " + numPlayers
-        // add a new block of player options
-
-        const playerSettingsElement = document.getElementById(MenuState.ID_PLAYER_SETTINGS);
-        playerSettingsElement.innerHTML = "";
-        const settings_description = {
-            "div": {
-                "className": "w3-col s3 m3 l3",
-                "textContent": "Player stuff goes here"
-            }
-        }
-        for (let i = 0; i < numPlayers; i++) {
-            playerSettingsElement.appendChild(J2H.parse(settings_description));
-        }
-    }
     private showGameOptions = (e: MouseEvent) => {
         this.ui.body.clear();
         const [left, middle, right] = this.ui.body.addColumns();
 
-        const sliderInput_description = {
-            "input": {
-                "type": "range",
-                "min": 2,
-                "max": 8,
-                "value": "2",
-                "className": "slider",
-                "id": MenuState.ID_SLIDER,
-                "oninput": this.sliderPlayerChange
-            }
-        };
-
-        const sliderInput = J2H.parse<HTMLInputElement>(sliderInput_description);
-        sliderInput.value = "2";
-
-        const slider_description = {
-            "div": {
-                "className": "slidecontainer"
-            }
-        };
-
-        const slider = J2H.parse(slider_description);
-        slider.appendChild(sliderInput);
-        middle.appendChild(slider);
-
-        const slider_valueDescription = {
-            "h1": {
-                "id": MenuState.ID_SLIDER_PLAYERS,
-                "textContent": "Players: 2"
-            }
-        }
-        middle.appendChild(J2H.parse(slider_valueDescription));
-
-        const playerSettingsDescription = {
-            "div": {
-                "className": "w3-row",
-                "id": MenuState.ID_PLAYER_SETTINGS
-            }
-        };
-        middle.appendChild(J2H.parse(playerSettingsDescription));
-        debugger
-        this.sliderPlayerChange(null);
-
-        const map_description = {
-            "div": {
-                "className": "w3-row",
-                "children": (() => {
-                    const e = {
-                        "div": {
-                            "className": "w3-col s3 m3 l3 w3-padding-64 w3-hover-gray",
-                            "textContent": "Map choice"
-                        }
-                    };
-                    const children = [];
-                    for (let i = 0; i < 4; i++) {
-                        children.push(e);
-                    }
-                    return children;
-                })()
-            }
-        }
-
-        middle.appendChild(J2H.parse(map_description));
+        MenuStartGame.addPlayerSlider(middle);
+        MenuStartGame.addPlayerNumberDisplay(middle);
+        MenuStartGame.addPlayerSettings(middle);
+        MenuStartGame.addMapChoices(middle);
 
         const button_startDescription = {
             "button": {
                 "className": MenuState.CLASS_MENU_BUTTON,
                 "onclick": this.prepareGame
             }
-        }
+        };
+
+        const button_start = J2H.parse(button_startDescription);
+        middle.appendChild(button_start);
 
         const button_backDescription = {
             "button": {
@@ -197,12 +236,14 @@ export class MenuState implements IActionState {
         this.ui.body.htmlElement.appendChild(left);
         this.ui.body.htmlElement.appendChild(middle);
         this.ui.body.htmlElement.appendChild(right);
+
+        MenuStartGame.chnageNumberOfPlayerSettings(null);
     }
 
     private prepareGame = (e: MouseEvent) => {
         const numPlayers = parseInt((<HTMLInputElement>document.getElementById(MenuState.ID_SLIDER)).value);
         const map = new TanksMap("apples");
-        this.startGame(map, this.createPlayers(numPlayers), e);
+        this.startGame(map, MenuStartGame.createPlayers(numPlayers, this.controller.theme), e);
     }
 
     /**
@@ -248,12 +289,4 @@ export class MenuState implements IActionState {
         this.ui.body.htmlElement.appendChild(right);
     }
 
-
-    private createPlayers(numPlayers: number) {
-        let players: Player[] = [];
-        for (let i = 0; i < numPlayers; i++) {
-            players.push(new Player(i, "Player " + (i + 1), this.controller.theme.nextPlayerColor()));
-        }
-        return players;
-    }
 }
