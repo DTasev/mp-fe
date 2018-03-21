@@ -3,6 +3,9 @@
 // Global classes
 import Controls from './siteControls';
 window["Controls"] = Controls;
+import * as jscolor from "../lib/jscolor";
+window["jscolor"] = jscolor;
+
 
 // Internal classes
 import { Ui } from "./ui/ui";
@@ -31,8 +34,8 @@ function init() {
     console.log("Window vertical scroll:", hasVerticalScroll);
     // Don't subtract if there is no scrollbar
     const viewportWidth = hasVerticalScroll ? window.innerWidth - SCROLLBAR_WIDTH : window.innerWidth;
+    const viewportHeight = hasVerticalScroll ? window.innerHeight - SCROLLBAR_WIDTH : window.innerHeight;
 
-    const viewportHeight = window.innerHeight;
     const ui = new Ui(Ui.ID_GAME_UI, viewportWidth, viewportHeight);
 
     const viewport = new Viewport(canvas.width, canvas.height);

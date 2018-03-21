@@ -18,8 +18,6 @@ import { SepiaTheme } from "../gameThemes/sepia";
 import * as Settings from '../settings';
 
 class MenuStartGame {
-
-
     static addMapChoices(middle: HTMLDivElement) {
         const map_description = {
             "div": {
@@ -71,7 +69,7 @@ class MenuStartGame {
                 "value": "2",
                 "className": "slider",
                 "id": MenuState.ID_SLIDER,
-                "oninput": MenuStartGame.chnageNumberOfPlayerSettings
+                "oninput": MenuStartGame.changeNumberOfPlayerSettings
             }
         };
         const sliderInput = J2H.parse<HTMLInputElement>(sliderInput_description);
@@ -94,7 +92,7 @@ class MenuStartGame {
         return players;
     }
 
-    static chnageNumberOfPlayerSettings(e: Event) {
+    static changeNumberOfPlayerSettings(e: Event) {
         const numPlayers = parseInt((<HTMLInputElement>document.getElementById(MenuState.ID_SLIDER)).value);
         // update the visual for number of players
 
@@ -109,15 +107,31 @@ class MenuStartGame {
                     "className": "w3-col s3 m3 l3",
                     "children": [{
                         "div": {
-                            "className": "w3-row",
+                            "className": "w3-row w3-padding-64",
                             "children": [{
                                 "label": {
+                                    "className": "w3-col s3 m3 l3",
+                                    "for": MenuState.ID_PLAYER_NAME + id,
                                     "textContent": "Name: "
                                 }
                             }, {
                                 "input": {
+                                    "className": "w3-col s9 m9 l9",
                                     "value": "Player " + (id + 1),
-                                    "id": "player-settings-name-" + id
+                                    "style": "width:65%",
+                                    "id": MenuState.ID_PLAYER_NAME + id
+                                }
+                            }, {
+                                "label": {
+                                    "className": "w3-col s3 m3 l3",
+                                    "textContent": "Color:"
+                                }
+                            }, {
+                                "input": {
+                                    "className": "w3-col s9 m9 l9",
+                                    "type": "color",
+                                    "style": "width:65%",
+                                    "value": "#ff8844"
                                 }
                             }]
                         }
@@ -136,7 +150,8 @@ export class MenuState implements IActionState {
     static readonly CLASS_MENU_TITLE = "tanks-ui-menu-title";
     static readonly ID_SLIDER = "slider-players";
     static readonly ID_SLIDER_PLAYERS = "slider-players-value";
-    static readonly ID_PLAYER_SETTINGS = "startgame-player-settings";
+    static readonly ID_PLAYER_SETTINGS = "player-settings";
+    static readonly ID_PLAYER_NAME = "player-settings-name-";
 
 
     private controller: GameController;
@@ -208,8 +223,8 @@ export class MenuState implements IActionState {
         this.ui.body.clear();
         const [left, middle, right] = this.ui.body.addColumns();
 
-        MenuStartGame.addPlayerSlider(middle);
         MenuStartGame.addPlayerNumberDisplay(middle);
+        MenuStartGame.addPlayerSlider(middle);
         MenuStartGame.addPlayerSettings(middle);
         MenuStartGame.addMapChoices(middle);
 
@@ -237,7 +252,7 @@ export class MenuState implements IActionState {
         this.ui.body.htmlElement.appendChild(middle);
         this.ui.body.htmlElement.appendChild(right);
 
-        MenuStartGame.chnageNumberOfPlayerSettings(null);
+        MenuStartGame.changeNumberOfPlayerSettings(null);
     }
 
     private prepareGame = (e: MouseEvent) => {
