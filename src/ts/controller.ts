@@ -198,7 +198,7 @@ export class GameController {
         }
     }
     /** Clears everything from the canvas on the screen. To show anything afterwards it needs to be redrawn. */
-    private clearCanvas(): void {
+    clearCanvas(): void {
         this.context.fillStyle = this.theme.canvasBackground().toRGBA();
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -232,7 +232,6 @@ export class GameController {
      * @param friendlyFire Whether the player's own tanks can be collided with
      */
     collide(start: Point, end: Point, friendlyFire = false) {
-        console.log("-------------------- Starting Collision -------------------");
         if (friendlyFire) {
             throw new Error("Not implemented");
         }
@@ -250,7 +249,7 @@ export class GameController {
      * For States after placement, it takes into account how many tanks the player has.
      * If the player has no tanks alive, then their turn will be skipped.
      */
-    private nextActivePlayer(): void {
+    nextActivePlayer(): void {
         if (this.state === GameState.TANK_PLACEMENT) {
             this.currentPlayer += 1;
         } else {
@@ -265,7 +264,6 @@ export class GameController {
         const N = Settings.NUM_PLAYERS + 1;
         for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
             const point = new Point(i * (canvasWidth / N), i % 2 == 0 ? 0 : canvasHeight);
-            console.log("Player viewport position, X:", point.x, "Y:", point.y);
             points.push(point);
         }
         return points;

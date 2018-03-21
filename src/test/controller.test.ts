@@ -13,6 +13,8 @@ import { Line } from '../ts/utility/line';
 import { Point } from '../ts/utility/point';
 import { Tank } from '../ts/gameObjects/tank';
 import { DarkTheme } from '../ts/gameThemes/dark';
+import { Player } from '../ts/gameObjects/player';
+import { TanksMap } from '../ts/gameMap/tanksMap';
 
 class CanvasMock {
     onmousedown() { }
@@ -88,22 +90,31 @@ describe('Game Controller', () => {
         const mock_collision = new Mock(Collision, Collision.shooting);
         const controller = new GameController(canvasMock as any, contextMock as any, ui, viewport);
 
+        // add some players
+        controller["players"].push(new Player(0, "P1", Color.black()));
+        controller["players"].push(new Player(1, "P2", Color.black()));
+
         const line = new Line();
         line.points.push(new Point(0, 0));
         line.points.push(new Point(20, 20));
         line.points.push(new Point(40, 40));
         line.points.push(new Point(60, 60));
 
-        controller.collide(line, false);
+        for (let i = 0; i < line.points.length; i++) {
+            const start = line.points[i];
+            const end = line.points[i + 1];
+            controller.collide(start, end, false);
+        }
 
-        mock_collision.expect_called.once();
+        mock_collision.expect_called.quadrice();
         mock_collision.restore();
     })
     it('should get the next active player', () => {
         (Settings.NUM_PLAYERS as any) = 2;
         const controller = new GameController(canvasMock as any, contextMock as any, ui, viewport);
-
-        // set up a tank for each player
+        controller["players"].push(new Player(0, "P1", Color.black()));
+        controller["players"].push(new Player(0, "P1", Color.black()));
+        // set up a tank for .push player
         controller["players"][0].tanks.push(new Tank(0, controller["players"][0], 10, 10, theme));
         controller["players"][1].tanks.push(new Tank(0, controller["players"][1], 10, 10, theme));
 
@@ -115,7 +126,10 @@ describe('Game Controller', () => {
     })
     it('should redraw the tanks on the canvas', () => {
         (Settings.NUM_PLAYERS as any) = 2;
+
         const controller = new GameController(canvasMock as any, contextMock as any, ui, viewport);
+        controller.initialise(new TanksMap("a"), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())]);
+
 
         // set up a tank for each player
         const tank = new Tank(0, controller["players"][0], 10, 10, theme);
@@ -133,6 +147,8 @@ describe('Game Controller', () => {
     })
     it('should change the game state', () => {
         const controller = new GameController(canvasMock as any, contextMock as any, ui, viewport);
+        controller["players"].push(new Player(0, "P1", Color.black()));
+        controller["players"].push(new Player(0, "P1", Color.black()));
         const mock_windowScroll = new SingleCallMock(window, window.scroll);
         window.scroll = () => { mock_windowScroll.default_callback() };
         controller.changeGameState(GameState.TANK_PLACEMENT);
