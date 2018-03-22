@@ -5,6 +5,7 @@ import { IGameObject } from './iGameObject'
 import { Color } from "../drawing/color";
 import { GameState } from "../controller";
 import { ITheme } from "../gameThemes/iTheme";
+import { DarkTheme } from "../gameThemes/dark";
 
 export enum TankTurnState {
     /** The tank has performed an action this turn, e.g. moved or shot */
@@ -98,7 +99,6 @@ export class Tank implements IGameObject {
     readonly id: number;
     readonly player: Player;
 
-    health: number;
     position: Point;
 
     healthState: TankHealthState;
@@ -192,5 +192,8 @@ export class Tank implements IGameObject {
             case TankTurnState.SHOT:
                 return GameState.TANK_SELECTION;
         }
+    }
+    static sampleTank(x = 0, y = 0): Tank {
+        return new Tank(0, Player.samplePlayer(), x, y, new DarkTheme());
     }
 }

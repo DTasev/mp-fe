@@ -39,4 +39,7 @@ export class Player {
     setViewportPosition(viewportPosition: Point): void {
         this.viewportPosition = viewportPosition;
     }
+    static samplePlayer(): Player {
+        return new Player(0, "Test", Color.red());
+    }
 }

@@ -134,10 +134,11 @@ export class GameController {
 
         // if the state has marked the end of the player's turn, then we go to the next player
         const gameWinner = this.gameOver();
-
+        let itWasNextTurn = false;
         if (!gameWinner && this.nextPlayer) {
             this.nextActivePlayer();
             this.nextPlayer = false;
+            itWasNextTurn = true;
         }
 
         if (gameWinner) {
@@ -149,33 +150,47 @@ export class GameController {
 
         // only display the player's name if there is a player
         if (this.state !== GameState.MENU && this.state !== GameState.GAME_END) {
-            console.log("This is", player.name, "playing.");
             this.ui.setPlayer(player.name, this.theme);
+            if (itWasNextTurn) {
+                console.log("This is", player.name, "playing.");
+            }
         }
 
         switch (this.state) {
             case GameState.MENU:
-                console.log("Initialising MENU");
+                if (itWasNextTurn) {
+                    console.log("Initialising MENU");
+                }
                 this.action = new MenuState(this, this.ui);
                 break;
             case GameState.TANK_PLACEMENT:
-                console.log("Initialising TANK PLACING");
+                if (itWasNextTurn) {
+                    console.log("Initialising TANK PLACING");
+                }
                 this.action = new PlacingState(this, this.context, player);
                 break;
             case GameState.TANK_SELECTION:
-                console.log("Initialising TANK SELECTION");
+                if (itWasNextTurn) {
+                    console.log("Initialising TANK SELECTION");
+                }
                 this.action = new SelectionState(this, this.context, this.ui, player);
                 break;
             case GameState.TANK_MOVEMENT:
-                console.log("Initialising TANK MOVEMENT");
+                if (itWasNextTurn) {
+                    console.log("Initialising TANK MOVEMENT");
+                }
                 this.action = new MovingState(this, this.context, this.ui, player);
                 break;
             case GameState.TANK_SHOOTING:
-                console.log("Initialising TANK SHOOTING");
+                if (itWasNextTurn) {
+                    console.log("Initialising TANK SHOOTING");
+                }
                 this.action = new ShootingState(this, this.context, this.ui, player);
                 break;
             case GameState.GAME_END:
-                console.log("Initialising GAME END");
+                if (itWasNextTurn) {
+                    console.log("Initialising GAME END");
+                }
                 this.action = new GameEndState(this, this.ui, player);
                 break
             default:

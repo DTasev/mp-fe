@@ -2,11 +2,14 @@ import { expect } from 'chai';
 
 import { TanksMath } from "../../ts/utility/tanksMath";
 import { Point } from '../../ts/utility/point';
-import { Tank } from '../../ts/gameObjects/tank';
+import { Tank, TankHealthState } from '../../ts/gameObjects/tank';
 import { Collision } from '../../ts/utility/collision';
 import { IObstacleData } from "../../ts/gameMap/dataInterfaces";
 import { Obstacle } from '../../ts/gameMap/obstacle';
 import { Line } from '../../ts/utility/line';
+import { Player } from '../../ts/gameObjects/player';
+import { Color } from '../../ts/drawing/color';
+import { DarkTheme } from '../../ts/gameThemes/dark';
 
 const exampleMap = {
     "name": "Map",
@@ -362,5 +365,45 @@ describe('Collision - Shot line with Terrain', () => {
         forEachTwo(line, (i, intersection) => {
             expect(intersection).to.be.null;
         }, false);
+    });
+});
+describe('Collision - Shot with Tanks', () => {
+    const line = new Line();
+    line.points = [
+        new Point(1056, 197),
+        new Point(1085, 142)
+    ];
+
+    it('shot hits single tank', () => {
+        const tank = new Tank(0, Player.samplePlayer(), 1091, 153, new DarkTheme());
+        const farAwayTank = new Tank(0, Player.samplePlayer(), 1202, 644, new DarkTheme());
+
+        Collision.shooting(line.points[0], line.points[1], [tank]);
+        expect(tank.healthState).to.eq(TankHealthState.DEAD);
+        expect(farAwayTank.healthState).to.eq(TankHealthState.ALIVE);
+    });
+    it('shot hits multiple tanks', () => {
+        const tank = new Tank(0, Player.samplePlayer(), 1091, 153, new DarkTheme());
+        const tank2 = new Tank(0, Player.samplePlayer(), 1062, 192, new DarkTheme());
+
+        const farAwayTank = new Tank(0, Player.samplePlayer(), 1202, 644, new DarkTheme());
+
+        Collision.shooting(line.points[0], line.points[1], [tank, tank2]);
+        expect(tank.healthState).to.eq(TankHealthState.DEAD);
+        expect(tank2.healthState).to.eq(TankHealthState.DEAD);
+        expect(farAwayTank.healthState).to.eq(TankHealthState.ALIVE);
+    });
+    it('shot misses single tank', () => {
+        const tank = Tank.sampleTank(1155, 592);
+        Collision.shooting(line.points[0], line.points[1], [tank]);
+        expect(tank.healthState).to.eq(TankHealthState.ALIVE);
+    });
+    it('shot misses multiple tanks', () => {
+        const tank = Tank.sampleTank(1155, 592);
+        const tank2 = Tank.sampleTank(1203, 584);
+        Collision.shooting(line.points[0], line.points[1], [tank, tank2]);
+        expect(tank.healthState).to.eq(TankHealthState.ALIVE);
+        expect(tank2.healthState).to.eq(TankHealthState.ALIVE);
+
     });
 });

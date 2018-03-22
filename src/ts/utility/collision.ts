@@ -7,21 +7,23 @@ import { S } from "./stringFormat";
 import { Obstacle } from "../gameMap/obstacle";
 
 export class Collision {
-    static debugShot(start: Point, end: Point, tank: IGameObject, distance: number) {
+    private static debugCollisionLine(start: Point, end: Point) {
         console.log(S.format("Collision versus line:\n%s,%s\n%s,%s", start.x, -start.y, end.x, -end.y));
+    }
+    private static debugShot(tank: IGameObject, distance: number) {
         console.log(S.format("Tank ID: %s\nPosition: (%s,%s)", tank.id, tank.position.x, -tank.position.y));
         console.log("Distance: ", distance);
     }
     static shooting(start: Point, end: Point, tanks: IGameObject[]): void {
+        this.debugCollisionLine(start, end);
         // loop over all their tanks
         for (const tank of tanks) {
             // only do collision detection versus tanks that have not been already killed
             if (tank.healthState !== TankHealthState.DEAD) {
                 // check each segment of the line for collision with the tank
-
                 const dist = TanksMath.line.distCircleCenter(start, end, tank.position);
 
-                this.debugShot(start, end, tank, dist);
+                this.debugShot(tank, dist);
                 if (dist === -1) {
                     continue;
                 }
@@ -31,14 +33,10 @@ export class Collision {
                 if (Tank.WIDTH - Tank.DISABLED_ZONE <= dist && dist <= Tank.WIDTH + Tank.DISABLED_ZONE) {
                     tank.healthState = TankHealthState.DISABLED;
                     console.log("Tank", tank.id, "disabled!");
-                    // stop checking collision for this tank, and go on the next one
-                    break;
                 } // if the line passes through the tank, mark dead
                 else if (dist < Tank.WIDTH) {
                     tank.healthState = TankHealthState.DEAD;
                     console.log("Tank", tank.id, "dead!");
-                    // stop checking collision for this tank, and go on the next one
-                    break;
                 }
             }
         }
