@@ -1,20 +1,20 @@
 import { IActionState } from "./iActionState";
 import { GameController, GameState } from "../controller";
-import { IGameObject } from "../gameObjects/iGameObject";
+import { IGameObject } from "../objects/iGameObject";
 import { Point } from "../utility/point";
-import { Player } from "../gameObjects/player";
+import { Player } from "../objects/player";
 import { Draw } from "../drawing/draw";
 import { Viewport } from "../gameMap/viewport";
 import { Ui } from "../ui/ui";
 import { Color } from "../drawing/color";
 import { J2H } from "../json2html";
 import Controls from "../siteControls";
-import { ITheme } from "../gameThemes/iTheme";
-import { IPlayer } from "../gameObjects/iPlayer";
+import { ITheme } from "../themes/iTheme";
+import { IPlayer } from "../objects/iPlayer";
 import { TanksMap } from "../gameMap/tanksMap";
-import { DarkTheme } from "../gameThemes/dark";
-import { LightTheme } from "../gameThemes/light";
-import { SepiaTheme } from "../gameThemes/sepia";
+import { DarkTheme } from "../themes/dark";
+import { LightTheme } from "../themes/light";
+import { SepiaTheme } from "../themes/sepia";
 import * as Settings from '../settings';
 
 function getSliderValue(id: string) {

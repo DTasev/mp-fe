@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { Actions } from '../../ts/limiters/action'
-import { Point } from '../../ts/utility/point';
+import { Actions } from '../../ts/tanks/limiters/action'
+import { Point } from '../../ts/tanks/utility/point';
 
 describe('Action limiter', () => {
     const number_of_turns = 3;

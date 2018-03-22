@@ -1,6 +1,6 @@
 {
     "include": [
-        "./src/ts/*",
+        "./src/ts/tanks/*",
         "./src/ts/mc/*",
         "./src/test/*"
     ],

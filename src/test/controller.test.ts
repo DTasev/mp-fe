@@ -1,20 +1,20 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { GameController, GameState } from "../ts/controller";
+import { GameController, GameState } from "../ts/tanks/controller";
 import { Mock, SingleCallMock } from './mocking/mock';
 import { CanvasContextMock } from './mocking/canvasContextMock';
-import { Ui } from '../ts/ui/ui';
-import { Viewport } from '../ts/gameMap/viewport';
-import { Color } from '../ts/drawing/color';
-import { Collision } from '../ts/utility/collision';
-import * as Settings from '../ts/settings';
-import { Line } from '../ts/utility/line';
-import { Point } from '../ts/utility/point';
-import { Tank } from '../ts/gameObjects/tank';
-import { DarkTheme } from '../ts/gameThemes/dark';
-import { Player } from '../ts/gameObjects/player';
-import { TanksMap } from '../ts/gameMap/tanksMap';
+import { Ui } from '../ts/tanks/ui/ui';
+import { Viewport } from '../ts/tanks/gameMap/viewport';
+import { Color } from '../ts/tanks/drawing/color';
+import { Collision } from '../ts/tanks/utility/collision';
+import * as Settings from '../ts/tanks/settings';
+import { Line } from '../ts/tanks/utility/line';
+import { Point } from '../ts/tanks/utility/point';
+import { Tank } from '../ts/tanks/objects/tank';
+import { DarkTheme } from '../ts/tanks/themes/dark';
+import { Player } from '../ts/tanks/objects/player';
+import { TanksMap } from '../ts/tanks/gameMap/tanksMap';
 
 class CanvasMock {
     onmousedown() { }

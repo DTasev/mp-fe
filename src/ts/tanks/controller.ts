@@ -1,24 +1,24 @@
-import { IPlayState, IActionState } from "./gameStates/iActionState";
-import { MovingState } from "./gameStates/movement";
-import { PlacingState } from "./gameStates/placement";
-import { ShootingState } from "./gameStates/shooting";
-import { SelectionState } from "./gameStates/selection";
-import { GameEndState } from "./gameStates/gameEnd";
-import { MainMenu } from "./gameStates/menu";
-import { Player } from './gameObjects/player';
+import { IPlayState, IActionState } from "./states/iActionState";
+import { MovingState } from "./states/movement";
+import { PlacingState } from "./states/placement";
+import { ShootingState } from "./states/shooting";
+import { SelectionState } from "./states/selection";
+import { GameEndState } from "./states/gameEnd";
+import { MainMenu } from "./states/menu";
+import { Player } from './objects/player';
 import { Draw } from './drawing/draw';
 import { Color } from './drawing/color';
 import { Line } from './utility/line';
 import { LineCache } from './utility/lineCache';
 import { TanksMath } from './utility/tanksMath';
-import { Tank, TankHealthState } from './gameObjects/tank';
+import { Tank, TankHealthState } from './objects/tank';
 import { Point } from './utility/point';
-import { IGameObject } from './gameObjects/iGameObject';
+import { IGameObject } from './objects/iGameObject';
 import { Ui } from "./ui/ui";
 import { Collision } from "./utility/collision";
 import { Viewport } from "./gameMap/viewport";
-import { ITheme } from "./gameThemes/iTheme";
-import { IPlayer } from "./gameObjects/iPlayer";
+import { ITheme } from "./themes/iTheme";
+import { IPlayer } from "./objects/iPlayer";
 
 import * as Limit from './limiters/index'
 import * as Settings from './settings';
@@ -26,7 +26,6 @@ import { J2H } from "./json2html";
 import { CommonUi } from "./ui/common";
 import { TanksMap } from "./gameMap/tanksMap";
 import { SingleAccess } from "./utility/singleAccess";
-import { SepiaTheme } from "./gameThemes/sepia";
 import { determineCanvasSize } from "./gameMap/mapSize";
 
 export enum GameState {

@@ -1,4 +1,4 @@
-import { S } from "../../ts/utility/stringFormat";
+import { S } from "../../ts/tanks/utility/stringFormat";
 import 'mocha'
 import { expect } from "chai";
 

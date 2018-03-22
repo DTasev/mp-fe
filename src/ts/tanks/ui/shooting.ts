@@ -1,5 +1,5 @@
 import { J2H } from "../json2html";
-import { ITheme } from "../gameThemes/iTheme";
+import { ITheme } from "../themes/iTheme";
 
 export class ShootingUi {
     static button_skipTurn(theme: ITheme): HTMLButtonElement {

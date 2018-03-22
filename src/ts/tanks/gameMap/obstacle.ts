@@ -1,6 +1,6 @@
 import { Point } from "../utility/point";
 import { Color } from "../drawing/color";
-import { ITheme } from "../gameThemes/iTheme";
+import { ITheme } from "../themes/iTheme";
 import { Draw } from "../drawing/draw";
 import { IObstacleData } from "./dataInterfaces";
 

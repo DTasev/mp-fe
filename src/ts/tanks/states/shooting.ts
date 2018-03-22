@@ -2,11 +2,11 @@ import { J2H } from "../json2html";
 
 import { IPlayState } from "./iActionState";
 import { GameController, GameState } from "../controller";
-import { Player } from "../gameObjects/player";
+import { Player } from "../objects/player";
 import { Draw, DrawState } from "../drawing/draw";
-import { Tank, TankTurnState, TankColor } from "../gameObjects/tank";
+import { Tank, TankTurnState, TankColor } from "../objects/tank";
 import { Point } from "../utility/point";
-import { IGameObject } from "../gameObjects/iGameObject";
+import { IGameObject } from "../objects/iGameObject";
 import { TanksMath } from "../utility/tanksMath";
 import { Line } from "../utility/line";
 import { Color } from "../drawing/color";
@@ -16,7 +16,7 @@ import { ShootingUi } from "../ui/shooting";
 
 import * as Settings from '../settings';
 import * as Limit from "../limiters/index";
-import { ITheme } from "../gameThemes/iTheme";
+import { ITheme } from "../themes/iTheme";
 
 export class ShootingState implements IPlayState {
     context: CanvasRenderingContext2D;

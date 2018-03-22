@@ -2,17 +2,17 @@ import { IActionState, IPlayState } from "./iActionState";
 import { Draw, DrawState } from "../drawing/draw";
 import * as Limit from "../limiters/index";
 import { GameController, GameState } from "../controller";
-import { Player } from "../gameObjects/player";
+import { Player } from "../objects/player";
 import { TanksMath } from "../utility/tanksMath";
 import { Point } from "../utility/point";
-import { Tank, TankHealthState, TankTurnState, TankColor } from "../gameObjects/tank";
-import { IGameObject } from "../gameObjects/iGameObject";
+import { Tank, TankHealthState, TankTurnState, TankColor } from "../objects/tank";
+import { IGameObject } from "../objects/iGameObject";
 import { Color } from "../drawing/color";
 import { Ui } from "../ui/ui";
 import { J2H } from "../json2html";
 import { Viewport } from "../gameMap/viewport";
 import { MovementUi } from "../ui/movement";
-import { ITheme } from "../gameThemes/iTheme";
+import { ITheme } from "../themes/iTheme";
 
 export class MovingState implements IPlayState {
     context: CanvasRenderingContext2D;

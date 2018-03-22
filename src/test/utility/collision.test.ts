@@ -1,15 +1,15 @@
 import { expect } from 'chai';
 
-import { TanksMath } from "../../ts/utility/tanksMath";
-import { Point } from '../../ts/utility/point';
-import { Tank, TankHealthState } from '../../ts/gameObjects/tank';
-import { Collision } from '../../ts/utility/collision';
-import { IObstacleData } from "../../ts/gameMap/dataInterfaces";
-import { Obstacle } from '../../ts/gameMap/obstacle';
-import { Line } from '../../ts/utility/line';
-import { Player } from '../../ts/gameObjects/player';
-import { Color } from '../../ts/drawing/color';
-import { DarkTheme } from '../../ts/gameThemes/dark';
+import { TanksMath } from "../../ts/tanks/utility/tanksMath";
+import { Point } from '../../ts/tanks/utility/point';
+import { Tank, TankHealthState } from '../../ts/tanks/objects/tank';
+import { Collision } from '../../ts/tanks/utility/collision';
+import { IObstacleData } from "../../ts/tanks/gameMap/dataInterfaces";
+import { Obstacle } from '../../ts/tanks/gameMap/obstacle';
+import { Line } from '../../ts/tanks/utility/line';
+import { Player } from '../../ts/tanks/objects/player';
+import { Color } from '../../ts/tanks/drawing/color';
+import { DarkTheme } from '../../ts/tanks/themes/dark';
 
 const exampleMap = {
     "name": "Map",

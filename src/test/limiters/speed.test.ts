@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { Speed } from '../../ts/limiters/speed'
-import { Point } from '../../ts/utility/point';
+import { Speed } from '../../ts/tanks/limiters/speed'
+import { Point } from '../../ts/tanks/utility/point';
 
 describe('Speed limiter', () => {
     const distance = 25;

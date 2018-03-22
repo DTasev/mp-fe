@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { Length } from '../../ts/limiters/length'
-import { Point } from '../../ts/utility/point';
+import { Length } from '../../ts/tanks/limiters/length'
+import { Point } from '../../ts/tanks/utility/point';
 
 describe('Action limiter', () => {
     const length = 150;

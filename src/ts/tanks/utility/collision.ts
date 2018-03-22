@@ -1,5 +1,5 @@
-import { IGameObject } from "../gameObjects/iGameObject";
-import { TankHealthState, Tank } from "../gameObjects/tank";
+import { IGameObject } from "../objects/iGameObject";
+import { TankHealthState, Tank } from "../objects/tank";
 import { Line } from "./line";
 import { TanksMath } from "./tanksMath";
 import { Point } from "./point";

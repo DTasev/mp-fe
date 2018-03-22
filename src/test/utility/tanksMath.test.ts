@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { TanksMath } from "../../ts/utility/tanksMath";
-import { Point } from '../../ts/utility/point';
-import { Tank } from '../../ts/gameObjects/tank';
+import { TanksMath } from "../../ts/tanks/utility/tanksMath";
+import { Point } from '../../ts/tanks/utility/point';
+import { Tank } from '../../ts/tanks/objects/tank';
 
 describe('Tanks Math - Point', () => {
     it('should calculate distance between two points', () => {

@@ -2,7 +2,7 @@ const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = [{
-        entry: './src/build/ts/main.js',
+        entry: './src/build/tanks/main.js',
         plugins: [
             new CleanWebpackPlugin(['src/dist'])
         ],
@@ -12,7 +12,7 @@ module.exports = [{
         }
     },
     {
-        entry: './src/build/ts/mc/main.js',
+        entry: './src/build/mc/main.js',
         plugins: [
             new CleanWebpackPlugin(['src/dist/mc'])
         ],

@@ -1,13 +1,13 @@
 import { IPlayState } from "./iActionState";
 import { GameController, GameState } from "../controller";
-import { Player } from "../gameObjects/player";
+import { Player } from "../objects/player";
 import { TanksMath } from "../utility/tanksMath";
 import { Draw } from "../drawing/draw";
-import { Tank, TankHealthState, TankTurnState } from "../gameObjects/tank";
+import { Tank, TankHealthState, TankTurnState } from "../objects/tank";
 import { Ui } from "../ui/ui";
-import { IGameObject } from "../gameObjects/iGameObject";
+import { IGameObject } from "../objects/iGameObject";
 import { Viewport } from "../gameMap/viewport";
-import { ITheme } from "../gameThemes/iTheme";
+import { ITheme } from "../themes/iTheme";
 
 export class SelectionState implements IPlayState {
     context: CanvasRenderingContext2D;

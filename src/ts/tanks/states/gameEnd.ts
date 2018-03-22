@@ -1,15 +1,15 @@
 import { IActionState } from "./iActionState";
 import { GameController, GameState } from "../controller";
-import { IGameObject } from "../gameObjects/iGameObject";
+import { IGameObject } from "../objects/iGameObject";
 import { Point } from "../utility/point";
-import { Player } from "../gameObjects/player";
+import { Player } from "../objects/player";
 import { Draw } from "../drawing/draw";
 import { S } from "../utility/stringFormat";
 import { Viewport } from "../gameMap/viewport";
 import { Ui } from "../ui/ui";
 import { J2H } from "../json2html";
 import { Color } from "../drawing/color";
-import { ITheme } from "../gameThemes/iTheme";
+import { ITheme } from "../themes/iTheme";
 
 
 export class GameEndState implements IActionState {

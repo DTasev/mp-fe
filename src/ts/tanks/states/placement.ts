@@ -1,15 +1,15 @@
 import { IPlayState } from "./iActionState";
 import { GameController, GameState } from "../controller";
-import { Tank } from "../gameObjects/tank";
+import { Tank } from "../objects/tank";
 import { Draw } from "../drawing/draw";
-import { Player } from "../gameObjects/player";
+import { Player } from "../objects/player";
 import { Ui } from "../ui/ui";
 
 import * as Settings from '../settings';
 import * as Limit from "../limiters/index";
 import { Viewport } from "../gameMap/viewport";
 import { CommonUi } from "../ui/common";
-import { ITheme } from "../gameThemes/iTheme";
+import { ITheme } from "../themes/iTheme";
 
 export class PlacingState implements IPlayState {
     // keeps track of how many players have placed their tanks IN TOTAL

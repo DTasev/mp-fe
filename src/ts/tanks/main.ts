@@ -3,7 +3,7 @@
 // Global classes
 import Controls from './siteControls';
 window["Controls"] = Controls;
-import { MainMenu, PublicMenuStartGame } from './gameStates/menu';
+import { MainMenu, PublicMenuStartGame } from './states/menu';
 window["PublicMenuStartGame"] = PublicMenuStartGame;
 
 

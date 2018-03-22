@@ -4,8 +4,8 @@ import { Draw } from "../drawing/draw";
 import { IGameObject } from './iGameObject'
 import { Color } from "../drawing/color";
 import { GameState } from "../controller";
-import { ITheme } from "../gameThemes/iTheme";
-import { DarkTheme } from "../gameThemes/dark";
+import { ITheme } from "../themes/iTheme";
+import { DarkTheme } from "../themes/dark";
 
 export enum TankTurnState {
     /** The tank has performed an action this turn, e.g. moved or shot */

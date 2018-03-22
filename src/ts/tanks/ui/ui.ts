@@ -1,12 +1,12 @@
 import { J2H } from "../json2html";
 import { Viewport } from "../gameMap/viewport";
-import { Player } from "../gameObjects/player";
+import { Player } from "../objects/player";
 import { CommonUi } from "./common";
 import { Color } from "../drawing/color";
 import { UiHeading } from "./uiHeading";
 import { UiBody } from "./uiBody";
 import { GameController } from "../controller";
-import { ITheme } from "../gameThemes/iTheme";
+import { ITheme } from "../themes/iTheme";
 
 
 export class Ui {
