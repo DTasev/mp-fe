@@ -117,14 +117,14 @@ export class Tank implements IGameObject {
 
         // initialise colors for each of the tank's states
         this.color = new TankColor(
-            theme.tankActive().toRGBA(),
-            theme.tankActiveOutline().toRGBA(),
-            theme.tankLabel().toRGBA(this.LABEL_OPACITY),
-            this.player.color.toRGBA(),
-            this.player.color.toRGBA(this.DISABLED_OPACITY),
-            theme.tankDead().toRGBA(),
-            theme.tankShootingLine().toRGBA(),
-            theme.tankMovementLine().toRGBA()
+            theme.tankActive().rgba(),
+            theme.tankActiveOutline().rgba(),
+            theme.tankLabel().rgba(this.LABEL_OPACITY),
+            this.player.color.rgba(),
+            this.player.color.rgba(this.DISABLED_OPACITY),
+            theme.tankDead().rgba(),
+            theme.tankShootingLine().rgba(),
+            theme.tankMovementLine().rgba()
         );
     }
 

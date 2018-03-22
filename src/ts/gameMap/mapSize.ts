@@ -5,14 +5,14 @@ export enum MapSize {
     MEDIUM,
     LARGE
 }
-export function determineMapSize(): [number, number] {
+export function determineCanvasSize(numPlayers: number): [number, number] {
     // const height = window.innerHeight * 0.995;
     // take 90% of the window, leave a bit of gap on the right
     // const width = window.innerWidth;
 
     const mapSize = MapSize.MEDIUM;
-    const width = 1024 * Settings.NUM_PLAYERS;
+    const width = Math.min(1024 * numPlayers, 4096);
     const height = width / 2;
-    console.log("Players:", Settings.NUM_PLAYERS, "Canvas size width:", width, "height:", height);
+    console.log("Players:", numPlayers, "Canvas size width:", width, "height:", height);
     return [width, height];
 }

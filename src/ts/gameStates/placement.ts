@@ -13,7 +13,7 @@ import { ITheme } from "../gameThemes/iTheme";
 
 export class PlacingState implements IPlayState {
     // keeps track of how many players have placed their tanks IN TOTAL
-    private static playersTankPlacement = new Limit.Actions(Settings.NUM_PLAYERS);
+    static playersTankPlacement: Limit.Actions;
 
     context: CanvasRenderingContext2D;
     controller: GameController;
@@ -32,7 +32,12 @@ export class PlacingState implements IPlayState {
         this.controller = controller;
         this.context = context;
         this.draw = new Draw();
-        this.tanksPlaced = new Limit.Actions(Settings.NUM_TANKS);
+        this.tanksPlaced = new Limit.Actions(controller.numTanks);
+
+        if (!PlacingState.playersTankPlacement) {
+            PlacingState.playersTankPlacement = new Limit.Actions(controller.numPlayers);
+        }
+
         this.player = player;
     }
 

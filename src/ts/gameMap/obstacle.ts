@@ -29,10 +29,10 @@ export class Obstacle {
     draw(context: CanvasRenderingContext2D, theme: ITheme): void {
         const length = this.points.length;
         for (let i = 1; i < length; i++) {
-            Draw.line(context, this.points[i - 1], this.points[i], 1, theme.mapObstacle(this.type).toRGBA());
+            Draw.line(context, this.points[i - 1], this.points[i], 1, theme.mapObstacle(this.type).rgba());
         }
         // connect the last one to the first one
-        Draw.line(context, this.points[length - 1], this.points[0], 1, theme.mapObstacle(this.type).toRGBA());
+        Draw.line(context, this.points[length - 1], this.points[0], 1, theme.mapObstacle(this.type).rgba());
     }
 
     typeFromString(obstacleType: string): ObstacleType {

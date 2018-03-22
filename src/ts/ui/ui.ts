@@ -106,10 +106,10 @@ export class Ui {
     }
 
     background(color: Color) {
-        this.container.style.backgroundColor = color.toRGBA();
+        this.container.style.backgroundColor = color.rgba();
     }
     textColor(color: Color) {
-        this.container.style.color = color.toRGBA();
+        this.container.style.color = color.rgba();
     }
     setController(controller: GameController): void {
         this.controller = controller;

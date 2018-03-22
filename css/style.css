@@ -101,6 +101,19 @@
     /* Cursor on hover */
 }
 
+input.player-color[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+}
+
+input.player-color[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+input.player-color[type="color"]::-webkit-color-swatch {
+    border: none;
+}
+
 /* Sidebar classes */
 
 #button-submit>button {

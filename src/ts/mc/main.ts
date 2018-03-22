@@ -1,6 +1,6 @@
 import * as Settings from '../settings';
 
-import { determineMapSize } from "../gameMap/mapSize";
+import { determineCanvasSize } from "../gameMap/mapSize";
 import { Draw, DrawState } from "../drawing/draw";
 import { Color } from '../drawing/color';
 import { LineCache } from '../utility/lineCache';
@@ -11,7 +11,7 @@ let draw: Draw;
 let context: CanvasRenderingContext2D;
 let lineCache = new LineCache();
 let line = new Line();
-const lineColor = Color.black().toRGBA();
+const lineColor = Color.black().rgba();
 
 function startDrawingMap(e: MouseEvent) {
     draw.updateMousePosition(e);

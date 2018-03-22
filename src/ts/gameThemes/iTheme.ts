@@ -19,7 +19,7 @@ export interface ITheme {
     playerTurnTextClass(): string;
     playerMessageClass(): string;
 
-    nextPlayerColor(): Color;
+    playerColors(): Color[];
 
     // Game colors
     canvasBackground(): Color;

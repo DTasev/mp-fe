@@ -27,6 +27,7 @@ import { CommonUi } from "./ui/common";
 import { TanksMap } from "./gameMap/tanksMap";
 import { SingleAccess } from "./utility/singleAccess";
 import { SepiaTheme } from "./gameThemes/sepia";
+import { determineCanvasSize } from "./gameMap/mapSize";
 
 export enum GameState {
     MENU,
@@ -51,8 +52,9 @@ export class GameController {
     private readonly canvas: HTMLCanvasElement;
     private readonly context: CanvasRenderingContext2D;
     private readonly ui: Ui;
-    private readonly viewport: Viewport;
 
+    /** The player's current view of the canvas. */
+    private viewport: Viewport;
     /** The current state of the game */
     private state: GameState;
     /** The current event that carries out the actions for the state */
@@ -66,6 +68,9 @@ export class GameController {
     private readonly lineCache: LineCache;
     private map: TanksMap;
 
+    /** The number of players in the game */
+    readonly numPlayers: number;
+    readonly numTanks: number;
     /** Flag to specify if the current player's turn is over */
     nextPlayer: boolean = false;
 
@@ -76,11 +81,10 @@ export class GameController {
 
     timeStart: SingleAccess<Date>;
 
-    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui, viewport: Viewport) {
+    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui) {
         this.canvas = canvas;
         this.context = context;
         this.ui = ui;
-        this.viewport = viewport;
 
         this.lineCache = new LineCache();
         this.timeStart = new SingleAccess<Date>();
@@ -88,8 +92,17 @@ export class GameController {
 
         this.theme = new SepiaTheme();
     }
-    initialise(map: TanksMap, players: Player[]) {
+
+    initialise(map: TanksMap, players: Player[], numTanks: number) {
         this.map = map;
+        (<any>this.numPlayers) = players.length;
+        (<any>this.numTanks) = numTanks;
+
+        const [canvasWidth, canvasHeight] = determineCanvasSize(this.numPlayers);
+        this.canvas.width = canvasWidth;
+        this.canvas.height = canvasHeight;
+        this.viewport = new Viewport(canvasWidth, canvasHeight);
+        this.viewport.middle();
 
         const playerPositions = this.generatePlayerViews(this.canvas.width, this.canvas.height);
         for (const [id, player] of players.entries()) {
@@ -199,7 +212,7 @@ export class GameController {
     }
     /** Clears everything from the canvas on the screen. To show anything afterwards it needs to be redrawn. */
     clearCanvas(): void {
-        this.context.fillStyle = this.theme.canvasBackground().toRGBA();
+        this.context.fillStyle = this.theme.canvasBackground().rgba();
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -216,7 +229,7 @@ export class GameController {
             }
         }
 
-        const oldLinesColor = this.theme.oldLinesColor().toRGBA();
+        const oldLinesColor = this.theme.oldLinesColor().rgba();
         // draw the last N lines
         for (const line_path of this.lineCache.active()) {
             for (let i = 1; i < line_path.points.length; i++) {
@@ -255,14 +268,14 @@ export class GameController {
         } else {
             do {
                 // if this is the last player, it will revert back to zero, otherwise just increment
-                this.currentPlayer = this.currentPlayer === Settings.NUM_PLAYERS - 1 ? 0 : this.currentPlayer + 1;
+                this.currentPlayer = this.currentPlayer === this.numPlayers - 1 ? 0 : this.currentPlayer + 1;
             } while (this.players[this.currentPlayer].activeTanks().length === 0);
         }
     }
     private generatePlayerViews(canvasWidth: number, canvasHeight: number): Point[] {
         const points: Point[] = [];
-        const N = Settings.NUM_PLAYERS + 1;
-        for (let i = 0; i < Settings.NUM_PLAYERS; i++) {
+        const N = this.numPlayers + 1;
+        for (let i = 0; i < this.numPlayers; i++) {
             const point = new Point(i * (canvasWidth / N), i % 2 == 0 ? 0 : canvasHeight);
             points.push(point);
         }

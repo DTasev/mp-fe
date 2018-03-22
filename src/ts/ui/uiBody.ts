@@ -9,7 +9,7 @@ export class UiBody {
     }
 
     textColor(color: Color) {
-        this.htmlElement.style.color = color.toRGBA();
+        this.htmlElement.style.color = color.rgba();
     }
     textAlign(position: string = "center") {
         this.htmlElement.style.textAlign = position;

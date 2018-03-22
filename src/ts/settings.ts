@@ -1,3 +1,3 @@
-export const NUM_PLAYERS: number = 2;
-export const NUM_TANKS: number = 1;
+export const DEFAULT_NUMBER_PLAYERS = 2;
+export const DEFAULT_NUMBER_TANKS = 1;
 export const ID_GAME_CANVAS = "tanks-canvas";

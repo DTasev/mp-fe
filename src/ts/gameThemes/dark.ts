@@ -3,21 +3,12 @@ import { Color } from "../drawing/color";
 
 export class DarkTheme implements ITheme {
     private currentColor: number = 0;
-    nextPlayerColor(): Color {
-        if (this.currentColor == 0) {
-            this.currentColor++;
-            return Color.red();
-        } else if (this.currentColor == 1) {
-            this.currentColor++;
-            return Color.blue();
-        } else if (this.currentColor == 2) {
-            this.currentColor++;
-            return Color.green();
-        } else if (this.currentColor == 3) {
-            this.currentColor++;
-            return Color.yellow();
-        }
-        throw new Error("You've used all the available colours!");
+    playerColors(): Color[] {
+        return [
+            Color.red(),
+            Color.blue(),
+            Color.yellow()
+        ];
     }
     menuBackground(): Color {
         return Color.black();

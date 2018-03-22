@@ -12,7 +12,7 @@ import { Ui } from "./ui/ui";
 import { GameController, GameState } from './controller';
 import { Viewport } from './gameMap/viewport';
 import * as Settings from './settings';
-import { determineMapSize } from "./gameMap/mapSize";
+import { determineCanvasSize } from "./gameMap/mapSize";
 
 // Scrollbar Width for browsers
 // Source: https://www.textfixer.com/tutorials/browser-scrollbar-width.php
@@ -20,11 +20,6 @@ const SCROLLBAR_WIDTH = 17;
 
 // Set-up the canvas and add our event handlers after the page has loaded
 function init() {
-    const [canvasWidth, canvasHeight] = determineMapSize();
-
-    const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
     window.onscroll = (e: Event) => {
         ui.moveToFitView(e);
     };
@@ -38,10 +33,10 @@ function init() {
 
     const ui = new Ui(Ui.ID_GAME_UI, viewportWidth, viewportHeight);
 
-    const viewport = new Viewport(canvas.width, canvas.height);
-    viewport.middle();
 
-    const controller = new GameController(canvas, canvas.getContext("2d"), ui, viewport);
+    const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
+
+    const controller = new GameController(canvas, canvas.getContext("2d"), ui);
     ui.setController(controller);
 
     // start the game in Menu state

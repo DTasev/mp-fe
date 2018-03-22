@@ -57,11 +57,11 @@ export class UiHeading {
     }
 
     background(color: Color) {
-        this.htmlElement.style.backgroundColor = color.toRGBA();
+        this.htmlElement.style.backgroundColor = color.rgba();
     }
 
     textColor(color: Color) {
-        this.htmlElement.style.color = color.toRGBA();
+        this.htmlElement.style.color = color.rgba();
     }
 
     addHome(viewport: Viewport, player: Player, theme: ITheme): any {
