@@ -86,63 +86,76 @@ class MenuStartGame {
 
     static createPlayers(numPlayers: number, theme: ITheme) {
         let players: Player[] = [];
+        const colors = theme.playerColors();
         for (let i = 0; i < numPlayers; i++) {
-            players.push(new Player(i, "Player " + (i + 1), theme.nextPlayerColor()));
+            players.push(new Player(i, "Player " + (i + 1), colors[i]));
         }
         return players;
     }
 
-    static changeNumberOfPlayerSettings(e: Event) {
-        const numPlayers = parseInt((<HTMLInputElement>document.getElementById(MenuState.ID_SLIDER)).value);
+    static changeNumberOfPlayerSettings(e: Event, playerColors: Color[]) {
+        const newNumberOfPlayers = parseInt((<HTMLInputElement>document.getElementById(MenuState.ID_SLIDER)).value);
         // update the visual for number of players
 
-        document.getElementById(MenuState.ID_SLIDER_PLAYERS).innerHTML = "Players: " + numPlayers
+        document.getElementById(MenuState.ID_SLIDER_PLAYERS).innerHTML = "Players: " + newNumberOfPlayers
         // add a new block of player options
 
         const playerSettingsElement = document.getElementById(MenuState.ID_PLAYER_SETTINGS);
-        playerSettingsElement.innerHTML = "";
-        const generateSettingsDescription = (id: number) => {
-            return {
-                "div": {
-                    "className": "w3-col s3 m3 l3",
-                    "children": [{
-                        "div": {
-                            "className": "w3-row w3-padding-64",
-                            "children": [{
-                                "label": {
-                                    "className": "w3-col s3 m3 l3",
-                                    "for": MenuState.ID_PLAYER_NAME + id,
-                                    "textContent": "Name: "
-                                }
-                            }, {
-                                "input": {
-                                    "className": "w3-col s9 m9 l9",
-                                    "value": "Player " + (id + 1),
-                                    "style": "width:65%",
-                                    "id": MenuState.ID_PLAYER_NAME + id
-                                }
-                            }, {
-                                "label": {
-                                    "className": "w3-col s3 m3 l3",
-                                    "textContent": "Color:"
-                                }
-                            }, {
-                                "input": {
-                                    "className": "w3-col s9 m9 l9",
-                                    "type": "color",
-                                    "style": "width:65%",
-                                    "value": "#ff8844"
-                                }
-                            }]
-                        }
-                    }]
-                }
-            };
+        const currentNumberOfPlayers = playerSettingsElement.children.length;
+        const playerDifference = newNumberOfPlayers - currentNumberOfPlayers;
+
+        // if players have been removed, then drop the children
+        if (playerDifference < 0) {
+            playerSettingsElement.removeChild(playerSettingsElement.lastChild);
+        } else {
+            // players have been added
+            const generateSettingsDescription = (id: number) => {
+                return {
+                    "div": {
+                        "className": "w3-col s3 m3 l3",
+                        "children": [{
+                            "div": {
+                                "className": "w3-row w3-padding-64",
+                                "children": [{
+                                    "label": {
+                                        "className": "w3-col s3 m3 l3",
+                                        "for": MenuState.ID_PLAYER_NAME + id,
+                                        "textContent": "Name: "
+                                    }
+                                }, {
+                                    "input": {
+                                        "className": "w3-col s9 m9 l9",
+                                        "value": "Player " + (id + 1),
+                                        "style": "width:65%",
+                                        "id": MenuState.ID_PLAYER_NAME + id
+                                    }
+                                }, {
+                                    "label": {
+                                        "className": "w3-col s3 m3 l3",
+                                        "textContent": "Color:",
+                                        "for": MenuState.ID_PLAYER_COLOR + id
+                                    }
+                                }, {
+                                    "input": {
+                                        "className": "w3-col s9 m9 l9",
+                                        "type": "color",
+                                        "style": "width:65%",
+                                        "value": "#ff8844",
+                                        "id": MenuState.ID_PLAYER_COLOR + id
+                                    }
+                                }]
+                            }
+                        }]
+                    }
+                };
+            }
+
+            // subtract the number of already present players
+            for (let i = 0; i < playerDifference; i++) {
+                playerSettingsElement.appendChild(J2H.parse(generateSettingsDescription(i + currentNumberOfPlayers + 1)));
+            }
         }
 
-        for (let i = 0; i < numPlayers; i++) {
-            playerSettingsElement.appendChild(J2H.parse(generateSettingsDescription(i)));
-        }
     }
 }
 export class MenuState implements IActionState {
@@ -152,6 +165,7 @@ export class MenuState implements IActionState {
     static readonly ID_SLIDER_PLAYERS = "slider-players-value";
     static readonly ID_PLAYER_SETTINGS = "player-settings";
     static readonly ID_PLAYER_NAME = "player-settings-name-";
+    static readonly ID_PLAYER_COLOR = "player-settings-color-";
 
 
     private controller: GameController;
@@ -252,7 +266,7 @@ export class MenuState implements IActionState {
         this.ui.body.htmlElement.appendChild(middle);
         this.ui.body.htmlElement.appendChild(right);
 
-        MenuStartGame.changeNumberOfPlayerSettings(null);
+        MenuStartGame.changeNumberOfPlayerSettings(null, this.controller.theme.playerColors());
     }
 
     private prepareGame = (e: MouseEvent) => {
