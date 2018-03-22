@@ -14,7 +14,7 @@ describe('Drawing', () => {
     let mock_context: CanvasContextMock;
     const test_coords: Point = new Point(23, 23);
     const expected_width = 11414;
-    const color = Color.red().toRGBA();
+    const color = Color.red().rgba();
 
     beforeEach(() => {
         mock_context = new CanvasContextMock();

@@ -3,8 +3,6 @@
 // Global classes
 import Controls from './siteControls';
 window["Controls"] = Controls;
-import * as jscolor from "../lib/jscolor";
-window["jscolor"] = jscolor;
 
 
 // Internal classes
