@@ -64,14 +64,14 @@ describe('Game Controller', () => {
         viewport = new Viewport(canvasMock.width, canvasMock.height);
     });
     it('should construct', () => {
-        const controller = new GameController(canvasMock as any, contextMock as any, ui);
+        const controller = new GameController(canvasMock as any, contextMock as any, ui, theme, new TanksMap("a"), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
         expect(controller["currentPlayer"]).to.eq(0);
         canvasMock.mock_onmousedown.called.never();
         canvasMock.mock_onmouseup.called.never();
         canvasMock.mock_onmousemove.called.never();
     });
     it('should clear canvas', () => {
-        const controller = new GameController(canvasMock as any, contextMock as any, ui);
+        const controller = new GameController(canvasMock as any, contextMock as any, ui, theme, new TanksMap("a"), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
         controller.clearCanvas();
 
         contextMock.mock_fillRect.expect_called.once();
@@ -85,7 +85,7 @@ describe('Game Controller', () => {
     it('should perform collision', () => {
         // enforce having two player with two tanks each, for a total of 2 collision calls
         const mock_collision = new Mock(Collision, Collision.shooting);
-        const controller = new GameController(canvasMock as any, contextMock as any, ui);
+        const controller = new GameController(canvasMock as any, contextMock as any, ui, theme, new TanksMap("a"), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
 
         // add some players
         controller["players"].push(new Player(0, "P1", Color.black()));
@@ -107,8 +107,7 @@ describe('Game Controller', () => {
         mock_collision.restore();
     })
     it('should get the next active player', () => {
-        const controller = new GameController(canvasMock as any, contextMock as any, ui);
-        controller.initialise(new TanksMap("a"), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
+        const controller = new GameController(canvasMock as any, contextMock as any, ui, theme, new TanksMap("a"), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
 
         // set up a tank for .push player
         controller["players"][0].tanks.push(new Tank(0, controller["players"][0], 10, 10, theme));
@@ -121,8 +120,7 @@ describe('Game Controller', () => {
         expect(controller["currentPlayer"]).to.eq(0);
     })
     it('should redraw the tanks on the canvas', () => {
-        const controller = new GameController(canvasMock as any, contextMock as any, ui);
-        controller.initialise(new TanksMap("a"), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
+        const controller = new GameController(canvasMock as any, contextMock as any, ui, theme, new TanksMap("a"), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
 
         // set up a tank for each player
         const tank = new Tank(0, controller["players"][0], 10, 10, theme);
@@ -139,8 +137,7 @@ describe('Game Controller', () => {
         mock_tank2.expect_called.once();
     })
     it('should change the game state', () => {
-        const controller = new GameController(canvasMock as any, contextMock as any, ui);
-        controller.initialise(new TanksMap("a"), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
+        const controller = new GameController(canvasMock as any, contextMock as any, ui, theme, new TanksMap("a"), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
 
         controller["players"].push(new Player(0, "P1", Color.black()));
         controller["players"].push(new Player(0, "P1", Color.black()));

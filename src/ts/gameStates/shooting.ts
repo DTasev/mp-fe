@@ -111,12 +111,12 @@ export class ShootingState implements IPlayState {
             // if the player is just moving about on the tank's space
             if (this.tankRoamingLength.in(this.active.position, this.draw.mouse)) {
                 console.log("Roaming in tank space");
-                this.ui.message("");
+                this.ui.message("", this.controller.theme);
                 this.validRange(this.active.color);
             } // if the player has shot far away start drawing the line
             else if (this.shotSpeed.enough(this.active.position, this.draw.mouse)) {
                 console.log("Shooting!");
-                this.ui.message("");
+                this.ui.message("", this.controller.theme);
                 this.validRange(this.active.color);
 
                 // only add to the shot path if the shot was successful
@@ -130,7 +130,7 @@ export class ShootingState implements IPlayState {
                     this.draw.state = DrawState.STOPPED;
                 }
             } else {
-                this.ui.message("Shooting too slow!");
+                this.ui.message("Shooting too slow!", this.controller.theme);
                 console.log("Shooting too slow!");
                 this.draw.state = DrawState.STOPPED;
             }

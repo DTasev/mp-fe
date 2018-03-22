@@ -4,7 +4,7 @@ import { PlacingState } from "./gameStates/placement";
 import { ShootingState } from "./gameStates/shooting";
 import { SelectionState } from "./gameStates/selection";
 import { GameEndState } from "./gameStates/gameEnd";
-import { MenuState } from "./gameStates/menu";
+import { MainMenu } from "./gameStates/menu";
 import { Player } from './gameObjects/player';
 import { Draw } from './drawing/draw';
 import { Color } from './drawing/color';
@@ -30,7 +30,6 @@ import { SepiaTheme } from "./gameThemes/sepia";
 import { determineCanvasSize } from "./gameMap/mapSize";
 
 export enum GameState {
-    MENU,
     TANK_PLACEMENT,
     TANK_MOVEMENT,
     TANK_SELECTION,
@@ -66,37 +65,31 @@ export class GameController {
 
     /** Stores the all of the shot lines */
     private readonly lineCache: LineCache;
-    private map: TanksMap;
+    private readonly map: TanksMap;
 
     /** The number of players in the game */
     readonly numPlayers: number;
     readonly numTanks: number;
-    /** Flag to specify if the current player's turn is over */
-    nextPlayer: boolean = false;
-
     /** The current color theme of the game */
     // theme: ITheme = new DarkTheme();
     // theme: ITheme = new LightTheme();
-    theme: ITheme;
+    readonly theme: ITheme;
 
-    timeStart: SingleAccess<Date>;
+    /** Flag to specify if the current player's turn is over */
+    nextPlayer: boolean = false;
+    readonly timeStart: SingleAccess<Date>;
 
-    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui) {
+    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui, theme: ITheme, map: TanksMap, players: Player[], numTanks: number) {
         this.canvas = canvas;
         this.context = context;
         this.ui = ui;
-
-        this.lineCache = new LineCache();
-        this.timeStart = new SingleAccess<Date>();
-        this.currentPlayer = 0;
-
-        this.theme = new SepiaTheme();
-    }
-
-    initialise(map: TanksMap, players: Player[], numTanks: number) {
+        this.theme = theme;
         this.map = map;
-        (<any>this.numPlayers) = players.length;
-        (<any>this.numTanks) = numTanks;
+        this.lineCache = new LineCache();
+
+        this.currentPlayer = 0;
+        this.numPlayers = players.length;
+        this.numTanks = numTanks;
 
         const [canvasWidth, canvasHeight] = determineCanvasSize(this.numPlayers);
         this.canvas.width = canvasWidth;
@@ -108,9 +101,10 @@ export class GameController {
         for (const [id, player] of players.entries()) {
             player.setViewportPosition(playerPositions[id]);
         }
-        (<any>this.players) = players;
+        this.players = players;
 
         this.redrawCanvas();
+        this.timeStart = new SingleAccess<Date>(new Date());
     }
 
     /**
@@ -149,7 +143,7 @@ export class GameController {
         const player = <Player>gameWinner || this.players[this.currentPlayer];
 
         // only display the player's name if there is a player
-        if (this.state !== GameState.MENU && this.state !== GameState.GAME_END) {
+        if (this.state !== GameState.GAME_END) {
             this.ui.setPlayer(player.name, this.theme);
             if (itWasNextTurn) {
                 console.log("This is", player.name, "playing.");
@@ -157,12 +151,6 @@ export class GameController {
         }
 
         switch (this.state) {
-            case GameState.MENU:
-                if (itWasNextTurn) {
-                    console.log("Initialising MENU");
-                }
-                this.action = new MenuState(this, this.ui);
-                break;
             case GameState.TANK_PLACEMENT:
                 if (itWasNextTurn) {
                     console.log("Initialising TANK PLACING");
@@ -203,7 +191,7 @@ export class GameController {
         this.action.addEventListeners(this.canvas);
     }
     private gameOver(): Player | boolean {
-        if (this.state !== GameState.MENU && this.state !== GameState.TANK_PLACEMENT) {
+        if (this.state !== GameState.TANK_PLACEMENT) {
             let onePlayerHasTanks = false;
             let winner: Player;
             for (const player of this.players) {

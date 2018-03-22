@@ -1,7 +1,11 @@
 export class SingleAccess<T> {
     private resource: T = null;
     private accessed: boolean = false;
-
+    constructor(resource?: T) {
+        if (resource) {
+            this.set(resource);
+        }
+    }
     set(resource: T) {
         this.resource = resource;
         this.accessed = false;

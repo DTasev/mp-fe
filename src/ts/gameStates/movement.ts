@@ -90,7 +90,7 @@ export class MovingState implements IPlayState {
             tank.position = this.draw.mouse.copy();
             tank.actionState = TankTurnState.MOVED;
 
-            this.ui.message("");
+            this.ui.message("", this.controller.theme);
 
             // set the player's viewport position to the last position they were looking at
             this.player.viewportPosition = Viewport.current();

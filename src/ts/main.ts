@@ -3,6 +3,8 @@
 // Global classes
 import Controls from './siteControls';
 window["Controls"] = Controls;
+import { MainMenu, PublicMenuStartGame } from './gameStates/menu';
+window["PublicMenuStartGame"] = PublicMenuStartGame;
 
 
 // Internal classes
@@ -30,16 +32,9 @@ function init() {
     const viewportHeight = hasVerticalScroll ? window.innerHeight - SCROLLBAR_WIDTH : window.innerHeight;
 
     const ui = new Ui(Ui.ID_GAME_UI, viewportWidth, viewportHeight);
-
-
     const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
-
-    const controller = new GameController(canvas, canvas.getContext("2d"), ui);
-    ui.setController(controller);
-
-    // start the game in Menu state
-    controller.changeGameState(GameState.MENU);
-    canvas.scrollIntoView();
+    const mainMenu = new MainMenu(ui, canvas);
+    mainMenu.setUpUi();
 }
 
 init(); 

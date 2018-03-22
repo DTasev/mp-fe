@@ -96,11 +96,11 @@ export class Ui {
         this.container.style.left = window.pageXOffset + "px";
         this.container.style.top = window.pageYOffset + "px";
     }
-    message(msg: string) {
+    message(msg: string, theme: ITheme) {
         this.heading.message.add(J2H.parse({
             "b": {
                 "textContent": msg,
-                "className": "fa-2x " + this.controller.theme.playerMessageClass()
+                "className": "fa-2x " + theme.playerMessageClass()
             }
         }));
     }
