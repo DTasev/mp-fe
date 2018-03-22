@@ -32,6 +32,8 @@ export class Player {
         return this.tanks.filter((tank) => tank.healthState !== TankHealthState.DEAD);
     }
     resetTanksActStates(): any {
+        // clears the limiter for how many tanks have shot
+        this.tanksShot.clear();
         for (const tank of this.tanks) {
             tank.actionState = TankTurnState.NOT_ACTED;
         }

@@ -22,4 +22,9 @@ export class SingleAccess<T> {
             throw new Error("Unknown error with single access object");
         }
     }
+    clear() {
+        if (this.available()) {
+            this.resource = null;
+        }
+    }
 }

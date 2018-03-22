@@ -150,6 +150,7 @@ export class ShootingState implements IPlayState {
         // the shot must be sucessfull - (i.e. fast enough), and must not collide with any terrain
         if (this.successfulShot) {
             playerTanksShot.take();
+            console.log("Player has taken a successful shot, limit:", playerTanksShot.limit, "left:", playerTanksShot.left())
             this.active.actionState = TankTurnState.SHOT;
 
             // for each segment of the path, perform collision
@@ -183,6 +184,7 @@ export class ShootingState implements IPlayState {
 
         // if all the player's tank have shot
         if (playerTanksShot.over()) {
+            console.log("Player shooting turn over!");
             // reset the current player's tank act states
             this.player.resetTanksActStates();
             // change to the next player when the state is next changed
