@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { Draw } from "../../ts/drawing/draw";
+import { Draw } from "../../ts/tanks/drawing/draw";
 import { SingleCallMock } from "../mocking/mock";
 import { CanvasContextMock } from "../mocking/canvasContextMock";
-import { Point } from "../../ts/utility/point";
-import { Color } from '../../ts/drawing/color';
+import { Point } from "../../ts/tanks/utility/point";
+import { Color } from '../../ts/tanks/drawing/color';
 
 
 describe('Drawing', () => {
