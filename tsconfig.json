@@ -2,6 +2,7 @@
     "include": [
         "./src/ts/tanks/*",
         "./src/ts/mc/*",
+        "./src/ts/ms/*",
         "./src/test/*"
     ],
     "compilerOptions": {

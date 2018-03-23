@@ -3,7 +3,9 @@
     "version": "1.0.0",
     "description": "Tanks game",
     "main": "src/dist/bundle.js",
-    "dependencies": {},
+    "dependencies": {
+        "@types/emscripten": "0.0.31"
+    },
     "devDependencies": {
         "@types/chai": "^4.1.2",
         "@types/mocha": "^2.2.48",
