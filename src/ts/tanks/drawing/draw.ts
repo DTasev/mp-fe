@@ -129,6 +129,35 @@ export class Draw {
 
         context.closePath();
     }
+    static closedShape(context: CanvasRenderingContext2D, points: Point[], width: number, color: string, fill = false, fillStyle: string = null) {
+        // Select a fill style
+        context.strokeStyle = color;
+
+        // Set the line "cap" style to round, so lines at different angles can join into each other
+        context.lineCap = "round";
+        context.lineJoin = "round";
+
+        // Draw a filled line
+        context.beginPath();
+        // First, move to the old (previous) position
+        context.moveTo(points[0].x, points[0].y);
+
+        for (const point of points) {
+            // Now draw a line to the current touch/pointer position
+            context.lineTo(point.x, point.y);
+        }
+        // close the lines my moving to the beginning
+        context.lineTo(points[0].x, points[0].y);
+
+        context.lineWidth = width;
+        context.stroke();
+
+        if (fill) {
+            context.fillStyle = fillStyle;
+            context.fill();
+        }
+        context.closePath();
+    }
 
     updateMousePosition(e: MouseEvent) {
         // if the browser hasn't passed a parameter, but has set the global event variable

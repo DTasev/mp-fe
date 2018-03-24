@@ -3,7 +3,7 @@ import { Line } from "./line";
 import { TanksMath } from "./tanksMath";
 import { Point } from "./point";
 import { S } from "./stringFormat";
-import { Obstacle } from "../gameMap/obstacle";
+import { Obstacle, ObstacleType } from "../gameMap/obstacle";
 
 export class Collision {
     private static debugCollisionLine(start: Point, end: Point) {
@@ -64,15 +64,18 @@ export class Collision {
     }
     static lineWithTerrain(start: Point, end: Point, obstacles: Obstacle[]): Point {
         for (const obstacle of obstacles) {
-            // collides each segment of the shot line against the obstacle
-            // if the shot line goes THROUGH the obstacle, then there will be a collision
-            // if the shot line DOES NOT go through the obstacle, then there will be no collision
-            const [left, right, intersection] = TanksMath.line.closestTwo(start, end, obstacle.points);
-            if (left && right) {
-                // the line goes through the obstacle
-                // 2 is added to account for being the end of the shot line segment (which would be i + 1, or p2)
-                // and another +1 is added for the slice with which the points are filtered later.
-                return intersection;
+            // shots do NOT collide with water
+            if (obstacle.type !== ObstacleType.WATER) {
+                // collides each segment of the shot line against the obstacle
+                // if the shot line goes THROUGH the obstacle, then there will be a collision
+                // if the shot line DOES NOT go through the obstacle, then there will be no collision
+                const [left, right, intersection] = TanksMath.line.closestTwo(start, end, obstacle.points);
+                if (left && right) {
+                    // the line goes through the obstacle
+                    // 2 is added to account for being the end of the shot line segment (which would be i + 1, or p2)
+                    // and another +1 is added for the slice with which the points are filtered later.
+                    return intersection;
+                }
             }
         }
         return null;

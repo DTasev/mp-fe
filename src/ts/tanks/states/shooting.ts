@@ -158,11 +158,11 @@ export class ShootingState implements IPlayState {
             for (i = 0; i < shotPathLength - 1; i++) {
                 const start = this.shotPath.points[i];
                 const end = this.shotPath.points[i + 1];
-                // if the shot segment is not colliding with any terrain do tank collision
-                // TODO return the collision point from lineCollidingWithTerrain -> this is the new line with which
-                // the this.controller.collide should be run! This means we can check for tanks that are hit next to the
-                // obstacle
+
                 const shotTerrainCollisionPoint: Point = this.controller.lineCollidingWithTerrain(start, end);
+                // if there is a collision point, use it as the END OF THE SHOT, this means if there is a tank in
+                // that space it will still be hit, furthermore no more collision is done as the rest of the shot
+                // is inside the obstacle
                 if (shotTerrainCollisionPoint) {
                     // the NEW END is the collision point of the shot with the obstacle
                     this.controller.collide(start, shotTerrainCollisionPoint);

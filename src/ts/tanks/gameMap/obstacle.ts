@@ -30,11 +30,19 @@ export class Obstacle {
 
     draw(context: CanvasRenderingContext2D, theme: ITheme): void {
         const length = this.points.length;
-        for (let i = 1; i < length; i++) {
-            Draw.line(context, this.points[i - 1], this.points[i], 1, theme.mapObstacle(this.type).rgba());
+        const [fill, fillStyle] = this.getFill();
+        Draw.closedShape(context, this.points, 1, theme.mapObstacle(this.type).rgba(), fill, fillStyle);
+    }
+    private getFill(): [boolean, string] {
+        switch (this.type) {
+            case ObstacleType.SOLID:
+                return [false, null];
+            case ObstacleType.WATER:
+                return [true, Color.brightblue().rgba()];
+            default:
+                throw new Error("Obstacle type not supported. Error type: " + this.type);
+
         }
-        // connect the last one to the first one
-        Draw.line(context, this.points[length - 1], this.points[0], 1, theme.mapObstacle(this.type).rgba());
     }
 
     private typeFromString(obstacleType: string): ObstacleType {
@@ -57,7 +65,8 @@ export class Obstacle {
                 throw new Error("Obstacle type not supported. Error type: " + this.type);
         }
     }
-    effectFromType(): IEffect {
+
+    private effectFromType(): IEffect {
         return new SlowEffect();
     }
     affect(tank: Tank) {
