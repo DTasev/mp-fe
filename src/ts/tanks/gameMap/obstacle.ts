@@ -5,8 +5,8 @@ import { Draw } from "../drawing/draw";
 import { IObstacleData } from "./dataInterfaces";
 
 export enum ObstacleType {
-    SOLID,
-    WATER
+    SOLID, // cannot move through
+    WATER // will slow the tank down to half speed for 1 movement
 }
 export class Obstacle {
     points: Point[];
@@ -20,7 +20,6 @@ export class Obstacle {
 
         const obstacleData = obstacleDescription.points;
         const length = obstacleData.length;
-        // traverse two at a time
         for (const obstacle of obstacleData) {
             this.points.push(new Point(obstacle.x, obstacle.y));
         }

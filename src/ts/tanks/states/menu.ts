@@ -32,7 +32,6 @@ export class PublicMenuStartGame {
 class MenuStartGame {
     static playerColors: Color[];
     static addThemeChoices(middle: HTMLDivElement) {
-
         const commonClasses = "w3-col s4 m4 l4 w3-padding-16 w3-hover-gray ";
         const activeClass = "w3-red";
         const d_themes = {
@@ -69,6 +68,7 @@ class MenuStartGame {
         }
         middle.appendChild(J2H.parse(d_themes));
     }
+
     static addMapChoices(middle: HTMLDivElement) {
         const map_description = {
             "div": {
