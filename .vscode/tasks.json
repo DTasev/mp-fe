@@ -66,6 +66,24 @@
             "group": "build",
             "label": "emcc build",
             "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "W:/Dev/js/emsdk/emscripten/1.37.36/emcc.py",
+                "${workspaceRoot}/src/c/mapScanner.c",
+                "-o",
+                "${workspaceRoot}/src/build/ts/ms/ms.js",
+                "-s", // below we have to escape the escape character so that the shell can escape the escape character. K?
+                "EXPORTED_FUNCTIONS=\\\"['_myimage']\\\"", // end result looks like EXPORTED_FUNCTIONS=\"['_myimage']\"
+                "-s",
+                "EXTRA_EXPORTED_RUNTIME_METHODS=\\\"['cwrap']\\\"",
+                "-O1"
+            ],
+            "group": "build",
+            "label": "emcc build O1",
+            "problemMatcher": []
         }
     ]
 }
