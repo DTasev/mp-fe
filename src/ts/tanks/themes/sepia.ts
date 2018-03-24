@@ -2,6 +2,7 @@ import { ITheme } from "./iTheme";
 import { Color } from "../drawing/color";
 
 export class SepiaTheme implements ITheme {
+    name = "sepia";
     private currentColor: number = 0;
     playerColors(): Color[] {
         return [

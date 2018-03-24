@@ -12,9 +12,8 @@ import Controls from "../siteControls";
 import { ITheme } from "../themes/iTheme";
 import { IPlayer } from "../objects/iPlayer";
 import { TanksMap } from "../gameMap/tanksMap";
-import { DarkTheme } from "../themes/dark";
-import { LightTheme } from "../themes/light";
-import { SepiaTheme } from "../themes/sepia";
+import { ThemeFactory } from "../themes/themeFactory";
+import { TanksCache } from "../utility/tanksCache";
 import * as Settings from '../settings';
 
 function getSliderValue(id: string) {
@@ -41,7 +40,7 @@ class MenuStartGame {
                 "className": "w3-row w3-margin",
                 "children": [{
                     "div": {
-                        "className": commonClasses + activeClass,
+                        "className": commonClasses,
                         "textContent": "Sepia",
                         "onclick": 'PublicMenuStartGame.toggle(this, "' + activeClass + '")',
                         "id": MainMenu.ID_THEME
@@ -61,6 +60,13 @@ class MenuStartGame {
                 }]
             }
         };
+        for (const child of d_themes.div.children) {
+            if (child.div.textContent.toLowerCase() === TanksCache.theme) {
+                child.div.className += activeClass;
+                child.div.id = MainMenu.ID_THEME;
+                break;
+            }
+        }
         middle.appendChild(J2H.parse(d_themes));
     }
     static addMapChoices(middle: HTMLDivElement) {
@@ -265,15 +271,14 @@ export class MainMenu implements IActionState {
     static readonly ID_THEME = "tanks-theme";
     static readonly ID_MAP = "tanks-map";
 
-    private ui: Ui;
-    theme: ITheme;
-    private canvas: HTMLCanvasElement;
+    private readonly ui: Ui;
+    private readonly theme: ITheme;
+    private readonly canvas: HTMLCanvasElement;
 
     constructor(ui: Ui, canvas: HTMLCanvasElement) {
         this.ui = ui;
         this.canvas = canvas;
-        // TODO add a default in settings or something
-        this.theme = new SepiaTheme();
+        this.theme = ThemeFactory.create(TanksCache.theme);
     }
 
     addEventListeners(canvas: HTMLCanvasElement) { }
@@ -321,7 +326,6 @@ export class MainMenu implements IActionState {
         const button_mapCreator = <HTMLButtonElement>button_startGame.cloneNode();
         button_account.textContent = "Map Creator";
         button_account.onclick = () => { window.location.assign("mc.html"); }
-
 
         middle.appendChild(button_startGame);
         middle.appendChild(button_quickStart);
@@ -390,23 +394,15 @@ export class MainMenu implements IActionState {
      */
     private startGame = (map: TanksMap, players: Player[], numTanks: number, e: MouseEvent) => {
         this.ui.showCanvas();
-        let theme: ITheme;
 
-        switch (document.getElementById(MainMenu.ID_THEME).textContent) {
-            case "Sepia":
-                theme = new SepiaTheme();
-                break;
-            case "Dark":
-                theme = new DarkTheme();
-                break;
-            case "Light":
-                theme = new LightTheme();
-                break;
-            default:
-                throw new Error("Inconsistent state, theme unknown.");
-        }
+        // retrieve the selected theme from the start game screen
+        const themeInput = document.getElementById(MainMenu.ID_THEME);
+        // if not present (when quick start is pressed) or the theme is the same, use the current theme
+        const gameTheme = themeInput && themeInput.textContent !== this.theme.name ? ThemeFactory.create(themeInput.textContent) : this.theme;
+        // cache the theme, so that next time the player runs the game it will be that theme
+        TanksCache.theme = gameTheme.name;
 
-        const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, theme, map, players, numTanks);
+        const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, gameTheme, map, players, numTanks);
         controller.changeGameState(GameState.TANK_PLACEMENT);
     }
     private showOptions = (e: MouseEvent) => {

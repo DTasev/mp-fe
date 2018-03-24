@@ -2,12 +2,18 @@ import { ITheme } from "./iTheme";
 import { Color } from "../drawing/color";
 
 export class LightTheme implements ITheme {
+    name = "light";
     private currentColor: number = 0;
     playerColors(): Color[] {
         return [
             Color.red(),
-            Color.green(),
             Color.blue(),
+            Color.green(),
+            Color.pink(),
+            Color.lilac(),
+            Color.orange(),
+            Color.purple(),
+            Color.maroon()
         ];
     }
     menuBackground(): Color {

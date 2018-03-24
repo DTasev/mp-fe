@@ -70,8 +70,6 @@ export class GameController {
     readonly numPlayers: number;
     readonly numTanks: number;
     /** The current color theme of the game */
-    // theme: ITheme = new DarkTheme();
-    // theme: ITheme = new LightTheme();
     readonly theme: ITheme;
 
     /** Flag to specify if the current player's turn is over */

@@ -2,12 +2,18 @@ import { ITheme } from "./iTheme";
 import { Color } from "../drawing/color";
 
 export class DarkTheme implements ITheme {
+    name = "dark";
     private currentColor: number = 0;
     playerColors(): Color[] {
         return [
             Color.red(),
             Color.blue(),
-            Color.yellow()
+            Color.green(),
+            Color.pink(),
+            Color.lilac(),
+            Color.orange(),
+            Color.purple(),
+            Color.maroon()
         ];
     }
     menuBackground(): Color {
