@@ -7,18 +7,13 @@ import { GameEndState } from "./states/gameEnd";
 import { MainMenu } from "./states/menu";
 import { Player } from './objects/player';
 import { Draw } from './drawing/draw';
-import { Color } from './drawing/color';
 import { Line } from './utility/line';
 import { LineCache } from './utility/lineCache';
-import { TanksMath } from './utility/tanksMath';
-import { Tank, TankHealthState } from './objects/tank';
 import { Point } from './utility/point';
-import { IGameObject } from './objects/iGameObject';
 import { Ui } from "./ui/ui";
 import { Collision } from "./utility/collision";
 import { Viewport } from "./gameMap/viewport";
 import { ITheme } from "./themes/iTheme";
-import { IPlayer } from "./objects/iPlayer";
 
 import * as Limit from './limiters/index'
 import * as Settings from './settings';
@@ -27,6 +22,7 @@ import { CommonUi } from "./ui/common";
 import { TanksMap } from "./gameMap/tanksMap";
 import { SingleAccess } from "./utility/singleAccess";
 import { determineCanvasSize } from "./gameMap/mapSize";
+import { Obstacle } from "./gameMap/obstacle";
 
 export enum GameState {
     TANK_PLACEMENT,
@@ -72,7 +68,6 @@ export class GameController {
     /** The current color theme of the game */
     readonly theme: ITheme;
 
-    /** Flag to specify if the current player's turn is over */
     nextPlayer: boolean = false;
     readonly timeStart: SingleAccess<Date>;
 
@@ -282,7 +277,7 @@ export class GameController {
         return points;
     }
 
-    collidingWithTerrain(point: Point, radius: number): boolean {
+    collidingWithTerrain(point: Point, radius: number): Obstacle {
         return Collision.terrain(point, radius, this.map.terrain);
     }
 

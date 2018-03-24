@@ -6,7 +6,6 @@ import { Player } from "../objects/player";
 import { Draw, DrawState } from "../drawing/draw";
 import { Tank, TankTurnState, TankColor } from "../objects/tank";
 import { Point } from "../utility/point";
-import { IGameObject } from "../objects/iGameObject";
 import { TanksMath } from "../utility/tanksMath";
 import { Line } from "../utility/line";
 import { Color } from "../drawing/color";
@@ -27,7 +26,7 @@ export class ShootingState implements IPlayState {
     draw: Draw;
 
     /** The current active tank */
-    active: IGameObject;
+    active: Tank;
 
     /** The limiter for the deadzone for moving around inside the tank before a shot */
     tankRoamingLength: Limit.Length;

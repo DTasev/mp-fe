@@ -3,6 +3,9 @@ import { Color } from "../drawing/color";
 import { ITheme } from "../themes/iTheme";
 import { Draw } from "../drawing/draw";
 import { IObstacleData } from "./dataInterfaces";
+import { IEffect } from "../objects/effects/iEffect";
+import { SlowEffect } from "../objects/effects/slow";
+import { Tank } from "../objects/tank";
 
 export enum ObstacleType {
     SOLID, // cannot move through
@@ -34,7 +37,7 @@ export class Obstacle {
         Draw.line(context, this.points[length - 1], this.points[0], 1, theme.mapObstacle(this.type).rgba());
     }
 
-    typeFromString(obstacleType: string): ObstacleType {
+    private typeFromString(obstacleType: string): ObstacleType {
         switch (obstacleType.toLowerCase()) {
             case "solid":
                 return ObstacleType.SOLID;
@@ -43,5 +46,21 @@ export class Obstacle {
             default:
                 throw new Error("Obstacle type not supported. Error type: " + obstacleType);
         }
+    }
+    traversable(): boolean {
+        switch (this.type) {
+            case ObstacleType.SOLID:
+                return false;
+            case ObstacleType.WATER:
+                return true;
+            default:
+                throw new Error("Obstacle type not supported. Error type: " + this.type);
+        }
+    }
+    effectFromType(): IEffect {
+        return new SlowEffect();
+    }
+    affect(tank: Tank) {
+        tank.effects.push(this.effectFromType());
     }
 }

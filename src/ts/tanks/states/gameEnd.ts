@@ -1,6 +1,5 @@
 import { IActionState } from "./iActionState";
 import { GameController, GameState } from "../controller";
-import { IGameObject } from "../objects/iGameObject";
 import { Point } from "../utility/point";
 import { Player } from "../objects/player";
 import { Draw } from "../drawing/draw";

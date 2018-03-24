@@ -1,6 +1,5 @@
 import { IActionState } from "./iActionState";
 import { GameController, GameState } from "../controller";
-import { IGameObject } from "../objects/iGameObject";
 import { Point } from "../utility/point";
 import { Player } from "../objects/player";
 import { Draw } from "../drawing/draw";
@@ -10,7 +9,6 @@ import { Color } from "../drawing/color";
 import { J2H } from "../json2html";
 import Controls from "../siteControls";
 import { ITheme } from "../themes/iTheme";
-import { IPlayer } from "../objects/iPlayer";
 import { TanksMap } from "../gameMap/tanksMap";
 import { ThemeFactory } from "../themes/themeFactory";
 import { TanksCache } from "../utility/tanksCache";

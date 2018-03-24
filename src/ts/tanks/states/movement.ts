@@ -6,7 +6,6 @@ import { Player } from "../objects/player";
 import { TanksMath } from "../utility/tanksMath";
 import { Point } from "../utility/point";
 import { Tank, TankHealthState, TankTurnState, TankColor } from "../objects/tank";
-import { IGameObject } from "../objects/iGameObject";
 import { Color } from "../drawing/color";
 import { Ui } from "../ui/ui";
 import { J2H } from "../json2html";
@@ -22,7 +21,7 @@ export class MovingState implements IPlayState {
 
     draw: Draw;
     line: Limit.Length;
-    active: IGameObject;
+    active: Tank;
     tankValidPosition: boolean;
 
     constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
@@ -32,7 +31,6 @@ export class MovingState implements IPlayState {
         this.ui = ui;
 
         this.draw = new Draw();
-        this.line = new Limit.Length(Tank.MOVEMENT_RANGE);
         this.active = this.player.activeTank.get();
     }
 
@@ -61,6 +59,8 @@ export class MovingState implements IPlayState {
         if (e.button != 0) {
             return;
         }
+        this.line = new Limit.Length(this.active.movementRange);
+
         // limit the start of the line to be the tank
         this.draw.last = new Point(this.active.position.x, this.active.position.y);
         // limit the length of the line to the maximum allowed tank movement, and disabled tanks can't be moved
@@ -84,11 +84,23 @@ export class MovingState implements IPlayState {
         this.line.reset();
 
         // only act if the position is valid
-        if (this.tankValidPosition && !this.controller.collidingWithTerrain(this.draw.mouse, Tank.WIDTH)) {
+        if (this.tankValidPosition) {
+            const collisionObstacle = this.controller.collidingWithTerrain(this.draw.mouse, Tank.WIDTH);
             // update the position of the tank in the player array
-            const tank = this.player.tanks[this.active.id]
-            tank.position = this.draw.mouse.copy();
-            tank.actionState = TankTurnState.MOVED;
+            const tank = this.player.tanks[this.active.id];
+            // exhaust any previous effects on the tank
+            tank.afterTurnEffects();
+
+            // the tank will be moved provided: there is no obstacle
+            // OR the obstacle is traversable, and the tank will get an effect
+            // if it is NOT traversable, the tank will not move
+            if (!collisionObstacle || collisionObstacle.traversable()) {
+                tank.position = this.draw.mouse.copy();
+                tank.actionState = TankTurnState.MOVED;
+                if (collisionObstacle) {
+                    collisionObstacle.affect(tank);
+                }
+            }
 
             this.ui.message("", this.controller.theme);
 

@@ -1,4 +1,3 @@
-import { IGameObject } from "../objects/iGameObject";
 import { TankHealthState, Tank } from "../objects/tank";
 import { Line } from "./line";
 import { TanksMath } from "./tanksMath";
@@ -10,11 +9,11 @@ export class Collision {
     private static debugCollisionLine(start: Point, end: Point) {
         console.log(S.format("Collision versus line:\n%s,%s\n%s,%s", start.x, -start.y, end.x, -end.y));
     }
-    private static debugShot(tank: IGameObject, distance: number) {
+    private static debugShot(tank: Tank, distance: number) {
         console.log(S.format("Tank ID: %s\nPosition: (%s,%s)", tank.id, tank.position.x, -tank.position.y));
         console.log("Distance: ", distance);
     }
-    static shooting(start: Point, end: Point, tanks: IGameObject[]): void {
+    static shooting(start: Point, end: Point, tanks: Tank[]): void {
         this.debugCollisionLine(start, end);
         // loop over all their tanks
         for (const tank of tanks) {
@@ -49,7 +48,7 @@ export class Collision {
      * @param radius The radius around the point
      * @param obstacles 
      */
-    static terrain(point: Point, radius: number, obstacles: Obstacle[]): boolean {
+    static terrain(point: Point, radius: number, obstacles: Obstacle[]): Obstacle {
         // TODO filter out irrelevant obstacles
         for (const obstacle of obstacles) {
             // TODO filter out irrelevant points
@@ -58,10 +57,10 @@ export class Collision {
             // if there is no closest line points, then the tank is inside the obstacle
             // if there is closest line points, the line will be collided against the circle
             if (!left || !right || TanksMath.line.collideCircle(left, right, point, radius)) {
-                return true;
+                return obstacle;
             }
         }
-        return false;
+        return null;
     }
     static lineWithTerrain(start: Point, end: Point, obstacles: Obstacle[]): Point {
         for (const obstacle of obstacles) {

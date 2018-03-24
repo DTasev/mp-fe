@@ -5,7 +5,6 @@ import { TanksMath } from "../utility/tanksMath";
 import { Draw } from "../drawing/draw";
 import { Tank, TankHealthState, TankTurnState } from "../objects/tank";
 import { Ui } from "../ui/ui";
-import { IGameObject } from "../objects/iGameObject";
 import { Viewport } from "../gameMap/viewport";
 import { ITheme } from "../themes/iTheme";
 
@@ -16,7 +15,7 @@ export class SelectionState implements IPlayState {
     draw: Draw;
     ui: Ui;
 
-    currentActiveTank: IGameObject;
+    currentActiveTank: Tank;
 
     constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
@@ -80,8 +79,9 @@ export class SelectionState implements IPlayState {
         }
     }
 
-    private successfulSelection(tank: IGameObject) {
-        tank.highlight(this.context, this.draw);
+    private successfulSelection(tank: Tank) {
+        tank.highlight(this.context);
+        tank.beforeTurnEffects();
         // store the details of the active tank
         this.player.activeTank.set(tank);
         this.currentActiveTank = tank;

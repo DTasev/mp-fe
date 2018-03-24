@@ -1,11 +1,11 @@
 import { Player } from "./player";
 import { Point } from "../utility/point";
 import { Draw } from "../drawing/draw";
-import { IGameObject } from './iGameObject'
 import { Color } from "../drawing/color";
 import { GameState } from "../controller";
 import { ITheme } from "../themes/iTheme";
 import { DarkTheme } from "../themes/dark";
+import { IEffect } from "./effects/iEffect";
 
 export enum TankTurnState {
     /** The tank has performed an action this turn, e.g. moved or shot */
@@ -59,7 +59,7 @@ export class TankColor {
     }
 }
 
-export class Tank implements IGameObject {
+export class Tank {
 
     /** The width of the dot when drawing the tank */
     static readonly WIDTH = 12;
@@ -103,6 +103,9 @@ export class Tank implements IGameObject {
 
     healthState: TankHealthState;
     actionState: TankTurnState;
+    effects: IEffect[];
+
+    movementRange = Tank.MOVEMENT_RANGE;
 
     label: string;
 
@@ -112,8 +115,8 @@ export class Tank implements IGameObject {
         this.position = new Point(x, y);
         this.healthState = TankHealthState.ALIVE;
         this.actionState = TankTurnState.NOT_ACTED;
-        this.label = ""; // + "" converts to string
-        // this.label = this.id + ""; // + "" converts to string
+        this.label = "";
+        this.effects = [];
 
         // initialise colors for each of the tank's states
         this.color = new TankColor(
@@ -170,7 +173,7 @@ export class Tank implements IGameObject {
 
     highlight(context: CanvasRenderingContext2D): any {
         Draw.dot(context, this.position, Tank.WIDTH, this.color.active);
-        Draw.circle(context, this.position, Tank.MOVEMENT_RANGE, Tank.LINE_WIDTH, this.color.activeOutline);
+        Draw.circle(context, this.position, this.movementRange, Tank.LINE_WIDTH, this.color.activeOutline);
         let [label, color] = this.uiElements();
         this.showStatus(context, label);
     }
@@ -195,5 +198,17 @@ export class Tank implements IGameObject {
     }
     static sampleTank(x = 0, y = 0): Tank {
         return new Tank(0, Player.samplePlayer(), x, y, new DarkTheme());
+    }
+    beforeTurnEffects() {
+        for (const effect of this.effects) {
+            effect.before(this);
+        }
+    }
+    afterTurnEffects() {
+        for (const effect of this.effects) {
+            effect.after(this);
+        }
+        // clear all effects that don't have the duration
+        this.effects = this.effects.filter((effect) => effect.duration > 0);
     }
 }
