@@ -84,7 +84,7 @@ export class Ui {
         this.heading.playerTurn.add(J2H.parse({
             "b": {
                 "textContent": name + "'s turn.",
-                "className": "fa-2x " + theme.playerTurnTextClass()
+                "className": "fa-2x " + theme.ui.playerTurnTextClass()
             }
         }));
     }
@@ -100,7 +100,7 @@ export class Ui {
         this.heading.message.add(J2H.parse({
             "b": {
                 "textContent": msg,
-                "className": "fa-2x " + theme.playerMessageClass()
+                "className": "fa-2x " + theme.ui.playerMessageClass()
             }
         }));
     }

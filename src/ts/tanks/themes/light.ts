@@ -1,39 +1,29 @@
-import { ITheme } from "./iTheme";
+import { ITheme, IThemeMenu, IThemeEndGame, IThemeGameUi, IThemeGameColors, IThemeMapColors } from "./iTheme";
 import { Color } from "../drawing/color";
 
-export class LightTheme implements ITheme {
-    name = "light";
-    private currentColor: number = 0;
-    playerColors(): Color[] {
-        return [
-            Color.red(),
-            Color.blue(),
-            Color.green(),
-            Color.pink(),
-            Color.lilac(),
-            Color.orange(),
-            Color.purple(),
-            Color.maroon()
-        ];
-    }
-    menuBackground(): Color {
+class LightMenu implements IThemeMenu {
+    background(): Color {
         return Color.white();
     }
-    menuTitle(): Color {
+    title(): Color {
         return Color.black();
     }
-    menuText(): Color {
+    text(): Color {
         return Color.black();
     }
-    endGameBackground(): Color {
+}
+class LightEndGame implements IThemeEndGame {
+    background(): Color {
         return Color.transparent();
     }
-    endGameTitleClass(): string {
+    titleClass(): string {
         return "w3-text-black";
     }
-    endGameText(): Color {
+    text(): Color {
         return Color.black();
     }
+}
+class LightGameUi implements IThemeGameUi {
     homeButtonClass(): string {
         return "w3-dark-gray";
     }
@@ -49,8 +39,23 @@ export class LightTheme implements ITheme {
     playerMessageClass(): string {
         return this.playerTurnTextClass();
     }
+}
+class LightGameColors implements IThemeGameColors {
+    playerColors(): Color[] {
+        return [
+            Color.red(),
+            Color.blue(),
+            Color.green(),
+            Color.pink(),
+            Color.lilac(),
+            Color.orange(),
+            Color.purple(),
+            Color.maroon()
+        ];
+    }
+
     canvasBackground(): Color {
-        return Color.white();
+        return Color.black();
     }
     tankActive(): Color {
         return Color.red();
@@ -76,7 +81,33 @@ export class LightTheme implements ITheme {
     oldLinesColor(): Color {
         return Color.gray();
     }
-    mapObstacle(): Color {
-        return Color.black();
+}
+class LightMapColors implements IThemeMapColors {
+    solid(): Color {
+        return Color.white();
+    }
+    water(): Color {
+        return Color.lightblue();
+    }
+    wood(): Color {
+        return Color.woodbrown();
+    }
+}
+export class LightTheme implements ITheme {
+    name = "light";
+    menu: IThemeMenu;
+    end: IThemeEndGame;
+    ui: IThemeGameUi;
+    game: IThemeGameColors;
+    map: IThemeMapColors;
+
+    private currentColor = 0;
+
+    constructor() {
+        this.menu = new LightMenu();
+        this.end = new LightEndGame();
+        this.ui = new LightGameUi();
+        this.game = new LightGameColors();
+        this.map = new LightMapColors();
     }
 }

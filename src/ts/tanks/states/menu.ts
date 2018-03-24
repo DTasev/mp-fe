@@ -285,8 +285,8 @@ export class MainMenu implements IActionState {
     setUpUi = () => {
         this.ui.hideCanvas();
         this.ui.body.clear();
-        this.ui.background(this.theme.menuBackground());
-        this.ui.body.textColor(this.theme.menuText());
+        this.ui.background(this.theme.menu.background());
+        this.ui.body.textColor(this.theme.menu.text());
         this.ui.body.textAlign("center");
 
         const [left, middle, right] = this.ui.body.addColumns();
@@ -337,7 +337,7 @@ export class MainMenu implements IActionState {
 
     private quickStart = (e: MouseEvent) => {
         let map = new TanksMap("apples");
-        let players: Player[] = MenuStartGame.createPlayers(Settings.DEFAULT_NUMBER_PLAYERS, this.theme.playerColors());
+        let players: Player[] = MenuStartGame.createPlayers(Settings.DEFAULT_NUMBER_PLAYERS, this.theme.game.playerColors());
         this.startGame(map, players, Settings.DEFAULT_NUMBER_TANKS, e);
     }
 
@@ -376,7 +376,7 @@ export class MainMenu implements IActionState {
         this.ui.body.htmlElement.appendChild(middle);
         this.ui.body.htmlElement.appendChild(right);
 
-        MenuStartGame.playerColors = this.theme.playerColors();
+        MenuStartGame.playerColors = this.theme.game.playerColors();
         MenuStartGame.changeNumberOfPlayerSettings(null);
     }
 

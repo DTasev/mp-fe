@@ -62,7 +62,7 @@ export class Collision {
         }
         return null;
     }
-    static lineWithTerrain(start: Point, end: Point, obstacles: Obstacle[]): Point {
+    static lineWithTerrain(start: Point, end: Point, obstacles: Obstacle[]): [Point, Obstacle] {
         for (const obstacle of obstacles) {
             // shots do NOT collide with water
             if (obstacle.type !== ObstacleType.WATER) {
@@ -71,13 +71,14 @@ export class Collision {
                 // if the shot line DOES NOT go through the obstacle, then there will be no collision
                 const [left, right, intersection] = TanksMath.line.closestTwo(start, end, obstacle.points);
                 if (left && right) {
+                    // if the obstacle is wood, then don't immediatelly stop the shot, but continue to the end of the line
                     // the line goes through the obstacle
                     // 2 is added to account for being the end of the shot line segment (which would be i + 1, or p2)
                     // and another +1 is added for the slice with which the points are filtered later.
-                    return intersection;
+                    return [intersection, obstacle];
                 }
             }
         }
-        return null;
+        return [null, null];
     }
 }

@@ -6,7 +6,7 @@ export class MovementUi {
         return J2H.parse({
             "button": {
                 "style": "width:100%",
-                "className": "w3-button w3-border " + theme.skipShootingButtonClass(),
+                "className": "w3-button w3-border " + theme.ui.skipShootingButtonClass(),
                 "children": {
                     "i": {
                         "className": "fas fa-rocket"

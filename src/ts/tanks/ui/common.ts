@@ -7,7 +7,7 @@ export class CommonUi {
         return J2H.parse({
             "button": {
                 "style": "width:100%",
-                "className": "w3-button w3-border " + theme.homeButtonClass(),
+                "className": "w3-button w3-border " + theme.ui.homeButtonClass(),
                 "children": {
                     "i": {
                         "className": "fas fa-home"

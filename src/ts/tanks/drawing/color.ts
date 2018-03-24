@@ -1,6 +1,7 @@
 import { S } from "../utility/stringFormat";
 
 export class Color {
+
     private red: number;
     private green: number;
     private blue: number;
@@ -58,7 +59,7 @@ export class Color {
     static lilac(alpha = 1.0): Color {
         return new Color(153, 102, 255, alpha);
     }
-    static brightblue(alpha = 1.0) {
+    static lightblue(alpha = 1.0) {
         return new Color(0, 204, 255, alpha);
     }
     static orange(alpha = 1.0) {
@@ -69,6 +70,9 @@ export class Color {
     }
     static maroon(alpha = 1.0) {
         return new Color(128, 0, 0, alpha);
+    }
+    static woodbrown(alpha = 1.0) {
+        return new Color(102, 51, 0, alpha);
     }
     static c(red: number, green: number, blue: number, alpha = 1.0) {
         return new Color(red, green, blue, alpha);

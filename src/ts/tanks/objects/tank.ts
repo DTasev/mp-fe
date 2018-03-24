@@ -120,14 +120,14 @@ export class Tank {
 
         // initialise colors for each of the tank's states
         this.color = new TankColor(
-            theme.tankActive().rgba(),
-            theme.tankActiveOutline().rgba(),
-            theme.tankLabel().rgba(this.LABEL_OPACITY),
+            theme.game.tankActive().rgba(),
+            theme.game.tankActiveOutline().rgba(),
+            theme.game.tankLabel().rgba(this.LABEL_OPACITY),
             this.player.color.rgba(),
             this.player.color.rgba(this.DISABLED_OPACITY),
-            theme.tankDead().rgba(),
-            theme.tankShootingLine().rgba(),
-            theme.tankMovementLine().rgba()
+            theme.game.tankDead().rgba(),
+            theme.game.tankShootingLine().rgba(),
+            theme.game.tankMovementLine().rgba()
         );
     }
 
@@ -171,9 +171,11 @@ export class Tank {
         return [label, color];
     }
 
-    highlight(context: CanvasRenderingContext2D): any {
+    highlight(context: CanvasRenderingContext2D, drawRange = true): any {
         Draw.dot(context, this.position, Tank.WIDTH, this.color.active);
-        Draw.circle(context, this.position, this.movementRange, Tank.LINE_WIDTH, this.color.activeOutline);
+        if (drawRange) {
+            Draw.circle(context, this.position, this.movementRange, Tank.LINE_WIDTH, this.color.activeOutline);
+        }
         let [label, color] = this.uiElements();
         this.showStatus(context, label);
     }

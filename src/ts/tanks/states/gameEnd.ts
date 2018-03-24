@@ -30,8 +30,8 @@ export class GameEndState implements IActionState {
 
     setUpUi(ui: Ui, viewport: Viewport, theme: ITheme) {
         this.ui.hideCanvas();
-        this.ui.background(theme.endGameBackground());
-        this.ui.body.textColor(theme.endGameText());
+        this.ui.background(theme.end.background());
+        this.ui.body.textColor(theme.end.text());
 
         const numTanks = this.player.activeTanks().length;
         const tanksStr = numTanks === 1 ? " tank" : " tanks";
@@ -41,7 +41,7 @@ export class GameEndState implements IActionState {
         const elapsedTime = (Date.now() - <any>this.controller.timeStart.get()) / 1000;
         const winnerNameDescription = {
             "div": {
-                "className": "w3-padding-64 " + theme.endGameTitleClass(),
+                "className": "w3-padding-64 " + theme.end.titleClass(),
                 "children": [{
                     "h1": {
                         "textContent": "Winner " + this.player.name + " with " + numTanks + " tanks."

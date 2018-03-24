@@ -1,39 +1,29 @@
-import { ITheme } from "./iTheme";
+import { ITheme, IThemeMenu, IThemeEndGame, IThemeGameUi, IThemeGameColors, IThemeMapColors } from "./iTheme";
 import { Color } from "../drawing/color";
 
-export class DarkTheme implements ITheme {
-    name = "dark";
-    private currentColor: number = 0;
-    playerColors(): Color[] {
-        return [
-            Color.red(),
-            Color.blue(),
-            Color.green(),
-            Color.pink(),
-            Color.lilac(),
-            Color.orange(),
-            Color.purple(),
-            Color.maroon()
-        ];
-    }
-    menuBackground(): Color {
+class DarkMenu implements IThemeMenu {
+    background(): Color {
         return Color.black();
     }
-    menuTitle(): Color {
+    title(): Color {
         return Color.white();
     }
-    menuText(): Color {
+    text(): Color {
         return Color.white();
     }
-    endGameBackground(): Color {
+}
+class DarkEndGame implements IThemeEndGame {
+    background(): Color {
         return Color.transparent();
     }
-    endGameTitleClass(): string {
+    titleClass(): string {
         return "w3-text-white";
     }
-    endGameText(): Color {
+    text(): Color {
         return Color.white();
     }
+}
+class DarkGameUi implements IThemeGameUi {
     homeButtonClass(): string {
         return "w3-dark-gray";
     }
@@ -48,6 +38,20 @@ export class DarkTheme implements ITheme {
     }
     playerMessageClass(): string {
         return this.playerTurnTextClass();
+    }
+}
+class DarkGameColors implements IThemeGameColors {
+    playerColors(): Color[] {
+        return [
+            Color.red(),
+            Color.blue(),
+            Color.green(),
+            Color.pink(),
+            Color.lilac(),
+            Color.orange(),
+            Color.purple(),
+            Color.maroon()
+        ];
     }
     canvasBackground(): Color {
         return Color.black();
@@ -76,7 +80,34 @@ export class DarkTheme implements ITheme {
     oldLinesColor(): Color {
         return Color.gray();
     }
-    mapObstacle(): Color {
+
+}
+class DarkMapColors implements IThemeMapColors {
+    solid(): Color {
         return Color.white();
+    }
+    water(): Color {
+        return Color.lightblue();
+    }
+    wood(): Color {
+        return Color.woodbrown();
+    }
+}
+
+export class DarkTheme implements ITheme {
+    name = "dark";
+    menu: IThemeMenu;
+    end: IThemeEndGame;
+    ui: IThemeGameUi;
+    game: IThemeGameColors;
+    map: IThemeMapColors;
+
+    private currentColor = 0;
+    constructor() {
+        this.menu = new DarkMenu();
+        this.end = new DarkEndGame();
+        this.ui = new DarkGameUi();
+        this.game = new DarkGameColors();
+        this.map = new DarkMapColors();
     }
 }

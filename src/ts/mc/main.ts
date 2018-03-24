@@ -25,7 +25,16 @@ function stopDrawingMap(e: MouseEvent) {
     lineCache.lines.push(line.copy());
     line.points = [];
     draw.last = new Point();
-    console.log(lineCache.lines);
+    const d = { "terrain": [] };
+    for (let i = 0; i < lineCache.lines.length - 1; i += 2) {
+        const obstacle = {};
+        const center = lineCache.lines[i + 1];
+        obstacle["centerX"] = center.points[0].x;
+        obstacle["centerY"] = center.points[0].y;
+        obstacle["points"] = lineCache.lines[i];
+        d.terrain.push(obstacle);
+    }
+    console.log(d);
 }
 
 function drawMap(e: MouseEvent) {

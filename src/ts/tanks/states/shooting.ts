@@ -16,6 +16,7 @@ import { ShootingUi } from "../ui/shooting";
 import * as Settings from '../settings';
 import * as Limit from "../limiters/index";
 import { ITheme } from "../themes/iTheme";
+import { ObstacleType } from "../gameMap/obstacle";
 
 export class ShootingState implements IPlayState {
     context: CanvasRenderingContext2D;
@@ -155,15 +156,26 @@ export class ShootingState implements IPlayState {
             // for each segment of the path, perform collision
             const shotPathLength = this.shotPath.points.length;
             let i: number;
+            let trimIncrement = 2;
             for (i = 0; i < shotPathLength - 1; i++) {
                 const start = this.shotPath.points[i];
                 const end = this.shotPath.points[i + 1];
 
-                const shotTerrainCollisionPoint: Point = this.controller.lineCollidingWithTerrain(start, end);
+                let [shotTerrainCollisionPoint, obstacle] = this.controller.lineCollidingWithTerrain(start, end);
                 // if there is a collision point, use it as the END OF THE SHOT, this means if there is a tank in
                 // that space it will still be hit, furthermore no more collision is done as the rest of the shot
                 // is inside the obstacle
                 if (shotTerrainCollisionPoint) {
+                    // if it's wood the intersection point IS NOT the one we collide against, as the shot will
+                    // penetrate the wood obstacle for 1 more length
+                    if (obstacle.type === ObstacleType.WOOD) {
+                        // handle the case where the last part of the shot has penetrated
+                        const nextShot = i + 2 >= shotPathLength ? shotPathLength - 1 : i + 2;
+                        shotTerrainCollisionPoint = this.shotPath.points[nextShot];
+                        // the trimIncrement needs to be incremented, so that the part that penetrated is visible
+                        // if this is not done, then the penetrating part of the shot is NOT rendered on the canvas
+                        trimIncrement = 3;
+                    }
                     // the NEW END is the collision point of the shot with the obstacle
                     this.controller.collide(start, shotTerrainCollisionPoint);
                     // this is also the last collision, any further shot segments will be INSIDE the obstacle
@@ -175,8 +187,8 @@ export class ShootingState implements IPlayState {
             }
             // trim the path if it collided with an obstacle, two is added because the lines must be
             // trimmed after the end point (i + 1), and slice trims in range [start, end)
-            if (i + 2 < shotPathLength) {
-                this.shotPath.points = this.shotPath.points.slice(0, i + 2);
+            if (trimIncrement < shotPathLength) {
+                this.shotPath.points = this.shotPath.points.slice(0, i + trimIncrement);
             }
             this.controller.cacheLine(this.shotPath);
         }

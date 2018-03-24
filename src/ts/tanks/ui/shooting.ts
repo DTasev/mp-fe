@@ -6,7 +6,7 @@ export class ShootingUi {
         return J2H.parse({
             "button": {
                 "style": "width:100%",
-                "className": "w3-button w3-border " + theme.skipTurnButtonClass(),
+                "className": "w3-button w3-border " + theme.ui.skipTurnButtonClass(),
                 "children": {
                     "i": {
                         "className": "fas fa-fast-forward"

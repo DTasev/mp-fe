@@ -207,7 +207,7 @@ export class GameController {
     }
     /** Clears everything from the canvas on the screen. To show anything afterwards it needs to be redrawn. */
     clearCanvas(): void {
-        this.context.fillStyle = this.theme.canvasBackground().rgba();
+        this.context.fillStyle = this.theme.game.canvasBackground().rgba();
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -224,7 +224,7 @@ export class GameController {
             }
         }
 
-        const oldLinesColor = this.theme.oldLinesColor().rgba();
+        const oldLinesColor = this.theme.game.oldLinesColor().rgba();
         // draw the last N lines
         for (const line_path of this.lineCache.active()) {
             for (let i = 1; i < line_path.points.length; i++) {
@@ -281,7 +281,7 @@ export class GameController {
         return Collision.terrain(point, radius, this.map.terrain);
     }
 
-    lineCollidingWithTerrain(start: Point, end: Point): Point {
+    lineCollidingWithTerrain(start: Point, end: Point): [Point, Obstacle] {
         return Collision.lineWithTerrain(start, end, this.map.terrain);
     }
 }
