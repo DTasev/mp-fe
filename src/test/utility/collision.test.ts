@@ -236,11 +236,11 @@ function forEachTwo(line: Line, assertion: Function, loud = true) {
     for (let i = 0; i < len - 1; i++) {
         const start = line.points[i];
         const end = line.points[i + 1];
-        const intersection = Collision.lineWithTerrain(start, end, obstacles);
+        const [intersection, obstacle] = Collision.lineWithTerrain(start, end, obstacles);
         if (loud) {
             console.log("FOREACHTWO DEBUG:", i, intersection);
         }
-        assertion(i, intersection);
+        assertion(i, intersection, obstacle);
 
         // the shooting collision will stop on the first hit with an obstacle
         if (intersection) {
@@ -256,11 +256,13 @@ describe('Collision - Shot line with Terrain', () => {
         const pointsJson = '[{"x":568,"y":539},{"x":546,"y":567},{"x":526,"y":608},{"x":496,"y":692},{"x":489,"y":720}]';
         const line = new Line();
         line.points = JSON.parse(pointsJson);
-        forEachTwo(line, (i, intersection) => {
+        forEachTwo(line, (i, intersection, obstacle) => {
             if (i == 1) {
                 expect(intersection).to.not.be.null;
+                expect(obstacle).to.be.not.null;
             } else {
                 expect(intersection).to.be.null;
+                expect(obstacle).to.be.null;
             }
         }, false);
     });
@@ -274,11 +276,13 @@ describe('Collision - Shot line with Terrain', () => {
             new Point(574, 426)
         ];
 
-        forEachTwo(line, (i, intersection) => {
+        forEachTwo(line, (i, intersection, obstacle) => {
             if (i == 0) {
                 expect(intersection).to.not.be.null;
+                expect(obstacle).to.be.not.null;
             } else {
                 expect(intersection).to.be.null;
+                expect(obstacle).to.be.null;
             }
         }, false);
     });
@@ -287,11 +291,13 @@ describe('Collision - Shot line with Terrain', () => {
         const pointsJson = '[{"x":425,"y":689},{"x":441,"y":660},{"x":478,"y":579},{"x":508,"y":525},{"x":521,"y":506}]';
         const line = new Line();
         line.points = JSON.parse(pointsJson);
-        forEachTwo(line, (i, intersection) => {
+        forEachTwo(line, (i, intersection, obstacle) => {
             if (i == 1) {
                 expect(intersection).to.not.be.null;
+                expect(obstacle).to.be.not.null;
             } else {
                 expect(intersection).to.be.null;
+                expect(obstacle).to.be.null;
             }
         }, false);
     });
@@ -300,11 +306,13 @@ describe('Collision - Shot line with Terrain', () => {
         const pointsJson = '[{"x":425,"y":689},{"x":442,"y":652},{"x":464,"y":604},{"x":500,"y":531},{"x":520,"y":482}]';
         const line = new Line();
         line.points = JSON.parse(pointsJson);
-        forEachTwo(line, (i, intersection) => {
+        forEachTwo(line, (i, intersection, obstacle) => {
             if (i == 2) {
                 expect(intersection).to.not.be.null;
+                expect(obstacle).to.be.not.null;
             } else {
                 expect(intersection).to.be.null;
+                expect(obstacle).to.be.null;
             }
         }, false);
     });
@@ -313,11 +321,13 @@ describe('Collision - Shot line with Terrain', () => {
         const pointsJson = '[{"x":535,"y":508},{"x":532,"y":545},{"x":524,"y":589},{"x":505,"y":656},{"x":494,"y":686}]';
         const line = new Line();
         line.points = JSON.parse(pointsJson);
-        forEachTwo(line, (i, intersection) => {
+        forEachTwo(line, (i, intersection, obstacle) => {
             if (i == 0) {
                 expect(intersection).to.not.be.null;
+                expect(obstacle).to.be.not.null;
             } else {
                 expect(intersection).to.be.null;
+                expect(obstacle).to.be.null;
             }
         }, false);
     });
@@ -326,11 +336,13 @@ describe('Collision - Shot line with Terrain', () => {
         const pointsJson = '[{"x":469,"y":709},{"x":488,"y":656},{"x":532,"y":548},{"x":580,"y":454}]';
         const line = new Line();
         line.points = JSON.parse(pointsJson);
-        forEachTwo(line, (i, intersection) => {
+        forEachTwo(line, (i, intersection, obstacle) => {
             if (i == 0) {
                 expect(intersection).to.not.be.null;
+                expect(obstacle).to.be.not.null;
             } else {
                 expect(intersection).to.be.null;
+                expect(obstacle).to.be.null;
             }
         }, false);
     });
@@ -338,11 +350,13 @@ describe('Collision - Shot line with Terrain', () => {
         const pointsJson = '[{"x":498,"y":753},{"x":500,"y":722},{"x":502,"y":643},{"x":504,"y":601},{"x":504,"y":556}]';
         const line = new Line();
         line.points = JSON.parse(pointsJson);
-        forEachTwo(line, (i, intersection) => {
+        forEachTwo(line, (i, intersection, obstacle) => {
             if (i == 1) {
                 expect(intersection).to.not.be.null;
+                expect(obstacle).to.be.not.null;
             } else {
                 expect(intersection).to.be.null;
+                expect(obstacle).to.be.null;
             }
         }, false);
     })
@@ -350,11 +364,13 @@ describe('Collision - Shot line with Terrain', () => {
         const pointsJson = '[{"x":429,"y":685},{"x":456,"y":651},{"x":487,"y":614},{"x":564,"y":520},{"x":605,"y":478}]';
         const line = new Line();
         line.points = JSON.parse(pointsJson);
-        forEachTwo(line, (i, intersection) => {
+        forEachTwo(line, (i, intersection, obstacle) => {
             if (i == 0) {
                 expect(intersection).to.not.be.null;
+                expect(obstacle).to.be.not.null;
             } else {
                 expect(intersection).to.be.null;
+                expect(obstacle).to.be.null;
             }
         }, false);
     });
@@ -362,8 +378,9 @@ describe('Collision - Shot line with Terrain', () => {
         const pointsJson = '[{"x":544,"y":750},{"x":544,"y":720},{"x":551,"y":617},{"x":565,"y":506},{"x":574,"y":465}]';
         const line = new Line();
         line.points = JSON.parse(pointsJson);
-        forEachTwo(line, (i, intersection) => {
+        forEachTwo(line, (i, intersection, obstacle) => {
             expect(intersection).to.be.null;
+            expect(obstacle).to.be.null;
         }, false);
     });
 });
