@@ -8,7 +8,12 @@ import { UiBody } from "./uiBody";
 import { GameController } from "../controller";
 import { ITheme } from "../themes/iTheme";
 
+import * as Settings from '../settings';
 
+interface IVisualViewport {
+    offsetLeft: number;
+    offsetTop: number;
+}
 export class Ui {
     static readonly ID_GAME_UI = "tanks-ui";
 
@@ -95,6 +100,12 @@ export class Ui {
     moveToFitView(e: Event): void {
         this.container.style.left = window.pageXOffset + "px";
         this.container.style.top = window.pageYOffset + "px";
+    }
+    mobileMoveToFitView(e: Event): void {
+        const visualViewport: IVisualViewport = (<any>window).visualViewport;
+        this.container.style.left = visualViewport.offsetLeft + "px";
+        this.container.style.top = visualViewport.offsetTop + "px";
+
     }
     message(msg: string, theme: ITheme) {
         this.heading.message.add(J2H.parse({

@@ -98,9 +98,15 @@ export class GameController {
         this.redrawCanvas();
         this.timeStart = new SingleAccess<Date>(new Date());
 
-        window.onscroll = (e: Event) => {
-            this.ui.moveToFitView(e);
-        };
+        if (!Settings.IS_MOBILE) {
+            // normal computers trigger the onscroll event properly -> every time the page is scrolled
+            // mobile, however, only triggers the event sometimes, and is not reliable, thus the 
+            // touchmove event is used in `selection`
+            window.onscroll = (e: Event) => {
+                this.ui.moveToFitView(e);
+            };
+        }
+
     }
 
     /**

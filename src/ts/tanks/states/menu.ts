@@ -18,13 +18,21 @@ function getSliderValue(id: string) {
     return parseInt((<HTMLInputElement>document.getElementById(id)).value);
 }
 export class PublicMenuStartGame {
-    static toggle(elem: HTMLDivElement, klass: string) {
+    static toggleTheme(elem: HTMLDivElement, klass: string) {
         for (const child of elem.parentElement.children) {
             child.classList.remove(klass);
             child.id = "";
         }
         elem.classList.add(klass);
         elem.id = MainMenu.ID_THEME;
+    }
+    static toggleMap(elem: HTMLDivElement, klass: string) {
+        for (const child of elem.parentElement.children) {
+            child.classList.remove(klass);
+            child.id = "";
+        }
+        elem.classList.add(klass);
+        elem.id = MainMenu.ID_MAP;
     }
 }
 class MenuStartGame {
@@ -39,19 +47,19 @@ class MenuStartGame {
                     "div": {
                         "className": commonClasses,
                         "textContent": "Sepia",
-                        "onclick": 'PublicMenuStartGame.toggle(this, "' + activeClass + '")'
+                        "onclick": 'PublicMenuStartGame.toggleTheme(this, "' + activeClass + '")'
                     }
                 }, {
                     "div": {
                         "className": commonClasses,
                         "textContent": "Dark",
-                        "onclick": 'PublicMenuStartGame.toggle(this, "' + activeClass + '")'
+                        "onclick": 'PublicMenuStartGame.toggleTheme(this, "' + activeClass + '")'
                     }
                 }, {
                     "div": {
                         "className": commonClasses,
                         "textContent": "Light",
-                        "onclick": 'PublicMenuStartGame.toggle(this, "' + activeClass + '")'
+                        "onclick": 'PublicMenuStartGame.toggleTheme(this, "' + activeClass + '")'
                     }
                 }]
             }
@@ -78,7 +86,7 @@ class MenuStartGame {
                             "div": {
                                 "className": "w3-col s3 m3 l3 w3-padding-64 w3-hover-gray",
                                 "textContent": "Map choice",
-                                "onclick": 'PublicMenuStartGame.toggle(this, "' + activeClass + '")',
+                                "onclick": 'PublicMenuStartGame.toggleMap(this, "' + activeClass + '")',
                             }
                         };
                         children.push(e);

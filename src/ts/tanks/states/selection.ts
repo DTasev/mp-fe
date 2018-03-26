@@ -38,6 +38,12 @@ export class SelectionState implements IPlayState {
             if (Settings.IS_MOBILE) {
                 // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
                 canvas.ontouchstart = this.mouseDown;
+                // Scrolling for Mobile: this is added here so that the touchmove event triggers the ui adjusting event
+                // normal computers trigger window.onscroll, and that is handled in the controller
+                window.ontouchmove = (e: Event) => {
+                    console.log('Adjusting UI');
+                    this.ui.mobileMoveToFitView(e);
+                }
                 window.ontouchend = this.mouseUp;
             } else {
                 canvas.onmousedown = this.mouseDown;
