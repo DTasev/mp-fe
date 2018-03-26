@@ -80,7 +80,7 @@ export class Tank {
     static readonly SHOOTING_RANGE = 409;
 
     /** How fast must the player move for a valid shot */
-    static readonly SHOOTING_SPEED = 30;
+    static readonly SHOOTING_SPEED = 15;
 
     /** The deadzone allowed for free mouse movement before the player shoots.
      * This means that the player can wiggle the cursor around in the tank's space
