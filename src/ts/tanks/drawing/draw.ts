@@ -165,7 +165,7 @@ export class Draw {
             this.updateTouchPosition(e);
         }
     }
-    updateMousePosition(e: MouseEvent) {
+    private updateMousePosition(e: MouseEvent) {
         // if the browser hasn't passed a parameter, but has set the global event variable
         if (!e) {
             var e = <MouseEvent>event;
@@ -177,7 +177,7 @@ export class Draw {
         }
     }
 
-    updateTouchPosition(e: TouchEvent) {
+    private updateTouchPosition(e: TouchEvent) {
         // if the browser hasn't passed a parameter, but has set the global event variable
         if (!e) {
             var e = <TouchEvent>event;

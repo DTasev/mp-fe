@@ -64,6 +64,10 @@ export class ShootingState implements IPlayState {
         canvas.onmousedown = this.startShooting;
         canvas.onmousemove = this.continueShooting;
         window.onmouseup = this.stopShooting;
+
+        canvas.ontouchstart = this.startShooting;
+        canvas.ontouchmove = this.continueShooting;
+        window.ontouchend = this.stopShooting;
     }
 
     view(viewport: Viewport) { }
@@ -75,12 +79,12 @@ export class ShootingState implements IPlayState {
         ui.heading.right.add(button_skipTurn);
     }
 
-    private startShooting = (e: MouseEvent) => {
+    private startShooting = (e: MouseEvent | TouchEvent) => {
         // if the button clicked is not the left button, do nothing
-        if (e.button != 0) {
+        if (e instanceof MouseEvent && e.button != 0) {
             return;
         }
-        this.draw.updateMousePosition(e);
+        this.draw.updatePosition(e);
         this.draw.last = new Point(this.active.position.x, this.active.position.y);
         // resets the successful shot flag
         this.successfulShot = false;
@@ -94,8 +98,10 @@ export class ShootingState implements IPlayState {
                 this.draw.state = DrawState.DRAWING;
                 this.validRange(this.active.color);
             }
-        } else {
-            console.log("Click did not collide with the active tank");
+        }
+
+        if (e instanceof TouchEvent) {
+            e.preventDefault();
         }
     }
 
@@ -103,8 +109,8 @@ export class ShootingState implements IPlayState {
         this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, tankColors.shootingLine);
     }
 
-    private continueShooting = (e: MouseEvent) => {
-        this.draw.updateMousePosition(e);
+    private continueShooting = (e: MouseEvent | TouchEvent) => {
+        this.draw.updatePosition(e);
 
         // draw the movement line if the mouse button is currently being pressed
         if (this.draw.state == DrawState.DRAWING) {
@@ -135,11 +141,14 @@ export class ShootingState implements IPlayState {
                 this.draw.state = DrawState.STOPPED;
             }
         }
+        if (e instanceof TouchEvent) {
+            e.preventDefault();
+        }
     }
 
-    private stopShooting = (e: MouseEvent) => {
+    private stopShooting = (e: MouseEvent | TouchEvent) => {
         // if the button clicked is not the left button, do nothing
-        if (e.button != 0) {
+        if (e instanceof MouseEvent && e.button != 0) {
             return;
         }
 
@@ -147,50 +156,9 @@ export class ShootingState implements IPlayState {
         this.player.viewportPosition = Viewport.current();
 
         const playerTanksShot = this.player.tanksShot.get();
-        // the shot must be sucessfull - (i.e. fast enough), and must not collide with any terrain
+        // for the shot to be sucessful - it must be fast enough, and not collide with any terrain
         if (this.successfulShot) {
-            playerTanksShot.take();
-            console.log("Player has taken a successful shot, limit:", playerTanksShot.limit, "left:", playerTanksShot.left())
-            this.active.actionState = TankTurnState.SHOT;
-
-            // for each segment of the path, perform collision
-            const shotPathLength = this.shotPath.points.length;
-            let i: number;
-            let trimIncrement = 2;
-            for (i = 0; i < shotPathLength - 1; i++) {
-                const start = this.shotPath.points[i];
-                const end = this.shotPath.points[i + 1];
-
-                let [shotTerrainCollisionPoint, obstacle] = this.controller.lineCollidingWithTerrain(start, end);
-                // if there is a collision point, use it as the END OF THE SHOT, this means if there is a tank in
-                // that space it will still be hit, furthermore no more collision is done as the rest of the shot
-                // is inside the obstacle
-                if (shotTerrainCollisionPoint) {
-                    // if it's wood the intersection point IS NOT the one we collide against, as the shot will
-                    // penetrate the wood obstacle for 1 more length
-                    if (obstacle.type === ObstacleType.WOOD) {
-                        // handle the case where the last part of the shot has penetrated
-                        const nextShot = i + 2 >= shotPathLength ? shotPathLength - 1 : i + 2;
-                        shotTerrainCollisionPoint = this.shotPath.points[nextShot];
-                        // the trimIncrement needs to be incremented, so that the part that penetrated is visible
-                        // if this is not done, then the penetrating part of the shot is NOT rendered on the canvas
-                        trimIncrement = 3;
-                    }
-                    // the NEW END is the collision point of the shot with the obstacle
-                    this.controller.collide(start, shotTerrainCollisionPoint);
-                    // this is also the last collision, any further shot segments will be INSIDE the obstacle
-                    break;
-                } else {
-                    // the shot DOES NOT collide with an obstacle
-                    this.controller.collide(start, end);
-                }
-            }
-            // trim the path if it collided with an obstacle, two is added because the lines must be
-            // trimmed after the end point (i + 1), and slice trims in range [start, end)
-            if (trimIncrement < shotPathLength) {
-                this.shotPath.points = this.shotPath.points.slice(0, i + trimIncrement);
-            }
-            this.controller.cacheLine(this.shotPath);
+            this.shoot(playerTanksShot);
         }
 
         // if all the player's tank have shot
@@ -207,8 +175,57 @@ export class ShootingState implements IPlayState {
 
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
+        if (e instanceof TouchEvent) {
+            e.preventDefault();
+        }
+
         this.controller.redrawCanvas();
         this.controller.changeGameState(GameState.TANK_SELECTION);
+    }
+
+    private shoot(playerTanksShot: Limit.Actions) {
+        playerTanksShot.take();
+        console.log("Player has taken a successful shot, limit:", playerTanksShot.limit, "left:", playerTanksShot.left())
+        this.active.actionState = TankTurnState.SHOT;
+
+        // for each segment of the path, perform collision
+        const shotPathLength = this.shotPath.points.length;
+        let i: number;
+        let trimIncrement = 2;
+        for (i = 0; i < shotPathLength - 1; i++) {
+            const start = this.shotPath.points[i];
+            const end = this.shotPath.points[i + 1];
+
+            let [shotTerrainCollisionPoint, obstacle] = this.controller.lineCollidingWithTerrain(start, end);
+            // if there is a collision point, use it as the END OF THE SHOT, this means if there is a tank in
+            // that space it will still be hit, furthermore no more collision is done as the rest of the shot
+            // is inside the obstacle
+            if (shotTerrainCollisionPoint) {
+                // if it's wood the intersection point IS NOT the one we collide against, as the shot will
+                // penetrate the wood obstacle for 1 more length
+                if (obstacle.type === ObstacleType.WOOD) {
+                    // handle the case where the last part of the shot has penetrated
+                    const nextShot = i + 2 >= shotPathLength ? shotPathLength - 1 : i + 2;
+                    shotTerrainCollisionPoint = this.shotPath.points[nextShot];
+                    // the trimIncrement needs to be incremented, so that the part that penetrated is visible
+                    // if this is not done, then the penetrating part of the shot is NOT rendered on the canvas
+                    trimIncrement = 3;
+                }
+                // the NEW END is the collision point of the shot with the obstacle
+                this.controller.collide(start, shotTerrainCollisionPoint);
+                // this is also the last collision, any further shot segments will be INSIDE the obstacle
+                break;
+            } else {
+                // the shot DOES NOT collide with an obstacle
+                this.controller.collide(start, end);
+            }
+        }
+        // trim the path if it collided with an obstacle, two is added because the lines must be
+        // trimmed after the end point (i + 1), and slice trims in range [start, end)
+        if (trimIncrement < shotPathLength) {
+            this.shotPath.points = this.shotPath.points.slice(0, i + trimIncrement);
+        }
+        this.controller.cacheLine(this.shotPath);
     }
     private skipTurn = () => {
         // reset the current player's tank act states

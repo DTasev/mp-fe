@@ -151,23 +151,4 @@ export class MovingState implements IPlayState {
             e.preventDefault();
         }
     }
-
-    // touchMove = (e: TouchEvent) => {
-    //     // Update the touch co-ordinates
-    //     this.draw.updateTouchPosition(e);
-
-    //     // During a touchmove event, unlike a mousemove event, we don't need to check if the touch is engaged, since there will always be contact with the screen by definition.
-    //     this.draw.line(this.context, Tank.DEFAULT_WIDTH);
-
-    //     // Prevent a scrolling action as a result of this touchmove triggering.
-    //     event.preventDefault();
-    // }
-
-    // penMove = (e: PointerEvent) => {
-    //     this.draw.updateMousePosition(e);
-    //     if (this.draw.state == DrawState.DRAWING) {
-    //         this.draw.line(this.context, Tank.DEFAULT_WIDTH);
-    //     }
-    //     event.preventDefault();
-    // }
 }

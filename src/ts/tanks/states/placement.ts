@@ -51,12 +51,13 @@ export class PlacingState implements IPlayState {
     setUpUi(ui: Ui, viewport: Viewport, theme: ITheme) {
         ui.heading.addHome(viewport, this.player, theme);
     }
-    private addTank = (e) => {
+    private addTank = (e: MouseEvent | TouchEvent) => {
         // if the button clicked is not the left button, do nothing
-        if (e.button != 0) {
+        if (e instanceof MouseEvent && e.button != 0) {
             return;
         }
-        this.draw.updateMousePosition(e);
+
+        this.draw.updatePosition(e);
 
         // if the position of the tank does not collide with existing terrain, then the tank can be placed
         if (!this.controller.collidingWithTerrain(this.draw.mouse, Tank.WIDTH)) {
@@ -76,6 +77,9 @@ export class PlacingState implements IPlayState {
                     this.controller.changeGameState(GameState.TANK_PLACEMENT);
                 }
             }
+        }
+        if (e instanceof TouchEvent) {
+            e.preventDefault();
         }
     }
 }
