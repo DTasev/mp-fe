@@ -26,7 +26,8 @@
         "test": "set TS_NODE_COMPILER_OPTIONS={\"module\":\"commonjs\"} && mocha --compilerOptions --require ts-node/register --require jsdom-global/register \"src/test/**/*.test.ts\"",
         "build:prod": "webpack --config webpack.prod.js && git ls-files -s src/dist/bundle.js > src/dist/prod_build",
         "watch": "webpack --config webpack.dev.js --watch",
-        "build:dev": "webpack --config webpack.dev.js"
+        "build:dev": "webpack --config webpack.dev.js",
+        "fullbuild:dev": "tsc && webpack --config webpack.prod.js"
     },
     "repository": {
         "type": "git",

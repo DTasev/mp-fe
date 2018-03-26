@@ -58,10 +58,10 @@
                 "${workspaceRoot}/src/c/mapScanner.c",
                 "-o",
                 "${workspaceRoot}/src/build/ts/ms/ms.js",
-                "-s", // below we have to escape the escape character so that the shell can escape the escape character. K?
-                "EXPORTED_FUNCTIONS=\\\"['_myimage']\\\"", // end result looks like EXPORTED_FUNCTIONS=\"['_myimage']\"
                 "-s",
-                "EXTRA_EXPORTED_RUNTIME_METHODS=\\\"['cwrap']\\\"",
+                "EXPORTED_FUNCTIONS=\\\"['_myimage']\\\"",
+                "-s",
+                "EXTRA_EXPORTED_RUNTIME_METHODS=\\\"['cwrap']\\\""
             ],
             "group": "build",
             "label": "emcc build",
@@ -75,8 +75,8 @@
                 "${workspaceRoot}/src/c/mapScanner.c",
                 "-o",
                 "${workspaceRoot}/src/build/ts/ms/ms.js",
-                "-s", // below we have to escape the escape character so that the shell can escape the escape character. K?
-                "EXPORTED_FUNCTIONS=\\\"['_myimage']\\\"", // end result looks like EXPORTED_FUNCTIONS=\"['_myimage']\"
+                "-s",
+                "EXPORTED_FUNCTIONS=\\\"['_myimage']\\\"",
                 "-s",
                 "EXTRA_EXPORTED_RUNTIME_METHODS=\\\"['cwrap']\\\"",
                 "-O1"
@@ -84,6 +84,13 @@
             "group": "build",
             "label": "emcc build O1",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "fullbuild:dev",
+            "problemMatcher": [
+                "$tsc"
+            ]
         }
     ]
 }
