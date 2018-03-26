@@ -15,7 +15,7 @@ let line = new Line();
 const lineColor = Color.black().rgba();
 
 function startDrawingMap(e: MouseEvent) {
-    draw.updateMousePosition(e);
+    draw.updatePosition(e);
     draw.state = DrawState.DRAWING;
 }
 
@@ -39,7 +39,7 @@ function stopDrawingMap(e: MouseEvent) {
 
 function drawMap(e: MouseEvent) {
     if (draw.state == DrawState.DRAWING) {
-        draw.updateMousePosition(e);
+        draw.updatePosition(e);
         draw.mouseLine(context, 3, lineColor);
         line.points.push(draw.mouse.copy());
     }

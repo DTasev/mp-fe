@@ -43,6 +43,7 @@ export class PlacingState implements IPlayState {
 
     addEventListeners(canvas: HTMLCanvasElement) {
         canvas.onmousedown = this.addTank;
+        canvas.ontouchstart = this.addTank;
     }
 
     view(viewport: Viewport) {

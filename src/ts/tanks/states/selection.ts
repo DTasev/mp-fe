@@ -34,8 +34,10 @@ export class SelectionState implements IPlayState {
             this.mouseUp();
         } else {
             canvas.onmousedown = this.mouseDown;
-            // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
             window.onmouseup = this.mouseUp;
+            // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
+            canvas.ontouchstart = this.mouseDown;
+            window.ontouchend = this.mouseUp;
         }
     }
 
@@ -47,12 +49,13 @@ export class SelectionState implements IPlayState {
         ui.heading.addHome(viewport, this.player, theme);
     }
 
-    mouseDown = (e: MouseEvent): void => {
+    mouseDown = (e: MouseEvent | TouchEvent): void => {
         // if the button clicked is not the left button, do nothing
-        if (e.button != 0) {
+        if (e instanceof MouseEvent && e.button != 0) {
             return;
         }
-        this.draw.updateMousePosition(e);
+
+        this.draw.updatePosition(e);
 
         // Check if the user has clicked any tank.
         for (const tank of this.player.tanks) {
@@ -68,6 +71,9 @@ export class SelectionState implements IPlayState {
                 // only highlight the first tank, if there are multiple on top of each other
                 break;
             }
+        }
+        if (e instanceof TouchEvent) {
+            e.preventDefault();
         }
     }
 

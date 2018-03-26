@@ -113,11 +113,12 @@ export class GameController {
 
         this.state = newState;
 
-        // clears any old events that were added
+        // clears mouse events
         this.canvas.onmousedown = null;
         this.canvas.onmouseup = null;
         window.onmouseup = null;
         this.canvas.onmousemove = null;
+        // clears touch events
         this.canvas.ontouchstart = null;
         this.canvas.ontouchend = null;
         window.ontouchend = null;
