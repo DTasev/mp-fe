@@ -61,9 +61,9 @@ export class ShootingState implements IPlayState {
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
-        canvas.onmousedown = this.startShooting;
-        canvas.onmousemove = this.continueShooting;
-        window.onmouseup = this.stopShooting;
+        // canvas.onmousedown = this.startShooting;
+        // canvas.onmousemove = this.continueShooting;
+        // window.onmouseup = this.stopShooting;
 
         canvas.ontouchstart = this.startShooting;
         canvas.ontouchmove = this.continueShooting;

@@ -14,6 +14,7 @@ import { ITheme } from "../themes/iTheme";
 export class PlacingState implements IPlayState {
     // keeps track of how many players have placed their tanks IN TOTAL
     static playersTankPlacement: Limit.Actions;
+    private DBL_CLICK_TIMEOUT = 300;
 
     context: CanvasRenderingContext2D;
     controller: GameController;
@@ -21,6 +22,9 @@ export class PlacingState implements IPlayState {
     player: Player;
     ui: Ui;
     tanksPlaced: Limit.Actions;
+
+    // touch only
+    private lastTouch: number;
 
     /**
      * 
@@ -42,7 +46,7 @@ export class PlacingState implements IPlayState {
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
-        canvas.onmousedown = this.addTank;
+        // canvas.onmousedown = this.addTank;
         canvas.ontouchstart = this.addTank;
     }
 
@@ -56,6 +60,25 @@ export class PlacingState implements IPlayState {
         // if the button clicked is not the left button, do nothing
         if (e instanceof MouseEvent && e.button != 0) {
             return;
+        }
+        if (!this.lastTouch) {
+            this.lastTouch = Date.now();
+            console.log('first touch');
+            setTimeout(() => { console.log('clearing lastTouch'); this.lastTouch = null }, this.DBL_CLICK_TIMEOUT + 10);
+            return;
+        } else {
+            console.log('second touch');
+            const diff = Date.now() - this.lastTouch;
+            console.log('time difference:', diff);
+            this.lastTouch = null;
+            if (diff > this.DBL_CLICK_TIMEOUT) {
+                console.log('too long to be double click');
+                return;
+            }
+            console.log('double click successful');
+            if (e instanceof TouchEvent) {
+                e.preventDefault();
+            }
         }
 
         this.draw.updatePosition(e);
@@ -79,8 +102,6 @@ export class PlacingState implements IPlayState {
                 }
             }
         }
-        if (e instanceof TouchEvent) {
-            e.preventDefault();
-        }
+
     }
 }

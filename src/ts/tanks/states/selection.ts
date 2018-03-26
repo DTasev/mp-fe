@@ -33,8 +33,8 @@ export class SelectionState implements IPlayState {
             // switch to the next state
             this.mouseUp();
         } else {
-            canvas.onmousedown = this.mouseDown;
-            window.onmouseup = this.mouseUp;
+            // canvas.onmousedown = this.mouseDown;
+            // window.onmouseup = this.mouseUp;
             // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
             canvas.ontouchstart = this.mouseDown;
             window.ontouchend = this.mouseUp;

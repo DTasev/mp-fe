@@ -35,10 +35,10 @@ export class MovingState implements IPlayState {
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
-        canvas.onmousedown = this.startMovement;
-        canvas.onmousemove = this.drawMoveLine;
+        // canvas.onmousedown = this.startMovement;
+        // canvas.onmousemove = this.drawMoveLine;
         // the mouseup is only on the canvas, otherwise none of the UI buttons can be clicked
-        canvas.onmouseup = this.endMovement;
+        // canvas.onmouseup = this.endMovement;
 
         canvas.ontouchstart = this.startMovement;
         canvas.ontouchmove = this.drawMoveLine;
