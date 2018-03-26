@@ -56,6 +56,7 @@ export class SelectionState implements IPlayState {
         }
 
         this.draw.updatePosition(e);
+        console.log('In selection mousedown');
 
         // Check if the user has clicked any tank.
         for (const tank of this.player.tanks) {
@@ -73,6 +74,7 @@ export class SelectionState implements IPlayState {
                 if (e instanceof TouchEvent) {
                     e.preventDefault();
                 }
+
                 // only highlight the first tank, if there are multiple on top of each other
                 break;
             }

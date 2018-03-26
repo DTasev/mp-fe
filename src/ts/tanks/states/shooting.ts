@@ -67,7 +67,8 @@ export class ShootingState implements IPlayState {
 
         canvas.ontouchstart = this.startShooting;
         canvas.ontouchmove = this.continueShooting;
-        window.ontouchend = this.stopShooting;
+        // the mouseup is only on the canvas, otherwise none of the UI buttons can be clicked
+        canvas.ontouchend = this.stopShooting;
     }
 
     view(viewport: Viewport) { }
@@ -80,6 +81,7 @@ export class ShootingState implements IPlayState {
     }
 
     private startShooting = (e: MouseEvent | TouchEvent) => {
+        console.log('Starting shooting');
         // if the button clicked is not the left button, do nothing
         if (e instanceof MouseEvent && e.button != 0) {
             return;
@@ -99,10 +101,6 @@ export class ShootingState implements IPlayState {
                 this.validRange(this.active.color);
             }
         }
-
-        if (e instanceof TouchEvent) {
-            e.preventDefault();
-        }
     }
 
     private validRange(tankColors: TankColor): void {
@@ -110,6 +108,7 @@ export class ShootingState implements IPlayState {
     }
 
     private continueShooting = (e: MouseEvent | TouchEvent) => {
+        console.log('continue shooting');
         this.draw.updatePosition(e);
 
         // draw the movement line if the mouse button is currently being pressed
@@ -175,10 +174,6 @@ export class ShootingState implements IPlayState {
 
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
-        if (e instanceof TouchEvent) {
-            e.preventDefault();
-        }
-
         this.controller.redrawCanvas();
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
@@ -228,6 +223,7 @@ export class ShootingState implements IPlayState {
         this.controller.cacheLine(this.shotPath);
     }
     private skipTurn = () => {
+        console.log('skip turn');
         // reset the current player's tank act states
         this.player.resetTanksActStates();
         // change to the next player when the state is next changed
