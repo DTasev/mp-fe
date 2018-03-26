@@ -31,7 +31,7 @@ describe('Drawing', () => {
         (mock_event as any).offsetX = new_X;
         (mock_event as any).offsetY = new_Y;
 
-        draw.updateMousePosition(mock_event);
+        draw.updatePosition(mock_event);
 
         expect(draw.mouse.x).to.not.equal(initial_mouse_pos);
         expect(draw.mouse.x).to.equal(new_X);
@@ -87,7 +87,7 @@ describe('Drawing', () => {
         // as any disables typescript "can't be assigned" error
         (mock_event as any).offsetX = new_X;
         (mock_event as any).offsetY = new_Y;
-        draw.updateMousePosition(mock_event);
+        draw.updatePosition(mock_event);
         draw.mouseLine(mock_context as any, expected_width, color, true);
 
         // tests mouse coords
@@ -103,7 +103,7 @@ describe('Drawing', () => {
         // as any disables typescript "can't be assigned" error
         (mock_event as any).offsetX = new_X;
         (mock_event as any).offsetY = new_Y;
-        draw.updateMousePosition(mock_event);
+        draw.updatePosition(mock_event);
         // this is necessary, otherwise last coords will also be updated, as they have never been set
         draw.last.x = 1;
         // drawing a line with update_last = false
@@ -122,7 +122,7 @@ describe('Drawing', () => {
         // as any disables typescript "can't be assigned" error
         (mock_event as any).offsetX = new_X;
         (mock_event as any).offsetY = new_Y;
-        draw.updateMousePosition(mock_event);
+        draw.updatePosition(mock_event);
         // drawing a line with update_last = false, but the last coords have never been set before
         // so they will be updated anyway
         draw.mouseLine(mock_context as any, expected_width, color, false);
