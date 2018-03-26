@@ -158,7 +158,13 @@ export class Draw {
         }
         context.closePath();
     }
-
+    updatePosition(e: MouseEvent | TouchEvent) {
+        if (e instanceof MouseEvent) {
+            this.updateMousePosition(e);
+        } else if (e instanceof TouchEvent) {
+            this.updateTouchPosition(e);
+        }
+    }
     updateMousePosition(e: MouseEvent) {
         // if the browser hasn't passed a parameter, but has set the global event variable
         if (!e) {

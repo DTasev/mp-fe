@@ -40,9 +40,9 @@ export class MovingState implements IPlayState {
         // the mouseup is only on the canvas, otherwise none of the UI buttons can be clicked
         canvas.onmouseup = this.endMovement;
 
-        // canvas.addEventListener('touchstart', this.touchMove, false);
-        // canvas.addEventListener('touchend', this.mouseUp, false);
-        // canvas.addEventListener('touchmove', this.touchMove, false);
+        canvas.ontouchstart = this.startMovement;
+        canvas.ontouchmove = this.drawMoveLine;
+        canvas.ontouchend = this.endMovement;
     }
 
     view(viewport: Viewport) { }
@@ -54,11 +54,13 @@ export class MovingState implements IPlayState {
         ui.heading.right.add(button_goToShooting);
     }
 
-    startMovement = (e: MouseEvent): void => {
+    startMovement = (e: MouseEvent | TouchEvent): void => {
         // if the button clicked is not the left button, do nothing
-        if (e.button != 0) {
+        if (e instanceof MouseEvent && e.button != 0) {
             return;
         }
+
+        this.draw.updatePosition(e);
         this.line = new Limit.Length(this.active.movementRange);
 
         // limit the start of the line to be the tank
@@ -68,6 +70,9 @@ export class MovingState implements IPlayState {
             this.draw.state = DrawState.DRAWING;
             this.validMove(this.active.color);
         }
+        if (e instanceof TouchEvent) {
+            e.preventDefault();
+        }
     }
 
     private validMove(tankColors: TankColor) {
@@ -75,9 +80,9 @@ export class MovingState implements IPlayState {
         this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, tankColors.movementLine);
     }
 
-    endMovement = (e: MouseEvent) => {
+    endMovement = (e: MouseEvent | TouchEvent) => {
         // if the button clicked is not the left button, do nothing
-        if (e.button != 0) {
+        if (e instanceof MouseEvent && e.button != 0) {
             return;
         }
         // reset the line limit as the user has let go of the button
@@ -108,6 +113,9 @@ export class MovingState implements IPlayState {
             this.player.viewportPosition = Viewport.current();
         }
         this.endTurn();
+        if (e instanceof TouchEvent) {
+            e.preventDefault();
+        }
     }
 
     private goToShooting = () => {
@@ -129,8 +137,8 @@ export class MovingState implements IPlayState {
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
 
-    private drawMoveLine = (e: MouseEvent) => {
-        this.draw.updateMousePosition(e);
+    private drawMoveLine = (e: MouseEvent | TouchEvent) => {
+        this.draw.updatePosition(e);
         // draw the movement line if the mouse button is currently being pressed
         if (this.draw.state == DrawState.DRAWING) {
             if (this.line.in(this.active.position, this.draw.mouse)) {
@@ -138,6 +146,9 @@ export class MovingState implements IPlayState {
             } else {
                 this.tankValidPosition = false;
             }
+        }
+        if (e instanceof TouchEvent) {
+            e.preventDefault();
         }
     }
 

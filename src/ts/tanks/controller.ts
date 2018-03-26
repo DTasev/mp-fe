@@ -112,11 +112,16 @@ export class GameController {
         this.ui.clear();
 
         this.state = newState;
+
         // clears any old events that were added
         this.canvas.onmousedown = null;
         this.canvas.onmouseup = null;
         window.onmouseup = null;
         this.canvas.onmousemove = null;
+        this.canvas.ontouchstart = null;
+        this.canvas.ontouchend = null;
+        window.ontouchend = null;
+        this.canvas.ontouchmove = null;
 
         // if the state has marked the end of the player's turn, then we go to the next player
         const gameWinner = this.gameOver();
