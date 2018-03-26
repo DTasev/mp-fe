@@ -68,12 +68,14 @@ export class SelectionState implements IPlayState {
                 TanksMath.point.collideCircle(this.draw.mouse, tank.position, Tank.WIDTH)) {
                 // highlight the selected tank
                 this.successfulSelection(tank);
+
+                // prevent scrolling action on mobile, only when a tank is successfully selected
+                if (e instanceof TouchEvent) {
+                    e.preventDefault();
+                }
                 // only highlight the first tank, if there are multiple on top of each other
                 break;
             }
-        }
-        if (e instanceof TouchEvent) {
-            e.preventDefault();
         }
     }
 
