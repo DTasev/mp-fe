@@ -71,7 +71,7 @@ export class Tank {
     static readonly LINE_WIDTH = 1;
 
     /** How far can the tank move */
-    static readonly MOVEMENT_RANGE = 100;
+    static readonly DEFAULT_MOVEMENT_RANGE = 100;
 
     /** The width of the movement line */
     static readonly MOVEMENT_LINE_WIDTH = 3;
@@ -105,7 +105,7 @@ export class Tank {
     actionState: TankTurnState;
     effects: IEffect[];
 
-    movementRange = Tank.MOVEMENT_RANGE;
+    movementRange = Tank.DEFAULT_MOVEMENT_RANGE;
 
     label: string;
 
