@@ -4,17 +4,19 @@ import { Tank } from "../objects/tank";
 import { Draw } from "../drawing/draw";
 import { Player } from "../objects/player";
 import { Ui } from "../ui/ui";
-
-import * as Settings from '../settings';
-import * as Limit from "../limiters/index";
 import { Viewport } from "../gameMap/viewport";
 import { CommonUi } from "../ui/common";
 import { ITheme } from "../themes/iTheme";
 
+import * as Settings from '../settings';
+import * as Limit from "../limiters/index";
+
 export class PlacingState implements IPlayState {
+    private DBL_CLICK_TIMEOUT = 300;
+
     // keeps track of how many players have placed their tanks IN TOTAL
     static playersTankPlacement: Limit.Actions;
-    private DBL_CLICK_TIMEOUT = 300;
+    private lastTouch: number;
 
     context: CanvasRenderingContext2D;
     controller: GameController;
@@ -23,8 +25,6 @@ export class PlacingState implements IPlayState {
     ui: Ui;
     tanksPlaced: Limit.Actions;
 
-    // touch only
-    private lastTouch: number;
 
     /**
      * 
@@ -46,8 +46,11 @@ export class PlacingState implements IPlayState {
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
-        // canvas.onmousedown = this.addTank;
-        canvas.ontouchstart = this.addTank;
+        if (Settings.IS_MOBILE) {
+            canvas.ontouchstart = this.addTank;
+        } else {
+            canvas.onmousedown = this.addTank;
+        }
     }
 
     view(viewport: Viewport) {

@@ -12,11 +12,11 @@ import { Color } from "../drawing/color";
 import { Ui } from "../ui/ui";
 import { Viewport } from "../gameMap/viewport";
 import { ShootingUi } from "../ui/shooting";
+import { ITheme } from "../themes/iTheme";
+import { ObstacleType } from "../gameMap/obstacle";
 
 import * as Settings from '../settings';
 import * as Limit from "../limiters/index";
-import { ITheme } from "../themes/iTheme";
-import { ObstacleType } from "../gameMap/obstacle";
 
 export class ShootingState implements IPlayState {
     context: CanvasRenderingContext2D;
@@ -61,14 +61,16 @@ export class ShootingState implements IPlayState {
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
-        // canvas.onmousedown = this.startShooting;
-        // canvas.onmousemove = this.continueShooting;
-        // window.onmouseup = this.stopShooting;
-
-        canvas.ontouchstart = this.startShooting;
-        canvas.ontouchmove = this.continueShooting;
-        // the mouseup is only on the canvas, otherwise none of the UI buttons can be clicked
-        canvas.ontouchend = this.stopShooting;
+        if (Settings.IS_MOBILE) {
+            canvas.ontouchstart = this.startShooting;
+            canvas.ontouchmove = this.continueShooting;
+            // the mouseup is only on the canvas, otherwise none of the UI buttons can be clicked
+            canvas.ontouchend = this.stopShooting;
+        } else {
+            canvas.onmousedown = this.startShooting;
+            canvas.onmousemove = this.continueShooting;
+            window.onmouseup = this.stopShooting;
+        }
     }
 
     view(viewport: Viewport) { }

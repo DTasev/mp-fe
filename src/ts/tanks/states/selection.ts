@@ -8,6 +8,8 @@ import { Ui } from "../ui/ui";
 import { Viewport } from "../gameMap/viewport";
 import { ITheme } from "../themes/iTheme";
 
+import * as Settings from '../settings';
+
 export class SelectionState implements IPlayState {
     context: CanvasRenderingContext2D;
     controller: GameController;
@@ -33,11 +35,14 @@ export class SelectionState implements IPlayState {
             // switch to the next state
             this.mouseUp();
         } else {
-            // canvas.onmousedown = this.mouseDown;
-            // window.onmouseup = this.mouseUp;
-            // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
-            canvas.ontouchstart = this.mouseDown;
-            window.ontouchend = this.mouseUp;
+            if (Settings.IS_MOBILE) {
+                // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
+                canvas.ontouchstart = this.mouseDown;
+                window.ontouchend = this.mouseUp;
+            } else {
+                canvas.onmousedown = this.mouseDown;
+                window.onmouseup = this.mouseUp;
+            }
         }
     }
 

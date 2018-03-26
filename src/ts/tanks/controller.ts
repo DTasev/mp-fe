@@ -113,16 +113,19 @@ export class GameController {
 
         this.state = newState;
 
-        // clears mouse events
-        this.canvas.onmousedown = null;
-        this.canvas.onmouseup = null;
-        window.onmouseup = null;
-        this.canvas.onmousemove = null;
-        // clears touch events
-        this.canvas.ontouchstart = null;
-        this.canvas.ontouchend = null;
-        window.ontouchend = null;
-        this.canvas.ontouchmove = null;
+        if (Settings.IS_MOBILE) {
+            // clears touch events
+            this.canvas.ontouchstart = null;
+            this.canvas.ontouchend = null;
+            window.ontouchend = null;
+            this.canvas.ontouchmove = null;
+        } else {
+            // clears mouse events
+            this.canvas.onmousedown = null;
+            this.canvas.onmouseup = null;
+            window.onmouseup = null;
+            this.canvas.onmousemove = null;
+        }
 
         // if the state has marked the end of the player's turn, then we go to the next player
         const gameWinner = this.gameOver();

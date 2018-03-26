@@ -1,6 +1,5 @@
-import { IActionState, IPlayState } from "./iActionState";
+import { IPlayState } from "./iActionState";
 import { Draw, DrawState } from "../drawing/draw";
-import * as Limit from "../limiters/index";
 import { GameController, GameState } from "../controller";
 import { Player } from "../objects/player";
 import { TanksMath } from "../utility/tanksMath";
@@ -12,6 +11,9 @@ import { J2H } from "../json2html";
 import { Viewport } from "../gameMap/viewport";
 import { MovementUi } from "../ui/movement";
 import { ITheme } from "../themes/iTheme";
+
+import * as Settings from '../settings';
+import * as Limit from "../limiters/index";
 
 export class MovingState implements IPlayState {
     context: CanvasRenderingContext2D;
@@ -35,14 +37,17 @@ export class MovingState implements IPlayState {
     }
 
     addEventListeners(canvas: HTMLCanvasElement) {
-        // canvas.onmousedown = this.startMovement;
-        // canvas.onmousemove = this.drawMoveLine;
-        // the mouseup is only on the canvas, otherwise none of the UI buttons can be clicked
-        // canvas.onmouseup = this.endMovement;
-
-        canvas.ontouchstart = this.startMovement;
-        canvas.ontouchmove = this.drawMoveLine;
-        canvas.ontouchend = this.endMovement;
+        if (Settings.IS_MOBILE) {
+            canvas.ontouchstart = this.startMovement;
+            canvas.ontouchmove = this.drawMoveLine;
+            // the mouseup is only on the canvas, otherwise none of the UI buttons can be clicked
+            canvas.ontouchend = this.endMovement;
+        } else {
+            canvas.onmousedown = this.startMovement;
+            canvas.onmousemove = this.drawMoveLine;
+            // the mouseup is only on the canvas, otherwise none of the UI buttons can be clicked
+            canvas.onmouseup = this.endMovement;
+        }
     }
 
     view(viewport: Viewport) { }
