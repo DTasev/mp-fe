@@ -30,9 +30,6 @@ function init() {
     const viewportHeight = hasVerticalScroll ? window.innerHeight - SCROLLBAR_WIDTH : window.innerHeight;
 
     const ui = new Ui(Ui.ID_GAME_UI, viewportWidth, viewportHeight);
-    window.onscroll = (e: Event) => {
-        ui.moveToFitView(e);
-    };
     const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
     const mainMenu = new MainMenu(ui, canvas);
     mainMenu.setUpUi();

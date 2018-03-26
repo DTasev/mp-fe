@@ -55,7 +55,7 @@ class LightGameColors implements IThemeGameColors {
     }
 
     canvasBackground(): Color {
-        return Color.black();
+        return Color.white();
     }
     tankActive(): Color {
         return Color.red();
@@ -84,7 +84,7 @@ class LightGameColors implements IThemeGameColors {
 }
 class LightMapColors implements IThemeMapColors {
     solid(): Color {
-        return Color.white();
+        return Color.black();
     }
     water(): Color {
         return Color.lightblue();

@@ -39,8 +39,7 @@ class MenuStartGame {
                     "div": {
                         "className": commonClasses,
                         "textContent": "Sepia",
-                        "onclick": 'PublicMenuStartGame.toggle(this, "' + activeClass + '")',
-                        "id": MainMenu.ID_THEME
+                        "onclick": 'PublicMenuStartGame.toggle(this, "' + activeClass + '")'
                     }
                 }, {
                     "div": {
@@ -60,7 +59,7 @@ class MenuStartGame {
         for (const child of d_themes.div.children) {
             if (child.div.textContent.toLowerCase() === TanksCache.theme) {
                 child.div.className += activeClass;
-                child.div.id = MainMenu.ID_THEME;
+                child.div["id"] = MainMenu.ID_THEME;
                 break;
             }
         }
@@ -166,7 +165,7 @@ class MenuStartGame {
                         "className": "w3-col s3 m3 l3",
                         "children": [{
                             "div": {
-                                "className": "w3-row w3-padding-32",
+                                "className": "w3-row" + MainMenu.ELEMENT_PADDING,
                                 "children": [{
                                     "div": {
                                         "className": "w3-row",
@@ -255,8 +254,9 @@ class MenuStartGame {
     }
 }
 export class MainMenu implements IActionState {
-    static readonly CLASS_MENU_BUTTON = "w3-padding-32 w3-button tanks-ui-menu-button";
-    static readonly CLASS_MENU_TITLE = "tanks-ui-menu-title";
+    static readonly ELEMENT_PADDING = Settings.IS_MOBILE ? "" : " w3-padding-32";
+    static readonly CLASS_MENU_BUTTON = "w3-button tanks-ui-menu-button" + MainMenu.ELEMENT_PADDING;
+    static readonly CLASS_MENU_TITLE = "tanks-ui-menu-title" + MainMenu.ELEMENT_PADDING;
     static readonly ID_PLAYER_SLIDER = "slider-players";
     static readonly ID_PLAYER_SLIDER_DISPLAY = "slider-players-value";
     static readonly ID_PLAYER_SETTINGS = "player-settings";
@@ -277,6 +277,7 @@ export class MainMenu implements IActionState {
         this.ui = ui;
         this.canvas = canvas;
         this.theme = ThemeFactory.create(TanksCache.theme);
+        document.body.style.backgroundColor = this.theme.game.canvasBackground().rgba();
     }
 
     addEventListeners(canvas: HTMLCanvasElement) { }
@@ -396,9 +397,11 @@ export class MainMenu implements IActionState {
         // retrieve the selected theme from the start game screen
         const themeInput = document.getElementById(MainMenu.ID_THEME);
         // if not present (when quick start is pressed) or the theme is the same, use the current theme
-        const gameTheme = themeInput && themeInput.textContent !== this.theme.name ? ThemeFactory.create(themeInput.textContent) : this.theme;
+        const gameTheme = themeInput ? ThemeFactory.create(themeInput.textContent) : this.theme;
         // cache the theme, so that next time the player runs the game it will be that theme
         TanksCache.theme = gameTheme.name;
+
+        document.body.style.backgroundColor = gameTheme.game.canvasBackground().rgba();
 
         const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, gameTheme, map, players, numTanks);
         controller.changeGameState(GameState.TANK_PLACEMENT);

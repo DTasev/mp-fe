@@ -41,8 +41,11 @@
     font-family: 'Gloria Hallelujah', cursive;
     letter-spacing: 0.1em;
     font-weight: 700;
-    padding-bottom: 64px;
     text-decoration: none;
+}
+
+.tanks-ui-menu-title-padding {
+    padding-bottom: 64px;
 }
 
 .slidecontainer {

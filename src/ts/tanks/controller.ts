@@ -97,6 +97,10 @@ export class GameController {
 
         this.redrawCanvas();
         this.timeStart = new SingleAccess<Date>(new Date());
+
+        window.onscroll = (e: Event) => {
+            this.ui.moveToFitView(e);
+        };
     }
 
     /**
