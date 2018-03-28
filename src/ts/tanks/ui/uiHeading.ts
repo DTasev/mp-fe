@@ -18,35 +18,24 @@ export class UiHeading {
 
         this.htmlElement = htmlElement;
 
-
-        const leftDescription = {
+        const sideDescription = {
             "div": {
-                "className": "w3-col s1 m1 l1"
+                "className": "w3-col s2 m2 l1"
             }
         };
-        const left = new UiSection(J2H.parse(leftDescription));
+
+        this.left = new UiSection(J2H.parse(sideDescription));
+        this.right = new UiSection(J2H.parse(sideDescription));
 
         const middleSections = {
             "div": {
-                "className": "w3-col s5 m5 l5",
+                "className": "w3-col s4 m4 l5",
                 "style": "text-align:center;"
             }
         };
 
-        const playerTurn = new UiSection(J2H.parse(middleSections));
-        const message = new UiSection(J2H.parse(middleSections));
-
-        const rightDescription = {
-            "div": {
-                "className": "w3-col s1 m1 l1"
-            }
-        };
-        const right = new UiSection(J2H.parse(rightDescription));
-
-        this.left = left;
-        this.playerTurn = playerTurn;
-        this.message = message;
-        this.right = right;
+        this.playerTurn = new UiSection(J2H.parse(middleSections));
+        this.message = new UiSection(J2H.parse(middleSections));
     }
 
     addTo(rowHeading: HTMLDivElement): void {

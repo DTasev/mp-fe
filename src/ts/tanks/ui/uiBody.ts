@@ -21,14 +21,14 @@ export class UiBody {
         // these are on the side of the menu buttons, to pad it out so that it can be in the middle
         const sideDescription = {
             "div": {
-                "className": "w3-col s1 m1 l2",
+                "className": "w3-col w3-hide-small w3-hide-medium l2",
                 // tells the browser to render a whitespace and respect the CSS styling classes
                 "innerHTML": "&nbsp;"
             }
         };
         const middleDescription = {
             "div": {
-                "className": "w3-col s10 m10 l8"
+                "className": "w3-col s12 m12 l8"
             }
         };
         const left = J2H.parse<HTMLDivElement>(sideDescription);

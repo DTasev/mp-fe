@@ -64,23 +64,25 @@ export class PlacingState implements IPlayState {
         if (e instanceof MouseEvent && e.button != 0) {
             return;
         }
-        if (!this.lastTouch) {
-            this.lastTouch = Date.now();
-            console.log('first touch');
-            setTimeout(() => { console.log('clearing lastTouch'); this.lastTouch = null }, this.DBL_CLICK_TIMEOUT + 10);
-            return;
-        } else {
-            console.log('second touch');
-            const diff = Date.now() - this.lastTouch;
-            console.log('time difference:', diff);
-            this.lastTouch = null;
-            if (diff > this.DBL_CLICK_TIMEOUT) {
-                console.log('too long to be double click');
+        if (Settings.IS_MOBILE) {
+            if (!this.lastTouch) {
+                this.lastTouch = Date.now();
+                console.log('first touch');
+                setTimeout(() => { console.log('clearing lastTouch'); this.lastTouch = null }, this.DBL_CLICK_TIMEOUT + 10);
                 return;
-            }
-            console.log('double click successful');
-            if (e instanceof TouchEvent) {
-                e.preventDefault();
+            } else {
+                console.log('second touch');
+                const diff = Date.now() - this.lastTouch;
+                console.log('time difference:', diff);
+                this.lastTouch = null;
+                if (diff > this.DBL_CLICK_TIMEOUT) {
+                    console.log('too long to be double click');
+                    return;
+                }
+                console.log('double click successful');
+                if (e instanceof TouchEvent) {
+                    e.preventDefault();
+                }
             }
         }
 

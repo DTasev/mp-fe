@@ -27,7 +27,8 @@ export class Viewport {
     }
 
     go(x: number, y: number) {
-        window.scroll(x, y);
+        console.log('Going to:', x, y);
+        window.scrollTo(x, y);
     }
     goTo(point: Point) {
         this.go(point.x, point.y);
