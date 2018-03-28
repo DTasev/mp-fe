@@ -18,7 +18,7 @@ import { Line } from './utility/line';
 import { LineCache } from './utility/lineCache';
 import { Point } from './utility/point';
 import { SingleAccess } from "./utility/singleAccess";
-
+import { generatePlayerPositions } from "./gameMap/positions";
 export enum GameState {
     TANK_PLACEMENT,
     TANK_MOVEMENT,
@@ -84,7 +84,7 @@ export class GameController {
         this.viewport = new Viewport(canvasWidth, canvasHeight);
         this.viewport.middle();
 
-        const playerPositions = this.generatePlayerViews(this.canvas.width, this.canvas.height);
+        const playerPositions = generatePlayerPositions(this.numPlayers, this.canvas.width, this.canvas.height);
         for (const [id, player] of players.entries()) {
             player.setViewportPosition(playerPositions[id]);
         }
@@ -280,15 +280,6 @@ export class GameController {
                 this.currentPlayer = this.currentPlayer === this.numPlayers - 1 ? 0 : this.currentPlayer + 1;
             } while (this.players[this.currentPlayer].activeTanks().length === 0);
         }
-    }
-    private generatePlayerViews(canvasWidth: number, canvasHeight: number): Point[] {
-        const points: Point[] = [];
-        const N = this.numPlayers + 1;
-        for (let i = 0; i < this.numPlayers; i++) {
-            const point = new Point(i * (canvasWidth / N), i % 2 == 0 ? 0 : canvasHeight);
-            points.push(point);
-        }
-        return points;
     }
 
     collidingWithTerrain(point: Point, radius: number): Obstacle {

@@ -26,7 +26,6 @@ function init() {
     const hasVerticalScroll = window.innerWidth > document.documentElement.clientWidth;
     console.log("Window vertical scroll:", hasVerticalScroll);
     // Don't subtract if there is no scrollbar
-    debugger
     const viewportWidth = hasVerticalScroll ? window.innerWidth - SCROLLBAR_WIDTH : window.innerWidth;
     const viewportHeight = hasVerticalScroll ? window.innerHeight - SCROLLBAR_WIDTH : window.innerHeight;
 
