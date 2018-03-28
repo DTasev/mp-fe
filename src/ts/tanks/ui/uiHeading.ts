@@ -30,7 +30,13 @@ export class UiHeading {
         const middleSections = {
             "div": {
                 "className": "w3-col s4 m4 l5",
-                "style": "text-align:center;"
+                "style": "text-align:center;",
+                "children": [{
+                    "b": {
+                        "innerHTML": "&nbsp;"
+                    }
+                }
+                ]
             }
         };
 

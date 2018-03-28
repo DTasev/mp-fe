@@ -105,8 +105,8 @@ export class Ui {
     }
     message(msg: string, theme: ITheme) {
         const b = document.createElement('b');
-        b.className = "fa-2x " + theme.ui.playerMessageClass();
-        b.textContent = msg;
+        b.classList.add("fa-2x", theme.ui.playerMessageClass());
+        b.innerHTML = msg === "" ? "&nbsp;" : msg;
         this.heading.message.innerHTML(b.outerHTML);
     }
 
