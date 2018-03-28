@@ -289,4 +289,7 @@ export class GameController {
     lineCollidingWithTerrain(start: Point, end: Point): [Point, Obstacle] {
         return Collision.lineWithTerrain(start, end, this.map.terrain);
     }
+    gameState(): GameState {
+        return this.state;
+    }
 }

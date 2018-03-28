@@ -141,11 +141,8 @@ describe('Game Controller', () => {
 
         controller["players"].push(new Player(0, "P1", Color.black()));
         controller["players"].push(new Player(0, "P1", Color.black()));
-        const mock_windowScroll = new SingleCallMock(window, window.scroll);
-        window.scroll = () => { mock_windowScroll.default_callback() };
         controller.changeGameState(GameState.TANK_PLACEMENT);
 
-        // expect that the viewport was scrolled to the player's view
-        mock_windowScroll.expect_called.once();
+        expect(controller.gameState()).to.eq(GameState.TANK_PLACEMENT);
     })
 });
