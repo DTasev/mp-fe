@@ -21,7 +21,7 @@ export class MovingState implements IPlayState {
     draw: Draw;
     line: Limit.Length;
     active: Tank;
-    tankValidPosition: boolean;
+    tankMovementInRange: boolean;
 
     constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
@@ -78,7 +78,7 @@ export class MovingState implements IPlayState {
     }
 
     private validMove(tankColors: TankColor) {
-        this.tankValidPosition = true;
+        this.tankMovementInRange = true;
         this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, tankColors.movementLine);
     }
 
@@ -91,7 +91,7 @@ export class MovingState implements IPlayState {
         this.line.reset();
 
         // only act if the position is valid
-        if (this.tankValidPosition) {
+        if (this.tankMovementInRange) {
             const collisionObstacle = this.controller.collidingWithTerrain(this.draw.mouse, Tank.WIDTH);
             // update the position of the tank in the player array
             const tank = this.player.tanks[this.active.id];
@@ -104,12 +104,20 @@ export class MovingState implements IPlayState {
             if (!collisionObstacle || collisionObstacle.traversable()) {
                 tank.position = this.draw.mouse.copy();
                 tank.actionState = TankTurnState.MOVED;
+
+                this.ui.message("", this.controller.theme);
+
+                // if the obstacle is traversable, it might affect the tank, e.g. slow it down
                 if (collisionObstacle) {
                     collisionObstacle.affect(tank);
+                    this.ui.message("Tank slowed down!", this.controller.theme);
                 }
+            } else {
+                // the tank collided with an obstacle, do NOT remove the highlight
+                this.player.activeTank.set(this.player.tanks[this.active.id]);
+                this.ui.message("Tank collides with obstacle!", this.controller.theme);
             }
 
-            this.ui.message("", this.controller.theme);
 
             // set the player's viewport position to the last position they were looking at
             this.player.viewportPosition = Viewport.current();
@@ -146,7 +154,7 @@ export class MovingState implements IPlayState {
             if (this.line.in(this.active.position, this.draw.mouse)) {
                 this.validMove(this.active.color);
             } else {
-                this.tankValidPosition = false;
+                this.tankMovementInRange = false;
             }
         }
         if (e instanceof TouchEvent) {

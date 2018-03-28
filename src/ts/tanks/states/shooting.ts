@@ -108,20 +108,15 @@ export class ShootingState implements IPlayState {
     }
 
     private continueShooting = (e: MouseEvent | TouchEvent) => {
-        console.log('continue shooting');
         this.draw.updatePosition(e);
 
         // draw the movement line if the mouse button is currently being pressed
         if (this.draw.state == DrawState.DRAWING) {
             // if the player is just moving about on the tank's space
             if (this.tankRoamingLength.in(this.active.position, this.draw.mouse)) {
-                console.log("Roaming in tank space");
-                this.ui.message("", this.controller.theme);
                 this.validRange(this.active.color);
             } // if the player has shot far away start drawing the line
             else if (this.shotSpeed.enough(this.active.position, this.draw.mouse)) {
-                console.log("Shooting!");
-                this.ui.message("", this.controller.theme);
                 this.validRange(this.active.color);
 
                 // only add to the shot path if the shot was successful
@@ -130,13 +125,13 @@ export class ShootingState implements IPlayState {
                 // if the shot has reached the max allowed limit we stop the drawing, this is an artificial
                 // limitation to stop a shot that goes along the whole screen
                 if (!this.shotLength.add(this.active.position, this.draw.mouse)) {
-                    console.log("Successful shot!");
+                    this.ui.message("Successful shot!", this.controller.theme);
+
                     this.successfulShot = true;
                     this.draw.state = DrawState.STOPPED;
                 }
             } else {
                 this.ui.message("Shooting too slow!", this.controller.theme);
-                console.log("Shooting too slow!");
                 this.draw.state = DrawState.STOPPED;
             }
         }

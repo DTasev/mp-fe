@@ -104,12 +104,10 @@ export class Ui {
 
     }
     message(msg: string, theme: ITheme) {
-        this.heading.message.add(J2H.parse({
-            "b": {
-                "textContent": msg,
-                "className": "fa-2x " + theme.ui.playerMessageClass()
-            }
-        }));
+        const b = document.createElement('b');
+        b.className = "fa-2x " + theme.ui.playerMessageClass();
+        b.textContent = msg;
+        this.heading.message.innerHTML(b.outerHTML);
     }
 
     background(color: Color) {

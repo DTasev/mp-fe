@@ -64,7 +64,7 @@ export class UiHeading {
     clear(): void {
         this.left.clear();
         this.playerTurn.clear();
-        this.message.clear();
+        // this.message.clear();
         this.right.clear();
     }
 }
