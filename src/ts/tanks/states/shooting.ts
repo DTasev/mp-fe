@@ -180,6 +180,8 @@ export class ShootingState implements IPlayState {
 
         // for each segment of the path, perform collision
         const shotPathLength = this.shotPath.points.length;
+        // this variable is used after the for loop in order to trim segments of the shot that are
+        // inside obstacles, or removed due to shooting through wood
         let i: number;
         let trimIncrement = 2;
         for (i = 0; i < shotPathLength - 1; i++) {
@@ -194,6 +196,7 @@ export class ShootingState implements IPlayState {
                 // if it's wood the intersection point IS NOT the one we collide against, as the shot will
                 // penetrate the wood obstacle for 1 more length
                 if (obstacle.type === ObstacleType.WOOD) {
+                    // i + 2 here gives us the end of the NEXT shot segment, thus making the shot earlier than usual 
                     // handle the case where the last part of the shot has penetrated
                     const nextShot = i + 2 >= shotPathLength ? shotPathLength - 1 : i + 2;
                     shotTerrainCollisionPoint = this.shotPath.points[nextShot];
