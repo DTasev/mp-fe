@@ -1,11 +1,11 @@
-import { Point } from "../utility/point";
 import { Color } from "../drawing/color";
-import { ITheme } from "../themes/iTheme";
 import { Draw } from "../drawing/draw";
-import { IObstacleData } from "./dataInterfaces";
 import { IEffect } from "../objects/effects/iEffect";
 import { SlowEffect } from "../objects/effects/slow";
 import { Tank } from "../objects/tank";
+import { ITheme } from "../themes/iTheme";
+import { Point } from "../utility/point";
+import { IObstacleData } from "./dataInterfaces";
 
 export enum ObstacleType {
     SOLID, // cannot move through

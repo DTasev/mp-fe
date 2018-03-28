@@ -1,28 +1,23 @@
-import { IPlayState, IActionState } from "./states/iActionState";
+import { Draw } from './drawing/draw';
+import { determineCanvasSize } from "./gameMap/mapSize";
+import { Obstacle } from "./gameMap/obstacle";
+import { TanksMap } from "./gameMap/tanksMap";
+import { Viewport } from "./gameMap/viewport";
+import { Player } from './objects/player';
+import * as Settings from './settings';
+import { GameEndState } from "./states/gameEnd";
+import { IActionState } from "./states/iActionState";
 import { MovingState } from "./states/movement";
 import { PlacingState } from "./states/placement";
-import { ShootingState } from "./states/shooting";
 import { SelectionState } from "./states/selection";
-import { GameEndState } from "./states/gameEnd";
-import { MainMenu } from "./states/menu";
-import { Player } from './objects/player';
-import { Draw } from './drawing/draw';
+import { ShootingState } from "./states/shooting";
+import { ITheme } from "./themes/iTheme";
+import { Ui } from "./ui/ui";
+import { Collision } from "./utility/collision";
 import { Line } from './utility/line';
 import { LineCache } from './utility/lineCache';
 import { Point } from './utility/point';
-import { Ui } from "./ui/ui";
-import { Collision } from "./utility/collision";
-import { Viewport } from "./gameMap/viewport";
-import { ITheme } from "./themes/iTheme";
-
-import * as Limit from './limiters/index'
-import * as Settings from './settings';
-import { J2H } from "./json2html";
-import { CommonUi } from "./ui/common";
-import { TanksMap } from "./gameMap/tanksMap";
 import { SingleAccess } from "./utility/singleAccess";
-import { determineCanvasSize } from "./gameMap/mapSize";
-import { Obstacle } from "./gameMap/obstacle";
 
 export enum GameState {
     TANK_PLACEMENT,

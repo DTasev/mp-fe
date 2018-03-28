@@ -1,11 +1,10 @@
-import * as Settings from '../tanks/settings';
-
-import { determineCanvasSize } from "../tanks/gameMap/mapSize";
-import { Draw, DrawState } from "../tanks/drawing/draw";
 import { Color } from '../tanks/drawing/color';
-import { LineCache } from '../tanks/utility/lineCache';
+import { Draw, DrawState } from "../tanks/drawing/draw";
+import * as Settings from '../tanks/settings';
 import { Line } from '../tanks/utility/line';
+import { LineCache } from '../tanks/utility/lineCache';
 import { Point } from '../tanks/utility/point';
+
 
 let draw: Draw;
 

@@ -1,7 +1,7 @@
 import { DarkTheme } from "./dark";
+import { ITheme } from "./iTheme";
 import { LightTheme } from "./light";
 import { SepiaTheme } from "./sepia";
-import { ITheme } from "./iTheme";
 
 export class ThemeFactory {
     static create(theme: string): ITheme {

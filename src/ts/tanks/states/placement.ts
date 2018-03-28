@@ -1,15 +1,14 @@
-import { IPlayState } from "./iActionState";
 import { GameController, GameState } from "../controller";
-import { Tank } from "../objects/tank";
 import { Draw } from "../drawing/draw";
-import { Player } from "../objects/player";
-import { Ui } from "../ui/ui";
 import { Viewport } from "../gameMap/viewport";
-import { CommonUi } from "../ui/common";
-import { ITheme } from "../themes/iTheme";
-
-import * as Settings from '../settings';
 import * as Limit from "../limiters/index";
+import { Player } from "../objects/player";
+import { Tank } from "../objects/tank";
+import * as Settings from '../settings';
+import { ITheme } from "../themes/iTheme";
+import { Ui } from "../ui/ui";
+import { IPlayState } from "./iActionState";
+
 
 export class PlacingState implements IPlayState {
     private DBL_CLICK_TIMEOUT = 300;

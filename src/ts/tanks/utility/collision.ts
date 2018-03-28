@@ -1,9 +1,8 @@
-import { TankHealthState, Tank } from "../objects/tank";
-import { Line } from "./line";
-import { TanksMath } from "./tanksMath";
+import { Obstacle, ObstacleType } from "../gameMap/obstacle";
+import { Tank, TankHealthState } from "../objects/tank";
 import { Point } from "./point";
 import { S } from "./stringFormat";
-import { Obstacle, ObstacleType } from "../gameMap/obstacle";
+import { TanksMath } from "./tanksMath";
 
 export class Collision {
     private static debugCollisionLine(start: Point, end: Point) {

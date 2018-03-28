@@ -1,9 +1,9 @@
 import { GameController } from "../controller";
-import { Player } from "../objects/player";
-import { Ui } from "../ui/ui";
 import { Draw } from "../drawing/draw";
 import { Viewport } from "../gameMap/viewport";
+import { Player } from "../objects/player";
 import { ITheme } from "../themes/iTheme";
+import { Ui } from "../ui/ui";
 
 /** Interface for a playable state of the game. */
 export interface IActionState {

@@ -1,5 +1,6 @@
-import { IEffect } from "./iEffect";
 import { Tank } from "../tank";
+import { IEffect } from "./iEffect";
+
 export class SlowEffect implements IEffect {
     duration: number = 1;
     before(tank: Tank) {

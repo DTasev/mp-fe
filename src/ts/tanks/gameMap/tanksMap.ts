@@ -1,9 +1,6 @@
-import { Point } from "../utility/point";
-import { Draw } from "../drawing/draw";
-import { Color } from "../drawing/color";
 import { ITheme } from "../themes/iTheme";
-import { Obstacle } from "./obstacle";
 import { IMapData } from "./dataInterfaces";
+import { Obstacle } from "./obstacle";
 
 
 export class TanksMap {

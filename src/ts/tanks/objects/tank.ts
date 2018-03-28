@@ -1,11 +1,10 @@
-import { Player } from "./player";
-import { Point } from "../utility/point";
-import { Draw } from "../drawing/draw";
-import { Color } from "../drawing/color";
 import { GameState } from "../controller";
-import { ITheme } from "../themes/iTheme";
+import { Draw } from "../drawing/draw";
 import { DarkTheme } from "../themes/dark";
+import { ITheme } from "../themes/iTheme";
+import { Point } from "../utility/point";
 import { IEffect } from "./effects/iEffect";
+import { Player } from "./player";
 
 export enum TankTurnState {
     /** The tank has performed an action this turn, e.g. moved or shot */

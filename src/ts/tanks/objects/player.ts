@@ -1,8 +1,8 @@
-import { Tank, TankHealthState, TankTurnState } from "./tank";
 import { Color } from "../drawing/color";
-import * as Limit from '../limiters/index'
-import { SingleAccess } from "../utility/singleAccess";
+import * as Limit from '../limiters/index';
 import { Point } from "../utility/point";
+import { SingleAccess } from "../utility/singleAccess";
+import { Tank, TankHealthState, TankTurnState } from "./tank";
 
 
 export class Player {

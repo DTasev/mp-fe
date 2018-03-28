@@ -1,10 +1,10 @@
-import { J2H } from "../json2html";
+import { Color } from "../drawing/color";
 import { Viewport } from "../gameMap/viewport";
+import { J2H } from "../json2html";
 import { Player } from "../objects/player";
+import { ITheme } from "../themes/iTheme";
 import { CommonUi } from "./common";
 import { UiSection } from "./uiSection";
-import { Color } from "../drawing/color";
-import { ITheme } from "../themes/iTheme";
 
 export class UiHeading {
     private readonly left: UiSection;

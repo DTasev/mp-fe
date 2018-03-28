@@ -1,14 +1,10 @@
-import { J2H } from "../json2html";
-import { Viewport } from "../gameMap/viewport";
-import { Player } from "../objects/player";
-import { CommonUi } from "./common";
-import { Color } from "../drawing/color";
-import { UiHeading } from "./uiHeading";
-import { UiBody } from "./uiBody";
 import { GameController } from "../controller";
+import { Color } from "../drawing/color";
+import { J2H } from "../json2html";
 import { ITheme } from "../themes/iTheme";
+import { UiBody } from "./uiBody";
+import { UiHeading } from "./uiHeading";
 
-import * as Settings from '../settings';
 
 interface IVisualViewport {
     offsetLeft: number;

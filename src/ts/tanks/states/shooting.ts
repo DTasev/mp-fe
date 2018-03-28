@@ -1,22 +1,20 @@
-import { J2H } from "../json2html";
-
-import { IPlayState } from "./iActionState";
 import { GameController, GameState } from "../controller";
-import { Player } from "../objects/player";
 import { Draw, DrawState } from "../drawing/draw";
-import { Tank, TankTurnState, TankColor } from "../objects/tank";
+import { ObstacleType } from "../gameMap/obstacle";
+import { Viewport } from "../gameMap/viewport";
+import * as Limit from "../limiters/index";
+import { Player } from "../objects/player";
+import { Tank, TankColor, TankTurnState } from "../objects/tank";
+import * as Settings from '../settings';
+import { ITheme } from "../themes/iTheme";
+import { ShootingUi } from "../ui/shooting";
+import { Ui } from "../ui/ui";
+import { Line } from "../utility/line";
 import { Point } from "../utility/point";
 import { TanksMath } from "../utility/tanksMath";
-import { Line } from "../utility/line";
-import { Color } from "../drawing/color";
-import { Ui } from "../ui/ui";
-import { Viewport } from "../gameMap/viewport";
-import { ShootingUi } from "../ui/shooting";
-import { ITheme } from "../themes/iTheme";
-import { ObstacleType } from "../gameMap/obstacle";
+import { IPlayState } from "./iActionState";
 
-import * as Settings from '../settings';
-import * as Limit from "../limiters/index";
+
 
 export class ShootingState implements IPlayState {
     context: CanvasRenderingContext2D;

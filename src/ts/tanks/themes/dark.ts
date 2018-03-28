@@ -1,5 +1,5 @@
-import { ITheme, IThemeMenu, IThemeEndGame, IThemeGameUi, IThemeGameColors, IThemeMapColors } from "./iTheme";
 import { Color } from "../drawing/color";
+import { ITheme, IThemeEndGame, IThemeGameColors, IThemeGameUi, IThemeMapColors, IThemeMenu } from "./iTheme";
 
 class DarkMenu implements IThemeMenu {
     background(): Color {

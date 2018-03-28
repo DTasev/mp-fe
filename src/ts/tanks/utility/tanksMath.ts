@@ -1,4 +1,3 @@
-
 import { Point } from "./point";
 
 class PointMath {

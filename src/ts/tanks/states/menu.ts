@@ -1,18 +1,16 @@
-import { IActionState } from "./iActionState";
 import { GameController, GameState } from "../controller";
-import { Point } from "../utility/point";
-import { Player } from "../objects/player";
-import { Draw } from "../drawing/draw";
-import { Viewport } from "../gameMap/viewport";
-import { Ui } from "../ui/ui";
 import { Color } from "../drawing/color";
+import { TanksMap } from "../gameMap/tanksMap";
+import { Viewport } from "../gameMap/viewport";
 import { J2H } from "../json2html";
+import { Player } from "../objects/player";
+import * as Settings from '../settings';
 import Controls from "../siteControls";
 import { ITheme } from "../themes/iTheme";
-import { TanksMap } from "../gameMap/tanksMap";
 import { ThemeFactory } from "../themes/themeFactory";
+import { Ui } from "../ui/ui";
 import { TanksCache } from "../utility/tanksCache";
-import * as Settings from '../settings';
+import { IActionState } from "./iActionState";
 
 function getSliderValue(id: string) {
     return parseInt((<HTMLInputElement>document.getElementById(id)).value);

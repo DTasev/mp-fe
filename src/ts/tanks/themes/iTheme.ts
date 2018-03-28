@@ -1,5 +1,4 @@
 import { Color } from "../drawing/color";
-import { ObstacleType } from "../gameMap/obstacle";
 
 export interface IThemeMenu {
     background(): Color;
