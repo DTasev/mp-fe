@@ -21,7 +21,7 @@ export class GameEndState implements IActionState {
     }
 
     addEventListeners(canvas: HTMLCanvasElement) { }
-
+    addKeyboardShortcuts(canvas: HTMLCanvasElement) { }
     view(viewport: Viewport) { }
 
     setUpUi(ui: Ui, viewport: Viewport, theme: ITheme) {

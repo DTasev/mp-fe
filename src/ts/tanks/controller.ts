@@ -130,6 +130,7 @@ export class GameController {
             this.canvas.onmouseup = null;
             window.onmouseup = null;
             this.canvas.onmousemove = null;
+            window.onkeyup = null;
         }
 
         // if the state has marked the end of the player's turn, then we go to the next player
@@ -195,6 +196,7 @@ export class GameController {
         this.action.setUpUi(this.ui, this.viewport, this.theme);
         this.action.view(this.viewport);
         this.action.addEventListeners(this.canvas);
+        this.action.addKeyboardShortcuts(this.canvas);
     }
     private gameOver(): Player | boolean {
         if (this.state !== GameState.TANK_PLACEMENT) {

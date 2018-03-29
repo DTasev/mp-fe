@@ -13,6 +13,7 @@ import { Line } from "../utility/line";
 import { Point } from "../utility/point";
 import { TanksMath } from "../utility/tanksMath";
 import { IPlayState } from "./iActionState";
+import { KeyboardKeys } from "../utility/keyboardKeys";
 
 
 
@@ -68,6 +69,15 @@ export class ShootingState implements IPlayState {
             canvas.onmousedown = this.startShooting;
             canvas.onmousemove = this.continueShooting;
             window.onmouseup = this.stopShooting;
+        }
+    }
+    addKeyboardShortcuts(canvas: HTMLCanvasElement) {
+        if (!Settings.IS_MOBILE) {
+            window.onkeyup = (e: KeyboardEvent) => {
+                if (e.keyCode === KeyboardKeys.KEY_Q) {
+                    this.skipTurn();
+                }
+            };
         }
     }
 

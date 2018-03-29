@@ -8,6 +8,7 @@ import { ITheme } from "../themes/iTheme";
 import { Ui } from "../ui/ui";
 import { TanksMath } from "../utility/tanksMath";
 import { IPlayState } from "./iActionState";
+import { KeyboardKeys } from "../utility/keyboardKeys";
 
 
 export class SelectionState implements IPlayState {
@@ -51,6 +52,40 @@ export class SelectionState implements IPlayState {
             }
         }
     }
+    addKeyboardShortcuts(canvas: HTMLCanvasElement) {
+        if (!Settings.IS_MOBILE) {
+            console.log("In selection shortcuts");
+            window.onkeyup = (e: KeyboardEvent) => {
+                switch (e.keyCode) {
+                    case KeyboardKeys.KEY_1:
+                        this.selectTankKeyboard(this.player.tanks[0])
+                        break;
+                    case KeyboardKeys.KEY_2:
+                        if (2 <= this.player.tanks.length) {
+                            this.selectTankKeyboard(this.player.tanks[1]);
+                        }
+                        break;
+                    case KeyboardKeys.KEY_3:
+                        if (3 <= this.player.tanks.length) {
+                            this.selectTankKeyboard(this.player.tanks[2]);
+                        }
+                        break;
+                    case KeyboardKeys.KEY_4:
+                        if (4 <= this.player.tanks.length) {
+                            this.selectTankKeyboard(this.player.tanks[3]);
+                        }
+                        break;
+                    case KeyboardKeys.KEY_5:
+                        if (4 <= this.player.tanks.length) {
+                            this.selectTankKeyboard(this.player.tanks[4]);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            };
+        }
+    }
 
     view(viewport: Viewport) {
         viewport.goTo(this.player.viewportPosition);
@@ -80,7 +115,6 @@ export class SelectionState implements IPlayState {
                 TanksMath.point.collideCircle(this.draw.mouse, tank.position, Tank.WIDTH)) {
                 // highlight the selected tank
                 this.successfulSelection(tank);
-
                 // prevent scrolling action on mobile, only when a tank is successfully selected
                 if (e instanceof TouchEvent) {
                     e.preventDefault();
@@ -89,6 +123,19 @@ export class SelectionState implements IPlayState {
                 // only highlight the first tank, if there are multiple on top of each other
                 break;
             }
+        }
+    }
+
+    /**
+     * Checks if the tank is alive and active. DOES NOT CHECK FOR MOUSE COLLISION. 
+     * This is intended to be used for keyboard shortcuts.
+     * 
+     * @param tank The tank object to be checked
+     */
+    private selectTankKeyboard(tank: Tank): void {
+        if (tank.healthState !== TankHealthState.DEAD && tank.active()) {
+            this.successfulSelection(tank);
+            this.mouseUp();
         }
     }
 

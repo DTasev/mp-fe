@@ -8,6 +8,7 @@ import { Ui } from "../ui/ui";
 /** Interface for a playable state of the game. */
 export interface IActionState {
     addEventListeners(canvas: HTMLCanvasElement);
+    addKeyboardShortcuts(canvas: HTMLCanvasElement);
     view(viewport: Viewport);
     setUpUi(ui: Ui, viewport: Viewport, theme: ITheme);
 }

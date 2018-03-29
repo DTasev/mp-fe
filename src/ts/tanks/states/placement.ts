@@ -52,12 +52,16 @@ export class PlacingState implements IPlayState {
         }
     }
 
+    addKeyboardShortcuts(canvas: HTMLCanvasElement) { }
+
     view(viewport: Viewport) {
         viewport.goTo(this.player.viewportPosition);
     }
+
     setUpUi(ui: Ui, viewport: Viewport, theme: ITheme) {
         ui.heading.addHome(viewport, this.player, theme);
     }
+
     private addTank = (e: MouseEvent | TouchEvent) => {
         // if the button clicked is not the left button, do nothing
         if (e instanceof MouseEvent && e.button != 0) {
@@ -91,6 +95,7 @@ export class PlacingState implements IPlayState {
         if (!this.controller.collidingWithTerrain(this.draw.mouse, Tank.WIDTH)) {
             const tank = new Tank(this.player.tanks.length, this.player, this.draw.mouse.x, this.draw.mouse.y, this.controller.theme);
             this.player.tanks.push(tank);
+            this.player.viewportPosition = Viewport.current();
             tank.draw(this.context);
             // player has placed a tank
             this.tanksPlaced.take();

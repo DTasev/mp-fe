@@ -229,16 +229,16 @@ class MenuStartGame {
         const slider_valueDescription = {
             "h1": {
                 "id": MainMenu.ID_TANKS_SLIDER_DISPLAY,
-                "textContent": "Tanks: 2"
+                "textContent": "Tanks: 1"
             }
         };
         middle.appendChild(J2H.parse(slider_valueDescription));
         const sliderInput_description = {
             "input": {
                 "type": "range",
-                "min": 2,
-                "max": 8,
-                "value": "2",
+                "min": 1,
+                "max": Settings.MAX_TANKS,
+                "value": "1",
                 "className": "slider",
                 "id": MainMenu.ID_TANKS_SLIDER,
                 "oninput": MenuStartGame.changeNumberOfTanks
@@ -287,6 +287,7 @@ export class MainMenu implements IActionState {
     }
 
     addEventListeners(canvas: HTMLCanvasElement) { }
+    addKeyboardShortcuts(canvas: HTMLCanvasElement) { }
     view(viewport: Viewport) { }
 
     setUpUi = () => {

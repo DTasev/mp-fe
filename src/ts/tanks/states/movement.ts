@@ -10,6 +10,7 @@ import { MovementUi } from "../ui/movement";
 import { Ui } from "../ui/ui";
 import { Point } from "../utility/point";
 import { IPlayState } from "./iActionState";
+import { KeyboardKeys } from "../utility/keyboardKeys";
 
 
 export class MovingState implements IPlayState {
@@ -46,9 +47,16 @@ export class MovingState implements IPlayState {
             canvas.onmouseup = this.endMovement;
         }
     }
-
+    addKeyboardShortcuts(canvas: HTMLCanvasElement) {
+        if (!Settings.IS_MOBILE) {
+            window.onkeyup = (e: KeyboardEvent) => {
+                if (e.keyCode === KeyboardKeys.KEY_Q) {
+                    this.goToShooting();
+                }
+            };
+        }
+    }
     view(viewport: Viewport) { }
-
     setUpUi(ui: Ui, viewport: Viewport, theme: ITheme) {
         ui.heading.addHome(viewport, this.player, theme);
         const button_goToShooting = MovementUi.button_goToShooting(theme);
