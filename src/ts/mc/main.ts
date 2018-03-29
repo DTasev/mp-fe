@@ -26,15 +26,26 @@ function stopDrawingMap(e: MouseEvent) {
     // close the obstacle by connecting the last to the first points. This is done automatically
     // during Tanks' map drawing.
     Draw.line(context, line.points[line.points.length - 1], line.points[0], 3, lineColor);
+
+    const length = line.points.length;
+    const centerOfMass = line.points.reduce((a: Point, c: Point) => { a.x += c.x; a.y += c.y; return a; }, new Point(0, 0));
+    centerOfMass.x = centerOfMass.x / length;
+    centerOfMass.y = centerOfMass.y / length;
+
+    Draw.circle(context, centerOfMass, 1, 1, Color.green().rgba());
+    console.log("Center X:", centerOfMass.x, "Center Y:", centerOfMass.y);
+    centers.push(centerOfMass);
     // cache the current obstacle
     lineCache.lines.push(line.copy());
     // reset the current points so that new obstacles can start separated
     line.points = [];
     // clear the last mouse position
     draw.last = new Point();
+
+    printObstacleData();
 }
 
-function drawMap(e: MouseEvent) {
+function drawObstacle(e: MouseEvent) {
     if (draw.state == DrawState.DRAWING) {
         draw.updatePosition(e);
         draw.mouseLine(context, 3, lineColor);
@@ -53,9 +64,15 @@ function setCenter(e: MouseEvent) {
         centers.push(draw.mouse.copy());
     }
 
+    printObstacleData();
+}
+
+function printObstacleData() {
     obstacles = { "terrain": [] };
     for (let i = 0; i < lineCache.lines.length; ++i) {
         const obstacle = {};
+        obstacle["id"] = i;
+        obstacle["type"] = "solid";
         obstacle["centerX"] = centers[i].x;
         obstacle["centerY"] = centers[i].y;
         obstacle["points"] = lineCache.lines[i].points;
@@ -70,16 +87,20 @@ function setCenter(e: MouseEvent) {
 function mouseForward(e: MouseEvent, action_LMB: Function, action_MMB?: Function, action_RMB?: Function) {
     switch (e.button) {
         case 0: // LMB
-            if (action_LMB)
+            if (action_LMB) {
                 action_LMB(e);
+            }
             break;
         case 1: // MMB
-            if (action_MMB)
+            if (action_MMB) {
                 action_MMB(e);
+            }
             break;
         case 2: // RMB
-            if (action_RMB)
+            if (action_RMB) {
                 action_RMB(e);
+            }
+            break;
         default:
             throw new Error("Button does nothing");
     }
@@ -100,7 +121,7 @@ function init() {
 
     canvas.onmousedown = (e: MouseEvent) => mouseForward(e, startDrawingMap, setCenter);
     canvas.onmouseup = (e: MouseEvent) => mouseForward(e, stopDrawingMap);
-    canvas.onmousemove = (e: MouseEvent) => mouseForward(e, drawMap);
+    canvas.onmousemove = (e: MouseEvent) => mouseForward(e, drawObstacle);
 }
 
 init();
