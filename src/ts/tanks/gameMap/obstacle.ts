@@ -13,11 +13,13 @@ export enum ObstacleType {
     WOOD // will reduce the length of the shot
 }
 export class Obstacle {
+    id: number;
     points: Point[];
     center: Point;
     type: ObstacleType;
 
     constructor(obstacleDescription: IObstacleData) {
+        this.id = obstacleDescription.id;
         this.type = this.typeFromString(obstacleDescription.type)
         this.center = new Point(obstacleDescription.centerX, obstacleDescription.centerY);
         this.points = []
@@ -33,7 +35,11 @@ export class Obstacle {
         const length = this.points.length;
         const [fill, fillStyle] = this.getFill(theme);
         Draw.closedShape(context, this.points, 1, theme.map.solid().rgba(), fill, fillStyle);
+        context.fillStyle = theme.map.solid().rgba(0.5);
+        context.font = "16px Calibri";
+        context.fillText(this.id + "", this.center.x, this.center.y);
     }
+
     private getFill(theme: ITheme): [boolean, string] {
         switch (this.type) {
             case ObstacleType.SOLID:
