@@ -72,6 +72,9 @@ export class Color {
         return new Color(128, 0, 0, alpha);
     }
     static woodbrown(alpha = 1.0) {
+        return new Color(110, 71, 11, alpha);
+    }
+    static darkbrown(alpha = 1.0) {
         return new Color(102, 51, 0, alpha);
     }
     static c(red: number, green: number, blue: number, alpha = 1.0) {
