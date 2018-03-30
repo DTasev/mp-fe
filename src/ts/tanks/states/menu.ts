@@ -86,7 +86,12 @@ class MenuStartGame {
                                 "className": "w3-col s3 m3 l3 w3-padding-64 w3-hover-gray",
                                 "textContent": map.name,
                                 "onclick": 'PublicMenuStartGame.toggleMap(this, "' + activeClass + '")',
-                                "data-mapid": map.id
+                                "data-mapid": map.id,
+                                "children": {
+                                    "img": {
+                                        "src": map.thumbnail_url
+                                    }
+                                }
                             }
                         };
                         children.push(e);

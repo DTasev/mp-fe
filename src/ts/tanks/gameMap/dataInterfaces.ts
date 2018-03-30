@@ -40,5 +40,5 @@ export interface IMapListData {
     creator: string;
     created: string;
     url: URL;
-    thumbnail: URL;
+    thumbnail_url: URL;
 }
