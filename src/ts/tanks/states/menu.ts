@@ -11,6 +11,7 @@ import { ThemeFactory } from "../themes/themeFactory";
 import { Ui } from "../ui/ui";
 import { TanksCache } from "../utility/tanksCache";
 import { IActionState } from "./iActionState";
+import { IMapListData } from "../gameMap/dataInterfaces";
 
 function getSliderValue(id: string) {
     return parseInt((<HTMLInputElement>document.getElementById(id)).value);
@@ -72,19 +73,20 @@ class MenuStartGame {
         middle.appendChild(J2H.parse(d_themes));
     }
 
-    static addMapChoices(middle: HTMLDivElement) {
+    static addMapChoices(middle: HTMLDivElement, mapsData: IMapListData[]) {
         const map_description = {
             "div": {
                 "className": "w3-row w3-margin",
                 "children": (() => {
                     const activeClass = "w3-red";
                     const children = [];
-                    for (let i = 0; i < 4; i++) {
+                    for (const map of mapsData) {
                         const e = {
                             "div": {
                                 "className": "w3-col s3 m3 l3 w3-padding-64 w3-hover-gray",
-                                "textContent": "Map choice",
+                                "textContent": map.name,
                                 "onclick": 'PublicMenuStartGame.toggleMap(this, "' + activeClass + '")',
+                                "data-mapid": map.id
                             }
                         };
                         children.push(e);
@@ -279,7 +281,21 @@ export class MainMenu implements IActionState {
     private readonly theme: ITheme;
     private readonly canvas: HTMLCanvasElement;
 
+    private mapsData: IMapListData[] = [];
+
     constructor(ui: Ui, canvas: HTMLCanvasElement) {
+        const request = new XMLHttpRequest();
+        request.open("GET", Settings.REMOTE_URL, true);
+        request.onreadystatechange = () => {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) { // 200 OK
+                    this.mapsData = JSON.parse(request.responseText);
+                } else {
+                    // provide default map
+                }
+            }
+        }
+        request.send(null);
         this.ui = ui;
         this.canvas = canvas;
         this.theme = ThemeFactory.create(TanksCache.theme);
@@ -356,7 +372,7 @@ export class MainMenu implements IActionState {
         MenuStartGame.addPlayerSlider(middle);
         MenuStartGame.addPlayerSettings(middle);
         MenuStartGame.addTanksSlider(middle);
-        MenuStartGame.addMapChoices(middle);
+        MenuStartGame.addMapChoices(middle, this.mapsData);
         MenuStartGame.addThemeChoices(middle);
 
         const button_startDescription = {
