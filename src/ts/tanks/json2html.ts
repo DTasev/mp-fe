@@ -94,6 +94,8 @@ export class J2H {
                 }
             } else if (key === "for" && parent instanceof HTMLLabelElement) {
                 parent.setAttribute(key, props[key]);
+            } else if (key.includes("data")) {
+                parent.setAttribute(key, props[key]);
             } else {
                 parent[key] = props[key];
             }
