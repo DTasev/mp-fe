@@ -1,6 +1,11 @@
 import { Color } from "../drawing/color";
 import { J2H } from "../json2html";
 
+/**
+ * The UiBody is on top of the canvas and overlays it. It should not be shown at the same
+ * time as any events are happening on the canvas, as it might hide them or stop onmouseclick events 
+ * on the canvas
+ */
 export class UiBody {
 
     readonly htmlElement: HTMLDivElement;

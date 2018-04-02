@@ -3,9 +3,12 @@ import { Viewport } from "../gameMap/viewport";
 import { J2H } from "../json2html";
 import { Player } from "../objects/player";
 import { ITheme } from "../themes/iTheme";
-import { CommonUi } from "./common";
+import { CommonUi } from "../tanksUi/common";
 import { UiSection } from "./uiSection";
 
+/**
+ * The UiHeading is the top row on the canvas.
+ */
 export class UiHeading {
     private readonly left: UiSection;
     readonly playerTurn: UiSection;
@@ -45,10 +48,10 @@ export class UiHeading {
     }
 
     addTo(rowHeading: HTMLDivElement): void {
-        rowHeading.appendChild(this.left.html());
-        rowHeading.appendChild(this.playerTurn.html());
-        rowHeading.appendChild(this.message.html());
-        rowHeading.appendChild(this.right.html());
+        rowHeading.appendChild(this.left.htmlElement());
+        rowHeading.appendChild(this.playerTurn.htmlElement());
+        rowHeading.appendChild(this.message.htmlElement());
+        rowHeading.appendChild(this.right.htmlElement());
     }
 
     background(color: Color) {

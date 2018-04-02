@@ -19,10 +19,22 @@ export class UiSection implements IUiSection {
     clear() {
         this.element.innerHTML = "&nbsp;";
     }
-    html(): HTMLElement {
+
+    htmlElement(): HTMLElement {
         return this.element;
     }
-    innerHTML(content: string) {
-        this.element.innerHTML = content;
+
+    public get style(): CSSStyleDeclaration {
+        return this.element.style;
     }
+
+    public get innerHTML(): string {
+        return this.element.innerHTML;
+    }
+    public set innerHTML(v: string) {
+        this.element.innerHTML = v;
+    }
+
+
+
 }
