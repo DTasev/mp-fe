@@ -394,11 +394,11 @@ export class MainMenu implements IActionState {
     private readonly theme: ITheme;
     private readonly canvas: HTMLCanvasElement;
 
-    private mapsData: IMapListData[] = [];
+    private mapsList: IMapListData[] = [];
 
     constructor(ui: Ui, canvas: HTMLCanvasElement) {
         Remote.mapList((remoteMapData: IMapListData[]) => {
-            this.mapsData = remoteMapData;
+            this.mapsList = remoteMapData;
         });
         this.ui = ui;
         this.canvas = canvas;
@@ -466,7 +466,7 @@ export class MainMenu implements IActionState {
     }
 
     private quickStart = (e: MouseEvent) => {
-        let map = new TanksMap("apples");
+        let map = new TanksMap(this.mapsList[0].id);
         let players: Player[] = MenuStartGame.createPlayers(Settings.DEFAULT_NUMBER_PLAYERS, this.theme.game.playerColors());
         this.startGame(map, players, Settings.DEFAULT_NUMBER_TANKS, e);
     }
@@ -478,7 +478,7 @@ export class MainMenu implements IActionState {
         MenuStartGame.addPlayerSlider(middle);
         MenuStartGame.addPlayerSettings(middle);
         MenuStartGame.addTanksSlider(middle);
-        MenuStartGame.setMapData(this.mapsData);
+        MenuStartGame.setMapData(this.mapsList);
         MenuStartGame.addMapChoices(middle);
         MenuStartGame.addThemeChoices(middle);
 
@@ -516,7 +516,7 @@ export class MainMenu implements IActionState {
     private prepareGame = (e: MouseEvent) => {
         const numPlayers = getSliderValue(MainMenu.ID_PLAYER_SLIDER);
         const selectedMap = document.getElementById(MainMenu.ID_MAP_CHOICE);
-        const map = new TanksMap(this.mapsData[selectedMap.dataset.mapid].id);
+        const map = new TanksMap(this.mapsList[selectedMap.dataset.mapid].id);
 
         this.startGame(map, MenuStartGame.createPlayers(numPlayers), getSliderValue(MainMenu.ID_TANKS_SLIDER), e);
     }

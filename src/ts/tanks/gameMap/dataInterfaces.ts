@@ -21,7 +21,7 @@ export interface IObstacleData {
  * It contains all of the terrain.
  */
 export interface IMapDetailData {
-    id: number;
+    id: string;
     name: string;
     creator: string;
     created: string;
@@ -34,7 +34,7 @@ export interface IMapDetailData {
  * Data interface exported when quering for all available maps.
  */
 export interface IMapListData {
-    id: number;
+    id: string;
     name: string;
     creator: string;
     created: string;
