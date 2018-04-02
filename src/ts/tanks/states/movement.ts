@@ -6,7 +6,7 @@ import { Player } from "../objects/player";
 import { Tank, TankColor, TankHealthState, TankTurnState } from "../objects/tank";
 import { Settings } from '../settings';
 import { ITheme } from "../themes/iTheme";
-import { MovementUi } from "../ui/movement";
+import { MovementUi } from "../tanksUi/movement";
 import { Ui } from "../ui/ui";
 import { Point } from "../utility/point";
 import { IPlayState } from "./iActionState";

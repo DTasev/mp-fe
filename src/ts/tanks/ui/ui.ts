@@ -4,6 +4,7 @@ import { J2H } from "../json2html";
 import { ITheme } from "../themes/iTheme";
 import { UiBody } from "./uiBody";
 import { UiHeading } from "./uiHeading";
+import { Settings } from "../settings";
 
 
 interface IVisualViewport {
@@ -20,7 +21,6 @@ export class Ui {
     private readonly container: HTMLDivElement;
     private readonly canvasWidth: number;
     private readonly canvasHeight: number;
-    private controller: GameController;
 
     readonly heading: UiHeading;
     readonly body: UiBody;
@@ -93,10 +93,11 @@ export class Ui {
      * Adjusts the Ui container to fit the currently viewed part of the page.
      * @param e The window event that is triggered
      */
-    moveToFitView(e: Event): void {
+    private moveToFitView(e: Event): void {
         this.container.style.left = window.pageXOffset + "px";
         this.container.style.top = window.pageYOffset + "px";
     }
+
     mobileMoveToFitView(e: Event): void {
         const visualViewport: IVisualViewport = (<any>window).visualViewport;
         this.container.style.left = visualViewport.offsetLeft + "px";
@@ -107,7 +108,7 @@ export class Ui {
         const b = document.createElement('b');
         b.classList.add("fa-2x", theme.ui.playerMessageClass());
         b.innerHTML = msg === "" ? "&nbsp;" : msg;
-        this.heading.message.innerHTML(b.outerHTML);
+        this.heading.message.innerHTML = b.outerHTML;
     }
 
     background(color: Color) {
@@ -116,7 +117,16 @@ export class Ui {
     textColor(color: Color) {
         this.container.style.color = color.rgba();
     }
-    setController(controller: GameController): void {
-        this.controller = controller;
+
+    startFollowingViewport() {
+        // the UI starts scrolling after the game settings are set, otherwise the menu UI will move around for the users
+        if (!Settings.IS_MOBILE) {
+            // normal computers trigger the onscroll event properly -> every time the page is scrolled
+            // mobile, however, only triggers the event sometimes, and is not reliable, thus the 
+            // touchmove event is used in `selection`
+            window.onscroll = (e: Event) => {
+                this.moveToFitView(e);
+            };
+        }
     }
 }

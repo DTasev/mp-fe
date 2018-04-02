@@ -7,7 +7,7 @@ import { Player } from "../objects/player";
 import { Tank, TankColor, TankTurnState } from "../objects/tank";
 import { Settings } from '../settings';
 import { ITheme } from "../themes/iTheme";
-import { ShootingUi } from "../ui/shooting";
+import { ShootingUi } from "../tanksUi/shooting";
 import { Ui } from "../ui/ui";
 import { Line } from "../utility/line";
 import { Point } from "../utility/point";
