@@ -43,14 +43,14 @@ export class Draw {
      * @param context Context on which the circle will be drawn
      * @param coords Coordinates for the origin point of the circle
      * @param radius The radius of the circle
-     * @param line_width The line width of the circle
+     * @param lineWidth The line width of the circle
      * @param color The color of the line
      */
-    static circle(context: CanvasRenderingContext2D, coords: Point, radius: number, line_width: number, color: string) {
+    static circle(context: CanvasRenderingContext2D, coords: Point, radius: number, lineWidth: number, color: string) {
         // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
         // Select a fill style
         context.strokeStyle = color;
-        context.lineWidth = line_width;
+        context.lineWidth = lineWidth;
 
         // Draw a filled circle
         context.beginPath();
