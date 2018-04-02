@@ -12,8 +12,7 @@ export interface ITerrainData {
 export interface IObstacleData {
     id: number;
     type: string;
-    centerX: number;
-    centerY: number;
+    center: { x: number, y: number };
     points: ITerrainData[];
 }
 

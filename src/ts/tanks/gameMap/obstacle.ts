@@ -8,10 +8,11 @@ import { Point } from "../utility/point";
 import { IObstacleData } from "./dataInterfaces";
 
 export enum ObstacleType {
-    SOLID, // cannot move through
-    WATER, // will slow the tank down to half speed for 1 movement
-    WOOD // will reduce the length of the shot
+    SOLID = "solid", // cannot move through
+    WATER = "water", // will slow the tank down to half speed for 1 movement
+    WOOD = "wood" // will reduce the length of the shot
 }
+
 export class Obstacle {
     id: number;
     points: Point[];
@@ -21,7 +22,7 @@ export class Obstacle {
     constructor(obstacleDescription: IObstacleData) {
         this.id = obstacleDescription.id;
         this.type = this.typeFromString(obstacleDescription.type)
-        this.center = new Point(obstacleDescription.centerX, obstacleDescription.centerY);
+        this.center = new Point(obstacleDescription.center.x, obstacleDescription.center.y);
         this.points = []
 
         const obstacleData = obstacleDescription.points;

@@ -547,7 +547,7 @@ export class MainMenu implements IActionState {
                 controller.changeGameState(GameState.TANK_PLACEMENT);
             }
             // TODO show a loading screen or something
-        }, 500);
+        }, Settings.MAP_SETUP_WAIT_TIME);
     }
     private showOptions = (e: MouseEvent) => {
         this.ui.body.clear();
