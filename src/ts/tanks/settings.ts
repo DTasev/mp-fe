@@ -11,4 +11,6 @@ export class Settings {
     static readonly MAP_SETUP_WAIT_TIME = 200;
 
     static readonly DEBUG = true;
+    static readonly SCROLLBAR_WIDTH = 17;
+
 }

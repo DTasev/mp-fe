@@ -4,18 +4,22 @@ import { Line } from '../tanks/utility/line';
 import { LineCache } from '../tanks/utility/lineCache';
 import { Point } from '../tanks/utility/point';
 import { Settings } from '../tanks/settings';
+import { Ui } from '../tanks/ui/ui';
+import { MapCreatorControls, PublicMapCreatorControls } from "./ui/mcControls";
+import { Obstacle, ObstacleType } from '../tanks/gameMap/obstacle';
 
+// Expose public function for controls
+window["PublicMapCreatorControls"] = PublicMapCreatorControls;
 
+const obstacleLineWidth = 1;
 let draw: Draw;
 
 let context: CanvasRenderingContext2D;
-let lineCache = new LineCache();
 let centers: Point[] = [];
 let line = new Line();
 const lineColor = Color.black().rgba();
 
-let obstacles = { "terrain": [] };
-
+let obstacles: Obstacle[] = [];
 function startDrawingMap(e: MouseEvent) {
     draw.updatePosition(e);
     draw.state = DrawState.DRAWING;
@@ -25,18 +29,22 @@ function stopDrawingMap(e: MouseEvent) {
     draw.state = DrawState.STOPPED;
     // close the obstacle by connecting the last to the first points. This is done automatically
     // during Tanks' map drawing.
-    Draw.line(context, line.points[line.points.length - 1], line.points[0], 3, lineColor);
+    Draw.line(context, line.points[line.points.length - 1], line.points[0], obstacleLineWidth, lineColor);
 
     const length = line.points.length;
     const centerOfMass = line.points.reduce((a: Point, c: Point) => { a.x += c.x; a.y += c.y; return a; }, new Point(0, 0));
     centerOfMass.x = centerOfMass.x / length;
     centerOfMass.y = centerOfMass.y / length;
 
-    Draw.circle(context, centerOfMass, 1, 1, Color.green().rgba());
+    Draw.circle(context, centerOfMass, 1, 2, Color.pink().rgba());
     console.log("Center X:", centerOfMass.x, "Center Y:", centerOfMass.y);
-    centers.push(centerOfMass);
     // cache the current obstacle
-    lineCache.lines.push(line.copy());
+    const type = document.getElementById(MapCreatorControls.ID_SELECTED_OBSTACLE_TYPE).dataset.type;
+    const newObstacle = new Obstacle(obstacles.length, type, centerOfMass, line.copy().points);
+    obstacles.push(newObstacle);
+    context.font = "16px Calibri";
+    context.fillText(newObstacle.id + " " + type, centerOfMass.x, centerOfMass.y + 20);
+
     // reset the current points so that new obstacles can start separated
     line.points = [];
     // clear the last mouse position
@@ -44,46 +52,51 @@ function stopDrawingMap(e: MouseEvent) {
 
     printObstacleData();
 }
+export function redrawCanvas() {
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+    for (const obstacle of obstacles) {
+        const len = obstacle.points.length;
+        for (let i = 0; i < len - 1; i++) {
+            Draw.line(context, obstacle.points[i], obstacle.points[i + 1], obstacleLineWidth, Color.black().rgba())
+        }
+
+        // add the implicit last line
+        Draw.line(context, obstacle.points[len - 1], obstacle.points[0], obstacleLineWidth, lineColor);
+
+        Draw.circle(context, obstacle.center, 1, 2, Color.pink().rgba());
+        context.font = "16px Calibri";
+        context.fillText(obstacle.id + " " + obstacle.type, obstacle.center.x, obstacle.center.y + 20);
+    }
+}
 
 function drawObstacle(e: MouseEvent) {
     if (draw.state == DrawState.DRAWING) {
         draw.updatePosition(e);
-        draw.mouseLine(context, 3, lineColor);
+        draw.mouseLine(context, obstacleLineWidth, lineColor);
         line.points.push(draw.mouse.copy());
     }
 }
 
-function setCenter(e: MouseEvent) {
+export function setCenter(e: MouseEvent, id: number) {
     draw.updatePosition(e);
     e.preventDefault();
     Draw.circle(context, draw.mouse, 1, 1, Color.red().rgba());
     // if there is equal amount of obstacles, then set the center for the last one
-    if (centers.length == lineCache.lines.length) {
-        centers[centers.length - 1] = draw.mouse.copy();
-    } else {
-        centers.push(draw.mouse.copy());
-    }
+    obstacles[id].center = draw.mouse.copy();
 
     printObstacleData();
+    const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
+    canvas.onmousedown = (e: MouseEvent) => mouseForward(e, startDrawingMap);
 }
 
 function printObstacleData() {
-    obstacles = { "terrain": [] };
-    for (let i = 0; i < lineCache.lines.length; ++i) {
-        const obstacle = {};
-        obstacle["id"] = i;
-        obstacle["type"] = "solid";
-        obstacle["center"] = { x: centers[i].x, y: centers[i].y };
-        obstacle["points"] = lineCache.lines[i].points;
-        obstacles.terrain.push(obstacle);
-    }
     console.log(obstacles);
     console.log(JSON.stringify(obstacles));
     console.log('Object `obstacles` globally accessible.');
     window["obstacles"] = obstacles;
 }
 
-function mouseForward(e: MouseEvent, action_LMB: Function, action_MMB?: Function, action_RMB?: Function) {
+export function mouseForward(e: MouseEvent, action_LMB: Function, action_MMB?: Function, action_RMB?: Function) {
     switch (e.button) {
         case 0: // LMB
             if (action_LMB) {
@@ -117,8 +130,16 @@ function init() {
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     context = canvas.getContext("2d");
+    console.log("Canvas globally accessible as `canvas`.");
+    window["canvas"] = canvas;
 
-    canvas.onmousedown = (e: MouseEvent) => mouseForward(e, startDrawingMap, setCenter);
+    const viewportWidth = Settings.IS_MOBILE ? window.innerWidth : window.innerWidth - Settings.SCROLLBAR_WIDTH;
+    const viewportHeight = Settings.IS_MOBILE ? window.innerHeight : window.innerHeight - Settings.SCROLLBAR_WIDTH;
+
+    const ui = new Ui(Ui.ID_GAME_UI, viewportWidth, viewportHeight);
+    ui.startFollowingViewport();
+    const controls = new MapCreatorControls(obstacles, ui);
+    canvas.onmousedown = (e: MouseEvent) => mouseForward(e, startDrawingMap);
     canvas.onmouseup = (e: MouseEvent) => mouseForward(e, stopDrawingMap);
     canvas.onmousemove = (e: MouseEvent) => mouseForward(e, drawObstacle);
 }

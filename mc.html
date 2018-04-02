@@ -75,29 +75,6 @@
 
     <!-- !PAGE CONTENT! -->
     <div class="w3-main">
-
-        <!-- Header -->
-        <!-- <header id="portfolio"> -->
-        <!-- <a href="#">
-                <img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity">
-            </a> -->
-        <!-- <div class="w3-row">
-                <div class="w3-col s2 m2 l2">
-                    <span class="w3-button w3-xxlarge w3-hover-text-grey" onclick="Controls.w3_open()">
-                        <i class="fas fa-bars"></i>
-                    </span>
-                </div>
-                <div class="w3-col s10 m10 l10">
-                    <h2>
-                        <b id="user-warning"></b>
-                        <span hidden id="loading-icon">
-                            <i class="fa fa-spinner fa-pulse fa-fw"></i>
-                        </span>
-                    </h2>
-                </div>
-            </div>
-        </header> -->
-
         <div class="canvas-holder container">
             <div class="child">
                 <canvas id="tanks-canvas" class="game-canvas"></canvas>
@@ -105,7 +82,18 @@
             <div id="tanks-ui" class="child">
             </div>
         </div>
-        <!-- End page content -->
+        <div id="mc-modal" class="mc-modal">
+            <!-- Modal content -->
+            <div class="w3-col w3-hide-small m2 l2">&nbsp;</div>
+            <div class="w3-col s12 m8 l8">
+                <div class="mc-modal-content">
+                    <span class="mc-modal-close" id="mc-modal-close">×</span>
+                    <div id="mc-modal-text" class="modal-text">
+                    </div>
+                </div>
+            </div>
+            <div class="w3-col w3-hide-small m2 l2">&nbsp;</div>
+        </div>
     </div>
 
     <script src="src/dist/mc/bundle.js"></script>

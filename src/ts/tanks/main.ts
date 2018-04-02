@@ -17,7 +17,6 @@ import { Settings } from './settings';
 
 // Scrollbar Width for browsers
 // Source: https://www.textfixer.com/tutorials/browser-scrollbar-width.php
-const SCROLLBAR_WIDTH = 17;
 
 // Set-up the canvas and add our event handlers after the page has loaded
 function init() {
@@ -27,8 +26,8 @@ function init() {
 
     // subtracting the scrollbar width prevents unlimited X scrolling to the right
     // Don't subtract scrollbar from mobile
-    const viewportWidth = Settings.IS_MOBILE ? window.innerWidth : window.innerWidth - SCROLLBAR_WIDTH;
-    const viewportHeight = Settings.IS_MOBILE ? window.innerHeight : window.innerHeight - SCROLLBAR_WIDTH;
+    const viewportWidth = Settings.IS_MOBILE ? window.innerWidth : window.innerWidth - Settings.SCROLLBAR_WIDTH;
+    const viewportHeight = Settings.IS_MOBILE ? window.innerHeight : window.innerHeight - Settings.SCROLLBAR_WIDTH;
 
     const ui = new Ui(Ui.ID_GAME_UI, viewportWidth, viewportHeight);
     const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
