@@ -16,6 +16,8 @@ import { IMapListData } from "../gameMap/dataInterfaces";
 function getSliderValue(id: string) {
     return parseInt((<HTMLInputElement>document.getElementById(id)).value);
 }
+
+
 export class PublicMenuStartGame {
     static toggleTheme(elem: HTMLDivElement, klass: string) {
         for (const child of elem.parentElement.children) {
@@ -25,13 +27,19 @@ export class PublicMenuStartGame {
         elem.classList.add(klass);
         elem.id = MainMenu.ID_THEME;
     }
-    static toggleMap(elem: HTMLDivElement, klass: string) {
-        for (const child of elem.parentElement.children) {
-            child.classList.remove(klass);
-            child.id = "";
-        }
-        elem.classList.add(klass);
-        elem.id = MainMenu.ID_MAP;
+
+    static previousMap() {
+        const previousMap = document.getElementById(MainMenu.ID_MAP_CHOICE);
+        const nextId = parseInt(previousMap.dataset.mapid) - 1;
+        MenuStartGame.setMap(nextId);
+    }
+    static nextMap() {
+        const previousMap = document.getElementById(MainMenu.ID_MAP_CHOICE);
+        const nextId = parseInt(previousMap.dataset.mapid) + 1;
+        MenuStartGame.setMap(nextId);
+    }
+    static setMap(id: number) {
+        MenuStartGame.setMap(id);
     }
 }
 class MenuStartGame {
@@ -73,36 +81,133 @@ class MenuStartGame {
         middle.appendChild(J2H.parse(d_themes));
     }
 
-    static addMapChoices(middle: HTMLDivElement, mapsData: IMapListData[]) {
+    static mapsData: IMapListData[];
+
+    static setMapData(mapsData: IMapListData[]) {
+        this.mapsData = mapsData;
+    }
+
+    static addMapChoices(middle: HTMLDivElement) {
+        //         <div class="w3-container">
+        //     <div class="w3-display-container mySlides" style="display: block;">
+        //       <img src="/w3images/coffee.jpg" style="width:100%">
+        //       <div class="w3-display-topleft w3-container w3-padding-32">
+        //         <span class="w3-white w3-padding-large w3-animate-bottom">Lorem ipsum</span>
+        //       </div>
+        //     </div>
+        //     <div class="w3-display-container mySlides" style="display: none;">
+        //       <img src="/w3images/workbench.jpg" style="width:100%">
+        //       <div class="w3-display-middle w3-container w3-padding-32">
+        //         <span class="w3-white w3-padding-large w3-animate-bottom">Klorim tipsum</span>
+        //       </div>
+        //     </div>
+        //     <div class="w3-display-container mySlides" style="display: none;">
+        //       <img src="/w3images/sound.jpg" style="width:100%">
+        //       <div class="w3-display-topright w3-container w3-padding-32">
+        //         <span class="w3-white w3-padding-large w3-animate-bottom">Blorum pipsum</span>
+        //       </div>
+        //     </div>
+
+        //     <!-- Slideshow next/previous buttons -->
+        //     <div class="w3-container w3-dark-grey w3-padding w3-xlarge">
+        //       <div class="w3-left" onclick="plusDivs(-1)"><i class="fa fa-arrow-circle-left w3-hover-text-teal"></i></div>
+        //       <div class="w3-right" onclick="plusDivs(1)"><i class="fa fa-arrow-circle-right w3-hover-text-teal"></i></div>
+
+        //       <div class="w3-center">
+        //         <span class="w3-tag demodots w3-border w3-transparent w3-hover-white w3-white" onclick="currentDiv(1)"></span>
+        //         <span class="w3-tag demodots w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
+        //         <span class="w3-tag demodots w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
+        //       </div>
+        //     </div>
+        //   </div>
         const map_description = {
-            "div": {
-                "className": "w3-row w3-margin",
-                "children": (() => {
-                    const activeClass = "w3-red";
-                    const children = [];
-                    for (const map of mapsData) {
-                        const e = {
-                            "div": {
-                                "className": "w3-col s3 m3 l3 w3-padding-64 w3-hover-gray",
-                                "textContent": map.name,
-                                "onclick": 'PublicMenuStartGame.toggleMap(this, "' + activeClass + '")',
-                                "data-mapid": map.id,
-                                "children": {
-                                    "img": {
-                                        "src": map.thumbnail_url
+            div: {
+                className: "w3-row w3-margin",
+                children: [{
+                    // Displays the current map
+                    div: {
+                        className: "w3-padding-64 w3-display-container",
+                        id: MainMenu.ID_MAP_CHOICE
+                    }
+                }, {
+                    // Displays the arrows underneath
+                    div: {
+                        className: "w3-container w3-dark-grey w3-padding w3-xlarge",
+                        children: [{
+                            div: {
+                                className: "w3-left",
+                                onclick: "PublicMenuStartGame.previousMap()",
+                                children: {
+                                    i: {
+                                        className: "fa fa-arrow-circle-left w3-hover-text-teal"
                                     }
                                 }
                             }
-                        };
-                        children.push(e);
+                        }, {
+                            div: {
+                                className: "w3-right",
+                                onclick: "PublicMenuStartGame.nextMap()",
+                                children: {
+                                    i: {
+                                        className: "fa fa-arrow-circle-right w3-hover-text-teal"
+                                    }
+                                }
+                            }
+                        }, {
+                            div: {
+                                id: MainMenu.ID_MAP_DOT_CHOICE,
+                                className: "w3-center",
+                                children: (function () {
+                                    const childList = [];
+                                    for (let i = 0; i < MenuStartGame.mapsData.length; ++i) {
+                                        const span = {
+                                            span: {
+                                                className: "w3-tag w3-border w3-transparent w3-hover-white tanks-map-dot",
+                                                onclick: "PublicMenuStartGame.setMap(" + i + ")"
+                                            }
+                                        };
+                                        childList.push(span);
+                                    }
+                                    return childList;
+                                })()
+                            }
+                        }]
                     }
-                    children[0]["div"]["id"] = MainMenu.ID_MAP;
-                    children[0]["div"]["className"] += " " + activeClass;
-                    return children;
-                })()
+                }]
             }
         };
         middle.appendChild(J2H.parse(map_description));
+    }
+
+    /**
+     * Set the current chosen map on the start game screen
+     * @param id The position of the map in the mapsData array, not the ID in the database!
+     */
+    static setMap(id: number) {
+        if (id < 0) {
+            // if below 0, go to the last element, this happens if on the first map the user clicks to go to the
+            // previous map
+            id = this.mapsData.length - 1;
+        } else if (id >= this.mapsData.length) {
+            // if above/equal to the length of available maps, then wrap back to the first, happens when the user
+            // click next on the last map choice
+            id = 0;
+        }
+
+        console.log("Setting map to id:", id);
+
+        const elem = document.getElementById(MainMenu.ID_MAP_DOT_CHOICE);
+        for (const child of elem.children) {
+            child.classList.remove(MainMenu.CLASS_MAP_DOT_CHOSEN);
+        }
+        elem.children[id].classList.add(MainMenu.CLASS_MAP_DOT_CHOSEN);
+
+        const map = document.getElementById(MainMenu.ID_MAP_CHOICE);
+        // delete the old map
+        map.innerHTML = "";
+        map.dataset["mapid"] = "" + id;
+        map.appendChild(J2H.parse({ p: { textContent: this.mapsData[id].name, className: "w3-display-top w3-container" } }))
+        map.appendChild(J2H.parse({ img: { src: this.mapsData[id].thumbnail_url, style: "height:200px" } }));
     }
 
     static addPlayerSettings(middle: HTMLDivElement) {
@@ -156,7 +261,7 @@ class MenuStartGame {
         return players;
     }
 
-    static changeNumberOfPlayerSettings(e: Event) {
+    static changeNumberOfPlayerSettings() {
         const newNumberOfPlayers = getSliderValue(MainMenu.ID_PLAYER_SLIDER);
 
         // update the visual for number of players
@@ -280,7 +385,9 @@ export class MainMenu implements IActionState {
     static readonly ID_TANKS_SLIDER_DISPLAY = "slider-tanks-value";
 
     static readonly ID_THEME = "tanks-theme";
-    static readonly ID_MAP = "tanks-map";
+    static readonly ID_MAP_CHOICE = "tanks-map-choice";
+    static readonly ID_MAP_DOT_CHOICE = "tanks-map-dot-choice";
+    static readonly CLASS_MAP_DOT_CHOSEN = "w3-white";
 
     private readonly ui: Ui;
     private readonly theme: ITheme;
@@ -297,6 +404,7 @@ export class MainMenu implements IActionState {
                     this.mapsData = JSON.parse(request.responseText);
                 } else {
                     // provide default map
+                    console.warn("Remote not reached. Using cached maps.");
                 }
             }
         }
@@ -333,7 +441,7 @@ export class MainMenu implements IActionState {
             "button": {
                 "className": MainMenu.CLASS_MENU_BUTTON,
                 "textContent": "Start Game",
-                "onclick": this.showGameOptions
+                "onclick": this.startGameOptions
             }
         };
 
@@ -370,14 +478,15 @@ export class MainMenu implements IActionState {
         this.startGame(map, players, Settings.DEFAULT_NUMBER_TANKS, e);
     }
 
-    private showGameOptions = (e: MouseEvent) => {
+    private startGameOptions = (e: MouseEvent) => {
         this.ui.body.clear();
         const [left, middle, right] = this.ui.body.addColumns();
 
         MenuStartGame.addPlayerSlider(middle);
         MenuStartGame.addPlayerSettings(middle);
         MenuStartGame.addTanksSlider(middle);
-        MenuStartGame.addMapChoices(middle, this.mapsData);
+        MenuStartGame.setMapData(this.mapsData);
+        MenuStartGame.addMapChoices(middle);
         MenuStartGame.addThemeChoices(middle);
 
         const button_startDescription = {
@@ -405,8 +514,10 @@ export class MainMenu implements IActionState {
         this.ui.body.htmlElement.appendChild(middle);
         this.ui.body.htmlElement.appendChild(right);
 
+        // set the defaults that are displayed to the user before anything is changed
         MenuStartGame.playerColors = this.theme.game.playerColors();
-        MenuStartGame.changeNumberOfPlayerSettings(null);
+        MenuStartGame.changeNumberOfPlayerSettings();
+        MenuStartGame.setMap(0);
     }
 
     private prepareGame = (e: MouseEvent) => {

@@ -45,6 +45,14 @@
     text-decoration: none;
 }
 
+.tanks-map-dot {
+    height: 15px;
+    width: 15px;
+    padding: 0;
+    margin: 0 2px;
+    margin-top: 6px;
+}
+
 .tanks-ui-menu-title-padding {
     padding-bottom: 64px;
 }
