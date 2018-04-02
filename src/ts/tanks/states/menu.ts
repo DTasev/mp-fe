@@ -12,6 +12,7 @@ import { Ui } from "../ui/ui";
 import { TanksCache } from "../utility/tanksCache";
 import { IActionState } from "./iActionState";
 import { IMapListData } from "../gameMap/dataInterfaces";
+import { Remote } from "../utility/remote";
 
 function getSliderValue(id: string) {
     return parseInt((<HTMLInputElement>document.getElementById(id)).value);
@@ -396,22 +397,14 @@ export class MainMenu implements IActionState {
     private mapsData: IMapListData[] = [];
 
     constructor(ui: Ui, canvas: HTMLCanvasElement) {
-        const request = new XMLHttpRequest();
-        request.open("GET", Settings.REMOTE_URL, true);
-        request.onreadystatechange = () => {
-            if (request.readyState === XMLHttpRequest.DONE) {
-                if (request.status === 200) { // 200 OK
-                    this.mapsData = JSON.parse(request.responseText);
-                } else {
-                    // provide default map
-                    console.warn("Remote not reached. Using cached maps.");
-                }
-            }
-        }
-        request.send(null);
+        Remote.mapList((remoteMapData: IMapListData[]) => {
+            this.mapsData = remoteMapData;
+        });
         this.ui = ui;
         this.canvas = canvas;
         this.theme = ThemeFactory.create(TanksCache.theme);
+
+        // set the background color of the page so that it is the same as the theme
         document.body.style.backgroundColor = this.theme.game.canvasBackground().rgba();
     }
 
@@ -522,7 +515,8 @@ export class MainMenu implements IActionState {
 
     private prepareGame = (e: MouseEvent) => {
         const numPlayers = getSliderValue(MainMenu.ID_PLAYER_SLIDER);
-        const map = new TanksMap("apples");
+        const selectedMap = document.getElementById(MainMenu.ID_MAP_CHOICE);
+        const map = new TanksMap(this.mapsData[selectedMap.dataset.mapid].id);
 
         this.startGame(map, MenuStartGame.createPlayers(numPlayers), getSliderValue(MainMenu.ID_TANKS_SLIDER), e);
     }
@@ -531,19 +525,29 @@ export class MainMenu implements IActionState {
      * Activates the selected menu option
      */
     private startGame = (map: TanksMap, players: Player[], numTanks: number, e: MouseEvent) => {
-        this.ui.showCanvas();
+        const startInterval = setInterval(() => {
+            // if the remote map hasn't finished downloading then do not show the canvas
+            if (map.ready) {
+                // stop this from repeating further
+                clearInterval(startInterval);
 
-        // retrieve the selected theme from the start game screen
-        const themeInput = document.getElementById(MainMenu.ID_THEME);
-        // if not present (when quick start is pressed) or the theme is the same, use the current theme
-        const gameTheme = themeInput ? ThemeFactory.create(themeInput.textContent) : this.theme;
-        // cache the theme, so that next time the player runs the game it will be that theme
-        TanksCache.theme = gameTheme.name;
+                // set up the canvas and the rest of the game
+                this.ui.showCanvas();
 
-        document.body.style.backgroundColor = gameTheme.game.canvasBackground().rgba();
+                // retrieve the selected theme from the start game screen
+                const themeInput = document.getElementById(MainMenu.ID_THEME);
+                // if not present (when quick start is pressed) or the theme is the same, use the current theme
+                const gameTheme = themeInput ? ThemeFactory.create(themeInput.textContent) : this.theme;
+                // cache the theme, so that next time the player runs the game it will be that theme
+                TanksCache.theme = gameTheme.name;
 
-        const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, gameTheme, map, players, numTanks);
-        controller.changeGameState(GameState.TANK_PLACEMENT);
+                document.body.style.backgroundColor = gameTheme.game.canvasBackground().rgba();
+
+                const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, gameTheme, map, players, numTanks);
+                controller.changeGameState(GameState.TANK_PLACEMENT);
+            }
+            // TODO show a loading screen or something
+        }, 500);
     }
     private showOptions = (e: MouseEvent) => {
         this.ui.body.clear();

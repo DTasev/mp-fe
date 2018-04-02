@@ -28,7 +28,7 @@ export interface IMapDetailData {
     created: string;
     url: URL;
     thumbnail: URL;
-    terrain: IObstacleData[];
+    terrain: string;
 }
 
 /**

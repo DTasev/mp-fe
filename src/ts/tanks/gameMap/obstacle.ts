@@ -26,9 +26,7 @@ export class Obstacle {
 
         const obstacleData = obstacleDescription.points;
         const length = obstacleData.length;
-        for (const obstacle of obstacleData) {
-            this.points.push(new Point(obstacle.x, obstacle.y));
-        }
+        this.points = <Point[]>obstacleData;
     }
 
     draw(context: CanvasRenderingContext2D, theme: ITheme): void {
