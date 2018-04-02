@@ -98,6 +98,13 @@ export class Draw {
             this.last.y = this.mouse.y;
         }
     }
+
+    static rect(context: CanvasRenderingContext2D, topleft: Point, bottomright: Point, color: string) {
+        context.strokeStyle = color;
+        context.beginPath();
+        context.rect(topleft.x, topleft.y, bottomright.x - topleft.x, bottomright.y - topleft.y);
+        context.stroke();
+    }
     /**
      * Draw a line between the start and end points.
      * @param context The canvas context that we're drawing on

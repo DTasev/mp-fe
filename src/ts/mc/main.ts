@@ -18,18 +18,36 @@ let context: CanvasRenderingContext2D;
 let centers: Point[] = [];
 let line = new Line();
 const lineColor = Color.black().rgba();
+let rectangleStart: Point;
 
 let obstacles: Obstacle[] = [];
 function startDrawingMap(e: MouseEvent) {
     draw.updatePosition(e);
     draw.state = DrawState.DRAWING;
+    rectangleStart = draw.mouse.copy();
 }
 
 function stopDrawingMap(e: MouseEvent) {
     draw.state = DrawState.STOPPED;
-    // close the obstacle by connecting the last to the first points. This is done automatically
-    // during Tanks' map drawing.
-    Draw.line(context, line.points[line.points.length - 1], line.points[0], obstacleLineWidth, lineColor);
+    const tool = document.getElementById(MapCreatorControls.ID_SELECTED_TOOL);
+    switch (tool.dataset.tool) {
+        case "line":
+            // close the obstacle by connecting the last to the first points. This is done automatically
+            // during Tanks' map drawing.
+            Draw.line(context, line.points[line.points.length - 1], line.points[0], obstacleLineWidth, lineColor);
+            break;
+        case "rectangle":
+            // pretend the user drew a perfect rectangle, and add the 4 end points. This allows to re-use the rest of the logic
+            line.points.push(rectangleStart.copy(),
+                new Point(rectangleStart.x, draw.mouse.y),
+                new Point(draw.mouse.x, draw.mouse.y),
+                new Point(draw.mouse.x, rectangleStart.y),
+            );
+            break;
+
+        default:
+            throw new Error("Internal error, unknown tool selected: " + tool.dataset.tool);
+    }
 
     const length = line.points.length;
     const centerOfMass = line.points.reduce((a: Point, c: Point) => { a.x += c.x; a.y += c.y; return a; }, new Point(0, 0));
@@ -72,8 +90,17 @@ export function redrawCanvas() {
 function drawObstacle(e: MouseEvent) {
     if (draw.state == DrawState.DRAWING) {
         draw.updatePosition(e);
-        draw.mouseLine(context, obstacleLineWidth, lineColor);
-        line.points.push(draw.mouse.copy());
+        const tool = document.getElementById(MapCreatorControls.ID_SELECTED_TOOL);
+        switch (tool.dataset.tool) {
+            case "line":
+                draw.mouseLine(context, obstacleLineWidth, lineColor);
+                line.points.push(draw.mouse.copy());
+                break;
+            case "rectangle":
+                redrawCanvas();
+                Draw.rect(context, rectangleStart, draw.mouse, lineColor);
+                break;
+        }
     }
 }
 

@@ -207,5 +207,9 @@ export class MapCreatorControls {
     }
     deleteObstacle(id: number) {
         this.obstacles.splice(id, 1);
+        // fix the obstacle ids the brute way
+        for (let i = 0; i < this.obstacles.length; i++) {
+            this.obstacles[i].id = i;
+        }
     }
 }
