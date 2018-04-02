@@ -5,7 +5,7 @@ import { Viewport } from "../gameMap/viewport";
 import * as Limit from "../limiters/index";
 import { Player } from "../objects/player";
 import { Tank, TankColor, TankTurnState } from "../objects/tank";
-import * as Settings from '../settings';
+import { Settings } from '../settings';
 import { ITheme } from "../themes/iTheme";
 import { ShootingUi } from "../ui/shooting";
 import { Ui } from "../ui/ui";

@@ -4,7 +4,7 @@ import { Viewport } from "../gameMap/viewport";
 import * as Limit from "../limiters/index";
 import { Player } from "../objects/player";
 import { Tank } from "../objects/tank";
-import * as Settings from '../settings';
+import { Settings } from '../settings';
 import { ITheme } from "../themes/iTheme";
 import { Ui } from "../ui/ui";
 import { IPlayState } from "./iActionState";

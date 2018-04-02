@@ -3,7 +3,7 @@ import { IMapDetailData, IObstacleData } from "./dataInterfaces";
 import { Obstacle } from "./obstacle";
 import { Remote } from "../utility/remote";
 import { TanksCache } from "../utility/tanksCache";
-import * as Settings from '../settings';
+import { Settings } from '../settings';
 
 
 export class TanksMap {

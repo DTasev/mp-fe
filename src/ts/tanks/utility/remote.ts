@@ -1,4 +1,4 @@
-import * as Settings from '../settings';
+import { Settings } from '../settings';
 import { IMapListData } from '../gameMap/dataInterfaces';
 
 export class Remote {

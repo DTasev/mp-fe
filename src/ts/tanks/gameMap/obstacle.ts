@@ -7,6 +7,8 @@ import { ITheme } from "../themes/iTheme";
 import { Point } from "../utility/point";
 import { IObstacleData } from "./dataInterfaces";
 
+import { Settings } from '../settings';
+
 export enum ObstacleType {
     SOLID = "solid", // cannot move through
     WATER = "water", // will slow the tank down to half speed for 1 movement
@@ -34,9 +36,11 @@ export class Obstacle {
         const length = this.points.length;
         const [fill, fillStyle] = this.getFill(theme);
         Draw.closedShape(context, this.points, 1, theme.map.solid().rgba(), fill, fillStyle);
-        context.fillStyle = theme.map.solid().rgba(0.5);
-        context.font = "16px Calibri";
-        context.fillText(this.id + "", this.center.x, this.center.y);
+        if (Settings.DEBUG) {
+            context.fillStyle = theme.map.solid().rgba(0.5);
+            context.font = "16px Calibri";
+            context.fillText(this.id + "", this.center.x, this.center.y);
+        }
     }
 
     private getFill(theme: ITheme): [boolean, string] {

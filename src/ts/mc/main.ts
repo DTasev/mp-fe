@@ -1,9 +1,9 @@
 import { Color } from '../tanks/drawing/color';
 import { Draw, DrawState } from "../tanks/drawing/draw";
-import * as Settings from '../tanks/settings';
 import { Line } from '../tanks/utility/line';
 import { LineCache } from '../tanks/utility/lineCache';
 import { Point } from '../tanks/utility/point';
+import { Settings } from '../tanks/settings';
 
 
 let draw: Draw;
@@ -73,8 +73,7 @@ function printObstacleData() {
         const obstacle = {};
         obstacle["id"] = i;
         obstacle["type"] = "solid";
-        obstacle["centerX"] = centers[i].x;
-        obstacle["centerY"] = centers[i].y;
+        obstacle["center"] = { x: centers[i].x, y: centers[i].y };
         obstacle["points"] = lineCache.lines[i].points;
         obstacles.terrain.push(obstacle);
     }

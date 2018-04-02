@@ -13,7 +13,7 @@ import { GameController, GameState } from './controller';
 import { Viewport } from './gameMap/viewport';
 import { determineCanvasSize } from "./gameMap/mapSize";
 
-import * as Settings from './settings';
+import { Settings } from './settings';
 
 // Scrollbar Width for browsers
 // Source: https://www.textfixer.com/tutorials/browser-scrollbar-width.php

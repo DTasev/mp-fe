@@ -1,4 +1,4 @@
-import * as Settings from '../settings';
+import { Settings } from '../settings';
 
 export enum MapSize {
     SMALL,

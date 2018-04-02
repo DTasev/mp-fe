@@ -4,7 +4,7 @@ import { TanksMap } from "../gameMap/tanksMap";
 import { Viewport } from "../gameMap/viewport";
 import { J2H } from "../json2html";
 import { Player } from "../objects/player";
-import * as Settings from '../settings';
+import { Settings } from '../settings';
 import Controls from "../siteControls";
 import { ITheme } from "../themes/iTheme";
 import { ThemeFactory } from "../themes/themeFactory";
@@ -123,11 +123,11 @@ class MenuStartGame {
         //   </div>
         const map_description = {
             div: {
-                className: "w3-row w3-margin",
+                className: "w3-row w3-border w3-margin-top",
                 children: [{
                     // Displays the current map
                     div: {
-                        className: "w3-padding-64 w3-display-container",
+                        className: "w3-padding w3-display-container",
                         id: MainMenu.ID_MAP_CHOICE
                     }
                 }, {
@@ -195,8 +195,6 @@ class MenuStartGame {
             id = 0;
         }
 
-        console.log("Setting map to id:", id);
-
         const elem = document.getElementById(MainMenu.ID_MAP_DOT_CHOICE);
         for (const child of elem.children) {
             child.classList.remove(MainMenu.CLASS_MAP_DOT_CHOSEN);
@@ -207,15 +205,15 @@ class MenuStartGame {
         // delete the old map
         map.innerHTML = "";
         map.dataset["mapid"] = "" + id;
-        map.appendChild(J2H.parse({ p: { textContent: this.mapsData[id].name, className: "w3-display-top w3-container" } }))
-        map.appendChild(J2H.parse({ img: { src: this.mapsData[id].thumbnail_url, style: "height:200px" } }));
+        map.appendChild(J2H.parse({ h3: { textContent: this.mapsData[id].name, className: "w3-display-top w3-border-bottom", style: "padding-bottom:16px;" } }))
+        map.appendChild(J2H.parse({ img: { src: this.mapsData[id].thumbnail_url, style: "height: 300px" } }));
     }
 
     static addPlayerSettings(middle: HTMLDivElement) {
         const playerSettingsDescription = {
-            "div": {
-                "className": "w3-row",
-                "id": MainMenu.ID_PLAYER_SETTINGS
+            div: {
+                className: "w3-row",
+                id: MainMenu.ID_PLAYER_SETTINGS
             }
         };
         middle.appendChild(J2H.parse(playerSettingsDescription));
@@ -223,28 +221,28 @@ class MenuStartGame {
 
     static addPlayerSlider(middle: HTMLDivElement) {
         const slider_valueDescription = {
-            "h1": {
-                "id": MainMenu.ID_PLAYER_SLIDER_DISPLAY,
-                "textContent": "Players: 2"
+            h1: {
+                id: MainMenu.ID_PLAYER_SLIDER_DISPLAY,
+                textContent: "Players: 2"
             }
         };
         middle.appendChild(J2H.parse(slider_valueDescription));
         const sliderInput_description = {
-            "input": {
-                "type": "range",
-                "min": 2,
-                "max": 8,
-                "value": "2",
-                "className": "slider",
-                "id": MainMenu.ID_PLAYER_SLIDER,
-                "oninput": MenuStartGame.changeNumberOfPlayerSettings
+            input: {
+                type: "range",
+                min: 2,
+                max: 8,
+                value: "2",
+                className: "slider",
+                id: MainMenu.ID_PLAYER_SLIDER,
+                oninput: MenuStartGame.changeNumberOfPlayerSettings
             }
         };
         const sliderInput = J2H.parse<HTMLInputElement>(sliderInput_description);
         sliderInput.value = "2";
         const slider_description = {
-            "div": {
-                "className": "slidecontainer"
+            div: {
+                className: "w3-row"
             }
         };
         const slider = J2H.parse(slider_description);
@@ -340,28 +338,29 @@ class MenuStartGame {
 
     static addTanksSlider(middle: HTMLDivElement): any {
         const slider_valueDescription = {
-            "h1": {
-                "id": MainMenu.ID_TANKS_SLIDER_DISPLAY,
-                "textContent": "Tanks: 1"
+            h1: {
+                id: MainMenu.ID_TANKS_SLIDER_DISPLAY,
+                textContent: "Tanks: 1"
             }
         };
         middle.appendChild(J2H.parse(slider_valueDescription));
         const sliderInput_description = {
-            "input": {
-                "type": "range",
-                "min": 1,
-                "max": Settings.MAX_TANKS,
-                "value": "1",
-                "className": "slider",
-                "id": MainMenu.ID_TANKS_SLIDER,
-                "oninput": MenuStartGame.changeNumberOfTanks
+            input: {
+                type: "range",
+                min: 1,
+                max: Settings.MAX_TANKS,
+                value: "1",
+                className: "slider",
+                id: MainMenu.ID_TANKS_SLIDER,
+                oninput: MenuStartGame.changeNumberOfTanks
             }
         };
         const sliderInput = J2H.parse<HTMLInputElement>(sliderInput_description);
         sliderInput.value = "1";
         const slider_description = {
-            "div": {
-                "className": "slidecontainer"
+            div: {
+                className: "w3-row",
+                style: "padding-bottom:32px"
             }
         };
         const slider = J2H.parse(slider_description);

@@ -3,7 +3,7 @@ import { Draw } from "../drawing/draw";
 import { Viewport } from "../gameMap/viewport";
 import { Player } from "../objects/player";
 import { Tank, TankHealthState, TankTurnState } from "../objects/tank";
-import * as Settings from '../settings';
+import { Settings } from '../settings';
 import { ITheme } from "../themes/iTheme";
 import { Ui } from "../ui/ui";
 import { TanksMath } from "../utility/tanksMath";
