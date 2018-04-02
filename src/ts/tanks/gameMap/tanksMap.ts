@@ -31,7 +31,7 @@ export class TanksMap {
             this.created = cachedMap.created;
             this.terrain = [];
             for (const obstacleDescription of <IObstacleData[]>(<any>cachedMap.terrain)) {
-                this.terrain.push(new Obstacle(obstacleDescription));
+                this.terrain.push(Obstacle.fromData(obstacleDescription));
             }
             this.ready = true;
         } else {
@@ -44,7 +44,7 @@ export class TanksMap {
 
                 this.terrain = [];
                 for (const obstacleDescription of <IObstacleData[]>JSON.parse(map.terrain)) {
-                    this.terrain.push(new Obstacle(obstacleDescription));
+                    this.terrain.push(Obstacle.fromData(obstacleDescription));
                 }
                 this.ready = true;
                 this.cached = Date.now();

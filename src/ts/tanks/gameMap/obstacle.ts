@@ -21,15 +21,19 @@ export class Obstacle {
     center: Point;
     type: ObstacleType;
 
-    constructor(obstacleDescription: IObstacleData) {
-        this.id = obstacleDescription.id;
-        this.type = this.typeFromString(obstacleDescription.type)
-        this.center = new Point(obstacleDescription.center.x, obstacleDescription.center.y);
-        this.points = []
+    constructor(id: number, type: string, center: Point, points: Point[]) {
+        this.id = id;
+        this.type = Obstacle.typeFromString(type)
+        this.center = center.copy();
+        this.points = points;
 
-        const obstacleData = obstacleDescription.points;
-        const length = obstacleData.length;
-        this.points = <Point[]>obstacleData;
+    }
+    static fromData(obstacleDescription: IObstacleData): Obstacle {
+        return new Obstacle(obstacleDescription.id,
+            obstacleDescription.type,
+            new Point(obstacleDescription.center.x, obstacleDescription.center.y),
+            <Point[]>obstacleDescription.points
+        )
     }
 
     draw(context: CanvasRenderingContext2D, theme: ITheme): void {
@@ -57,7 +61,7 @@ export class Obstacle {
         }
     }
 
-    private typeFromString(obstacleType: string): ObstacleType {
+    static typeFromString(obstacleType: string): ObstacleType {
         switch (obstacleType.toLowerCase()) {
             case "solid":
                 return ObstacleType.SOLID;
