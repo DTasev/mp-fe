@@ -19,6 +19,7 @@ const exampleMap = {
     "downloadedDate": "2018-03-14T05:00:00Z",
     "terrain": [
         {
+            id: 0,
             "type": "solid",
             "points": [
                 { "x": 500, "y": 500 },
@@ -26,13 +27,12 @@ const exampleMap = {
                 { "x": 500, "y": 700 },
                 { "x": 450, "y": 650 },
             ],
-            "centerX": 500,
-            "centerY": 600
+            "center": { "x": 500, "y": 600 }
         }
     ]
 };
 const obstacles: Obstacle[] = [
-    new Obstacle(exampleMap.terrain[0])
+    Obstacle.fromData(exampleMap.terrain[0])
 ];
 describe('Collision - Tank with Terrain', () => {
 

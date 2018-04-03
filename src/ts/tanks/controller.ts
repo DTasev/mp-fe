@@ -93,7 +93,6 @@ export class GameController {
         this.redrawCanvas();
         this.timeStart = new SingleAccess<Date>(new Date());
         this.ui.startFollowingViewport();
-
     }
 
     /**

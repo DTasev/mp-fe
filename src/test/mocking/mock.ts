@@ -106,9 +106,9 @@ export class Mock {
         this.originalFunctionName = func["name"];
 
         if (returnValue) {
-            cls[func["name"]] = () => this.default_callback(returnValue);
+            cls[this.originalFunctionName] = () => this.default_callback(returnValue);
         } else {
-            cls[func["name"]] = () => this.default_callback();
+            cls[this.originalFunctionName] = () => this.default_callback();
         }
     }
     restore(): any {
@@ -142,7 +142,7 @@ export class Mock {
 export class SingleCallMock extends Mock {
     default_callback(returnValue?) {
         if (this.called.once()) {
-            throw new Error("This mock must only be called once! Use normal Mock for more than a single call.");
+            throw new Error("This mock must only be called once, and this is a second call! Use normal Mock for more than a single call.");
         }
         this.called.increment();
         this.expect_called.increment();
