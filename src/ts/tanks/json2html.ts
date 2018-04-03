@@ -96,6 +96,8 @@ export class J2H {
                 parent.setAttribute(key, props[key]);
             } else if (key.includes("data")) {
                 parent.setAttribute(key, props[key]);
+            } else if (key === "maxlength" && parent instanceof HTMLInputElement) {
+                parent.setAttribute(key, props[key]);
             } else {
                 parent[key] = props[key];
             }

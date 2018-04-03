@@ -5,40 +5,44 @@ import { LineCache } from '../tanks/utility/lineCache';
 import { Point } from '../tanks/utility/point';
 import { Settings } from '../tanks/settings';
 import { Ui } from '../tanks/ui/ui';
-import { MapCreatorControls, PublicMapCreatorControls } from "./ui/mcControls";
 import { Obstacle, ObstacleType } from '../tanks/gameMap/obstacle';
-
+import { MCObstacleTypes, MCPublicObstacleTypes } from "./ui/mcObstacleTypes";
+import { MCTools, MCPublicTools, ToolTypes } from "./ui/mcTools";
+import { MCOptions } from "./ui/mcOptions";
 // Expose public function for controls
-window["PublicMapCreatorControls"] = PublicMapCreatorControls;
+window["MCPublicObstacleTypes"] = MCPublicObstacleTypes;
+window["MCPublicTools"] = MCPublicTools;
 
 const obstacleLineWidth = 1;
+const lineColor = Color.black().rgba();
+
 let draw: Draw;
 
 let context: CanvasRenderingContext2D;
-let centers: Point[] = [];
-let line = new Line();
-const lineColor = Color.black().rgba();
+let currentLine = new Line();
 let rectangleStart: Point;
 
 let obstacles: Obstacle[] = [];
 function startDrawingMap(e: MouseEvent) {
     draw.updatePosition(e);
     draw.state = DrawState.DRAWING;
+    console.log("Using tool");
+
     rectangleStart = draw.mouse.copy();
 }
 
 function stopDrawingMap(e: MouseEvent) {
     draw.state = DrawState.STOPPED;
-    const tool = document.getElementById(MapCreatorControls.ID_SELECTED_TOOL);
+    const tool = document.getElementById(MCTools.ID_SELECTED_TOOL);
     switch (tool.dataset.tool) {
-        case "line":
+        case ToolTypes.LINE:
             // close the obstacle by connecting the last to the first points. This is done automatically
             // during Tanks' map drawing.
-            Draw.line(context, line.points[line.points.length - 1], line.points[0], obstacleLineWidth, lineColor);
+            Draw.line(context, currentLine.points[currentLine.points.length - 1], currentLine.points[0], obstacleLineWidth, lineColor);
             break;
-        case "rectangle":
+        case ToolTypes.RECT:
             // pretend the user drew a perfect rectangle, and add the 4 end points. This allows to re-use the rest of the logic
-            line.points.push(rectangleStart.copy(),
+            currentLine.points.push(rectangleStart.copy(),
                 new Point(rectangleStart.x, draw.mouse.y),
                 new Point(draw.mouse.x, draw.mouse.y),
                 new Point(draw.mouse.x, rectangleStart.y),
@@ -49,22 +53,22 @@ function stopDrawingMap(e: MouseEvent) {
             throw new Error("Internal error, unknown tool selected: " + tool.dataset.tool);
     }
 
-    const length = line.points.length;
-    const centerOfMass = line.points.reduce((a: Point, c: Point) => { a.x += c.x; a.y += c.y; return a; }, new Point(0, 0));
+    const length = currentLine.points.length;
+    const centerOfMass = currentLine.points.reduce((a: Point, c: Point) => { a.x += c.x; a.y += c.y; return a; }, new Point(0, 0));
     centerOfMass.x = centerOfMass.x / length;
     centerOfMass.y = centerOfMass.y / length;
 
     Draw.circle(context, centerOfMass, 1, 2, Color.pink().rgba());
     console.log("Center X:", centerOfMass.x, "Center Y:", centerOfMass.y);
     // cache the current obstacle
-    const type = document.getElementById(MapCreatorControls.ID_SELECTED_OBSTACLE_TYPE).dataset.type;
-    const newObstacle = new Obstacle(obstacles.length, type, centerOfMass, line.copy().points);
+    const type = document.getElementById(MCObstacleTypes.ID_SELECTED_OBSTACLE_TYPE).dataset.type;
+    const newObstacle = new Obstacle(obstacles.length, type, centerOfMass, currentLine.copy().points);
     obstacles.push(newObstacle);
     context.font = "16px Calibri";
     context.fillText(newObstacle.id + " " + type, centerOfMass.x, centerOfMass.y + 20);
 
     // reset the current points so that new obstacles can start separated
-    line.points = [];
+    currentLine.points = [];
     // clear the last mouse position
     draw.last = new Point();
 
@@ -90,16 +94,19 @@ export function redrawCanvas() {
 function drawObstacle(e: MouseEvent) {
     if (draw.state == DrawState.DRAWING) {
         draw.updatePosition(e);
-        const tool = document.getElementById(MapCreatorControls.ID_SELECTED_TOOL);
+        const tool = document.getElementById(MCTools.ID_SELECTED_TOOL);
         switch (tool.dataset.tool) {
-            case "line":
+            case ToolTypes.LINE:
                 draw.mouseLine(context, obstacleLineWidth, lineColor);
-                line.points.push(draw.mouse.copy());
+                currentLine.points.push(draw.mouse.copy());
                 break;
-            case "rectangle":
+            case ToolTypes.RECT:
                 redrawCanvas();
                 Draw.rect(context, rectangleStart, draw.mouse, lineColor);
                 break;
+            default:
+                throw new Error("Internal error, unknown tool selected: " + tool.dataset.tool);
+
         }
     }
 }
@@ -147,7 +154,6 @@ export function mouseForward(e: MouseEvent, action_LMB: Function, action_MMB?: F
 
 function init() {
     draw = new Draw();
-    draw.state = DrawState.STOPPED;
 
     const canvasWidth = 2048;
     const canvasHeight = 1024;
@@ -164,8 +170,12 @@ function init() {
     const viewportHeight = Settings.IS_MOBILE ? window.innerHeight : window.innerHeight - Settings.SCROLLBAR_WIDTH;
 
     const ui = new Ui(Ui.ID_GAME_UI, viewportWidth, viewportHeight);
+
     ui.startFollowingViewport();
-    const controls = new MapCreatorControls(obstacles, ui);
+
+    const obstacleTypes = new MCObstacleTypes(obstacles, ui);
+    const tools = new MCTools(ui);
+    const options = new MCOptions(obstacles, ui);
     canvas.onmousedown = (e: MouseEvent) => mouseForward(e, startDrawingMap);
     canvas.onmouseup = (e: MouseEvent) => mouseForward(e, stopDrawingMap);
     canvas.onmousemove = (e: MouseEvent) => mouseForward(e, drawObstacle);
