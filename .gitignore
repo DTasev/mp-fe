@@ -12,3 +12,4 @@ src/dist/mc/bundle.js
 src/dist/bundle.js
 src/dist/prod_build
 src/ts/gameMap/exampleMap.json
+src/ts/tanks/gameMap/maps/*
