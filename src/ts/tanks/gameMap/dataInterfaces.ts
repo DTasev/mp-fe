@@ -16,28 +16,23 @@ export interface IObstacleData {
     points: ITerrainData[];
 }
 
-/**
- * Data interface exported when quering for the details of a specific map.
- * It contains all of the terrain.
- */
-export interface IMapDetailData {
-    id: string;
-    name: string;
-    creator: string;
-    created: string;
-    url: URL;
-    thumbnail: URL;
-    terrain: string;
-}
 
 /**
  * Data interface exported when quering for all available maps.
  */
-export interface IMapListData {
+export abstract class IMapListData {
     id: string;
     name: string;
     creator: string;
     created: string;
     url: URL;
     thumbnail_url: URL;
+}
+
+/**
+ * Data interface exported when quering for the details of a specific map.
+ * It contains all of the terrain.
+ */
+export abstract class IMapDetailData extends IMapListData {
+    terrain: string;
 }

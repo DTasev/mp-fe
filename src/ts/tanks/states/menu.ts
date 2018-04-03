@@ -18,7 +18,6 @@ function getSliderValue(id: string) {
     return parseInt((<HTMLInputElement>document.getElementById(id)).value);
 }
 
-
 export class PublicMenuStartGame {
     static toggleTheme(elem: HTMLDivElement, klass: string) {
         for (const child of elem.parentElement.children) {
@@ -82,45 +81,13 @@ class MenuStartGame {
         middle.appendChild(J2H.parse(d_themes));
     }
 
-    static mapsData: IMapListData[];
+    static mapsList: IMapListData[];
 
-    static setMapData(mapsData: IMapListData[]) {
-        this.mapsData = mapsData;
+    static setMapData(mapsList: IMapListData[]) {
+        this.mapsList = mapsList;
     }
 
     static addMapChoices(middle: HTMLDivElement) {
-        //         <div class="w3-container">
-        //     <div class="w3-display-container mySlides" style="display: block;">
-        //       <img src="/w3images/coffee.jpg" style="width:100%">
-        //       <div class="w3-display-topleft w3-container w3-padding-32">
-        //         <span class="w3-white w3-padding-large w3-animate-bottom">Lorem ipsum</span>
-        //       </div>
-        //     </div>
-        //     <div class="w3-display-container mySlides" style="display: none;">
-        //       <img src="/w3images/workbench.jpg" style="width:100%">
-        //       <div class="w3-display-middle w3-container w3-padding-32">
-        //         <span class="w3-white w3-padding-large w3-animate-bottom">Klorim tipsum</span>
-        //       </div>
-        //     </div>
-        //     <div class="w3-display-container mySlides" style="display: none;">
-        //       <img src="/w3images/sound.jpg" style="width:100%">
-        //       <div class="w3-display-topright w3-container w3-padding-32">
-        //         <span class="w3-white w3-padding-large w3-animate-bottom">Blorum pipsum</span>
-        //       </div>
-        //     </div>
-
-        //     <!-- Slideshow next/previous buttons -->
-        //     <div class="w3-container w3-dark-grey w3-padding w3-xlarge">
-        //       <div class="w3-left" onclick="plusDivs(-1)"><i class="fa fa-arrow-circle-left w3-hover-text-teal"></i></div>
-        //       <div class="w3-right" onclick="plusDivs(1)"><i class="fa fa-arrow-circle-right w3-hover-text-teal"></i></div>
-
-        //       <div class="w3-center">
-        //         <span class="w3-tag demodots w3-border w3-transparent w3-hover-white w3-white" onclick="currentDiv(1)"></span>
-        //         <span class="w3-tag demodots w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
-        //         <span class="w3-tag demodots w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
-        //       </div>
-        //     </div>
-        //   </div>
         const map_description = {
             div: {
                 className: "w3-row w3-border w3-margin-top",
@@ -160,7 +127,7 @@ class MenuStartGame {
                                 className: "w3-center",
                                 children: (function () {
                                     const childList = [];
-                                    for (let i = 0; i < MenuStartGame.mapsData.length; ++i) {
+                                    for (let i = 0; i < MenuStartGame.mapsList.length; ++i) {
                                         const span = {
                                             span: {
                                                 className: "w3-tag w3-border w3-transparent w3-hover-white tanks-map-dot",
@@ -182,14 +149,14 @@ class MenuStartGame {
 
     /**
      * Set the current chosen map on the start game screen
-     * @param id The position of the map in the mapsData array, not the ID in the database!
+     * @param id The position of the map in the mapsList array, not the ID in the database!
      */
     static setMap(id: number) {
         if (id < 0) {
             // if below 0, go to the last element, this happens if on the first map the user clicks to go to the
             // previous map
-            id = this.mapsData.length - 1;
-        } else if (id >= this.mapsData.length) {
+            id = this.mapsList.length - 1;
+        } else if (id >= this.mapsList.length) {
             // if above/equal to the length of available maps, then wrap back to the first, happens when the user
             // click next on the last map choice
             id = 0;
@@ -205,8 +172,9 @@ class MenuStartGame {
         // delete the old map
         map.innerHTML = "";
         map.dataset["mapid"] = "" + id;
-        map.appendChild(J2H.parse({ h3: { textContent: this.mapsData[id].name, className: "w3-display-top w3-border-bottom", style: "padding-bottom:16px;" } }))
-        map.appendChild(J2H.parse({ img: { src: this.mapsData[id].thumbnail_url, style: "height: 300px" } }));
+        const selectedMap = this.mapsList[id];
+        map.appendChild(J2H.parse({ h3: { textContent: selectedMap.name, className: "w3-display-top w3-border-bottom", style: "padding-bottom:16px;" } }))
+        map.appendChild(J2H.parse({ img: { src: selectedMap.thumbnail_url, style: "height: 300px" } }));
     }
 
     static addPlayerSettings(middle: HTMLDivElement) {
@@ -375,6 +343,8 @@ export class MainMenu implements IActionState {
     static readonly ELEMENT_PADDING = Settings.IS_MOBILE ? "" : " w3-padding-32";
     static readonly CLASS_MENU_BUTTON = "w3-button tanks-ui-menu-button" + MainMenu.ELEMENT_PADDING;
     static readonly CLASS_MENU_TITLE = "tanks-ui-menu-title" + MainMenu.ELEMENT_PADDING;
+
+
     static readonly ID_PLAYER_SLIDER = "slider-players";
     static readonly ID_PLAYER_SLIDER_DISPLAY = "slider-players-value";
     static readonly ID_PLAYER_SETTINGS = "player-settings";
@@ -389,6 +359,9 @@ export class MainMenu implements IActionState {
     static readonly ID_MAP_DOT_CHOICE = "tanks-map-dot-choice";
     static readonly CLASS_MAP_DOT_CHOSEN = "w3-white";
 
+    static readonly ID_START_GAME_BUTTON = "tanks-ui-start-game";
+    static readonly ID_QUICK_START_BUTTON = "tanks-ui-quick-start";
+
     private readonly ui: Ui;
     private readonly theme: ITheme;
     private readonly canvas: HTMLCanvasElement;
@@ -396,9 +369,19 @@ export class MainMenu implements IActionState {
     private mapsList: IMapListData[] = [];
 
     constructor(ui: Ui, canvas: HTMLCanvasElement) {
-        Remote.mapList((remoteMapData: IMapListData[]) => {
-            this.mapsList = remoteMapData;
-        });
+        Remote.mapList(
+            // success callback - remote was reached, load the remote data
+            (remoteMapData: IMapListData[]) => {
+                this.mapsList = remoteMapData;
+            },
+            // failure callback - remote was unavailable, load the premade data
+            () => {
+                const availableMaps = TanksCache.availableMaps();
+                for (const map of availableMaps) {
+                    const mapdata = <IMapListData>TanksCache.getMap(map);
+                    this.mapsList.push(mapdata);
+                }
+            });
         this.ui = ui;
         this.canvas = canvas;
         this.theme = ThemeFactory.create(TanksCache.theme);
@@ -431,14 +414,16 @@ export class MainMenu implements IActionState {
 
         const button_startGameDescription = {
             "button": {
-                "className": MainMenu.CLASS_MENU_BUTTON,
-                "textContent": "Start Game",
-                "onclick": this.startGameOptions
+                id: MainMenu.ID_START_GAME_BUTTON,
+                className: MainMenu.CLASS_MENU_BUTTON,
+                textContent: "Start Game",
+                onclick: this.startGameOptions
             }
         };
 
         const button_startGame = J2H.parse(button_startGameDescription);
         const button_quickStart = <HTMLButtonElement>button_startGame.cloneNode();
+        button_quickStart.id = MainMenu.ID_QUICK_START_BUTTON;
         button_quickStart.textContent = "Start 2P";
         button_quickStart.onclick = this.quickStart
 
@@ -464,13 +449,54 @@ export class MainMenu implements IActionState {
         this.ui.body.htmlElement.appendChild(right);
     }
 
+    /**
+     * Make sure the maps are loaded! Show a loading icon and
+     * set an interval to repeatedly check if the maps are loaded
+     * @param e Mouse event that triggered the wait
+     * @param elementId Id of the element that will show the loading text
+     * @param callback Callback function to go back to after the loading is complete
+     */
+    private waitMapLoad(e: MouseEvent, elementId: string, callback: Function) {
+        // Make sure the maps are loaded! Show a loading icon and
+        // set an interval to repeatedly check if the maps are loaded
+        if (this.mapsList.length === 0) {
+            this.showStartGameLoadingIcon(elementId);
+            const interval = setInterval(() => {
+                callback(e);
+                this.removeStartGameLoadingIcon(elementId);
+                clearInterval(interval);
+            }, 500);
+            return true;
+        }
+    }
     private quickStart = (e: MouseEvent) => {
+        if (this.waitMapLoad(e, MainMenu.ID_QUICK_START_BUTTON, this.quickStart)) {
+            return;
+        }
         let map = new TanksMap(this.mapsList[0].id);
         let players: Player[] = MenuStartGame.createPlayers(Settings.DEFAULT_NUMBER_PLAYERS, this.theme.game.playerColors());
         this.startGame(map, players, Settings.DEFAULT_NUMBER_TANKS, e);
     }
 
+    private showStartGameLoadingIcon(elementId: string) {
+        const button = document.getElementById(elementId);
+        // the hard-coded width fixes the spinner rotation to be around the center of the icon
+        // otherwise it wobbles around
+        button.innerHTML = ' Loading maps... <i class="fas fa-circle-notch fa-spin" style="width:38px"></i>';
+    }
+    private removeStartGameLoadingIcon(elementId: string) {
+        const button = document.getElementById(elementId);
+        // check if the menu is still present, if the map has loaded during this callback
+        // the element will have been removed at this point, and nothing has to be done
+        if (button) {
+            button.innerHTML = "Finished";
+        }
+    }
     private startGameOptions = (e: MouseEvent) => {
+        if (this.waitMapLoad(e, MainMenu.ID_START_GAME_BUTTON, this.startGameOptions)) {
+            return;
+        }
+
         this.ui.body.clear();
         const [left, middle, right] = this.ui.body.addColumns();
 
@@ -515,7 +541,8 @@ export class MainMenu implements IActionState {
     private prepareGame = (e: MouseEvent) => {
         const numPlayers = getSliderValue(MainMenu.ID_PLAYER_SLIDER);
         const selectedMap = document.getElementById(MainMenu.ID_MAP_CHOICE);
-        const map = new TanksMap(this.mapsList[selectedMap.dataset.mapid].id);
+        const mapdata = this.mapsList[selectedMap.dataset.mapid];
+        const map = new TanksMap(mapdata.id);
 
         this.startGame(map, MenuStartGame.createPlayers(numPlayers), getSliderValue(MainMenu.ID_TANKS_SLIDER), e);
     }

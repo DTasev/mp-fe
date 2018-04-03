@@ -200,11 +200,18 @@ export class Tank {
     static sampleTank(x = 0, y = 0): Tank {
         return new Tank(0, Player.samplePlayer(), x, y, new DarkTheme());
     }
+
+    /**
+     * Apply any effects to the tank before teh beginning of the turn
+     */
     beforeTurnEffects() {
         for (const effect of this.effects) {
             effect.before(this);
         }
     }
+    /**
+     * Expires any effects that are due to expire at the end of the turn.
+     */
     afterTurnEffects() {
         for (const effect of this.effects) {
             effect.after(this);
