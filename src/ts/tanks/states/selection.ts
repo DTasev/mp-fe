@@ -148,9 +148,10 @@ export class SelectionState implements IPlayState {
     }
 
     private successfulSelection(tank: Tank) {
+        // apply any effects to the movement range, etc
+        tank.beforeTurnEffects();
         // show the range is the tank is going to move, otherwise don't draw it
         tank.highlight(this.context, tank.actionState === TankTurnState.NOT_ACTED && tank.healthState !== TankHealthState.DISABLED ? true : false);
-        tank.beforeTurnEffects();
         // store the details of the active tank
         this.player.activeTank.set(tank);
         this.currentActiveTank = tank;
