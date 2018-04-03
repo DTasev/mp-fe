@@ -307,6 +307,8 @@ export class MCOptions {
         const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
         const modal = document.getElementById(this.ID_MODAL);
         modal.style.display = "none";
+
+        canvas.onmouseup = null;
         // on mouse down callback into the main function to set the new center and redraw the canvas
         canvas.onmousedown = (e: MouseEvent) => { setCenter(e, id); redrawCanvas(); }
     }

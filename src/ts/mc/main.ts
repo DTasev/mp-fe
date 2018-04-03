@@ -32,6 +32,10 @@ function startDrawingMap(e: MouseEvent) {
 }
 
 function stopDrawingMap(e: MouseEvent) {
+    // if there was no drawing up to this point, then do not execute the function
+    if (draw.state !== DrawState.DRAWING) {
+        return;
+    }
     draw.state = DrawState.STOPPED;
     const tool = document.getElementById(MCTools.ID_SELECTED_TOOL);
     switch (tool.dataset.tool) {
@@ -120,7 +124,7 @@ export function setCenter(e: MouseEvent, id: number) {
 
     printObstacleData();
     const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
-    canvas.onmousedown = (e: MouseEvent) => mouseForward(e, startDrawingMap);
+    setMapCreatorMouseEvents(canvas);
 }
 
 function printObstacleData() {
@@ -176,9 +180,13 @@ function init() {
     const obstacleTypes = new MCObstacleTypes(obstacles, ui);
     const tools = new MCTools(ui);
     const options = new MCOptions(obstacles, ui);
+    setMapCreatorMouseEvents(canvas);
+}
+
+init();
+
+function setMapCreatorMouseEvents(canvas: HTMLCanvasElement) {
     canvas.onmousedown = (e: MouseEvent) => mouseForward(e, startDrawingMap);
     canvas.onmouseup = (e: MouseEvent) => mouseForward(e, stopDrawingMap);
     canvas.onmousemove = (e: MouseEvent) => mouseForward(e, drawObstacle);
 }
-
-init();
