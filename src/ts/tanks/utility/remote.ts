@@ -32,4 +32,23 @@ export class Remote {
         };
         request.send(null);
     }
+    static sendMap(username: string, password: string, data: string, successCallback: Function, failureCallback: Function) {
+        const request = new XMLHttpRequest();
+
+        let auth_basic = window.btoa(username + ":" + password);
+        request.open("POST", Settings.REMOTE_URL, true);
+        request.setRequestHeader("Authorization", "Basic " + auth_basic);
+        request.setRequestHeader("Content-Type", "application/json");
+
+        request.onreadystatechange = () => {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 201) { // 201 CREATED
+                    successCallback(JSON.parse(request.responseText));
+                } else {
+                    failureCallback(request.responseText);
+                }
+            }
+        };
+        request.send(data);
+    }
 }

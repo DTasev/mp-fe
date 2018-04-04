@@ -3,6 +3,7 @@ import { Obstacle } from "../../tanks/gameMap/obstacle";
 import { setCenter, redrawCanvas } from '../main';
 import { Settings } from '../../tanks/settings';
 import { J2H } from "../../tanks/json2html";
+import { Remote } from "../../tanks/utility/remote";
 
 export class MCOptions {
     readonly ID_MODAL = "mc-modal";
@@ -15,6 +16,7 @@ export class MCOptions {
     readonly ID_MODAL_INPUT_MAP_NAME = "mc-input-map-name";
     readonly ID_MODAL_INPUT_MAP_USERNAME = "mc-input-map-username";
     readonly ID_MODAL_INPUT_MAP_PASSWORD = "mc-input-map-password";
+    readonly ID_MODAL_INPUT_MAP_THUMBNAIL = "mc-input-map-thumbnail";
 
     readonly COPIED_TEXT_TIMEOUT = 1500;
 
@@ -95,6 +97,23 @@ export class MCOptions {
                         }]
                     }
                 }, {
+                    div: {
+                        style: "display:block;",
+                        children: [{
+                            label: {
+                                for: this.ID_MODAL_INPUT_MAP_THUMBNAIL,
+                                style: "display:block;",
+                                textContent: "Thumbnail URL: "
+                            }
+                        }, {
+                            input: {
+                                id: this.ID_MODAL_INPUT_MAP_THUMBNAIL,
+                                type: "text",
+                                name: "thumbnail"
+                            }
+                        }]
+                    }
+                }, {
                     p: {
                         textContent: "Export to:"
                     }
@@ -102,18 +121,17 @@ export class MCOptions {
                     button: {
                         textContent: "Local",
                         className: "w3-button w3-border mc-button",
-                        onclick: this.exportObstaclesLocal
+                        onclick: this.exportObstaclesLocal,
+                        type: "button" // stops the form from submitting
                     }
-                }
-                    // , {
-                    // button: {
-                    //     textContent: "Remote",
-                    //     className: "w3-button w3-border mc-button",
-                    //     onclick: this.exportObstaclesRemote
-
-                    // }
-                    // }
-                ]
+                }, {
+                    button: {
+                        textContent: "Remote",
+                        className: "w3-button w3-border mc-button",
+                        onclick: this.exportObstaclesRemote,
+                        type: "button" // stops the form from submitting
+                    }
+                }]
             }
         };
         modalText.appendChild(J2H.parse(d));
@@ -166,7 +184,63 @@ export class MCOptions {
     }
 
     exportObstaclesRemote = () => {
-        alert("Not implemented yet");
+        const mapName = <HTMLInputElement>document.getElementById(this.ID_MODAL_INPUT_MAP_NAME);
+        if (mapName.value === "") {
+            mapName.setCustomValidity("Map name cannot be empty!");
+            // on the next key press remove the field's error message, then remove the function
+            mapName.onkeydown = () => { mapName.setCustomValidity(""); mapName.onkeydown = null; };
+            return;
+        } else {
+            mapName.setCustomValidity("");
+        }
+
+        const username = <HTMLInputElement>document.getElementById(this.ID_MODAL_INPUT_MAP_USERNAME);
+        if (username.value === "") {
+            username.setCustomValidity("Username cannot be empty!");
+            // on the next key press remove the field's error message, then remove the function
+            username.onkeydown = () => { username.setCustomValidity(""); username.onkeydown = null; };
+            return;
+        } else {
+            username.setCustomValidity("");
+        }
+        const password = <HTMLInputElement>document.getElementById(this.ID_MODAL_INPUT_MAP_PASSWORD);
+        if (password.value === "") {
+            password.setCustomValidity("Password cannot be empty!");
+            // on the next key press remove the field's error message, then remove the function
+            password.onkeydown = () => { password.setCustomValidity(""); password.onkeydown = null; };
+            return;
+        } else {
+            password.setCustomValidity("");
+        }
+        const thumbnail = <HTMLInputElement>document.getElementById(this.ID_MODAL_INPUT_MAP_THUMBNAIL);
+        if (thumbnail.value === "") {
+            thumbnail.setCustomValidity("Password cannot be empty!");
+            // on the next key press remove the field's error message, then remove the function
+            thumbnail.onkeydown = () => { thumbnail.setCustomValidity(""); thumbnail.onkeydown = null; };
+            return;
+        } else {
+            thumbnail.setCustomValidity("");
+        }
+
+        const [modalText, obstaclesPresent] = this.defaultModalView(false);
+        if (!obstaclesPresent) {
+            return;
+        }
+        debugger
+        const mapData = JSON.stringify({
+            name: mapName.value,
+            thumbnail_url: thumbnail.value,  // http://www.catster.com/wp-content/uploads/2017/12/A-kitten-meowing.jpg
+            // the terrain is expected to be a single JSON string
+            terrain: JSON.stringify(this.obstacles)
+        });
+
+        Remote.sendMap(username.value, password.value, mapData,
+            (responseText) => {
+                modalText.innerHTML = responseText;
+            }, (responseText) => {
+                modalText.innerHTML = responseText;
+            }
+        );
     }
 
 
@@ -280,7 +354,7 @@ export class MCOptions {
         modalText.appendChild(e);
     }
 
-    private defaultModalView(): [HTMLDivElement, boolean] {
+    private defaultModalView(clear = true): [HTMLDivElement, boolean] {
         const modal = document.getElementById(this.ID_MODAL);
         modal.style.display = "block";
         var span = document.getElementById(this.ID_MODAL_CLOSE);
@@ -298,7 +372,9 @@ export class MCOptions {
             return [modalText, false];
         }
         else {
-            modalText.innerHTML = "";
+            if (clear) {
+                modalText.innerHTML = "";
+            }
             return [modalText, true];
         }
     }
