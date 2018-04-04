@@ -229,16 +229,16 @@ export class MCOptions {
         debugger
         const mapData = JSON.stringify({
             name: mapName.value,
-            thumbnail_url: thumbnail.value,  // http://www.catster.com/wp-content/uploads/2017/12/A-kitten-meowing.jpg
+            // thumbnail_url: thumbnail.value,  // http://www.catster.com/wp-content/uploads/2017/12/A-kitten-meowing.jpg
             // the terrain is expected to be a single JSON string
             terrain: JSON.stringify(this.obstacles)
         });
 
         Remote.sendMap(username.value, password.value, mapData,
-            (responseText) => {
-                modalText.innerHTML = responseText;
+            () => {
+                modalText.innerHTML = "Successful upload!";
             }, (responseText) => {
-                modalText.innerHTML = responseText;
+                modalText.innerHTML = "Failed upload, server response: " + responseText;
             }
         );
     }

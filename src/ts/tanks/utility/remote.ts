@@ -1,6 +1,6 @@
 import { Settings } from '../settings';
 import { IMapListData } from '../gameMap/dataInterfaces';
-
+import { getCookie } from "../utility/cookies";
 export class Remote {
     static mapList(successCallback: Function, failureCallback: Function) {
         const request = new XMLHttpRequest();
@@ -39,11 +39,12 @@ export class Remote {
         request.open("POST", Settings.REMOTE_URL, true);
         request.setRequestHeader("Authorization", "Basic " + auth_basic);
         request.setRequestHeader("Content-Type", "application/json");
+        request.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
 
         request.onreadystatechange = () => {
             if (request.readyState === XMLHttpRequest.DONE) {
                 if (request.status === 201) { // 201 CREATED
-                    successCallback(JSON.parse(request.responseText));
+                    successCallback();
                 } else {
                     failureCallback(request.responseText);
                 }
