@@ -103,13 +103,13 @@ export class MovingState implements IPlayState {
             const collisionObstacle = this.controller.collidingWithTerrain(this.draw.mouse, Tank.WIDTH);
             // update the position of the tank in the player array
             const tank = this.player.tanks[this.active.id];
-            // exhaust any previous effects on the tank
-            tank.afterTurnEffects();
 
             // the tank will be moved provided: there is no obstacle
             // OR the obstacle is traversable, and the tank will get an effect
             // if it is NOT traversable, the tank will not move
             if (!collisionObstacle || collisionObstacle.traversable()) {
+                // exhaust any previous effects on the tank, ONLY IF the movement is successful
+                tank.afterTurnEffects();
                 tank.position = this.draw.mouse.copy();
                 tank.actionState = TankTurnState.MOVED;
 
