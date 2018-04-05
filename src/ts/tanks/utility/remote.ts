@@ -12,6 +12,7 @@ export class Remote {
                 if (request.readyState === XMLHttpRequest.DONE) {
                     if (request.status === 200) { // 200 OK
                         successCallback(JSON.parse(request.responseText));
+                        resolve();
                     }
                 }
             };
@@ -27,9 +28,7 @@ export class Remote {
                 if (request.readyState === XMLHttpRequest.DONE) {
                     if (request.status === 200) { // 200 OK
                         successCallback(JSON.parse(request.responseText));
-                    } else {
-                        // provide default map
-                        console.warn("Remote not reached. Using cached maps.");
+                        resolve();
                     }
                 }
             };
