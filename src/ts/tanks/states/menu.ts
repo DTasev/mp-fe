@@ -370,18 +370,10 @@ export class MainMenu implements IActionState {
     private mapsListRequest: Promise<XMLHttpRequest>;
 
     constructor(ui: Ui, canvas: HTMLCanvasElement) {
-        this.mapsListRequest = Remote.mapListPromise(
+        this.mapsListRequest = Remote.mapList(
             // success callback - remote was reached, load the remote data
             (remoteMapData: IMapListData[]) => {
                 this.mapsList = remoteMapData;
-            },
-            // failure callback - remote was unavailable, load the premade data
-            () => {
-                const availableMaps = TanksCache.availableMaps();
-                for (const map of availableMaps) {
-                    const mapdata = <IMapListData>TanksCache.getMap(map);
-                    this.mapsList.push(mapdata);
-                }
             });
         this.ui = ui;
         this.canvas = canvas;
@@ -541,28 +533,22 @@ export class MainMenu implements IActionState {
      * Activates the selected menu option
      */
     private startGame = (map: TanksMap, players: Player[], numTanks: number, e: MouseEvent) => {
-        const startInterval = setInterval(() => {
-            // if the remote map hasn't finished downloading then do not show the canvas
-            if (map.ready) {
-                // stop this from repeating further
-                clearInterval(startInterval);
+        map.ready.then(() => {
+            // set up the canvas and the rest of the game
+            this.ui.showCanvas();
 
-                // set up the canvas and the rest of the game
-                this.ui.showCanvas();
+            // retrieve the selected theme from the start game screen
+            const themeInput = document.getElementById(MainMenu.ID_THEME);
+            // if not present (when quick start is pressed) or the theme is the same, use the current theme
+            const gameTheme = themeInput ? ThemeFactory.create(themeInput.textContent) : this.theme;
+            // cache the theme, so that next time the player runs the game it will be that theme
+            TanksCache.theme = gameTheme.name;
 
-                // retrieve the selected theme from the start game screen
-                const themeInput = document.getElementById(MainMenu.ID_THEME);
-                // if not present (when quick start is pressed) or the theme is the same, use the current theme
-                const gameTheme = themeInput ? ThemeFactory.create(themeInput.textContent) : this.theme;
-                // cache the theme, so that next time the player runs the game it will be that theme
-                TanksCache.theme = gameTheme.name;
+            document.body.style.backgroundColor = gameTheme.game.canvasBackground().rgba();
 
-                document.body.style.backgroundColor = gameTheme.game.canvasBackground().rgba();
-
-                const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, gameTheme, map, players, numTanks);
-                controller.changeGameState(GameState.TANK_PLACEMENT);
-            }
-        }, Settings.MAP_SETUP_WAIT_TIME);
+            const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, gameTheme, map, players, numTanks);
+            controller.changeGameState(GameState.TANK_PLACEMENT);
+        });
     }
     // private showOptions = (e: MouseEvent) => {
     //     this.ui.body.clear();

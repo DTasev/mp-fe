@@ -7,7 +7,7 @@ import { Settings } from '../settings';
 
 
 export class TanksMap {
-    ready = false;
+    ready: Promise<XMLHttpRequest>;
 
     terrain: Obstacle[];
     id: string;
@@ -30,11 +30,11 @@ export class TanksMap {
         // checks that there is a cached version of the map, that has not expired
         if (cachedMap && Date.now() - cachedMap.cached < Settings.CACHE_DURATION) {
             console.log("Loading map from cache.");
-            this.loadMapDetails(cachedMap);
+            this.ready = new Promise((resolve, reject) => { this.loadMapDetails(cachedMap); resolve(); });
         } else {
             console.log("Downloading map from remote.");
             // cache is not present, download from remote
-            Remote.mapDetail(id, (map: IMapDetailData) => {
+            this.ready = Remote.mapDetail(id, (map: IMapDetailData) => {
                 this.loadMapDetails(map);
                 this.cached = Date.now();
                 TanksCache.setMap(id, this);
@@ -56,7 +56,6 @@ export class TanksMap {
         for (const obstacleDescription of <IObstacleData[]>cachedMap.terrain) {
             this.terrain.push(Obstacle.fromData(obstacleDescription));
         }
-        this.ready = true;
     }
 
     draw(context: CanvasRenderingContext2D, theme: ITheme) {
