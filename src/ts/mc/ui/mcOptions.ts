@@ -243,7 +243,6 @@ export class MCOptions {
         );
     }
 
-
     private copyObstaclesToClipboard = () => {
         const textarea = <HTMLTextAreaElement>document.getElementById(this.ID_MODAL_OBSTACLEDATA);
         textarea.select();

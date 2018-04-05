@@ -32,6 +32,7 @@ function init() {
     const ui = new Ui(Ui.ID_GAME_UI, viewportWidth, viewportHeight);
     const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
     const mainMenu = new MainMenu(ui, canvas);
+
     mainMenu.setUpUi();
 }
 
