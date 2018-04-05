@@ -27,7 +27,8 @@
         "build:prod": "webpack --config webpack.prod.js",
         "watch": "webpack --config webpack.dev.js --watch",
         "build:dev": "webpack --config webpack.dev.js",
-        "fullbuild": "tsc && webpack --config webpack.prod.js && cd .. && python manage.py collectstatic --noinput"
+        "fullbuild": "tsc && webpack --config webpack.prod.js && cd .. && python manage.py collectstatic --noinput",
+        "fullbuild:dev": "tsc && webpack --config webpack.dev.js && cd .. && python manage.py collectstatic --noinput"
     },
     "repository": {
         "type": "git",
