@@ -10,6 +10,8 @@ export class MCOptions {
     readonly ID_MODAL_CLOSE = "mc-modal-close";
     readonly ID_MODAL_TEXT = "mc-modal-text";
 
+    readonly ID_MODAL_OBSTACLETYPE = "mc-modal-obstacletype";
+
     readonly ID_MODAL_OBSTACLEDATA = "mc-modal-obstacledata";
     readonly ID_MODAL_OBSTACLEDATA_COPIED = "mc-modal-obstacledata-copied";
 
@@ -318,7 +320,8 @@ export class MCOptions {
                                 textContent: <string>obstacle.type
                             }
                             // append the rest of the available types
-                        }].concat(options)
+                        }].concat(options),
+                        id: this.ID_MODAL_OBSTACLETYPE
                     }
                 }, {
                     button: {
@@ -348,8 +351,8 @@ export class MCOptions {
 
         const e = J2H.parse(d);
         // Add onchange value to the select element. Setting it this way was the only way the event actually triggered
-        (<HTMLSelectElement>e.children[2]).onchange = (e: Event) => this.changeObstacleType(e, id);
         modalText.appendChild(e);
+        document.getElementById(this.ID_MODAL_OBSTACLETYPE).onchange = (e: Event) => this.changeObstacleType(e, id);
     }
 
     private defaultModalView(clear = true): [HTMLDivElement, boolean] {
