@@ -23,8 +23,14 @@ export class TanksMap {
      * Loads the map, from cache, if present and up-to-date, else from remote
      */
     constructor(id: string) {
-        // force ID to be a string
         id = id + "";
+
+        // special case to stop the map from looking for data in the cache or from remote
+        if (id === "-1") {
+            return;
+        }
+
+        // force ID to be a string
         // try loading the map from cache, if it has been downloaded previously
         const cachedMap = TanksCache.getMap(id);
         // checks that there is a cached version of the map, that has not expired
@@ -63,5 +69,16 @@ export class TanksMap {
         for (const obstacle of this.terrain) {
             obstacle.draw(context, theme);
         }
+    }
+    static premadeMap(): TanksMap {
+        const map = new TanksMap("-1");
+        map.id = "1";
+        map.name = "Test Map";
+        map.url = new URL("https://localhost/test/url");
+        map.thumbnail_url = new URL("https://localhost/test/url");
+        map.creator = "1";
+        map.created = Date.now() + "";
+        map.terrain = [];
+        return map;
     }
 }
