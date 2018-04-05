@@ -389,9 +389,11 @@ export class MCOptions {
         // on mouse down callback into the main function to set the new center and redraw the canvas
         canvas.onmousedown = (e: MouseEvent) => { setCenter(e, id); redrawCanvas(); }
     }
+
     changeObstacleType(e: Event, id: number) {
         this.obstacles[id].type = Obstacle.typeFromString((<HTMLSelectElement>e.srcElement).value);
     }
+
     deleteObstacle(id: number) {
         this.obstacles.splice(id, 1);
         // fix the obstacle ids the brute way

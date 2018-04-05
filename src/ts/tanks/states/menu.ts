@@ -427,9 +427,9 @@ export class MainMenu implements IActionState {
         button_quickStart.textContent = "Start 2P";
         button_quickStart.onclick = this.quickStart
 
-        const button_options = <HTMLButtonElement>button_startGame.cloneNode();
-        button_options.textContent = "Options";
-        button_options.onclick = this.showOptions
+        // const button_options = <HTMLButtonElement>button_startGame.cloneNode();
+        // button_options.textContent = "Options";
+        // button_options.onclick = this.showOptions
 
         const button_account = <HTMLButtonElement>button_startGame.cloneNode();
         button_account.textContent = "Account";
@@ -441,7 +441,7 @@ export class MainMenu implements IActionState {
 
         middle.appendChild(button_startGame);
         middle.appendChild(button_quickStart);
-        middle.appendChild(button_options);
+        // middle.appendChild(button_options);
         middle.appendChild(button_account);
 
         this.ui.body.htmlElement.appendChild(left);
@@ -575,37 +575,37 @@ export class MainMenu implements IActionState {
             // TODO show a loading screen or something
         }, Settings.MAP_SETUP_WAIT_TIME);
     }
-    private showOptions = (e: MouseEvent) => {
-        this.ui.body.clear();
-        const [left, middle, right] = this.ui.body.addColumns();
+    // private showOptions = (e: MouseEvent) => {
+    //     this.ui.body.clear();
+    //     const [left, middle, right] = this.ui.body.addColumns();
 
-        const button_emptyOptionDescription = {
-            "button": {
-                "className": MainMenu.CLASS_MENU_BUTTON,
-                "textContent": "Option",
-                "onclick": () => { throw new Error("Menu option not implemented"); }
-            }
-        };
+    //     const button_emptyOptionDescription = {
+    //         "button": {
+    //             "className": MainMenu.CLASS_MENU_BUTTON,
+    //             "textContent": "Option",
+    //             "onclick": () => { throw new Error("Menu option not implemented"); }
+    //         }
+    //     };
 
-        for (let i = 0; i < 5; i++) {
-            const button_emptyOption = J2H.parse(button_emptyOptionDescription);
-            button_emptyOption.textContent += " " + i;
-            middle.appendChild(button_emptyOption);
-        }
+    //     for (let i = 0; i < 5; i++) {
+    //         const button_emptyOption = J2H.parse(button_emptyOptionDescription);
+    //         button_emptyOption.textContent += " " + i;
+    //         middle.appendChild(button_emptyOption);
+    //     }
 
-        const button_backDescription = {
-            "button": {
-                "className": MainMenu.CLASS_MENU_BUTTON,
-                "textContent": "Back",
-                "onclick": this.setUpUi
-            }
-        };
-        const button_back = J2H.parse(button_backDescription);
-        middle.appendChild(button_back);
+    //     const button_backDescription = {
+    //         "button": {
+    //             "className": MainMenu.CLASS_MENU_BUTTON,
+    //             "textContent": "Back",
+    //             "onclick": this.setUpUi
+    //         }
+    //     };
+    //     const button_back = J2H.parse(button_backDescription);
+    //     middle.appendChild(button_back);
 
-        this.ui.body.htmlElement.appendChild(left);
-        this.ui.body.htmlElement.appendChild(middle);
-        this.ui.body.htmlElement.appendChild(right);
-    }
+    //     this.ui.body.htmlElement.appendChild(left);
+    //     this.ui.body.htmlElement.appendChild(middle);
+    //     this.ui.body.htmlElement.appendChild(right);
+    // }
 
 }

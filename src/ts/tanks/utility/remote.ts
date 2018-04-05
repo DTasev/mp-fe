@@ -1,6 +1,7 @@
 import { Settings } from '../settings';
 import { IMapListData } from '../gameMap/dataInterfaces';
 import { getCookie } from "../utility/cookies";
+
 export class Remote {
     static mapList(successCallback: Function, failureCallback: Function) {
         const request = new XMLHttpRequest();
@@ -17,6 +18,7 @@ export class Remote {
         };
         request.send(null);
     }
+
     static mapDetail(id: string, successCallback: Function) {
         const request = new XMLHttpRequest();
         request.open("GET", Settings.REMOTE_URL + id, true);
@@ -32,6 +34,7 @@ export class Remote {
         };
         request.send(null);
     }
+
     static sendMap(username: string, password: string, data: string, successCallback: Function, failureCallback: Function) {
         const request = new XMLHttpRequest();
 
