@@ -4,21 +4,21 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = [{
         entry: './src/build/ts/tanks/main.js',
         plugins: [
-            new CleanWebpackPlugin(['src/dist'])
+            new CleanWebpackPlugin(['static/tanks/js/'])
         ],
         output: {
             filename: 'bundle.js',
-            path: path.resolve(__dirname, 'src/dist'),
+            path: path.resolve(__dirname, 'static/tanks/js/'),
         }
     },
     {
         entry: './src/build/ts/mc/main.js',
         plugins: [
-            new CleanWebpackPlugin(['src/dist/mc'])
+            new CleanWebpackPlugin(['static/tanks/js/mc'])
         ],
         output: {
             filename: 'bundle.js',
-            path: path.resolve(__dirname, 'src/dist/mc'),
+            path: path.resolve(__dirname, 'static/tanks/js/mc'),
         }
     }
 ];

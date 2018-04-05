@@ -8,8 +8,7 @@ src/build/
 npm-debug.log
 logs/
 package-lock.json
-src/dist/mc/bundle.js
-src/dist/bundle.js
-src/dist/prod_build
 src/ts/gameMap/exampleMap.json
 src/ts/tanks/gameMap/maps/*
+static/tanks/js/bundle.js
+static/tanks/js/mc/bundle.js
