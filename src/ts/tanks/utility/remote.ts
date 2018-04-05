@@ -19,7 +19,7 @@ export class Remote {
     }
     static mapDetail(id: string, successCallback: Function) {
         const request = new XMLHttpRequest();
-        request.open("GET", Settings.REMOTE_URL + "/" + id, true);
+        request.open("GET", Settings.REMOTE_URL + id, true);
         request.onreadystatechange = () => {
             if (request.readyState === XMLHttpRequest.DONE) {
                 if (request.status === 200) { // 200 OK
