@@ -367,9 +367,10 @@ export class MainMenu implements IActionState {
     private readonly canvas: HTMLCanvasElement;
 
     private mapsList: IMapListData[] = [];
+    private mapsListRequest: Promise<XMLHttpRequest>;
 
     constructor(ui: Ui, canvas: HTMLCanvasElement) {
-        Remote.mapList(
+        this.mapsListRequest = Remote.mapListPromise(
             // success callback - remote was reached, load the remote data
             (remoteMapData: IMapListData[]) => {
                 this.mapsList = remoteMapData;
@@ -456,23 +457,14 @@ export class MainMenu implements IActionState {
      * @param elementId Id of the element that will show the loading text
      * @param callback Callback function to go back to after the loading is complete
      */
-    private waitMapLoad(e: MouseEvent, elementId: string, callback: Function) {
+    private waitMapLoad(e: MouseEvent, elementId: string) {
         // Make sure the maps are loaded! Show a loading icon and
         // set an interval to repeatedly check if the maps are loaded
-        if (this.mapsList.length === 0) {
-            this.showStartGameLoadingIcon(elementId);
-            const interval = setInterval(() => {
-                callback(e);
-                this.removeStartGameLoadingIcon(elementId);
-                clearInterval(interval);
-            }, 500);
-            return true;
-        }
+        this.showStartGameLoadingIcon(elementId);
+        this.mapsListRequest.then(() => this.removeStartGameLoadingIcon(elementId));
     }
     private quickStart = (e: MouseEvent) => {
-        if (this.waitMapLoad(e, MainMenu.ID_QUICK_START_BUTTON, this.quickStart)) {
-            return;
-        }
+        this.waitMapLoad(e, MainMenu.ID_QUICK_START_BUTTON)
         let map = new TanksMap(this.mapsList[0].id);
         let players: Player[] = MenuStartGame.createPlayers(Settings.DEFAULT_NUMBER_PLAYERS, this.theme.game.playerColors());
         this.startGame(map, players, Settings.DEFAULT_NUMBER_TANKS, e);
@@ -493,9 +485,7 @@ export class MainMenu implements IActionState {
         }
     }
     private startGameOptions = (e: MouseEvent) => {
-        if (this.waitMapLoad(e, MainMenu.ID_START_GAME_BUTTON, this.startGameOptions)) {
-            return;
-        }
+        this.waitMapLoad(e, MainMenu.ID_START_GAME_BUTTON)
 
         this.ui.body.clear();
         const [left, middle, right] = this.ui.body.addColumns();
@@ -572,7 +562,6 @@ export class MainMenu implements IActionState {
                 const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, gameTheme, map, players, numTanks);
                 controller.changeGameState(GameState.TANK_PLACEMENT);
             }
-            // TODO show a loading screen or something
         }, Settings.MAP_SETUP_WAIT_TIME);
     }
     // private showOptions = (e: MouseEvent) => {
