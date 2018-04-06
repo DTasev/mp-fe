@@ -315,6 +315,8 @@ export class MCOptions {
                     }
                 }, {
                     select: {
+                        className: "w3-select",
+                        style: "margin-bottom:16px",
                         children: [{
                             option: {
                                 textContent: <string>obstacle.type
