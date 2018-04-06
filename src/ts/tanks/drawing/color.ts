@@ -14,8 +14,7 @@ export class Color {
         this.alpha = alpha;
     }
 
-    rgba(alpha?: number): string {
-        alpha = alpha != undefined ? alpha : this.alpha;
+    rgba(alpha = this.alpha): string {
         return S.format("rgba(%s,%s,%s,%s)", this.red, this.green, this.blue, alpha);
     }
 

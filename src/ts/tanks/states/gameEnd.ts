@@ -5,6 +5,7 @@ import { Player } from "../objects/player";
 import { ITheme } from "../themes/iTheme";
 import { Ui } from "../ui/ui";
 import { IActionState } from "./iActionState";
+import { Color } from "../drawing/color";
 
 
 export class GameEndState implements IActionState {
@@ -33,19 +34,37 @@ export class GameEndState implements IActionState {
         const tanksStr = numTanks === 1 ? " tank" : " tanks";
 
         const [left, middle, right] = this.ui.body.addColumns();
+        middle.style.border = "1px solid";
+        middle.style.borderRadius = "10px";
+        middle.style.backgroundColor = Color.sand(0.8).rgba();
         // the elapsed time will be in total microseconds, divide by 1000 so we get seconds
         const elapsedTime = (Date.now() - <any>this.controller.timeStart.get()) / 1000;
         const winnerNameDescription = {
-            "div": {
-                "className": "w3-padding-64 " + theme.end.titleClass(),
-                "children": [{
-                    "h1": {
-                        "textContent": "Winner " + this.player.name + " with " + numTanks + " tanks."
+            div: {
+                className: "w3-padding-64 " + theme.end.titleClass(),
+                children: [{
+                    h1: {
+                        textContent: "Map: " + this.controller.mapName()
                     }
                 }, {
-                    "h1": {
-                        "textContent": "Time elapsed: " + elapsedTime + " seconds."
-
+                    h1: {
+                        textContent: "Winner " + this.player.name + " with " + numTanks + " tanks."
+                    }
+                }, {
+                    h1: {
+                        textContent: "Time elapsed: " + elapsedTime + " seconds."
+                    }
+                }, {
+                    h1: {
+                        textContent: "Shots taken " + this.player.stats.shotsTaken
+                    }
+                }, {
+                    h1: {
+                        textContent: "Disabled " + this.player.stats.tanksDisabled + " tanks."
+                    }
+                }, {
+                    h1: {
+                        textContent: "Killed " + this.player.stats.tanksKilled + " tanks."
                     }
                 }]
             }

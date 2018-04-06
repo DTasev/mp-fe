@@ -287,4 +287,7 @@ export class GameController {
     gameState(): GameState {
         return this.state;
     }
+    mapName(): string {
+        return this.map.name;
+    }
 }

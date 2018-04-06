@@ -14,7 +14,7 @@ class SepiaMenu implements IThemeMenu {
 }
 class SepiaEndGame implements IThemeEndGame {
     background(): Color {
-        return Color.transparent();
+        return Color.sand(0.5);
     }
     titleClass(): string {
         return "w3-text-black";

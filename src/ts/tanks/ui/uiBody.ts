@@ -16,6 +16,9 @@ export class UiBody {
     textColor(color: Color) {
         this.htmlElement.style.color = color.rgba();
     }
+    bgColor(color: Color) {
+        this.htmlElement.style.backgroundColor = color.rgba();
+    }
     textAlign(position: string = "center") {
         this.htmlElement.style.textAlign = position;
     }
