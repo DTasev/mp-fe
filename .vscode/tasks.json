@@ -91,6 +91,25 @@
             "problemMatcher": [
                 "$tsc"
             ]
+        },
+        {
+            "type": "gulp",
+            "task": "collectstatic",
+            "problemMatcher": [
+                "$gulp-tsc"
+            ]
+        },
+        {
+            "type": "gulp",
+            "task": "watch",
+            "problemMatcher": [
+                "$gulp-tsc"
+            ]
+        },
+        {
+            "type": "npm",
+            "script": "webpack:dev",
+            "problemMatcher": []
         }
     ]
 }
