@@ -5,11 +5,13 @@
     "main": "src/dist/bundle.js",
     "dependencies": {},
     "devDependencies": {
-        "@types/emscripten": "0.0.31",
         "@types/chai": "^4.1.2",
+        "@types/emscripten": "0.0.31",
         "@types/mocha": "^2.2.48",
         "chai": "^4.1.2",
         "clean-webpack-plugin": "^0.1.19",
+        "gulp": "^3.9.1",
+        "gulp-shell": "^0.6.5",
         "jsdom": "^11.6.2",
         "jsdom-global": "^3.0.2",
         "mocha": "^5.0.4",
@@ -22,13 +24,14 @@
         "webpack-merge": "^4.1.2"
     },
     "scripts": {
-        "ts:build": "tsc",
-        "test": "set TS_NODE_COMPILER_OPTIONS={\"module\":\"commonjs\"} && mocha --compilerOptions --require ts-node/register --require jsdom-global/register \"src/test/**/*.test.ts\"",
-        "build:prod": "webpack --config webpack.prod.js",
         "watch": "webpack --config webpack.dev.js --watch",
-        "build:dev": "webpack --config webpack.dev.js",
-        "fullbuild": "tsc && webpack --config webpack.prod.js && cd .. && python manage.py collectstatic --noinput",
-        "fullbuild:dev": "tsc && webpack --config webpack.dev.js && cd .. && python manage.py collectstatic --noinput"
+        "test": "set TS_NODE_COMPILER_OPTIONS={\"module\":\"commonjs\"} && mocha --compilerOptions --require ts-node/register --require jsdom-global/register \"src/test/**/*.test.ts\"",
+        "ts:build": "tsc",
+        "webpack:prod": "webpack --config webpack.prod.js",
+        "webpack:dev": "webpack --config webpack.dev.js",
+        "fullbuild:prod": "tsc && webpack --config webpack.prod.js && cd .. && python manage.py collectstatic --noinput",
+        "fullbuild:dev": "tsc && webpack --config webpack.dev.js && cd .. && python manage.py collectstatic --noinput",
+        "gulp:watch": "gulp watch"
     },
     "repository": {
         "type": "git",
