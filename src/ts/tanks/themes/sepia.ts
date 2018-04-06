@@ -13,8 +13,11 @@ class SepiaMenu implements IThemeMenu {
     }
 }
 class SepiaEndGame implements IThemeEndGame {
+    scoreScreen(): Color {
+        return Color.sand(0.9);
+    }
     background(): Color {
-        return Color.sand(0.5);
+        return Color.transparent();
     }
     titleClass(): string {
         return "w3-text-black";

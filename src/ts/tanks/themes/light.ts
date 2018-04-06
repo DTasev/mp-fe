@@ -13,6 +13,9 @@ class LightMenu implements IThemeMenu {
     }
 }
 class LightEndGame implements IThemeEndGame {
+    scoreScreen(): Color {
+        return Color.sand(0.9);
+    }
     background(): Color {
         return Color.transparent();
     }

@@ -36,7 +36,7 @@ export class GameEndState implements IActionState {
         const [left, middle, right] = this.ui.body.addColumns();
         middle.style.border = "1px solid";
         middle.style.borderRadius = "10px";
-        middle.style.backgroundColor = Color.sand(0.8).rgba();
+        middle.style.backgroundColor = theme.end.scoreScreen().rgba();
         // the elapsed time will be in total microseconds, divide by 1000 so we get seconds
         const elapsedTime = (Date.now() - <any>this.controller.timeStart.get()) / 1000;
         const winnerNameDescription = {

@@ -61,11 +61,17 @@ export class Color {
     static lightblue(alpha = 1.0) {
         return new Color(0, 204, 255, alpha);
     }
+    static darkblue(alpha = 1.0) {
+        return new Color(0, 0, 90, alpha);
+    }
     static orange(alpha = 1.0) {
         return new Color(245, 130, 48, alpha);
     }
     static purple(alpha = 1.0) {
         return new Color(145, 30, 180, alpha);
+    }
+    static darkpurple(alpha = 1.0) {
+        return new Color(76, 47, 90, alpha);
     }
     static maroon(alpha = 1.0) {
         return new Color(128, 0, 0, alpha);

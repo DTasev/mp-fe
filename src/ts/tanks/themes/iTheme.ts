@@ -7,6 +7,7 @@ export interface IThemeMenu {
 }
 export interface IThemeEndGame {
     background(): Color;
+    scoreScreen(): Color;
     titleClass(): string;
     text(): Color;
 }

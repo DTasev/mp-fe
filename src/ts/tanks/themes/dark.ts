@@ -13,6 +13,9 @@ class DarkMenu implements IThemeMenu {
     }
 }
 class DarkEndGame implements IThemeEndGame {
+    scoreScreen(): Color {
+        return Color.darkpurple(0.9);
+    }
     background(): Color {
         return Color.transparent();
     }
@@ -87,7 +90,7 @@ class DarkMapColors implements IThemeMapColors {
         return Color.white();
     }
     water(): Color {
-        return Color.lightblue();
+        return Color.darkblue();
     }
     wood(): Color {
         return Color.maroon();
