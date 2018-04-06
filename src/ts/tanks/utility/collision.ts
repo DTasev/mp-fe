@@ -3,16 +3,23 @@ import { Tank, TankHealthState } from "../objects/tank";
 import { Point } from "./point";
 import { S } from "./stringFormat";
 import { TanksMath } from "./tanksMath";
+import { Settings } from "../settings";
 
 export class Collision {
     private static debugCollisionLine(start: Point, end: Point) {
-        console.log(S.format("Collision versus line:\n%s,%s\n%s,%s", start.x, -start.y, end.x, -end.y));
+        if (Settings.DEBUG) {
+            console.log(S.format("Collision versus line:\n%s,%s\n%s,%s", start.x, -start.y, end.x, -end.y));
+        }
     }
     private static debugShot(tank: Tank, distance: number) {
-        console.log(S.format("Tank ID: %s\nPosition: (%s,%s)", tank.id, tank.position.x, -tank.position.y));
-        console.log("Distance: ", distance);
+        if (Settings.DEBUG) {
+            console.log(S.format("Tank ID: %s\nPosition: (%s,%s)", tank.id, tank.position.x, -tank.position.y));
+            console.log("Distance: ", distance);
+        }
     }
-    static shooting(start: Point, end: Point, tanks: Tank[]): void {
+    static shooting(start: Point, end: Point, tanks: Tank[]): [number, number] {
+        let tanksDisabled = 0;
+        let tanksKilled = 0;
         this.debugCollisionLine(start, end);
         // loop over all their tanks
         for (const tank of tanks) {
@@ -22,6 +29,7 @@ export class Collision {
                 const dist = TanksMath.line.distCircleCenter(start, end, tank.position);
 
                 this.debugShot(tank, dist);
+                // the shot is not near the tank at all
                 if (dist === -1) {
                     continue;
                 }
@@ -31,13 +39,16 @@ export class Collision {
                 if (Tank.WIDTH - Tank.DISABLED_ZONE <= dist && dist <= Tank.WIDTH + Tank.DISABLED_ZONE) {
                     tank.healthState = TankHealthState.DISABLED;
                     console.log("Tank", tank.id, "disabled!");
+                    tanksDisabled += 1;
                 } // if the line passes through the tank, mark dead
                 else if (dist < Tank.WIDTH) {
                     tank.healthState = TankHealthState.DEAD;
                     console.log("Tank", tank.id, "dead!");
+                    tanksKilled += 1;
                 }
             }
         }
+        return [tanksDisabled, tanksKilled];
     }
 
     /**

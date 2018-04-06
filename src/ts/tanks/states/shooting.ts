@@ -185,7 +185,8 @@ export class ShootingState implements IPlayState {
 
     private shoot(playerTanksShot: Limit.Actions) {
         playerTanksShot.take();
-        console.log("Player has taken a successful shot, limit:", playerTanksShot.limit, "left:", playerTanksShot.left())
+        this.player.stats.shotsTaken += 1;
+        console.log("Player has taken a successful shot, limit:", playerTanksShot.limit, "left:", playerTanksShot.left());
         this.active.actionState = TankTurnState.SHOT;
 
         // for each segment of the path, perform collision

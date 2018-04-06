@@ -395,8 +395,9 @@ describe('Collision - Shot with Tanks', () => {
         const tank = new Tank(0, Player.samplePlayer(), 1091, 153, new DarkTheme());
         const farAwayTank = new Tank(0, Player.samplePlayer(), 1202, 644, new DarkTheme());
 
-        Collision.shooting(line.points[0], line.points[1], [tank]);
+        const [tanksDisabled, tanksKilled] = Collision.shooting(line.points[0], line.points[1], [tank]);
         expect(tank.healthState).to.eq(TankHealthState.DEAD);
+        expect(tanksKilled).to.eq(1);
         expect(farAwayTank.healthState).to.eq(TankHealthState.ALIVE);
     });
     it('shot hits multiple tanks', () => {
@@ -405,22 +406,27 @@ describe('Collision - Shot with Tanks', () => {
 
         const farAwayTank = new Tank(0, Player.samplePlayer(), 1202, 644, new DarkTheme());
 
-        Collision.shooting(line.points[0], line.points[1], [tank, tank2]);
+        const [tanksDisabled, tanksKilled] = Collision.shooting(line.points[0], line.points[1], [tank, tank2]);
         expect(tank.healthState).to.eq(TankHealthState.DEAD);
         expect(tank2.healthState).to.eq(TankHealthState.DEAD);
+        expect(tanksKilled).to.eq(2);
         expect(farAwayTank.healthState).to.eq(TankHealthState.ALIVE);
+        expect(tanksDisabled).to.eq(0);
     });
     it('shot misses single tank', () => {
         const tank = Tank.sampleTank(1155, 592);
-        Collision.shooting(line.points[0], line.points[1], [tank]);
+        const [tanksDisabled, tanksKilled] = Collision.shooting(line.points[0], line.points[1], [tank]);
         expect(tank.healthState).to.eq(TankHealthState.ALIVE);
+        expect(tanksDisabled).to.eq(0);
+        expect(tanksKilled).to.eq(0);
     });
     it('shot misses multiple tanks', () => {
         const tank = Tank.sampleTank(1155, 592);
         const tank2 = Tank.sampleTank(1203, 584);
-        Collision.shooting(line.points[0], line.points[1], [tank, tank2]);
+        const [tanksDisabled, tanksKilled] = Collision.shooting(line.points[0], line.points[1], [tank, tank2]);
         expect(tank.healthState).to.eq(TankHealthState.ALIVE);
         expect(tank2.healthState).to.eq(TankHealthState.ALIVE);
-
+        expect(tanksDisabled).to.eq(0);
+        expect(tanksKilled).to.eq(0);
     });
 });

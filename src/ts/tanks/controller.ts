@@ -125,22 +125,21 @@ export class GameController {
         }
 
         // if the state has marked the end of the player's turn, then we go to the next player
-        const gameWinner = this.gameOver();
+        const winner = this.isGameOver();
         let itWasNextTurn = false;
-        if (!gameWinner && this.nextPlayer) {
+        if (!winner && this.nextPlayer) {
             this.nextActivePlayer();
             this.nextPlayer = false;
             itWasNextTurn = true;
         }
 
-        if (gameWinner) {
+        if (winner) {
             this.state = GameState.GAME_END;
         }
 
         // select either the winner or the current player
-        const player = <Player>gameWinner || this.players[this.currentPlayer];
+        const player = <Player>winner || this.players[this.currentPlayer];
 
-        // only display the player's name if there is a player
         if (this.state !== GameState.GAME_END) {
             this.ui.setPlayer(player.name, this.theme);
             if (itWasNextTurn) {
@@ -189,7 +188,7 @@ export class GameController {
         this.action.addEventListeners(this.canvas);
         this.action.addKeyboardShortcuts(this.canvas);
     }
-    private gameOver(): Player | boolean {
+    private isGameOver(): Player | boolean {
         if (this.state !== GameState.TANK_PLACEMENT) {
             let onePlayerHasTanks = false;
             let winner: Player;
@@ -250,9 +249,12 @@ export class GameController {
         if (friendlyFire) {
             throw new Error("Not implemented");
         }
+        const currentTurnPlayer = this.players[this.currentPlayer];
         const playersForCollision = friendlyFire ? this.players : this.players.filter((p) => p.id !== this.currentPlayer);
         for (const player of playersForCollision) {
-            Collision.shooting(start, end, player.tanks);
+            const [tanksDisabled, tanksKilled] = Collision.shooting(start, end, player.tanks);
+            currentTurnPlayer.stats.tanksDisabled += tanksDisabled;
+            currentTurnPlayer.stats.tanksKilled += tanksKilled;
         }
     }
 

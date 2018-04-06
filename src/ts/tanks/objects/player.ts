@@ -3,6 +3,7 @@ import * as Limit from '../limiters/index';
 import { Point } from "../utility/point";
 import { SingleAccess } from "../utility/singleAccess";
 import { Tank, TankHealthState, TankTurnState } from "./tank";
+import { Statistics } from "../stats";
 
 
 export class Player {
@@ -11,6 +12,7 @@ export class Player {
 
     readonly tanks: Tank[];
     readonly color: Color;
+    readonly stats: Statistics;
 
     /** Keeps track of how many of the player's tanks have already shot */
     tanksShot: SingleAccess<Limit.Actions>;
@@ -22,6 +24,7 @@ export class Player {
         this.name = name;
         this.tanks = new Array<Tank>();
         this.color = color;
+        this.stats = new Statistics();
         this.tanksShot = new SingleAccess();
         this.activeTank = new SingleAccess();
         this.viewportPosition = new Point(0, 0);
