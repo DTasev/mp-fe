@@ -3,13 +3,13 @@
         "./src/ts/tanks/*",
         "./src/ts/mc/*",
         "./src/ts/ms/*",
-        "./src/test/*"
+        "./src/test/**/*"
     ],
     "compilerOptions": {
         "target": "es6",
         "module": "es6",
         "sourceMap": true,
-        "outDir": "./src/build/",
+        "outDir": "./build/",
         "alwaysStrict": true
     }
 }
