@@ -90,7 +90,7 @@ class DarkMapColors implements IThemeMapColors {
         return Color.lightblue();
     }
     wood(): Color {
-        return Color.woodbrown();
+        return Color.maroon();
     }
 }
 

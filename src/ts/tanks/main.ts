@@ -1,18 +1,13 @@
-// Classes added to the `window` object are global, and visible inside the HTML code.
+// Classes added to the `window` object are global, and accessible through the DOM's window variable.
 // Any classes not added to the `window` are invisible (not accessible) from the HTML.
 // Global classes
 import Controls from './siteControls';
-window["Controls"] = Controls;
 import { MainMenu, PublicMenuStartGame } from './states/menu';
+window["Controls"] = Controls;
 window["PublicMenuStartGame"] = PublicMenuStartGame;
-
 
 // Internal classes
 import { Ui } from "./ui/ui";
-import { GameController, GameState } from './controller';
-import { Viewport } from './gameMap/viewport';
-import { determineCanvasSize } from "./gameMap/mapSize";
-
 import { Settings } from './settings';
 
 // Scrollbar Width for browsers
@@ -20,9 +15,10 @@ import { Settings } from './settings';
 
 // Set-up the canvas and add our event handlers after the page has loaded
 function init() {
-    console.log(Settings.IS_MOBILE ? 'Running on mobile' : 'Running on PC');
-    // const hasVerticalScroll = window.innerWidth > document.documentElement.clientWidth;
-    // console.log("Window vertical scroll:", hasVerticalScroll);
+    if (Settings.DEBUG) {
+        console.log("Running with DEBUG output.");
+        console.log(Settings.IS_MOBILE ? 'Running on mobile' : 'Running on PC');
+    }
 
     // subtracting the scrollbar width prevents unlimited X scrolling to the right
     // Don't subtract scrollbar from mobile

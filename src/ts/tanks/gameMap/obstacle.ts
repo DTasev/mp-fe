@@ -28,6 +28,12 @@ export class Obstacle {
         this.points = points;
 
     }
+
+    /**
+     * Create a new Obstacle object from JSON data. This is used to create a new obstacle
+     * from remotely downloaded map data.
+     * @param obstacleDescription Data for the obstacle
+     */
     static fromData(obstacleDescription: IObstacleData): Obstacle {
         return new Obstacle(obstacleDescription.id,
             obstacleDescription.type,
@@ -47,6 +53,12 @@ export class Obstacle {
         }
     }
 
+    /**
+     * 
+     * @param theme The theme from which the colors will be taken
+     * @returns `boolean` - whether the obstacle should be filled with the color
+     *          `string` - the RGBA string of the color
+     */
     private getFill(theme: ITheme): [boolean, string] {
         switch (this.type) {
             case ObstacleType.SOLID:
@@ -54,7 +66,7 @@ export class Obstacle {
             case ObstacleType.WATER:
                 return [true, theme.map.water().rgba()];
             case ObstacleType.WOOD:
-                return [true, Color.woodbrown().rgba()];
+                return [true, theme.map.wood().rgba()];
             default:
                 throw new Error("Obstacle type not supported. Error type: " + this.type);
 
@@ -73,6 +85,10 @@ export class Obstacle {
                 throw new Error("Obstacle type not supported. Error type: " + obstacleType);
         }
     }
+
+    /**
+     * @returns Whether a tank can go inside the obstacle
+     */
     traversable(): boolean {
         switch (this.type) {
             case ObstacleType.SOLID:
@@ -90,7 +106,14 @@ export class Obstacle {
     private effectFromType(): IEffect {
         return new SlowEffect();
     }
+    /**
+     * Affect a tank with an effect
+     * @param tank Tank to be affected
+     */
     affect(tank: Tank) {
         tank.effects.push(this.effectFromType());
+    }
+    static sampleObstacle(type: string): Obstacle {
+        return new Obstacle(1, type, new Point(15, 15), [new Point(0, 0), new Point(5, 5)]);
     }
 }

@@ -50,9 +50,9 @@ describe('Game Controller', () => {
     });
     it('should clear canvas', () => {
         const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1, false);
-        controller.clearCanvas();
-
         mock_context.mock_fillRect.expect_called.once();
+        controller.clearCanvas();
+        mock_context.mock_fillRect.expect_called.twice();
         mock_context.mock_clearRect.expect_called.never();
 
         expect(controller["currentPlayer"]).to.eq(0);
