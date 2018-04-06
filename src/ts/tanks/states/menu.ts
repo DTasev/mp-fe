@@ -498,7 +498,7 @@ export class MainMenu implements IActionState {
         this.waitMapLoad(e, MainMenu.ID_QUICK_START_BUTTON)
         let map = new TanksMap(this.mapsList[0].id);
         let players: Player[] = MenuStartGame.createPlayers(Settings.DEFAULT_NUMBER_PLAYERS, this.theme.game.playerColors());
-        this.startGame(map, players, Settings.DEFAULT_NUMBER_TANKS, e);
+        this.startGame(map, players, Settings.DEFAULT_NUMBER_TANKS, false, e);
     }
 
     private showStartGameLoadingIcon(elementId: string) {
@@ -565,14 +565,15 @@ export class MainMenu implements IActionState {
         const selectedMap = document.getElementById(MainMenu.ID_MAP_CHOICE);
         const mapdata = this.mapsList[selectedMap.dataset.mapid];
         const map = new TanksMap(mapdata.id);
+        const friendlyFire = (<HTMLInputElement>document.getElementById(MainMenu.ID_FRIENDLY_FIRE)).checked;
 
-        this.startGame(map, MenuStartGame.createPlayers(numPlayers), getSliderValue(MainMenu.ID_TANKS_SLIDER), e);
+        this.startGame(map, MenuStartGame.createPlayers(numPlayers), getSliderValue(MainMenu.ID_TANKS_SLIDER), friendlyFire, e);
     }
 
     /**
      * Activates the selected menu option
      */
-    private startGame = (map: TanksMap, players: Player[], numTanks: number, e: MouseEvent) => {
+    private startGame = (map: TanksMap, players: Player[], numTanks: number, friendlyFire: boolean, e: MouseEvent) => {
         map.ready.then(() => {
             // set up the canvas and the rest of the game
             this.ui.showCanvas();
@@ -586,7 +587,6 @@ export class MainMenu implements IActionState {
 
             document.body.style.backgroundColor = gameTheme.game.canvasBackground().rgba();
 
-            const friendlyFire = (<HTMLInputElement>document.getElementById(MainMenu.ID_FRIENDLY_FIRE)).checked;
             const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, gameTheme, map, players, numTanks, friendlyFire);
             controller.changeGameState(GameState.TANK_PLACEMENT);
         });
