@@ -66,13 +66,16 @@ export class GameController {
     nextPlayer: boolean = false;
     readonly timeStart: SingleAccess<Date>;
 
-    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui, theme: ITheme, map: TanksMap, players: Player[], numTanks: number) {
+    private readonly friendlyFire: boolean;
+
+    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, ui: Ui, theme: ITheme, map: TanksMap, players: Player[], numTanks: number, friendlyFire: boolean) {
         this.canvas = canvas;
         this.context = context;
         this.ui = ui;
         this.theme = theme;
         this.map = map;
         this.lineCache = new LineCache();
+        this.friendlyFire = friendlyFire;
 
         this.currentPlayer = 0;
         this.numPlayers = players.length;
@@ -245,9 +248,9 @@ export class GameController {
      * @param line The line of the shot for collision
      * @param friendlyFire Whether the player's own tanks can be collided with
      */
-    collide(start: Point, end: Point, friendlyFire = true) {
+    collide(start: Point, end: Point) {
         const currentTurnPlayer = this.players[this.currentPlayer];
-        const playersForCollision = friendlyFire ? this.players : this.players.filter((p) => p.id !== this.currentPlayer);
+        const playersForCollision = this.friendlyFire ? this.players : this.players.filter((p) => p.id !== this.currentPlayer);
         for (const player of playersForCollision) {
             const [tanksDisabled, tanksKilled] = Collision.shooting(start, end, player.tanks);
             currentTurnPlayer.stats.tanksDisabled += tanksDisabled;

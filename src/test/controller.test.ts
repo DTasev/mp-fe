@@ -42,14 +42,14 @@ describe('Game Controller', () => {
         ui = new Ui(Ui.ID_GAME_UI, mock_canvas.width, mock_canvas.height);
     });
     it('should construct', () => {
-        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
+        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1, false);
         expect(controller["currentPlayer"]).to.eq(0);
         mock_canvas.mock_onmousedown.called.never();
         mock_canvas.mock_onmouseup.called.never();
         mock_canvas.mock_onmousemove.called.never();
     });
     it('should clear canvas', () => {
-        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
+        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1, false);
         controller.clearCanvas();
 
         mock_context.mock_fillRect.expect_called.once();
@@ -63,7 +63,7 @@ describe('Game Controller', () => {
     it('should perform collision', () => {
         // enforce having two player with two tanks each, for a total of 2 collision calls
         const mock_collision = new Mock(Collision, Collision.shooting, [0, 1]);
-        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
+        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1, false);
 
         // add some players
         controller["players"].push(new Player(0, "P1", Color.black()));
@@ -78,14 +78,14 @@ describe('Game Controller', () => {
         for (let i = 0; i < line.points.length; i++) {
             const start = line.points[i];
             const end = line.points[i + 1];
-            controller.collide(start, end, false);
+            controller.collide(start, end);
         }
 
         mock_collision.expect_called.quadrice();
         mock_collision.restore();
     });
     it('should get the next active player', () => {
-        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
+        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1, false);
 
         // set up a tank for .push player
         controller["players"][0].tanks.push(new Tank(0, controller["players"][0], 10, 10, theme));
@@ -98,7 +98,7 @@ describe('Game Controller', () => {
         expect(controller["currentPlayer"]).to.eq(0);
     });
     it('should redraw the tanks on the canvas', () => {
-        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
+        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1, false);
 
         // set up a tank for each player
         const tank = new Tank(0, controller["players"][0], 10, 10, theme);
@@ -115,7 +115,7 @@ describe('Game Controller', () => {
         mock_tank2.expect_called.once();
     });
     it('should change the game state', () => {
-        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
+        const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1, false);
 
         controller["players"].push(new Player(0, "P1", Color.black()));
         controller["players"].push(new Player(0, "P1", Color.black()));

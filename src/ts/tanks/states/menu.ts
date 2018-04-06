@@ -41,32 +41,69 @@ export class PublicMenuStartGame {
     static setMap(id: number) {
         MenuStartGame.setMap(id);
     }
+    static toggleFriendlyFire(elem: HTMLLabelElement) {
+        const checkbox = <HTMLInputElement>document.getElementById(MainMenu.ID_FRIENDLY_FIRE);
+        if (!checkbox.checked) {
+            elem.parentElement.classList.add("w3-border", "w3-border-red");
+        } else {
+            elem.parentElement.classList.remove("w3-border", "w3-border-red");
+        }
+    }
 }
 class MenuStartGame {
+    static addFriendlyFire(middle: HTMLDivElement) {
+        const d = {
+            div: {
+                className: "w3-row w3-margin",
+                children: [
+                    {
+                        label: {
+                            for: MainMenu.ID_FRIENDLY_FIRE,
+                            onclick: "PublicMenuStartGame.toggleFriendlyFire(this)",
+                            style: "display:inline-block; padding:0 16px;",
+                            children: {
+                                h2: {
+                                    textContent: "Friendly Fire (can kill your own tanks)",
+                                }
+                            }
+                        }
+                    }, {
+                        input: {
+                            className: "w3-check",
+                            type: "checkbox",
+                            id: MainMenu.ID_FRIENDLY_FIRE
+                        }
+                    }
+
+                ]
+            }
+        }
+        middle.appendChild(J2H.parse(d));
+    }
     static playerColors: Color[];
     static addThemeChoices(middle: HTMLDivElement) {
         const commonClasses = "w3-col s4 m4 l4 w3-padding-16 w3-hover-gray ";
         const activeClass = "w3-red";
         const d_themes = {
-            "div": {
-                "className": "w3-row w3-margin",
-                "children": [{
-                    "div": {
-                        "className": commonClasses,
-                        "textContent": "Sepia",
-                        "onclick": 'PublicMenuStartGame.toggleTheme(this, "' + activeClass + '")'
+            div: {
+                className: "w3-row w3-margin",
+                children: [{
+                    div: {
+                        className: commonClasses,
+                        textContent: "Sepia",
+                        onclick: 'PublicMenuStartGame.toggleTheme(this, "' + activeClass + '")'
                     }
                 }, {
-                    "div": {
-                        "className": commonClasses,
-                        "textContent": "Dark",
-                        "onclick": 'PublicMenuStartGame.toggleTheme(this, "' + activeClass + '")'
+                    div: {
+                        className: commonClasses,
+                        textContent: "Dark",
+                        onclick: 'PublicMenuStartGame.toggleTheme(this, "' + activeClass + '")'
                     }
                 }, {
-                    "div": {
-                        "className": commonClasses,
-                        "textContent": "Light",
-                        "onclick": 'PublicMenuStartGame.toggleTheme(this, "' + activeClass + '")'
+                    div: {
+                        className: commonClasses,
+                        textContent: "Light",
+                        onclick: 'PublicMenuStartGame.toggleTheme(this, "' + activeClass + '")'
                     }
                 }]
             }
@@ -246,23 +283,23 @@ class MenuStartGame {
             // players have been added
             const generateSettingsDescription = (id: number) => {
                 return {
-                    "div": {
-                        "className": "w3-col s3 m3 l3",
-                        "children": [{
-                            "div": {
-                                "className": "w3-row" + MainMenu.ELEMENT_PADDING,
-                                "children": [{
-                                    "div": {
-                                        "className": "w3-row",
-                                        "children": [{
+                    div: {
+                        className: "w3-col s3 m3 l3",
+                        children: [{
+                            div: {
+                                className: "w3-row" + MainMenu.ELEMENT_PADDING,
+                                children: [{
+                                    div: {
+                                        className: "w3-row",
+                                        children: [{
                                             "label": {
-                                                "className": "w3-col s3 m3 l3",
+                                                className: "w3-col s3 m3 l3",
                                                 "for": MainMenu.ID_PLAYER_NAME + id,
-                                                "textContent": "Name: "
+                                                textContent: "Name: "
                                             }
                                         }, {
                                             "input": {
-                                                "className": "w3-col s9 m9 l9",
+                                                className: "w3-col s9 m9 l9",
                                                 "value": "Player " + (id + 1),
                                                 "style": "width:65%",
                                                 "id": MainMenu.ID_PLAYER_NAME + id
@@ -270,17 +307,17 @@ class MenuStartGame {
                                         }]
                                     }
                                 }, {
-                                    "div": {
-                                        "className": "w3-row w3-padding-16",
-                                        "children": [{
+                                    div: {
+                                        className: "w3-row w3-padding-16",
+                                        children: [{
                                             "label": {
-                                                "className": "w3-col s3 m3 l3",
-                                                "textContent": "Color:",
+                                                className: "w3-col s3 m3 l3",
+                                                textContent: "Color:",
                                                 "for": MainMenu.ID_PLAYER_COLOR + id
                                             }
                                         }, {
                                             "input": {
-                                                "className": "w3-col s9 m9 l9 player-color",
+                                                className: "w3-col s9 m9 l9 player-color",
                                                 "type": "color",
                                                 "style": "width:65%",
                                                 "value": MenuStartGame.playerColors[id].hex(),
@@ -304,7 +341,7 @@ class MenuStartGame {
 
     }
 
-    static addTanksSlider(middle: HTMLDivElement): any {
+    static addTankSlider(middle: HTMLDivElement): any {
         const slider_valueDescription = {
             h1: {
                 id: MainMenu.ID_TANKS_SLIDER_DISPLAY,
@@ -350,6 +387,8 @@ export class MainMenu implements IActionState {
     static readonly ID_PLAYER_SETTINGS = "player-settings";
     static readonly ID_PLAYER_NAME = "player-settings-name-";
     static readonly ID_PLAYER_COLOR = "player-settings-color-";
+
+    static readonly ID_FRIENDLY_FIRE = "tanks-friendly-fire";
 
     static readonly ID_TANKS_SLIDER = "slider-tanks";
     static readonly ID_TANKS_SLIDER_DISPLAY = "slider-tanks-value";
@@ -398,8 +437,8 @@ export class MainMenu implements IActionState {
 
         const titleDescription = {
             "h1": {
-                "className": MainMenu.CLASS_MENU_TITLE,
-                "textContent": "Tanks"
+                className: MainMenu.CLASS_MENU_TITLE,
+                textContent: "Tanks"
             }
         };
 
@@ -484,16 +523,17 @@ export class MainMenu implements IActionState {
 
         MenuStartGame.addPlayerSlider(middle);
         MenuStartGame.addPlayerSettings(middle);
-        MenuStartGame.addTanksSlider(middle);
+        MenuStartGame.addTankSlider(middle);
+        MenuStartGame.addFriendlyFire(middle);
         MenuStartGame.setMapData(this.mapsList);
         MenuStartGame.addMapChoices(middle);
         MenuStartGame.addThemeChoices(middle);
 
         const button_startDescription = {
             "button": {
-                "className": MainMenu.CLASS_MENU_BUTTON,
-                "textContent": "Start Game",
-                "onclick": this.prepareGame
+                className: MainMenu.CLASS_MENU_BUTTON,
+                textContent: "Start Game",
+                onclick: this.prepareGame
             }
         };
 
@@ -502,9 +542,9 @@ export class MainMenu implements IActionState {
 
         const button_backDescription = {
             "button": {
-                "className": MainMenu.CLASS_MENU_BUTTON,
-                "textContent": "Back",
-                "onclick": this.setUpUi
+                className: MainMenu.CLASS_MENU_BUTTON,
+                textContent: "Back",
+                onclick: this.setUpUi
             }
         };
         const button_back = J2H.parse(button_backDescription);
@@ -546,7 +586,8 @@ export class MainMenu implements IActionState {
 
             document.body.style.backgroundColor = gameTheme.game.canvasBackground().rgba();
 
-            const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, gameTheme, map, players, numTanks);
+            const friendlyFire = (<HTMLInputElement>document.getElementById(MainMenu.ID_FRIENDLY_FIRE)).checked;
+            const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, gameTheme, map, players, numTanks, friendlyFire);
             controller.changeGameState(GameState.TANK_PLACEMENT);
         });
     }
@@ -556,9 +597,9 @@ export class MainMenu implements IActionState {
 
     //     const button_emptyOptionDescription = {
     //         "button": {
-    //             "className": MainMenu.CLASS_MENU_BUTTON,
-    //             "textContent": "Option",
-    //             "onclick": () => { throw new Error("Menu option not implemented"); }
+    //             className: MainMenu.CLASS_MENU_BUTTON,
+    //             textContent: "Option",
+    //             onclick: () => { throw new Error("Menu option not implemented"); }
     //         }
     //     };
 
@@ -570,9 +611,9 @@ export class MainMenu implements IActionState {
 
     //     const button_backDescription = {
     //         "button": {
-    //             "className": MainMenu.CLASS_MENU_BUTTON,
-    //             "textContent": "Back",
-    //             "onclick": this.setUpUi
+    //             className: MainMenu.CLASS_MENU_BUTTON,
+    //             textContent: "Back",
+    //             onclick: this.setUpUi
     //         }
     //     };
     //     const button_back = J2H.parse(button_backDescription);

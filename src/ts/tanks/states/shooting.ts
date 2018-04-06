@@ -165,7 +165,6 @@ export class ShootingState implements IPlayState {
             this.shoot(playerTanksShot);
         }
 
-        debugger
         // if all the player's tank have shot
         const remainingTanks = this.player.activeTanks().length;
         console.log("Player ", this.player.name, "remaining tanks", remainingTanks);
