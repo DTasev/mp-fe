@@ -3,7 +3,7 @@ import { Draw, DrawState } from "../drawing/draw";
 import { Viewport } from "../gameMap/viewport";
 import * as Limit from "../limiters/index";
 import { Player } from "../objects/player";
-import { Tank, TankColor, TankHealthState, TankTurnState } from "../objects/tank";
+import { Tank, TankColor, TankHealthState, TankActState } from "../objects/tank";
 import { Settings } from '../settings';
 import { ITheme } from "../themes/iTheme";
 import { MovementUi } from "../tanksUi/movement";
@@ -111,7 +111,7 @@ export class MovingState implements IPlayState {
                 // exhaust any previous effects on the tank, ONLY IF the movement is successful
                 tank.afterTurnEffects();
                 tank.position = this.draw.mouse.copy();
-                tank.actionState = TankTurnState.MOVED;
+                tank.actionState = TankActState.MOVED;
 
                 this.ui.message("", this.controller.theme);
 
@@ -137,7 +137,7 @@ export class MovingState implements IPlayState {
     }
 
     private goToShooting = () => {
-        this.player.tanks[this.active.id].actionState = TankTurnState.MOVED;
+        this.player.tanks[this.active.id].actionState = TankActState.MOVED;
         this.player.activeTank.set(this.player.tanks[this.active.id]);
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks

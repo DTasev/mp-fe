@@ -6,11 +6,9 @@ import { Point } from "../utility/point";
 import { IEffect } from "./effects/iEffect";
 import { Player } from "./player";
 
-export enum TankTurnState {
-    /** The tank has performed an action this turn, e.g. moved or shot */
+export enum TankActState {
     SHOT,
     MOVED,
-    /** The tank hasn't performed an action this turn */
     NOT_ACTED
 }
 export enum TankHealthState {
@@ -101,7 +99,7 @@ export class Tank {
     position: Point;
 
     healthState: TankHealthState;
-    actionState: TankTurnState;
+    actionState: TankActState;
     effects: IEffect[];
 
     movementRange = Tank.DEFAULT_MOVEMENT_RANGE;
@@ -113,7 +111,7 @@ export class Tank {
         this.player = player;
         this.position = new Point(x, y);
         this.healthState = TankHealthState.ALIVE;
-        this.actionState = TankTurnState.NOT_ACTED;
+        this.actionState = TankActState.NOT_ACTED;
         this.label = "";
         this.effects = [];
 
@@ -147,10 +145,10 @@ export class Tank {
         let color: string;
         let label = this.label;
         switch (this.actionState) {
-            case TankTurnState.SHOT:
+            case TankActState.SHOT:
                 label += "🚀";
                 break;
-            case TankTurnState.MOVED:
+            case TankActState.MOVED:
                 label += "⚓";
                 break;
         }
@@ -180,20 +178,20 @@ export class Tank {
     }
 
     active() {
-        return this.actionState !== TankTurnState.SHOT;
+        return this.actionState !== TankActState.SHOT;
     }
 
     nextState(): GameState {
         // if the tank is disabled, then movement will be forcefully skipped
         if (this.healthState == TankHealthState.DISABLED) {
-            this.actionState = TankTurnState.MOVED;
+            this.actionState = TankActState.MOVED;
         }
         switch (this.actionState) {
-            case TankTurnState.NOT_ACTED:
+            case TankActState.NOT_ACTED:
                 return GameState.TANK_MOVEMENT;
-            case TankTurnState.MOVED:
+            case TankActState.MOVED:
                 return GameState.TANK_SHOOTING;
-            case TankTurnState.SHOT:
+            case TankActState.SHOT:
                 return GameState.TANK_SELECTION;
         }
     }

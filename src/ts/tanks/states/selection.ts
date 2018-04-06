@@ -2,7 +2,7 @@ import { GameController } from "../controller";
 import { Draw } from "../drawing/draw";
 import { Viewport } from "../gameMap/viewport";
 import { Player } from "../objects/player";
-import { Tank, TankHealthState, TankTurnState } from "../objects/tank";
+import { Tank, TankHealthState, TankActState } from "../objects/tank";
 import { Settings } from '../settings';
 import { ITheme } from "../themes/iTheme";
 import { Ui } from "../ui/ui";
@@ -151,7 +151,7 @@ export class SelectionState implements IPlayState {
         // apply any effects to the movement range, etc
         tank.beforeTurnEffects();
         // show the range is the tank is going to move, otherwise don't draw it
-        tank.highlight(this.context, tank.actionState === TankTurnState.NOT_ACTED && tank.healthState !== TankHealthState.DISABLED ? true : false);
+        tank.highlight(this.context, tank.actionState === TankActState.NOT_ACTED && tank.healthState !== TankHealthState.DISABLED ? true : false);
         // store the details of the active tank
         this.player.activeTank.set(tank);
         this.currentActiveTank = tank;

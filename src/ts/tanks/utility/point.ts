@@ -13,4 +13,7 @@ export class Point {
     toString() {
         return this.x + "," + this.y;
     }
+    equals(rhs: Point) {
+        return this.x === rhs.x && this.y === rhs.y;
+    }
 }

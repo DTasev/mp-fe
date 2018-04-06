@@ -23,6 +23,10 @@ export class Collision {
         this.debugCollisionLine(start, end);
         // loop over all their tanks
         for (const tank of tanks) {
+            // handles friendly fire case, where the start of the shot is the tank's position
+            if (start.equals(tank.position)) {
+                continue;
+            }
             // only do collision detection versus tanks that have not been already killed
             if (tank.healthState !== TankHealthState.DEAD) {
                 // check each segment of the line for collision with the tank

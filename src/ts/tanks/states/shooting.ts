@@ -4,7 +4,7 @@ import { ObstacleType } from "../gameMap/obstacle";
 import { Viewport } from "../gameMap/viewport";
 import * as Limit from "../limiters/index";
 import { Player } from "../objects/player";
-import { Tank, TankColor, TankTurnState } from "../objects/tank";
+import { Tank, TankColor, TankActState } from "../objects/tank";
 import { Settings } from '../settings';
 import { ITheme } from "../themes/iTheme";
 import { ShootingUi } from "../tanksUi/shooting";
@@ -53,7 +53,7 @@ export class ShootingState implements IPlayState {
         this.shotSpeed = new Limit.Speed(Tank.SHOOTING_SPEED);
 
         if (!player.tanksShot.available()) {
-            player.tanksShot.set(new Limit.Actions(player.activeTanks().length));
+            player.tanksShot.set(new Limit.Actions(player.aliveTanks().length));
         }
 
         this.active = this.player.activeTank.get();
@@ -165,8 +165,11 @@ export class ShootingState implements IPlayState {
             this.shoot(playerTanksShot);
         }
 
+        debugger
         // if all the player's tank have shot
-        if (playerTanksShot.over()) {
+        const remainingTanks = this.player.activeTanks().length;
+        console.log("Player ", this.player.name, "remaining tanks", remainingTanks);
+        if (remainingTanks === 0) {
             console.log("Player shooting turn over!");
             // reset the current player's tank act states
             this.player.resetTanksActStates();
@@ -187,7 +190,7 @@ export class ShootingState implements IPlayState {
         playerTanksShot.take();
         this.player.stats.shotsTaken += 1;
         console.log("Player has taken a successful shot, limit:", playerTanksShot.limit, "left:", playerTanksShot.left());
-        this.active.actionState = TankTurnState.SHOT;
+        this.active.actionState = TankActState.SHOT;
 
         // for each segment of the path, perform collision
         const shotPathLength = this.shotPath.points.length;

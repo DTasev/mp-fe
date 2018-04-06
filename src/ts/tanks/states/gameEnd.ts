@@ -30,7 +30,7 @@ export class GameEndState implements IActionState {
         this.ui.background(theme.end.background());
         this.ui.body.textColor(theme.end.text());
 
-        const numTanks = this.player.activeTanks().length;
+        const numTanks = this.player.aliveTanks().length;
         const tanksStr = numTanks === 1 ? " tank" : " tanks";
 
         const [left, middle, right] = this.ui.body.addColumns();

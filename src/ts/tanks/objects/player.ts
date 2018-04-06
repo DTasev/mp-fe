@@ -2,7 +2,7 @@ import { Color } from "../drawing/color";
 import * as Limit from '../limiters/index';
 import { Point } from "../utility/point";
 import { SingleAccess } from "../utility/singleAccess";
-import { Tank, TankHealthState, TankTurnState } from "./tank";
+import { Tank, TankHealthState, TankActState } from "./tank";
 import { Statistics } from "../stats";
 
 
@@ -31,13 +31,17 @@ export class Player {
     }
 
     activeTanks(): Tank[] {
+        // return tanks that have not shot and are not dead
+        return this.tanks.filter((tank) => tank.actionState !== TankActState.SHOT && tank.healthState !== TankHealthState.DEAD);
+    }
+    aliveTanks(): Tank[] {
         return this.tanks.filter((tank) => tank.healthState !== TankHealthState.DEAD);
     }
     resetTanksActStates(): any {
         // clears the limiter for how many tanks have shot
         this.tanksShot.clear();
         for (const tank of this.tanks) {
-            tank.actionState = TankTurnState.NOT_ACTED;
+            tank.actionState = TankActState.NOT_ACTED;
         }
     }
     setViewportPosition(viewportPosition: Point): void {

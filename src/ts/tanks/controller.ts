@@ -193,7 +193,7 @@ export class GameController {
             let onePlayerHasTanks = false;
             let winner: Player;
             for (const player of this.players) {
-                if (player.activeTanks().length > 0) {
+                if (player.aliveTanks().length > 0) {
 
                     // make note of the first player that has tanks, if no one else has tanks, then he is the winner
                     // if more than one person has tanks then no one has won yet
@@ -245,10 +245,7 @@ export class GameController {
      * @param line The line of the shot for collision
      * @param friendlyFire Whether the player's own tanks can be collided with
      */
-    collide(start: Point, end: Point, friendlyFire = false) {
-        if (friendlyFire) {
-            throw new Error("Not implemented");
-        }
+    collide(start: Point, end: Point, friendlyFire = true) {
         const currentTurnPlayer = this.players[this.currentPlayer];
         const playersForCollision = friendlyFire ? this.players : this.players.filter((p) => p.id !== this.currentPlayer);
         for (const player of playersForCollision) {
@@ -273,7 +270,7 @@ export class GameController {
             do {
                 // if this is the last player, it will revert back to zero, otherwise just increment
                 this.currentPlayer = this.currentPlayer === this.numPlayers - 1 ? 0 : this.currentPlayer + 1;
-            } while (this.players[this.currentPlayer].activeTanks().length === 0);
+            } while (this.players[this.currentPlayer].aliveTanks().length === 0);
         }
     }
 
