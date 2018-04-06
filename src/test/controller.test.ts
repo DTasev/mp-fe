@@ -62,7 +62,7 @@ describe('Game Controller', () => {
     });
     it('should perform collision', () => {
         // enforce having two player with two tanks each, for a total of 2 collision calls
-        const mock_collision = new Mock(Collision, Collision.shooting);
+        const mock_collision = new Mock(Collision, Collision.shooting, [0, 1]);
         const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1);
 
         // add some players
