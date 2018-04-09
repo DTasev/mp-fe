@@ -15,7 +15,7 @@ class MyClass {
 
 describe('Single Access Design Pattern', () => {
     it('should set the resource from constructor', () => {
-        const singleAccess = new SingleAccess<MyClass>(new MyClass(13, "apples"));
+        const singleAccess = new SingleAccess(new MyClass(13, "apples"));
         expect(singleAccess.available()).to.be.true;
     })
     it('should allow setting a resource', () => {
