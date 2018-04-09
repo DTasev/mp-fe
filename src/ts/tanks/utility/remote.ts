@@ -4,6 +4,24 @@ import { getCookie } from "../utility/cookies";
 
 export class Remote {
 
+    static available(): Promise<XMLHttpRequest> {
+        const request = new XMLHttpRequest();
+        request.timeout = 200;
+        request.open("GET", Settings.REMOTE_URL, true);
+        return new Promise((resolve, reject) => {
+            request.onreadystatechange = () => {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) { // 200 OK
+                        resolve();
+                    }
+                }
+            };
+            request.onerror = () => {
+                reject(Settings.REMOTE_URL + " can't be reached.");
+            }
+            request.send(null);
+        });
+    }
     static mapList(successCallback: Function): Promise<XMLHttpRequest> {
         const request = new XMLHttpRequest();
         request.open("GET", Settings.REMOTE_URL, true);
