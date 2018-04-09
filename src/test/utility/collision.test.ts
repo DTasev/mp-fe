@@ -414,15 +414,15 @@ describe('Collision - Shot with Tanks', () => {
         expect(tanksDisabled).to.eq(0);
     });
     it('shot misses single tank', () => {
-        const tank = Tank.sampleTank(1155, 592);
+        const tank = Tank.premadeTank(1155, 592);
         const [tanksDisabled, tanksKilled] = Collision.shooting(line.points[0], line.points[1], [tank]);
         expect(tank.healthState).to.eq(TankHealthState.ALIVE);
         expect(tanksDisabled).to.eq(0);
         expect(tanksKilled).to.eq(0);
     });
     it('shot misses multiple tanks', () => {
-        const tank = Tank.sampleTank(1155, 592);
-        const tank2 = Tank.sampleTank(1203, 584);
+        const tank = Tank.premadeTank(1155, 592);
+        const tank2 = Tank.premadeTank(1203, 584);
         const [tanksDisabled, tanksKilled] = Collision.shooting(line.points[0], line.points[1], [tank, tank2]);
         expect(tank.healthState).to.eq(TankHealthState.ALIVE);
         expect(tank2.healthState).to.eq(TankHealthState.ALIVE);

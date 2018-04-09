@@ -195,7 +195,7 @@ export class Tank {
                 return GameState.TANK_SELECTION;
         }
     }
-    static sampleTank(x = 0, y = 0): Tank {
+    static premadeTank(x = 0, y = 0): Tank {
         return new Tank(0, Player.samplePlayer(), x, y, new DarkTheme());
     }
 

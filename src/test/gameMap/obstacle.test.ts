@@ -71,7 +71,7 @@ describe('Obstacle', () => {
         expect(Obstacle.typeFromString("wood")).to.eq(ObstacleType.WOOD);
     })
     it('can affect a tank', () => {
-        const tank = Tank.sampleTank();
+        const tank = Tank.premadeTank();
         const obstacle = Obstacle.premadeObstacle("water");
         obstacle.affect(tank);
         expect(tank.effects.length).to.be.greaterThan(0);
