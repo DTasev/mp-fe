@@ -113,7 +113,7 @@ export class Obstacle {
     affect(tank: Tank) {
         tank.effects.push(this.effectFromType());
     }
-    static sampleObstacle(type: string): Obstacle {
+    static premadeObstacle(type = "solid"): Obstacle {
         return new Obstacle(1, type, new Point(15, 15), [new Point(0, 0), new Point(5, 5)]);
     }
 }

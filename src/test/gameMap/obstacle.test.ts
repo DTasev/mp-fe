@@ -58,7 +58,7 @@ describe('Obstacle', () => {
         const context = new CanvasContextMock();
         const theme = new SepiaTheme();
 
-        const obstacle = Obstacle.sampleObstacle("water");
+        const obstacle = Obstacle.premadeObstacle("water");
         obstacle.draw(context as any, theme);
         context.mock_beginPath.expect_called.once();
         context.mock_lineTo.expect_called.thrice();
@@ -72,7 +72,7 @@ describe('Obstacle', () => {
     })
     it('can affect a tank', () => {
         const tank = Tank.sampleTank();
-        const obstacle = Obstacle.sampleObstacle("water");
+        const obstacle = Obstacle.premadeObstacle("water");
         obstacle.affect(tank);
         expect(tank.effects.length).to.be.greaterThan(0);
     })
