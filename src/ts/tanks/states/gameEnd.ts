@@ -48,11 +48,11 @@ export class GameEndState implements IActionState {
                     }
                 }, {
                     h1: {
-                        textContent: "Winner " + this.player.name + " with " + numTanks + " tanks."
+                        textContent: "Winner " + this.player.name + " with " + numTanks + " tanks!"
                     }
                 }, {
                     h1: {
-                        textContent: "Time elapsed: " + elapsedTime + " seconds."
+                        textContent: "Time elapsed: " + elapsedTime + " seconds"
                     }
                 }, {
                     h1: {
@@ -60,11 +60,11 @@ export class GameEndState implements IActionState {
                     }
                 }, {
                     h1: {
-                        textContent: "Disabled " + this.player.stats.tanksDisabled + " tanks."
+                        textContent: "Disabled " + this.player.stats.tanksDisabled + " tanks"
                     }
                 }, {
                     h1: {
-                        textContent: "Killed " + this.player.stats.tanksKilled + " tanks."
+                        textContent: "Killed " + this.player.stats.tanksKilled + " tanks"
                     }
                 }]
             }
