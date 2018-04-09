@@ -26,8 +26,6 @@ describe('UI', () => {
         const ui = new Ui(Ui.ID_GAME_UI, 1024, 2024);
         expect(uiDom.children.length).to.eq(2);
         expect(uiDom.style.width).to.eq("1024px");
-        // height not set at this point
-        expect(uiDom.style.height).to.eq('');
     });
 
     it('clear', () => {
