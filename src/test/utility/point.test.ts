@@ -24,6 +24,12 @@ describe('Cartesian Coordinates', () => {
 
         expect(point.x).to.not.equal(pointCopy.x);
         expect(point.y).to.not.equal(pointCopy.y);
-
+    });
+    it('should correctly test equals', () => {
+        const p1 = new Point(15, 15);
+        const p2 = new Point(134, 153);
+        expect(p1.equals(p2)).to.be.false;
+        const p3 = new Point(15, 15);
+        expect(p1.equals(p3)).to.be.true;
     })
 });
