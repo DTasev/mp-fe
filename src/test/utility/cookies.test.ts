@@ -11,6 +11,6 @@ describe('Cookies', () => {
         expect(getCookie("chocolate")).to.eq("eoqwhdjwalkdjlaw");
     });
     it('return null for not-existing cookie', () => {
-        expect(getCookie("appels")).to.be.null;
+        expect(getCookie("apples")).to.be.null;
     });
 });
