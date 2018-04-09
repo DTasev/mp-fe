@@ -57,7 +57,8 @@ export class Ui {
         this.container.appendChild(rowHeading);
         this.container.appendChild(rowBody);
     }
-    setWidth(width: number) {
+
+    private setWidth(width: number) {
         this.container.style.width = width + "px";
     }
 

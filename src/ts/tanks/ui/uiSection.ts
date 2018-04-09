@@ -1,9 +1,4 @@
-interface IUiSection {
-    add(elem: HTMLElement);
-    clear();
-}
-
-export class UiSection implements IUiSection {
+export class UiSection {
     private readonly element: HTMLElement;
 
     constructor(elem: HTMLElement) {
@@ -11,11 +6,18 @@ export class UiSection implements IUiSection {
     }
 
     add(elem: HTMLElement) {
+        // if the current element is being held empty with a whitespace 
+        // character, then remove it and append the new element. The whitespace
+        // needs to be removed to ensure the child element is placed correctly
         if (this.element.innerHTML === "&nbsp;") {
             this.element.innerHTML = "";
         }
         this.element.appendChild(elem);
     }
+
+    /**
+     * Clear all HTML contained in the element.
+     */
     clear() {
         this.element.innerHTML = "&nbsp;";
     }
