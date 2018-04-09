@@ -3,18 +3,18 @@ import { ITheme, IThemeEndGame, IThemeGameColors, IThemeGameUi, IThemeMapColors,
 
 class DarkMenu implements IThemeMenu {
     background(): Color {
-        return Color.black();
+        return Color.fromHex("#1c0f0b");
     }
     title(): Color {
-        return Color.white();
+        return new Color(182, 182, 150);
     }
     text(): Color {
-        return Color.white();
+        return new Color(182, 182, 150);
     }
 }
 class DarkEndGame implements IThemeEndGame {
     scoreScreen(): Color {
-        return Color.darkpurple(0.9);
+        return Color.fromHex("#2b2c3e", 0.8);
     }
     background(): Color {
         return Color.transparent();
@@ -23,7 +23,7 @@ class DarkEndGame implements IThemeEndGame {
         return "w3-text-white";
     }
     text(): Color {
-        return Color.white();
+        return new Color(182, 182, 150);
     }
 }
 class DarkGameUi implements IThemeGameUi {
@@ -37,7 +37,7 @@ class DarkGameUi implements IThemeGameUi {
         return this.homeButtonClass();
     }
     playerTurnTextClass(): string {
-        return "w3-text-white";
+        return "w3-text-light-green";
     }
     playerMessageClass(): string {
         return this.playerTurnTextClass();
@@ -57,13 +57,13 @@ class DarkGameColors implements IThemeGameColors {
         ];
     }
     canvasBackground(): Color {
-        return Color.black();
+        return Color.fromHex("#1c0f0b");
     }
     tankActive(): Color {
-        return Color.red();
+        return Color.fromHex("#5d3707");
     }
     tankActiveOutline(): Color {
-        return Color.green();
+        return Color.fromHex("#a2d0d8");
     }
     tankLabel(): Color {
         return Color.black();
@@ -72,13 +72,13 @@ class DarkGameColors implements IThemeGameColors {
         return Color.gray();
     }
     tankMovementLine(): Color {
-        return Color.white();
+        return new Color(182, 182, 150);
     }
     tankMovementArea(): Color {
         throw new Error("Method not implemented.");
     }
     tankShootingLine(): Color {
-        return Color.white();
+        return new Color(182, 182, 150);
     }
     oldLinesColor(): Color {
         return Color.gray();
@@ -87,10 +87,10 @@ class DarkGameColors implements IThemeGameColors {
 }
 class DarkMapColors implements IThemeMapColors {
     solid(): Color {
-        return Color.white();
+        return new Color(150, 150, 105);
     }
     water(): Color {
-        return Color.darkblue();
+        return new Color(56, 57, 82);
     }
     wood(): Color {
         return Color.maroon();

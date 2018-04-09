@@ -2,6 +2,7 @@ import { S } from "../utility/stringFormat";
 
 export class Color {
 
+
     private red: number;
     private green: number;
     private blue: number;
@@ -82,8 +83,8 @@ export class Color {
     static darkbrown(alpha = 1.0) {
         return new Color(102, 51, 0, alpha);
     }
-    static c(red: number, green: number, blue: number, alpha = 1.0) {
-        return new Color(red, green, blue, alpha);
+    static darkgray(): any {
+        throw new Error("Method not implemented.");
     }
     static transparent(): Color {
         return new Color(0, 0, 0, 0);
