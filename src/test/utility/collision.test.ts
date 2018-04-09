@@ -392,8 +392,8 @@ describe('Collision - Shot with Tanks', () => {
     ];
 
     it('shot hits single tank', () => {
-        const tank = new Tank(0, Player.samplePlayer(), 1091, 153, new DarkTheme());
-        const farAwayTank = new Tank(0, Player.samplePlayer(), 1202, 644, new DarkTheme());
+        const tank = new Tank(0, Player.premadePlayer(), 1091, 153, new DarkTheme());
+        const farAwayTank = new Tank(0, Player.premadePlayer(), 1202, 644, new DarkTheme());
 
         const [tanksDisabled, tanksKilled] = Collision.shooting(line.points[0], line.points[1], [tank]);
         expect(tank.healthState).to.eq(TankHealthState.DEAD);
@@ -401,10 +401,10 @@ describe('Collision - Shot with Tanks', () => {
         expect(farAwayTank.healthState).to.eq(TankHealthState.ALIVE);
     });
     it('shot hits multiple tanks', () => {
-        const tank = new Tank(0, Player.samplePlayer(), 1091, 153, new DarkTheme());
-        const tank2 = new Tank(0, Player.samplePlayer(), 1062, 192, new DarkTheme());
+        const tank = new Tank(0, Player.premadePlayer(), 1091, 153, new DarkTheme());
+        const tank2 = new Tank(0, Player.premadePlayer(), 1062, 192, new DarkTheme());
 
-        const farAwayTank = new Tank(0, Player.samplePlayer(), 1202, 644, new DarkTheme());
+        const farAwayTank = new Tank(0, Player.premadePlayer(), 1202, 644, new DarkTheme());
 
         const [tanksDisabled, tanksKilled] = Collision.shooting(line.points[0], line.points[1], [tank, tank2]);
         expect(tank.healthState).to.eq(TankHealthState.DEAD);

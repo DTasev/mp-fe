@@ -196,7 +196,7 @@ export class Tank {
         }
     }
     static premadeTank(x = 0, y = 0): Tank {
-        return new Tank(0, Player.samplePlayer(), x, y, new DarkTheme());
+        return new Tank(0, Player.premadePlayer(), x, y, new DarkTheme());
     }
 
     /**

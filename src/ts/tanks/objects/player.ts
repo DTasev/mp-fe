@@ -30,10 +30,15 @@ export class Player {
         this.viewportPosition = new Point(0, 0);
     }
 
+    /**
+     * @returns Tanks that are NOT DEAD and have NOT SHOT this turn
+     */
     activeTanks(): Tank[] {
-        // return tanks that have not shot and are not dead
         return this.tanks.filter((tank) => tank.actionState !== TankActState.SHOT && tank.healthState !== TankHealthState.DEAD);
     }
+    /**
+     * @returns Tanks that are NOT DEAD
+     */
     aliveTanks(): Tank[] {
         return this.tanks.filter((tank) => tank.healthState !== TankHealthState.DEAD);
     }
@@ -47,7 +52,7 @@ export class Player {
     setViewportPosition(viewportPosition: Point): void {
         this.viewportPosition = viewportPosition;
     }
-    static samplePlayer(): Player {
+    static premadePlayer(): Player {
         return new Player(0, "Test", Color.red());
     }
 }
