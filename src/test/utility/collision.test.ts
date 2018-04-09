@@ -232,7 +232,7 @@ describe('Collision - Tank with Terrain', () => {
 });
 
 function forEachTwo(line: Line, assertion: Function, loud = true) {
-    const len = line.points.length;
+    const len = line.length;
     for (let i = 0; i < len - 1; i++) {
         const start = line.points[i];
         const end = line.points[i + 1];

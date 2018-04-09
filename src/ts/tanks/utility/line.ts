@@ -2,11 +2,13 @@ import { Point } from "./point";
 
 export class Line {
     points: Point[];
-    constructor() {
-        this.points = [];
+
+    public get length(): number {
+        return this.points.length;
     }
-    list() {
-        console.log("Points for the shot: ", this.points.join(", "));
+
+    constructor(points = []) {
+        this.points = points;
     }
     copy(): Line {
         const newLine = new Line();

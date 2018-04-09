@@ -76,7 +76,7 @@ describe('Game Controller', () => {
         line.points.push(new Point(40, 40));
         line.points.push(new Point(60, 60));
 
-        for (let i = 0; i < line.points.length; i++) {
+        for (let i = 0; i < line.length; i++) {
             const start = line.points[i];
             const end = line.points[i + 1];
             controller.collide(start, end);
