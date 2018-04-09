@@ -12,8 +12,8 @@ export class TanksMap {
     terrain: Obstacle[];
     id: string;
     name: string;
-    url: URL;
-    thumbnail_url: URL;
+    url: string;
+    thumbnail_url: string;
     creator: string;
     created: string;
     cached: number;
@@ -48,18 +48,19 @@ export class TanksMap {
         }
     }
 
-    private loadMapDetails(cachedMap: TanksMap | IMapDetailData) {
-        this.id = cachedMap.id;
-        this.name = cachedMap.name;
-        this.url = cachedMap.url;
-        this.thumbnail_url = cachedMap.thumbnail_url;
-        this.creator = cachedMap.creator;
-        this.created = cachedMap.created;
+    private loadMapDetails(mapData: TanksMap | IMapDetailData) {
+        this.id = mapData.id;
+        this.name = mapData.name;
+        this.url = mapData.url;
+        this.thumbnail_url = mapData.thumbnail_url;
+        this.creator = mapData.creator;
+        this.created = mapData.created;
+
         this.terrain = [];
-        if (typeof cachedMap.terrain === "string") {
-            cachedMap.terrain = JSON.parse(cachedMap.terrain);
+        if (typeof mapData.terrain === "string") {
+            mapData.terrain = JSON.parse(mapData.terrain);
         }
-        for (const obstacleDescription of <IObstacleData[]>cachedMap.terrain) {
+        for (const obstacleDescription of <IObstacleData[]>mapData.terrain) {
             this.terrain.push(Obstacle.fromData(obstacleDescription));
         }
     }
@@ -74,10 +75,11 @@ export class TanksMap {
         const map = new TanksMap("-1");
         map.id = "1";
         map.name = "Test Map";
-        map.url = new URL("https://localhost/test/url");
-        map.thumbnail_url = new URL("https://localhost/test/url");
+        map.url = "https://localhost/test/url";
+        map.thumbnail_url = "https://localhost/test/url";
         map.creator = "1";
         map.created = Date.now() + "";
+        map.cached = Date.now();
         map.terrain = [];
         return map;
     }

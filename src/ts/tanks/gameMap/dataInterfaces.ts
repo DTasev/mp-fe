@@ -25,8 +25,8 @@ export abstract class IMapListData {
     name: string;
     creator: string;
     created: string;
-    url: URL;
-    thumbnail_url: URL;
+    url: string;
+    thumbnail_url: string;
 }
 
 /**

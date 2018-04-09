@@ -30,6 +30,4 @@ export class TanksCache {
             window.localStorage.setItem(this.KEY_AVAILABLE_MAPS, avail + "," + mapid);
         }
     }
-
-
 }
