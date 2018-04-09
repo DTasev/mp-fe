@@ -17,15 +17,7 @@ import { Tank } from '../ts/tanks/objects/tank';
 import { DarkTheme } from '../ts/tanks/themes/dark';
 import { Player } from '../ts/tanks/objects/player';
 import { TanksMap } from '../ts/tanks/gameMap/tanksMap';
-
-/**
- * Adds all the elements necessary to be inside the DOM
- */
-function mockDOM() {
-    let uiDom = document.createElement("div");
-    uiDom.id = Ui.ID_GAME_UI;
-    document.body.appendChild(uiDom);
-}
+import { mockDOM } from './testutility';
 
 describe('Game Controller', () => {
     mockDOM();

@@ -591,37 +591,4 @@ export class MainMenu implements IActionState {
             controller.changeGameState(GameState.TANK_PLACEMENT);
         });
     }
-    // private showOptions = (e: MouseEvent) => {
-    //     this.ui.body.clear();
-    //     const [left, middle, right] = this.ui.body.addColumns();
-
-    //     const button_emptyOptionDescription = {
-    //         "button": {
-    //             className: MainMenu.CLASS_MENU_BUTTON,
-    //             textContent: "Option",
-    //             onclick: () => { throw new Error("Menu option not implemented"); }
-    //         }
-    //     };
-
-    //     for (let i = 0; i < 5; i++) {
-    //         const button_emptyOption = J2H.parse(button_emptyOptionDescription);
-    //         button_emptyOption.textContent += " " + i;
-    //         middle.appendChild(button_emptyOption);
-    //     }
-
-    //     const button_backDescription = {
-    //         "button": {
-    //             className: MainMenu.CLASS_MENU_BUTTON,
-    //             textContent: "Back",
-    //             onclick: this.setUpUi
-    //         }
-    //     };
-    //     const button_back = J2H.parse(button_backDescription);
-    //     middle.appendChild(button_back);
-
-    //     this.ui.body.htmlElement.appendChild(left);
-    //     this.ui.body.htmlElement.appendChild(middle);
-    //     this.ui.body.htmlElement.appendChild(right);
-    // }
-
 }

@@ -3,16 +3,8 @@ import 'mocha';
 import { Ui } from '../../ts/tanks/ui/ui';
 import { SepiaTheme } from '../../ts/tanks/themes/sepia';
 import { Color } from '../../ts/tanks/drawing/color';
+import { mockDOM } from '../testutility';
 
-
-/**
- * Adds all the elements necessary to be inside the DOM
- */
-function mockDOM() {
-    const uiDom = document.createElement("div");
-    uiDom.id = Ui.ID_GAME_UI;
-    document.body.appendChild(uiDom);
-}
 
 describe('UI', () => {
     mockDOM();
