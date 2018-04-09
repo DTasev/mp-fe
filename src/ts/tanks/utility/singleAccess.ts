@@ -1,3 +1,7 @@
+/**
+ * Developed as part of the Tanks Major Project. More detailed blog post 
+ * at https://tech.io/playgrounds/16686/single-access-design-pattern
+ */
 export class SingleAccess<T> {
     private resource: T = null;
     private accessed: boolean = false;
