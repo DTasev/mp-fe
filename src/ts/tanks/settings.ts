@@ -14,4 +14,5 @@ export class Settings {
 
     static readonly DEBUG = !window.location.origin || window.location.origin.includes("localhost") || window.location.origin.includes("127.0.0.1") ? true : false;
     static readonly SCROLLBAR_WIDTH = 17;
-}
+    static readonly DEFAULT_THEME = "sepia";
+}   

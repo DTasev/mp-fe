@@ -1,12 +1,13 @@
 import { TanksMap } from "../gameMap/tanksMap";
 import { IMapDetailData } from "../gameMap/dataInterfaces";
+import { Settings } from "../settings";
 
 export class TanksCache {
     private static KEY_THEME = "theme";
     private static KEY_AVAILABLE_MAPS = "availablemaps";
 
     static get theme(): string {
-        return window.localStorage.getItem(this.KEY_THEME) || "sepia";
+        return window.localStorage.getItem(this.KEY_THEME) || Settings.DEFAULT_THEME;
     }
     static set theme(theme: string) {
         window.localStorage.setItem(this.KEY_THEME, theme.toLowerCase());
