@@ -38,20 +38,17 @@ export class UiHeading {
                     "b": {
                         "innerHTML": "&nbsp;"
                     }
-                }
-                ]
+                }]
             }
         };
 
         this.playerTurn = new UiSection(J2H.parse(middleSections));
         this.message = new UiSection(J2H.parse(middleSections));
-    }
 
-    addTo(rowHeading: HTMLDivElement): void {
-        rowHeading.appendChild(this.left.htmlElement());
-        rowHeading.appendChild(this.playerTurn.htmlElement());
-        rowHeading.appendChild(this.message.htmlElement());
-        rowHeading.appendChild(this.right.htmlElement());
+        htmlElement.appendChild(this.left.htmlElement());
+        htmlElement.appendChild(this.playerTurn.htmlElement());
+        htmlElement.appendChild(this.message.htmlElement());
+        htmlElement.appendChild(this.right.htmlElement());
     }
 
     background(color: Color) {
@@ -73,7 +70,6 @@ export class UiHeading {
     clear(): void {
         this.left.clear();
         this.playerTurn.clear();
-        // this.message.clear();
         this.right.clear();
     }
 }

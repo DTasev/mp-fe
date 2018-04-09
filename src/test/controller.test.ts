@@ -25,7 +25,6 @@ function mockDOM() {
     let uiDom = document.createElement("div");
     uiDom.id = Ui.ID_GAME_UI;
     document.body.appendChild(uiDom);
-
 }
 
 describe('Game Controller', () => {

@@ -51,7 +51,6 @@ export class Ui {
         });
 
         this.heading = new UiHeading(rowHeading);
-        this.heading.addTo(rowHeading);
         this.body = new UiBody(rowBody);
 
         this.container.appendChild(rowHeading);
@@ -90,21 +89,7 @@ export class Ui {
             }
         }));
     }
-    /**
-     * Adjusts the Ui container to fit the currently viewed part of the page.
-     * @param e The window event that is triggered
-     */
-    private moveToFitView(e: Event): void {
-        this.container.style.left = window.pageXOffset + "px";
-        this.container.style.top = window.pageYOffset + "px";
-    }
 
-    mobileMoveToFitView(e: Event): void {
-        const visualViewport: IVisualViewport = (<any>window).visualViewport;
-        this.container.style.left = visualViewport.offsetLeft + "px";
-        this.container.style.top = visualViewport.offsetTop + "px";
-
-    }
     message(msg: string, theme: ITheme) {
         const b = document.createElement('b');
         b.classList.add("fa-2x", theme.ui.playerMessageClass());
@@ -119,8 +104,10 @@ export class Ui {
         this.container.style.color = color.rgba();
     }
 
+    /**
+     * The UI starts scrolling after the game settings are set, otherwise the menu UI will move around for the users
+     */
     startFollowingViewport() {
-        // the UI starts scrolling after the game settings are set, otherwise the menu UI will move around for the users
         if (!Settings.IS_MOBILE) {
             // normal computers trigger the onscroll event properly -> every time the page is scrolled
             // mobile, however, only triggers the event sometimes, and is not reliable, thus the 
@@ -129,5 +116,22 @@ export class Ui {
                 this.moveToFitView(e);
             };
         }
+    }
+    /**
+    * Adjusts the Ui container to fit the currently viewed part of the page.
+    * @param e The window event that is triggered
+    */
+    private moveToFitView(e: Event): void {
+        this.container.style.left = window.pageXOffset + "px";
+        this.container.style.top = window.pageYOffset + "px";
+    }
+
+    /**
+     * UI scrolling logic is different for mobile - the scrolling is only done during selection.
+     */
+    mobileMoveToFitView(e: Event): void {
+        const visualViewport: IVisualViewport = (<any>window).visualViewport;
+        this.container.style.left = visualViewport.offsetLeft + "px";
+        this.container.style.top = visualViewport.offsetTop + "px";
     }
 }
