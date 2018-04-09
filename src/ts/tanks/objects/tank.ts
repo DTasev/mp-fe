@@ -182,7 +182,7 @@ export class Tank {
     }
 
     nextState(): GameState {
-        // if the tank is disabled, then movement will be forcefully skipped
+        // if the tank is disabled, then movement will be skipped
         if (this.healthState == TankHealthState.DISABLED) {
             this.actionState = TankActState.MOVED;
         }
