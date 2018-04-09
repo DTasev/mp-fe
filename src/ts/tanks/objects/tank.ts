@@ -169,7 +169,7 @@ export class Tank {
     }
 
     highlight(context: CanvasRenderingContext2D, drawRange = true): any {
-        Draw.dot(context, this.position, Tank.WIDTH, this.color.active);
+        Draw.dot(context, this.position, Tank.WIDTH + 1, this.color.active);
         if (drawRange) {
             Draw.circle(context, this.position, this.movementRange, Tank.LINE_WIDTH, this.color.activeOutline);
         }
@@ -195,9 +195,6 @@ export class Tank {
                 return GameState.TANK_SELECTION;
         }
     }
-    static premadeTank(x = 0, y = 0): Tank {
-        return new Tank(0, Player.premadePlayer(), x, y, new DarkTheme());
-    }
 
     /**
      * Apply any effects to the tank before teh beginning of the turn
@@ -216,5 +213,9 @@ export class Tank {
         }
         // clear all effects that don't have the duration
         this.effects = this.effects.filter((effect) => effect.duration > 0);
+    }
+
+    static premadeTank(x = 0, y = 0): Tank {
+        return new Tank(0, Player.premadePlayer(), x, y, new DarkTheme());
     }
 }
