@@ -7,7 +7,7 @@ export class Line {
         return this.points.length;
     }
 
-    constructor(points = []) {
+    constructor(points: Point[] = []) {
         this.points = points;
     }
     copy(): Line {

@@ -14,7 +14,7 @@ export class LineCache {
         return this.lines;
     }
 
-    constructor() {
-        this.lines = [];
+    constructor(lines: Line[] = []) {
+        this.lines = lines;
     }
 }
