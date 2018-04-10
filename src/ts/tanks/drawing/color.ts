@@ -1,8 +1,4 @@
-import { S } from "../utility/stringFormat";
-
 export class Color {
-
-
     private red: number;
     private green: number;
     private blue: number;
@@ -16,7 +12,7 @@ export class Color {
     }
 
     rgba(alpha = this.alpha): string {
-        return S.format("rgba(%s,%s,%s,%s)", this.red, this.green, this.blue, alpha);
+        return `rgba(${this.red},${this.green},${this.blue},${alpha})`;
     }
 
     private componentToHex(c) {

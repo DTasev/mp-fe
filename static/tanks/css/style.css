@@ -11,6 +11,7 @@
 .game-canvas {
     border: 0px solid;
     overflow: scroll;
+    position: absolute;
 }
 
 .container {
@@ -156,7 +157,7 @@ input.player-color[type="color"]::-webkit-color-swatch {
     float: right;
     font-size: 28px;
     font-weight: bold;
-    font-family: Verdana,sans-serif;
+    font-family: Verdana, sans-serif;
 }
 
 .mc-modal-close:hover {

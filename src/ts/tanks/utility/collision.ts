@@ -1,19 +1,18 @@
 import { Obstacle, ObstacleType } from "../gameMap/obstacle";
 import { Tank, TankHealthState } from "../objects/tank";
 import { Point } from "./point";
-import { S } from "./stringFormat";
 import { TanksMath } from "./tanksMath";
 import { Settings } from "../settings";
 
 export class Collision {
     private static debugCollisionLine(start: Point, end: Point) {
         if (Settings.DEBUG) {
-            console.log(S.format("Collision versus line:\n%s,%s\n%s,%s", start.x, -start.y, end.x, -end.y));
+            console.log(`Collision versus line:\n${start.x},${-start.y}\n${end.x},${-end.y}`);
         }
     }
     private static debugShot(tank: Tank, distance: number) {
         if (Settings.DEBUG) {
-            console.log(S.format("Tank ID: %s\nPosition: (%s,%s)", tank.id, tank.position.x, -tank.position.y));
+            console.log(`Tank ID: ${tank.id}\nPosition: (${tank.position.x},${-tank.position.y})`);
             console.log("Distance: ", distance);
         }
     }

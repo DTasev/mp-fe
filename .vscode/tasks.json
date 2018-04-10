@@ -110,6 +110,20 @@
             "type": "npm",
             "script": "webpack:dev",
             "problemMatcher": []
+        },
+        {
+            "type": "gulp",
+            "task": "watch:full",
+            "problemMatcher": [
+                "$gulp-tsc"
+            ]
+        },
+        {
+            "type": "npm",
+            "script": "watch:all",
+            "problemMatcher": [
+                "$gulp-tsc"
+            ]
         }
     ]
 }
