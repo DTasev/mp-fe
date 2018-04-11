@@ -5,7 +5,7 @@ export class Particles {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    static explosion(tank: Tank) {
+    static explosion(tank: Tank, duration = 400) {
         //create div element, and do not position
         const p = document.createElement("div");
         p.style.top = `${tank.position.y - Tank.WIDTH}px`;
@@ -36,22 +36,19 @@ export class Particles {
                     height: "8px"
                 }
             ], {
-                    duration: 400,
+                    duration: duration,
                     easing: "cubic-bezier(.15,.87,.72,.9)",
                 });
-            particle.addEventListener("transitionstart", function (e) {
-                debugger
-            });
-            particle.addEventListener("transitionend", function (e) {
-                debugger
-                particle.parentNode.removeChild(particle);
-            });
-            particle.addEventListener("webkitTransitionEnd", function (e) {
-                debugger
-                particle.parentNode.removeChild(particle);
-            });
             p.appendChild(particle);
         }
         document.body.appendChild(p);
+
+        // Remove the particle elements from the DOM
+        // using the 'animationend' event on each particle does not seem
+        // to ever get triggered, so this is a workaround to remove the elements 
+        // from the DOM some time after the animation is over
+        setTimeout(() => {
+            document.body.removeChild(p);
+        }, duration + 500);
     }
 }
