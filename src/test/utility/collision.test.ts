@@ -10,6 +10,8 @@ import { Line } from '../../ts/tanks/utility/line';
 import { Player } from '../../ts/tanks/objects/player';
 import { Color } from '../../ts/tanks/drawing/color';
 import { DarkTheme } from '../../ts/tanks/themes/dark';
+import { SingleCallMock, Mock } from '../mocking/mock';
+import { Particles } from '../../ts/tanks/utility/particles';
 
 const exampleMap = {
     "name": "Map",
@@ -394,15 +396,18 @@ describe('Collision - Shot with Tanks', () => {
     it('shot hits single tank', () => {
         const tank = new Tank(0, Player.premadePlayer(), 1091, 153, new DarkTheme());
         const farAwayTank = new Tank(0, Player.premadePlayer(), 1202, 644, new DarkTheme());
+        const mock_Particles_explosion = new SingleCallMock(Particles, Particles.explosion);
 
         const [tanksDisabled, tanksKilled] = Collision.shooting(line.points[0], line.points[1], [tank]);
         expect(tank.healthState).to.eq(TankHealthState.DEAD);
         expect(tanksKilled).to.eq(1);
         expect(farAwayTank.healthState).to.eq(TankHealthState.ALIVE);
+        mock_Particles_explosion.expect_called.once();
     });
     it('shot hits multiple tanks', () => {
         const tank = new Tank(0, Player.premadePlayer(), 1091, 153, new DarkTheme());
         const tank2 = new Tank(0, Player.premadePlayer(), 1062, 192, new DarkTheme());
+        const mock_Particles_explosion = new Mock(Particles, Particles.explosion);
 
         const farAwayTank = new Tank(0, Player.premadePlayer(), 1202, 644, new DarkTheme());
 
@@ -412,6 +417,7 @@ describe('Collision - Shot with Tanks', () => {
         expect(tanksKilled).to.eq(2);
         expect(farAwayTank.healthState).to.eq(TankHealthState.ALIVE);
         expect(tanksDisabled).to.eq(0);
+        mock_Particles_explosion.expect_called.twice();
     });
     it('shot misses single tank', () => {
         const tank = Tank.premadeTank(1155, 592);
