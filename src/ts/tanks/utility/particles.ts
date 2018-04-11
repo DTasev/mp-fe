@@ -13,7 +13,6 @@ export class Particles {
         // NOTE: position MUST be set after the top & left coordinates are set, otherwise the element is not on the correct place!
         p.style.position = "absolute";
 
-
         const numParticles = 24;
 
         for (let i = 0; i < numParticles; ++i) {

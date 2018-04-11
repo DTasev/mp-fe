@@ -107,9 +107,9 @@ export class Ui {
     /**
      * UI scrolling logic is different for mobile - the scrolling is only done during selection.
      */
-    // mobileMoveToFitView(e: Event): void {
-    //     const visualViewport: IVisualViewport = (<any>window).visualViewport;
-    //     this.container.style.left = visualViewport.offsetLeft + "px";
-    //     this.container.style.top = visualViewport.offsetTop + "px";
-    // }
+    mobileMoveToFitView(e: Event): void {
+        const visualViewport: IVisualViewport = (<any>window).visualViewport;
+        this.container.style.left = visualViewport.offsetLeft + "px";
+        this.container.style.top = visualViewport.offsetTop + "px";
+    }
 }
