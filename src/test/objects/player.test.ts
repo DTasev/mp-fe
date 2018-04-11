@@ -9,7 +9,6 @@ describe('Player', () => {
     it('alive tanks', () => {
         const p = Player.premadePlayer();
         p.tanks.push(Tank.premadeTank());
-        p.tanks.push(Tank.premadeTank());
 
         expect(p.aliveTanks().length).to.eq(2);
         p.tanks[0].healthState = TankHealthState.DEAD;
@@ -19,7 +18,6 @@ describe('Player', () => {
     });
     it('active tanks', () => {
         const p = Player.premadePlayer();
-        p.tanks.push(Tank.premadeTank());
         p.tanks.push(Tank.premadeTank());
 
         expect(p.activeTanks().length).to.eq(2);
@@ -32,7 +30,6 @@ describe('Player', () => {
     });
     it('reset tank act states', () => {
         const p = Player.premadePlayer();
-        p.tanks.push(Tank.premadeTank());
         p.tanks.push(Tank.premadeTank());
 
         p.tanks[0].actionState = TankActState.SHOT;
