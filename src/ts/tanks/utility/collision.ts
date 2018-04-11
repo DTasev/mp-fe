@@ -45,7 +45,7 @@ export class Collision {
                     tanksDisabled += 1;
                 } // if the line passes through the tank, mark dead
                 else if (dist < Tank.WIDTH) {
-                    tank.healthState = TankHealthState.DEAD;
+                    tank.die();
                     console.log("Tank", tank.id, "dead!");
                     tanksKilled += 1;
                 }
