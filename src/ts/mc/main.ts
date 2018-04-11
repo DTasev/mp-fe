@@ -175,7 +175,7 @@ function init() {
 
     const ui = new Ui(Ui.ID_GAME_UI, viewportWidth, viewportHeight);
 
-    ui.startFollowingViewport();
+    ui.showCanvas();
 
     const obstacleTypes = new MCObstacleTypes(obstacles, ui);
     const tools = new MCTools(ui);
