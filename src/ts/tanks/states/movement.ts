@@ -19,10 +19,11 @@ export class MovingState implements IPlayState {
     player: Player;
     ui: Ui;
 
-    draw: Draw;
     line: Limit.Length;
     active: Tank;
-    tankMovementInRange: boolean;
+    draw = new Draw();
+
+    tankMovementInRange = false;
 
     constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
@@ -30,7 +31,6 @@ export class MovingState implements IPlayState {
         this.player = player;
         this.ui = ui;
 
-        this.draw = new Draw();
         this.active = this.player.activeTank.get();
     }
 
@@ -78,14 +78,14 @@ export class MovingState implements IPlayState {
         // limit the length of the line to the maximum allowed tank movement, and disabled tanks can't be moved
         if (this.line.in(this.active.position, this.draw.mouse) && this.active.healthState !== TankHealthState.DISABLED) {
             this.draw.state = DrawState.DRAWING;
-            this.validMove(this.active.color);
+            this.drawMovement(this.active.color);
         }
         if (e instanceof TouchEvent) {
             e.preventDefault();
         }
     }
 
-    private validMove(tankColors: TankColor) {
+    private drawMovement(tankColors: TankColor) {
         this.tankMovementInRange = true;
         this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, tankColors.movementLine);
     }
@@ -104,7 +104,7 @@ export class MovingState implements IPlayState {
             // update the position of the tank in the player array
             const tank = this.player.tanks[this.active.id];
 
-            // the tank will be moved provided: there is no obstacle
+            // the tank will be moved, provided: there is no obstacle
             // OR the obstacle is traversable, and the tank will get an effect
             // if it is NOT traversable, the tank will not move
             if (!collisionObstacle || collisionObstacle.traversable()) {
@@ -136,18 +136,14 @@ export class MovingState implements IPlayState {
         }
     }
 
-    private goToShooting = () => {
+    goToShooting = () => {
         this.player.tanks[this.active.id].actionState = TankActState.MOVED;
         this.player.activeTank.set(this.player.tanks[this.active.id]);
-        this.draw.state = DrawState.STOPPED;
-        // redraw canvas with all current tanks
-        this.controller.redrawCanvas();
-        // go to tank selection state
-        this.controller.changeGameState(GameState.TANK_SELECTION);
+        this.endTurn();
     }
 
     /** The action to be taken at the end of the turn */
-    private endTurn() {
+    endTurn() {
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
         this.controller.redrawCanvas();
@@ -156,17 +152,17 @@ export class MovingState implements IPlayState {
     }
 
     private drawMoveLine = (e: MouseEvent | TouchEvent) => {
-        this.draw.updatePosition(e);
         // draw the movement line if the mouse button is currently being pressed
         if (this.draw.state == DrawState.DRAWING) {
+            this.draw.updatePosition(e);
             if (this.line.in(this.active.position, this.draw.mouse)) {
-                this.validMove(this.active.color);
+                this.drawMovement(this.active.color);
             } else {
                 this.tankMovementInRange = false;
             }
-        }
-        if (e instanceof TouchEvent) {
-            e.preventDefault();
+            if (e instanceof TouchEvent) {
+                e.preventDefault();
+            }
         }
     }
 }
