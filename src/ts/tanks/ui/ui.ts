@@ -72,6 +72,8 @@ export class Ui {
 
     showCanvas() {
         this.setHeight(0);
+        // fixed makes the UI fit the viewport and follow it when scrolling
+        this.container.style.position = "fixed";
     }
 
     /**

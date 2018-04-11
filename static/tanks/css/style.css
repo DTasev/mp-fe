@@ -34,10 +34,6 @@ h6 {
     height: 100%;
 }
 
-#tanks-ui {
-    position: fixed;
-}
-
 /* Tanks Menu classes */
 
 .tanks-ui-menu-button {
