@@ -42,6 +42,14 @@ h6 {
     letter-spacing: 0.6em;
     font-variant-caps: small-caps;
     text-transform: uppercase;
+    transition: all 0.3s ease 0s;
+    margin-bottom: 5px;
+    border: 1px solid coral;
+    border-radius: 5px;
+}
+
+.tanks-ui-menu-button:hover {
+    box-shadow: inset 0 0 0 5px #3071A9;
 }
 
 .tanks-ui-menu-title {
