@@ -53,6 +53,9 @@ export class Player {
         this.viewportPosition = viewportPosition;
     }
     static premadePlayer(): Player {
-        return new Player(0, "Test", Color.red());
+        const p = new Player(0, "Test", Color.red())
+        p.tanks.push(Tank.premadeTank(0, 0, p));
+        p.activeTank.set(p.tanks[0]);
+        return p;
     }
 }

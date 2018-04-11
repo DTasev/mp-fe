@@ -219,8 +219,8 @@ export class Tank {
         this.effects = this.effects.filter((effect) => effect.duration > 0);
     }
 
-    static premadeTank(x = 0, y = 0): Tank {
-        return new Tank(0, Player.premadePlayer(), x, y, new DarkTheme());
+    static premadeTank(x = 0, y = 0, player: Player = null): Tank {
+        return new Tank(0, player || Player.premadePlayer(), x, y, new DarkTheme());
     }
 
     /**
