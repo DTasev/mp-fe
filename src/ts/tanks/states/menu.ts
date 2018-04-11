@@ -228,7 +228,7 @@ class MenuStartGame {
         const slider_valueDescription = {
             h1: {
                 id: MainMenu.ID_PLAYER_SLIDER_DISPLAY,
-                textContent: "Players: 2"
+                textContent: `Players: ${Settings.DEFAULT_NUMBER_PLAYERS}`
             }
         };
         middle.appendChild(J2H.parse(slider_valueDescription));
@@ -345,7 +345,7 @@ class MenuStartGame {
         const slider_valueDescription = {
             h1: {
                 id: MainMenu.ID_TANKS_SLIDER_DISPLAY,
-                textContent: "Tanks: 1"
+                textContent: `Tanks: ${Settings.DEFAULT_NUMBER_TANKS}`
             }
         };
         middle.appendChild(J2H.parse(slider_valueDescription));

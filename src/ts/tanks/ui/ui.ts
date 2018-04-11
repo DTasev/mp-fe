@@ -105,33 +105,11 @@ export class Ui {
     }
 
     /**
-     * The UI starts scrolling after the game settings are set, otherwise the menu UI will move around for the users
-     */
-    startFollowingViewport() {
-        if (!Settings.IS_MOBILE) {
-            // normal computers trigger the onscroll event properly -> every time the page is scrolled
-            // mobile, however, only triggers the event sometimes, and is not reliable, thus the 
-            // touchmove event is used in `selection`
-            window.onscroll = (e: Event) => {
-                this.moveToFitView(e);
-            };
-        }
-    }
-    /**
-    * Adjusts the Ui container to fit the currently viewed part of the page.
-    * @param e The window event that is triggered
-    */
-    private moveToFitView(e: Event): void {
-        this.container.style.left = window.pageXOffset + "px";
-        this.container.style.top = window.pageYOffset + "px";
-    }
-
-    /**
      * UI scrolling logic is different for mobile - the scrolling is only done during selection.
      */
-    mobileMoveToFitView(e: Event): void {
-        const visualViewport: IVisualViewport = (<any>window).visualViewport;
-        this.container.style.left = visualViewport.offsetLeft + "px";
-        this.container.style.top = visualViewport.offsetTop + "px";
-    }
+    // mobileMoveToFitView(e: Event): void {
+    //     const visualViewport: IVisualViewport = (<any>window).visualViewport;
+    //     this.container.style.left = visualViewport.offsetLeft + "px";
+    //     this.container.style.top = visualViewport.offsetTop + "px";
+    // }
 }

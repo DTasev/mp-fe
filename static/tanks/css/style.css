@@ -1,3 +1,13 @@
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Raleway", sans-serif
+}
+
 .canvas-holder {
     /* Prevents text selection */
     -webkit-touch-callout: none;
@@ -25,7 +35,7 @@
 }
 
 #tanks-ui {
-    transition: left 0.1s 0.1s ease-out;
+    position: fixed;
 }
 
 /* Tanks Menu classes */
@@ -168,4 +178,12 @@ input.player-color[type="color"]::-webkit-color-swatch {
 
 .mc-button {
     margin: 0 2px;
+}
+
+.tanks-explosion-particle {
+    background-color: orangered;
+    border-radius: 12px;
+    display: block;
+    z-index: -1;
+    position: absolute;
 }

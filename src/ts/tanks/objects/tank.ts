@@ -5,6 +5,7 @@ import { ITheme } from "../themes/iTheme";
 import { Point } from "../utility/point";
 import { IEffect } from "./effects/iEffect";
 import { Player } from "./player";
+import { Particles } from "../utility/particles";
 
 export enum TankActState {
     SHOT,
@@ -91,6 +92,9 @@ export class Tank {
     /** Opacity for the player color when the tank is disabled */
     private readonly DISABLED_OPACITY = 0.7;
 
+    /** How many pixels to offset the label so that it appears in the center of the tank */
+    private readonly LABEL_OFFSET = 10.5;
+
     readonly color: TankColor;
 
     readonly id: number;
@@ -138,7 +142,7 @@ export class Tank {
         context.fillStyle = this.color.label;
         context.font = "16px Calibri";
         // put the text in the middle of the tank
-        context.fillText(label, this.position.x - 10.5, this.position.y + 5);
+        context.fillText(label, this.position.x - this.LABEL_OFFSET, this.position.y + 5);
     }
 
     private uiElements(): [string, string] {
@@ -218,4 +222,13 @@ export class Tank {
     static premadeTank(x = 0, y = 0): Tank {
         return new Tank(0, Player.premadePlayer(), x, y, new DarkTheme());
     }
+
+    /**
+     * Change tank status to reflect death and show animation
+     */
+    die() {
+        this.healthState = TankHealthState.DEAD;
+        Particles.explosion(this);
+    }
+
 }
