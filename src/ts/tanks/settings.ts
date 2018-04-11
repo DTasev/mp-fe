@@ -2,7 +2,7 @@ export class Settings {
     static readonly ID_GAME_CANVAS = "tanks-canvas";
 
     static readonly DEFAULT_NUMBER_PLAYERS = 2;
-    static readonly DEFAULT_NUMBER_TANKS = 1;
+    static readonly DEFAULT_NUMBER_TANKS = 2;
     static readonly IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? true : false;
     static readonly MAX_TANKS = 8;
 
