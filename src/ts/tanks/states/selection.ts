@@ -38,7 +38,7 @@ export class SelectionState implements IPlayState {
         } else {
             if (Settings.IS_MOBILE) {
                 // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
-                canvas.ontouchstart = this.mouseDown;
+                canvas.ontouchstart = this.selectTank;
                 // Scrolling for Mobile: this is added here so that the touchmove event triggers the ui adjusting event
                 // normal computers trigger window.onscroll, and that is handled in the controller
                 window.ontouchmove = (e: Event) => {
@@ -46,44 +46,43 @@ export class SelectionState implements IPlayState {
                 }
                 window.ontouchend = this.mouseUp;
             } else {
-                canvas.onmousedown = this.mouseDown;
+                canvas.onmousedown = this.selectTank;
                 window.onmouseup = this.mouseUp;
             }
         }
     }
     addKeyboardShortcuts(canvas: HTMLCanvasElement) {
-        if (!Settings.IS_MOBILE) {
-            console.log("In selection shortcuts");
-            window.onkeyup = (e: KeyboardEvent) => {
-                switch (e.keyCode) {
-                    case KeyboardKeys.KEY_1:
-                        this.selectTankKeyboard(this.player.tanks[0])
-                        break;
-                    case KeyboardKeys.KEY_2:
-                        if (2 <= this.player.tanks.length) {
-                            this.selectTankKeyboard(this.player.tanks[1]);
-                        }
-                        break;
-                    case KeyboardKeys.KEY_3:
-                        if (3 <= this.player.tanks.length) {
-                            this.selectTankKeyboard(this.player.tanks[2]);
-                        }
-                        break;
-                    case KeyboardKeys.KEY_4:
-                        if (4 <= this.player.tanks.length) {
-                            this.selectTankKeyboard(this.player.tanks[3]);
-                        }
-                        break;
-                    case KeyboardKeys.KEY_5:
-                        if (4 <= this.player.tanks.length) {
-                            this.selectTankKeyboard(this.player.tanks[4]);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            };
-        }
+        // Keyboard shortcuts are added for both PC and mobile,
+        // because mobile can use wireless keyboards
+        window.onkeyup = (e: KeyboardEvent) => {
+            switch (e.keyCode) {
+                case KeyboardKeys.KEY_1:
+                    this.selectTankKeyboard(this.player.tanks[0])
+                    break;
+                case KeyboardKeys.KEY_2:
+                    if (2 <= this.player.tanks.length) {
+                        this.selectTankKeyboard(this.player.tanks[1]);
+                    }
+                    break;
+                case KeyboardKeys.KEY_3:
+                    if (3 <= this.player.tanks.length) {
+                        this.selectTankKeyboard(this.player.tanks[2]);
+                    }
+                    break;
+                case KeyboardKeys.KEY_4:
+                    if (4 <= this.player.tanks.length) {
+                        this.selectTankKeyboard(this.player.tanks[3]);
+                    }
+                    break;
+                case KeyboardKeys.KEY_5:
+                    if (4 <= this.player.tanks.length) {
+                        this.selectTankKeyboard(this.player.tanks[4]);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        };
     }
 
     view(viewport: Viewport) {
@@ -94,7 +93,7 @@ export class SelectionState implements IPlayState {
         ui.heading.addHome(viewport, this.player, theme);
     }
 
-    mouseDown = (e: MouseEvent | TouchEvent): void => {
+    selectTank = (e: MouseEvent | TouchEvent): void => {
         // if the button clicked is not the left button, do nothing
         if (e instanceof MouseEvent && e.button != 0) {
             return;
