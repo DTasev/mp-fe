@@ -116,6 +116,7 @@ export class GameController {
             this.canvas.ontouchstart = null;
             this.canvas.ontouchend = null;
             window.ontouchend = null;
+            window.ontouchmove = null;
             this.canvas.ontouchmove = null;
         } else {
             // clears mouse events

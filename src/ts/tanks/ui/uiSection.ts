@@ -19,7 +19,7 @@ export class UiSection {
      * Clear all HTML contained in the element.
      */
     clear() {
-        this.element.innerHTML = "&nbsp;";
+        this.element.innerHTML = "";
     }
 
     htmlElement(): HTMLElement {

@@ -14,9 +14,10 @@ interface IVisualViewport {
 export class Ui {
     static readonly ID_GAME_UI = "tanks-ui";
 
-    static readonly ID_BUTTON_SKIP_TURN = "tanks-ui-button-skipturn";
-    static readonly ID_HEADING = "tanks-ui-heading";
-    static readonly ID_BODY = "tanks-ui-body";
+    readonly ID_HEADING = "tanks-ui-heading";
+    readonly ID_BODY = "tanks-ui-body";
+
+    readonly CLASS_TEXT_SIZE = Settings.IS_MOBILE ? "tanks-ui-heading-mobile-size" : "fa-2x";
 
     private readonly container: HTMLDivElement;
     private readonly canvasWidth: number;
@@ -39,14 +40,14 @@ export class Ui {
         const rowHeading = J2H.parse<HTMLDivElement>({
             "div": {
                 "className": "w3-row",
-                "id": Ui.ID_HEADING
+                "id": this.ID_HEADING
             }
         });
 
         const rowBody = J2H.parse<HTMLDivElement>({
             "div": {
                 "className": "w3-row",
-                "id": Ui.ID_BODY
+                "id": this.ID_BODY
             }
         });
 
@@ -88,14 +89,14 @@ export class Ui {
         this.heading.playerTurn.add(J2H.parse({
             "b": {
                 "textContent": name + "'s turn.",
-                "className": "fa-2x " + theme.ui.playerTurnTextClass()
+                "className": `${this.CLASS_TEXT_SIZE} ` + theme.ui.playerTurnTextClass()
             }
         }));
     }
 
     message(msg: string, theme: ITheme) {
         const b = document.createElement('b');
-        b.classList.add("fa-2x", theme.ui.playerMessageClass());
+        b.classList.add(this.CLASS_TEXT_SIZE, theme.ui.playerMessageClass());
         b.innerHTML = msg === "" ? "&nbsp;" : msg;
         this.heading.message.innerHTML = b.outerHTML;
     }

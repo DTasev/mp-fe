@@ -72,6 +72,10 @@ h6 {
     padding-bottom: 64px;
 }
 
+.tanks-ui-heading-mobile-size {
+    font-size: 1.5em;
+}
+
 /* The slider itself */
 
 .slider {

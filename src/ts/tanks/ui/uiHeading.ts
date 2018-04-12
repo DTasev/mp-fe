@@ -5,6 +5,7 @@ import { Player } from "../objects/player";
 import { ITheme } from "../themes/iTheme";
 import { CommonUi } from "../tanksUi/common";
 import { UiSection } from "./uiSection";
+import { Settings } from "../settings";
 
 /**
  * The UiHeading is the top row on the canvas.
@@ -33,7 +34,7 @@ export class UiHeading {
         const middleSections = {
             "div": {
                 "className": "w3-col s4 m4 l5",
-                "style": "text-align:center;",
+                "style": "text-align:center; z-index:-1",
                 "children": [{
                     "b": {
                         "innerHTML": "&nbsp;"
@@ -59,12 +60,15 @@ export class UiHeading {
         this.htmlElement.style.color = color.rgba();
     }
 
-    addHome(viewport: Viewport, player: Player, theme: ITheme): any {
-        const button_home = CommonUi.button_home(theme);
-        button_home.onclick = () => {
-            viewport.goTo(player.viewportPosition);
+    addHome(viewport: Viewport, player: Player, theme: ITheme) {
+        if (!Settings.IS_MOBILE) {
+
+            const button_home = CommonUi.button_home(theme);
+            button_home.onclick = () => {
+                viewport.goTo(player.viewportPosition);
+            }
+            this.left.add(button_home);
         }
-        this.left.add(button_home);
     }
 
     clear(): void {
