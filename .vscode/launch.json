@@ -25,7 +25,7 @@
                 "--colors",
                 "${workspaceFolder}/src/test/**/*.test.ts"
             ],
-            "internalConsoleOptions": "openOnSessionStart"
+            "internalConsoleOptions": "openOnSessionStart",
         },
         {
             "type": "node",

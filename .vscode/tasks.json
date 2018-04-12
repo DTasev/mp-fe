@@ -12,42 +12,7 @@
         },
         {
             "type": "npm",
-            "script": "build-prod",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
             "script": "watch",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "build-dev",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "test-current",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "test: unix",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "test:unix",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "test-win",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "test-unix",
             "problemMatcher": []
         },
         {
@@ -90,7 +55,11 @@
             "script": "fullbuild:dev",
             "problemMatcher": [
                 "$tsc"
-            ]
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "type": "gulp",
@@ -124,6 +93,12 @@
             "problemMatcher": [
                 "$gulp-tsc"
             ]
+        },
+        {
+            "type": "npm",
+            "script": "test",
+            "problemMatcher": [],
+            "group": "test"
         }
     ]
 }
