@@ -17,7 +17,7 @@ describe('UI Section', () => {
         const button = document.createElement("button");
         section.add(button);
         section.clear();
-        expect(section.innerHTML).to.eq("&nbsp;");
+        expect(section.innerHTML).to.eq("");
     });
     it('return it\'s HTML element', () => {
         const div = document.createElement("div");

@@ -98,7 +98,10 @@
             "type": "npm",
             "script": "test",
             "problemMatcher": [],
-            "group": "test"
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
         }
     ]
 }
