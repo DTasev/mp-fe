@@ -15,7 +15,7 @@ export class PlacingState implements IPlayState {
 
     // keeps track of how many players have placed their tanks IN TOTAL
     static playersTankPlacement: Limit.Actions;
-    private lastTouch: number;
+    private lastTouch: boolean;
 
     context: CanvasRenderingContext2D;
     controller: GameController;
@@ -62,7 +62,7 @@ export class PlacingState implements IPlayState {
         ui.heading.addHome(viewport, this.player, theme);
     }
 
-    private addTank = (e: MouseEvent | TouchEvent) => {
+    addTank = (e: MouseEvent | TouchEvent) => {
         // if the button clicked is not the left button, do nothing
         if (e instanceof MouseEvent && e.button != 0) {
             return;
@@ -91,21 +91,29 @@ export class PlacingState implements IPlayState {
                 // all of the players have placed their tanks, go to moving state
                 if (PlacingState.playersTankPlacement.over()) {
                     this.controller.changeGameState(GameState.TANK_SELECTION);
+                    // clear the variable, this will allow it to be garbage collected
+                    PlacingState.playersTankPlacement = null;
                 } else {
                     this.controller.changeGameState(GameState.TANK_PLACEMENT);
                 }
             }
         }
     }
+
+    /**
+     * Checks if the user performs a double tap. This allows scrolling on mobile
+     * before placing the tank, and then double tapping to place the tank.
+     * 
+     * @param e Touch event triggered by the user tapping on a touch screen
+     */
     doubleTap(e: TouchEvent): boolean {
         if (!this.lastTouch) {
-            this.lastTouch = Date.now();
-            setTimeout(() => { this.lastTouch = null }, this.DBL_CLICK_TIMEOUT + 10);
+            this.lastTouch = true;
+            setTimeout(() => { this.lastTouch = null }, this.DBL_CLICK_TIMEOUT);
             return false;
         } else {
-            const diff = Date.now() - this.lastTouch;
             this.lastTouch = null;
-
+            // prevent user scrolling with the second tap
             e.preventDefault();
             return true;
         }
