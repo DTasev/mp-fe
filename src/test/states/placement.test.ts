@@ -30,7 +30,7 @@ describe('Placement - Game State', () => {
         mock_context = mock_canvas.getContext();
         ui = new Ui(Ui.ID_GAME_UI, mock_canvas.width, mock_canvas.height);
         controller = new GameController(mock_canvas as any, mock_context as any, ui, new SepiaTheme(), TanksMap.premadeMap(), [player, new Player(0, "P1", Color.black())], 2, false);
-    })
+    });
     it('construct', () => {
         const player = Player.premadePlayer();
         const p = new PlacingState(controller, mock_context as any, player);
