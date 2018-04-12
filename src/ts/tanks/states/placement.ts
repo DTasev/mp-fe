@@ -67,26 +67,11 @@ export class PlacingState implements IPlayState {
         if (e instanceof MouseEvent && e.button != 0) {
             return;
         }
-        if (Settings.IS_MOBILE) {
-            if (!this.lastTouch) {
-                this.lastTouch = Date.now();
-                console.log('first touch');
-                setTimeout(() => { console.log('clearing lastTouch'); this.lastTouch = null }, this.DBL_CLICK_TIMEOUT + 10);
-                return;
-            } else {
-                console.log('second touch');
-                const diff = Date.now() - this.lastTouch;
-                console.log('time difference:', diff);
-                this.lastTouch = null;
-                if (diff > this.DBL_CLICK_TIMEOUT) {
-                    console.log('too long to be double click');
-                    return;
-                }
-                console.log('double click successful');
-                if (e instanceof TouchEvent) {
-                    e.preventDefault();
-                }
-            }
+
+        // check for double tap ONLY ON touch screens. TouchEvent will NOT 
+        // be fired when using a mouse.
+        if (e instanceof TouchEvent && !this.doubleTap(e)) {
+            return;
         }
 
         this.draw.updatePosition(e);
@@ -111,6 +96,18 @@ export class PlacingState implements IPlayState {
                 }
             }
         }
+    }
+    doubleTap(e: TouchEvent): boolean {
+        if (!this.lastTouch) {
+            this.lastTouch = Date.now();
+            setTimeout(() => { this.lastTouch = null }, this.DBL_CLICK_TIMEOUT + 10);
+            return false;
+        } else {
+            const diff = Date.now() - this.lastTouch;
+            this.lastTouch = null;
 
+            e.preventDefault();
+            return true;
+        }
     }
 }
