@@ -1,11 +1,12 @@
 import { Draw } from './drawing/draw';
 import { determineCanvasSize } from "./gameMap/mapSize";
 import { Obstacle } from "./gameMap/obstacle";
+import { generatePlayerPositions } from "./gameMap/positions";
 import { TanksMap } from "./gameMap/tanksMap";
 import { Viewport } from "./gameMap/viewport";
 import { Player } from './objects/player';
+import { Settings } from './settings';
 import { GameEndState } from "./states/gameEnd";
-import { IActionState } from "./states/iActionState";
 import { MovingState } from "./states/movement";
 import { PlacingState } from "./states/placement";
 import { SelectionState } from "./states/selection";
@@ -17,8 +18,8 @@ import { Line } from './utility/line';
 import { LineCache } from './utility/lineCache';
 import { Point } from './utility/point';
 import { SingleAccess } from "./utility/singleAccess";
-import { generatePlayerPositions } from "./gameMap/positions";
-import { Settings } from './settings';
+import { IActionState } from './states/iActionState';
+
 export enum GameState {
     TANK_PLACEMENT,
     TANK_MOVEMENT,

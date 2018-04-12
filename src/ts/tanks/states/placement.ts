@@ -13,7 +13,7 @@ import { IPlayState } from "./iActionState";
 export class PlacingState implements IPlayState {
     private DBL_CLICK_TIMEOUT = 300;
 
-    // keeps track of how many players have placed their tanks IN TOTAL
+    /* Limit the number of players that can place tanks */
     static playersTankPlacement: Limit.Actions;
     private lastTouch: boolean;
 
@@ -22,8 +22,9 @@ export class PlacingState implements IPlayState {
     draw: Draw;
     player: Player;
     ui: Ui;
-    tanksPlaced: Limit.Actions;
 
+    /* Limit the number of tanks for the current player */
+    tanksPlaced: Limit.Actions;
 
     /**
      * 

@@ -11,7 +11,7 @@ import { Settings } from "../settings";
  * The UiHeading is the top row on the canvas.
  */
 export class UiHeading {
-    private readonly left: UiSection;
+    readonly left: UiSection;
     readonly playerTurn: UiSection;
     readonly message: UiSection;
     readonly right: UiSection;
@@ -19,7 +19,6 @@ export class UiHeading {
     private readonly htmlElement: HTMLDivElement;
 
     constructor(htmlElement: HTMLDivElement) {
-
         this.htmlElement = htmlElement;
 
         const sideDescription = {
@@ -62,7 +61,6 @@ export class UiHeading {
 
     addHome(viewport: Viewport, player: Player, theme: ITheme) {
         if (!Settings.IS_MOBILE) {
-
             const button_home = CommonUi.button_home(theme);
             button_home.onclick = () => {
                 viewport.goTo(player.viewportPosition);
