@@ -225,34 +225,35 @@ class MenuStartGame {
     }
 
     static addPlayerSlider(middle: HTMLDivElement) {
-        const slider_valueDescription = {
-            h1: {
-                id: MainMenu.ID_PLAYER_SLIDER_DISPLAY,
-                textContent: `Players: ${Settings.DEFAULT_NUMBER_PLAYERS}`
-            }
-        };
-        middle.appendChild(J2H.parse(slider_valueDescription));
-        const sliderInput_description = {
+        const d_numberOfPlayers = {
             input: {
                 type: "range",
                 min: 2,
                 max: 8,
-                value: "2",
+                value: Settings.DEFAULT_NUMBER_PLAYERS + "", // +"" converts to string
                 className: "slider",
                 id: MainMenu.ID_PLAYER_SLIDER,
                 oninput: MenuStartGame.changeNumberOfPlayerSettings
             }
         };
-        const sliderInput = J2H.parse<HTMLInputElement>(sliderInput_description);
-        sliderInput.value = "2";
-        const slider_description = {
+        const sliderNumberOfPlayers = J2H.parse<HTMLInputElement>(d_numberOfPlayers);
+
+        const d_sliderContainer = {
             div: {
                 className: "w3-row"
             }
         };
-        const slider = J2H.parse(slider_description);
-        slider.appendChild(sliderInput);
-        middle.appendChild(slider);
+        const sliderContainer = J2H.parse(d_sliderContainer);
+        sliderContainer.appendChild(sliderNumberOfPlayers);
+
+        const numberOfPlayersDisplay = {
+            h1: {
+                id: MainMenu.ID_PLAYER_SLIDER_DISPLAY,
+                textContent: `Players: ${sliderNumberOfPlayers.value}`
+            }
+        };
+        middle.appendChild(J2H.parse(numberOfPlayersDisplay));
+        middle.appendChild(sliderContainer);
     }
 
     static createPlayers(numPlayers: number, colors?: Color[]) {
@@ -269,7 +270,7 @@ class MenuStartGame {
         const newNumberOfPlayers = getSliderValue(MainMenu.ID_PLAYER_SLIDER);
 
         // update the visual for number of players
-        document.getElementById(MainMenu.ID_PLAYER_SLIDER_DISPLAY).innerHTML = "Players: " + newNumberOfPlayers
+        document.getElementById(MainMenu.ID_PLAYER_SLIDER_DISPLAY).innerHTML = "Players: " + newNumberOfPlayers;
 
         // add a new block of player options
         const playerSettingsElement = document.getElementById(MainMenu.ID_PLAYER_SETTINGS);
@@ -342,35 +343,38 @@ class MenuStartGame {
     }
 
     static addTankSlider(middle: HTMLDivElement): any {
-        const slider_valueDescription = {
-            h1: {
-                id: MainMenu.ID_TANKS_SLIDER_DISPLAY,
-                textContent: `Tanks: ${Settings.DEFAULT_NUMBER_TANKS}`
-            }
-        };
-        middle.appendChild(J2H.parse(slider_valueDescription));
-        const sliderInput_description = {
+        const d_sliderNumberOfTanks = {
             input: {
                 type: "range",
                 min: 1,
                 max: Settings.MAX_TANKS,
-                value: "1",
+                value: Settings.DEFAULT_NUMBER_TANKS + "",
                 className: "slider",
                 id: MainMenu.ID_TANKS_SLIDER,
                 oninput: MenuStartGame.changeNumberOfTanks
             }
         };
-        const sliderInput = J2H.parse<HTMLInputElement>(sliderInput_description);
-        sliderInput.value = "1";
-        const slider_description = {
+
+        const sliderNumberOfTanks = J2H.parse<HTMLInputElement>(d_sliderNumberOfTanks);
+        const d_sliderContainer = {
             div: {
                 className: "w3-row",
                 style: "padding-bottom:32px"
             }
         };
-        const slider = J2H.parse(slider_description);
-        slider.appendChild(sliderInput);
-        middle.appendChild(slider);
+        const sliderContainer = J2H.parse(d_sliderContainer);
+        sliderContainer.appendChild(sliderNumberOfTanks);
+
+        // the paragraph that shows how many tanks are currently selected
+        const d_numberOfTanksDisplay = {
+            h1: {
+                id: MainMenu.ID_TANKS_SLIDER_DISPLAY,
+                textContent: `Tanks: ${sliderNumberOfTanks.value}`
+            }
+        };
+
+        middle.appendChild(J2H.parse(d_numberOfTanksDisplay));
+        middle.appendChild(sliderContainer);
     }
     static changeNumberOfTanks(e: Event) {
         document.getElementById(MainMenu.ID_TANKS_SLIDER_DISPLAY).innerHTML = "Tanks: " + getSliderValue(MainMenu.ID_TANKS_SLIDER);
