@@ -5,6 +5,7 @@ import { Color } from '../../ts/tanks/drawing/color';
 import { Viewport } from '../../ts/tanks/gameMap/viewport';
 import { Player } from '../../ts/tanks/objects/player';
 import { DarkTheme } from '../../ts/tanks/themes/dark';
+import { Settings } from '../../ts/tanks/settings';
 
 
 describe('UI Heading', () => {
@@ -28,6 +29,12 @@ describe('UI Heading', () => {
     it('add home', () => {
         const div = document.createElement("div");
         const heading = new UiHeading(div);
+        // on mobile no home button is added
+        (<any>Settings)["IS_MOBILE"] = true;
+        heading.addHome(new Viewport(1, 1), Player.premadePlayer(), new DarkTheme());
+        expect(div.children[0].children.length).to.eq(0);
+
+        (<any>Settings)["IS_MOBILE"] = false;
         heading.addHome(new Viewport(1, 1), Player.premadePlayer(), new DarkTheme());
         expect(div.children[0].children.length).to.eq(1);
     });
