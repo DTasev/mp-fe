@@ -24,12 +24,17 @@ function init() {
     // Don't subtract scrollbar from mobile
     const viewportWidth = Settings.IS_MOBILE ? window.innerWidth : window.innerWidth - Settings.SCROLLBAR_WIDTH;
     const viewportHeight = Settings.IS_MOBILE ? window.innerHeight : window.innerHeight - Settings.SCROLLBAR_WIDTH;
-
     const ui = new Ui(Ui.ID_GAME_UI, viewportWidth, viewportHeight);
-    const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
-    const mainMenu = new MainMenu(ui, canvas);
 
-    mainMenu.setUpUi();
+    initialiseGame(ui);
 }
 
-init(); 
+init();
+
+export function initialiseGame(ui: Ui) {
+    ui.clear();
+    ui.hideCanvas();
+    const canvas = <HTMLCanvasElement>document.getElementById(Settings.ID_GAME_CANVAS);
+    const mainMenu = new MainMenu(ui, canvas);
+    mainMenu.setUpUi();
+}
