@@ -92,34 +92,6 @@ class LineMath {
      * @param points List of points that form a convex shape
      */
     closestTwo(start: Point, end: Point, points: Point[]): [Point, Point, Point] {
-        // TODO this should be moved into an external function
-        // This stores the filter function that will be used to filter the point list. 
-        // This allows us to only once do the branching for the function selection
-        // let filterFunction;
-
-        // find out where the external point is in relation to the center
-        // if the points are not exactly above/below each other
-        // if (p.x !== center.x) {
-        //     // then compare the x axis values
-        //     if (p.x < center.x) {
-        //         // the point is on the LEFT of the center
-        //         filterFunction = (point: Point) => point.x <= center.x;
-        //     } else {
-        //         // the point is on the RIGHT of the center
-        //         filterFunction = (point: Point) => center.x <= point.x;
-        //     }
-        // } else {
-        //     // if the points are on the same X position, then compare the Y values
-        //     // check if the point is above the center, i.e. y is larger
-        //     if (p.y > center.y) {
-        //         // the point is on the TOP of the center
-        //         filterFunction = (point: Point) => center.y <= point.y;
-        //     } else {
-        //         // the point is on the BOTTOM of the center
-        //         filterFunction = (point: Point) => point.y <= center.y;
-        //     }
-        // }
-
         // filter out ONLY the points that are between the center and the external point p
         // const relevantPoints = points.filter(filterFunction);
         const length = points.length;
@@ -246,30 +218,6 @@ class LineMath {
         }
         return null;
     }
-
-    // intersect(start1: Point, end1: Point, start2: Point, end2: Point): boolean {
-    //     // http://ericleong.me/research/circle-line/
-    //     const A1 = end1.y - start1.y,
-    //         B1 = start1.x - end1.x,
-    //         C1 = A1 * start1.x + B1 * start1.y,
-    //         A2 = end2.y - start2.y,
-    //         B2 = start2.x - end2.x,
-    //         C2 = A2 * start2.x + B2 * start2.y,
-    //         det = A1 * B2 - A2 * B1;
-
-    //     if (det != 0) {
-    //         const x = (B2 * C1 - B1 * C2) / det;
-    //         if (x >= Math.min(start1.x, end1.x) && x <= Math.max(start1.x, end1.x)
-    //             && x >= Math.min(start2.x, end2.x) && x <= Math.max(start2.x, end2.x)) {
-    //             const y = (A1 * C2 - A2 * C1) / det;
-    //             if (y >= Math.min(start1.y, end1.y) && y <= Math.max(start1.y, end1.y)
-    //                 && y >= Math.min(start2.y, end2.y) && y <= Math.max(start2.y, end2.y)) {
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    //     return false;
-    // }
 }
 
 export class TanksMath {

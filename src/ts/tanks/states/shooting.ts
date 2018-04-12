@@ -14,6 +14,7 @@ import { Point } from "../utility/point";
 import { TanksMath } from "../utility/tanksMath";
 import { IPlayState } from "./iActionState";
 import { KeyboardKeys } from "../utility/keyboardKeys";
+import { Particles } from "../utility/particles";
 
 
 
@@ -190,6 +191,7 @@ export class ShootingState implements IPlayState {
         this.player.stats.shotsTaken += 1;
         console.log("Player has taken a successful shot, limit:", playerTanksShot.limit, "left:", playerTanksShot.left());
         this.active.actionState = TankActState.SHOT;
+        Particles.smoke(this.active);
 
         // for each segment of the path, perform collision
         const shotPathLength = this.shotPath.points.length;
