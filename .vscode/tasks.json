@@ -55,11 +55,7 @@
             "script": "fullbuild:dev",
             "problemMatcher": [
                 "$tsc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            ]
         },
         {
             "type": "gulp",
@@ -92,7 +88,11 @@
             "script": "watch:all",
             "problemMatcher": [
                 "$gulp-tsc"
-            ]
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "type": "npm",
