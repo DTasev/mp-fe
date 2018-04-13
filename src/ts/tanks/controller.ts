@@ -55,7 +55,7 @@ export class GameController {
     private readonly players: Player[] = [];
 
     /** Stores the all of the shot lines */
-    private readonly lineCache: LineCache;
+    readonly lineCache: LineCache;
     private readonly map: TanksMap;
 
     /** The number of players in the game */

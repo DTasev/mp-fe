@@ -112,10 +112,10 @@ export class ShootingState implements IPlayState {
     }
 
     continueShooting = (e: MouseEvent | TouchEvent) => {
-        this.draw.updatePosition(e);
-
         // draw the movement line if the mouse button is currently being pressed
         if (this.draw.state === DrawState.DRAWING) {
+            this.draw.updatePosition(e);
+
             // if the player is just moving about on the tank's space
             if (this.tankRoamingLength.in(this.active.position, this.draw.mouse)) {
                 this.validRange(this.active.color);
@@ -155,20 +155,20 @@ export class ShootingState implements IPlayState {
         // set the player's viewport position to the last position they were looking at
         this.player.viewportPosition = Viewport.current();
 
-        // for the shot to be sucessful - it must be fast enough, and not collide with any terrain
+        // for the shot to be sucessful, it must be fast enough, and reached it's maximum allowed length
         if (this.successfulShot) {
-            this.shoot();
-        }
+            this.collideShot();
 
-        // if all the player's tank have shot
-        const remainingTanks = this.player.activeTanks().length;
-        console.log("Player ", this.player.name, "remaining tanks", remainingTanks);
-        if (remainingTanks === 0) {
-            console.log("Player shooting turn over!");
-            // reset the current player's tank act states
-            this.player.resetTanksActStates();
-            // change to the next player when the state is next changed
-            this.controller.nextPlayer = true;
+            // if all the player's tank have shot
+            const remainingTanks = this.player.activeTanks().length;
+            console.log("Player ", this.player.name, "remaining tanks", remainingTanks);
+            if (remainingTanks === 0) {
+                console.log("Player shooting turn over!");
+                // reset the current player's tank act states
+                this.player.resetTanksActStates();
+                // change to the next player when the state is next changed
+                this.controller.nextPlayer = true;
+            }
         }
 
         this.draw.state = DrawState.STOPPED;
@@ -177,7 +177,7 @@ export class ShootingState implements IPlayState {
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
 
-    private shoot() {
+    private collideShot() {
         this.player.stats.shotsTaken += 1;
         this.active.actionState = TankActState.SHOT;
         Particles.smoke(this.active);
@@ -217,11 +217,10 @@ export class ShootingState implements IPlayState {
                 this.controller.collide(start, end);
             }
         }
-        // trim the path if it collided with an obstacle, two is added because the lines must be
-        // trimmed after the end point (i + 1), and slice trims in range [start, end)
-        if (trimIncrement < shotPathLength) {
-            this.shotPath.points = this.shotPath.points.slice(0, i + trimIncrement);
-        }
+
+        // slicing past the length of the array simply returns the whole array
+        // therefore we do not need to worry about the length of trimIncrement
+        this.shotPath.points = this.shotPath.points.slice(0, i + trimIncrement);
         this.controller.cacheLine(this.shotPath);
     }
 
