@@ -15,7 +15,7 @@ describe('Tanks API integration', () => {
             this.skip();
         }
     })
-    it('retrieve map', function () {
+    it('retrieve map', async function () {
         const mapId = "1";
 
         window.localStorage.clear();
@@ -33,12 +33,12 @@ describe('Tanks API integration', () => {
             expect(TanksCache.getMap(mapId)).to.not.be.undefined;
         });
     });
-    it('retrieve all maps', function () {
+    it('retrieve all maps', async function () {
         return Remote.mapList((remoteMapData: IMapListData[]) => {
             expect(remoteMapData.length).to.be.greaterThan(0);
         })
     });
-    it('retrieve map detail', () => {
+    it('retrieve map detail', async function () {
         return Remote.mapDetail("1", (remoteMapData: IMapDetailData) => {
             expect(remoteMapData.name.length).to.be.greaterThan(0);
             expect(remoteMapData.id).to.eq(1);
