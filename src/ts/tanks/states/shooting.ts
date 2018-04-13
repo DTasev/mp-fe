@@ -53,10 +53,6 @@ export class ShootingState implements IPlayState {
         this.shotLength = new Limit.Length(Tank.SHOOTING_RANGE);
         this.shotSpeed = new Limit.Speed(Tank.SHOOTING_SPEED);
 
-        if (!player.tanksShot.available()) {
-            player.tanksShot.set(new Limit.Actions(player.aliveTanks().length));
-        }
-
         this.active = this.player.activeTank.get();
     }
 
@@ -160,10 +156,9 @@ export class ShootingState implements IPlayState {
         // set the player's viewport position to the last position they were looking at
         this.player.viewportPosition = Viewport.current();
 
-        const playerTanksShot = this.player.tanksShot.get();
         // for the shot to be sucessful - it must be fast enough, and not collide with any terrain
         if (this.successfulShot) {
-            this.shoot(playerTanksShot);
+            this.shoot();
         }
 
         // if all the player's tank have shot
@@ -175,9 +170,6 @@ export class ShootingState implements IPlayState {
             this.player.resetTanksActStates();
             // change to the next player when the state is next changed
             this.controller.nextPlayer = true;
-        } else {
-            // if not all tanks have shot, then keep the state for the next shooting
-            this.player.tanksShot.set(playerTanksShot);
         }
 
         this.draw.state = DrawState.STOPPED;
@@ -186,10 +178,8 @@ export class ShootingState implements IPlayState {
         this.controller.changeGameState(GameState.TANK_SELECTION);
     }
 
-    private shoot(playerTanksShot: Limit.Actions) {
-        playerTanksShot.take();
+    private shoot() {
         this.player.stats.shotsTaken += 1;
-        console.log("Player has taken a successful shot, limit:", playerTanksShot.limit, "left:", playerTanksShot.left());
         this.active.actionState = TankActState.SHOT;
         Particles.smoke(this.active);
 

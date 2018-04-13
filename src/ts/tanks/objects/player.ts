@@ -14,8 +14,6 @@ export class Player {
     readonly color: Color;
     readonly stats: Statistics;
 
-    /** Keeps track of how many of the player's tanks have already shot */
-    tanksShot: SingleAccess<Limit.Actions>;
     activeTank: SingleAccess<Tank>
     viewportPosition: Point;
 
@@ -25,7 +23,6 @@ export class Player {
         this.tanks = new Array<Tank>();
         this.color = color;
         this.stats = new Statistics();
-        this.tanksShot = new SingleAccess();
         this.activeTank = new SingleAccess();
         this.viewportPosition = new Point(0, 0);
     }
@@ -44,7 +41,6 @@ export class Player {
     }
     resetTanksActStates(): any {
         // clears the limiter for how many tanks have shot
-        this.tanksShot.clear();
         for (const tank of this.tanks) {
             tank.actionState = TankActState.NOT_ACTED;
         }
