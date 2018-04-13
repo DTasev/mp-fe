@@ -1,20 +1,20 @@
 import { expect } from 'chai';
 import 'mocha';
-import { mockDOM } from '../testutility';
-import { CanvasMock } from '../mocking/canvasMock';
-import { CanvasContextMock } from '../mocking/canvasContextMock';
-import { Ui } from '../../ts/tanks/ui/ui';
 import { GameController } from '../../ts/tanks/controller';
-import { Player } from '../../ts/tanks/objects/player';
-import { Tank } from '../../ts/tanks/objects/tank';
 import { Color } from '../../ts/tanks/drawing/color';
 import { TanksMap } from '../../ts/tanks/gameMap/tanksMap';
-import { SepiaTheme } from '../../ts/tanks/themes/sepia';
-import { PlacingState } from '../../ts/tanks/states/placement';
-import { Settings } from '../../ts/tanks/settings';
-import { Mock } from '../mocking/mock';
 import { Viewport } from '../../ts/tanks/gameMap/viewport';
+import { Player } from '../../ts/tanks/objects/player';
+import { Tank } from '../../ts/tanks/objects/tank';
+import { Settings } from '../../ts/tanks/settings';
+import { PlacingState } from '../../ts/tanks/states/placement';
+import { SepiaTheme } from '../../ts/tanks/themes/sepia';
+import { Ui } from '../../ts/tanks/ui/ui';
 import { Point } from '../../ts/tanks/utility/point';
+import { CanvasContextMock } from '../mocking/canvasContextMock';
+import { CanvasMock } from '../mocking/canvasMock';
+import { SingleCallMock } from '../mocking/mock';
+import { mockDOM } from '../testutility';
 
 
 describe('Placement - Game State', () => {
@@ -55,7 +55,7 @@ describe('Placement - Game State', () => {
     });
     it('view', () => {
         const viewport = new Viewport(100, 100);
-        const mock_viewport_goTo = new Mock(viewport, viewport.goTo);
+        const mock_viewport_goTo = new SingleCallMock(viewport, viewport.goTo);
 
         const player = Player.premadePlayer();
         const p = new PlacingState(controller, mock_context as any, player);
@@ -108,7 +108,7 @@ describe('Placement - Game State', () => {
         const mouseEvent = new MouseEvent("woah", {
             button: 1 // MMB
         });
-        // custom mouse position so that it will be overrides if mouse coordinates are updated
+        // custom mouse position so that it will be overriden if mouse coordinates are updated
         (<any>mouseEvent).offsetX = 100;
         (<any>mouseEvent).offsetY = 100;
 
@@ -125,7 +125,7 @@ describe('Placement - Game State', () => {
         const mouseEvent = new MouseEvent("woah", {
             button: 0 // MMB
         });
-        // custom mouse position so that it will be overrides if mouse coordinates are updated
+        // custom mouse position so that it will be overriden if mouse coordinates are updated
         (<any>mouseEvent).offsetX = 100;
         (<any>mouseEvent).offsetY = 100;
 
@@ -146,7 +146,7 @@ describe('Placement - Game State', () => {
         const mouseEvent = new MouseEvent("woah", {
             button: 0 // MMB
         });
-        // custom mouse position so that it will be overrides if mouse coordinates are updated
+        // custom mouse position so that it will be overriden if mouse coordinates are updated
         (<any>mouseEvent).offsetX = 100;
         (<any>mouseEvent).offsetY = 100;
 

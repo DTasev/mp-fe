@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import 'mocha';
-
-import { Tank, TankActState, TankHealthState } from "../../ts/tanks/objects/tank";
-import { CanvasMock } from '../mocking/canvasMock';
-import { CanvasContextMock } from '../mocking/canvasContextMock';
 import { GameState } from '../../ts/tanks/controller';
 import { SlowEffect } from '../../ts/tanks/objects/effects/slow';
+import { Tank, TankActState, TankHealthState } from "../../ts/tanks/objects/tank";
+import { CanvasContextMock } from '../mocking/canvasContextMock';
+import { CanvasMock } from '../mocking/canvasMock';
+
 
 describe('Tank Game Object', () => {
     let mock_canvas: CanvasMock;
@@ -36,6 +36,11 @@ describe('Tank Game Object', () => {
         t.actionState = TankActState.MOVED;
         expect(t.active()).to.be.true;
         t.actionState = TankActState.SHOT;
+        expect(t.active()).to.be.false;
+        t.actionState = TankActState.MOVED;
+        t.healthState = TankHealthState.DISABLED;
+        expect(t.active()).to.be.true;
+        t.healthState = TankHealthState.DEAD;
         expect(t.active()).to.be.false;
     });
     it('nextState', () => {

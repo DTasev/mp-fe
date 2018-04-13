@@ -1,24 +1,22 @@
 import { expect } from 'chai';
 import 'mocha';
-import * as Limit from "../../ts/tanks/limiters/index";
-
-import { mockDOM } from '../testutility';
-import { CanvasMock } from '../mocking/canvasMock';
-import { CanvasContextMock } from '../mocking/canvasContextMock';
-import { Ui } from '../../ts/tanks/ui/ui';
-import { Player } from '../../ts/tanks/objects/player';
-import { Tank, TankActState } from '../../ts/tanks/objects/tank';
 import { GameController } from '../../ts/tanks/controller';
 import { Color } from '../../ts/tanks/drawing/color';
-import { MovingState } from '../../ts/tanks/states/movement';
-import { Settings } from '../../ts/tanks/settings';
-import { SepiaTheme } from '../../ts/tanks/themes/sepia';
+import { DrawState } from '../../ts/tanks/drawing/draw';
 import { TanksMap } from '../../ts/tanks/gameMap/tanksMap';
 import { Viewport } from '../../ts/tanks/gameMap/viewport';
+import { Player } from '../../ts/tanks/objects/player';
+import { Tank, TankActState } from '../../ts/tanks/objects/tank';
+import { Settings } from '../../ts/tanks/settings';
+import { MovingState } from '../../ts/tanks/states/movement';
+import { SepiaTheme } from '../../ts/tanks/themes/sepia';
+import { Ui } from '../../ts/tanks/ui/ui';
 import { Point } from '../../ts/tanks/utility/point';
-import { DrawState, Draw } from '../../ts/tanks/drawing/draw';
+import { CanvasContextMock } from '../mocking/canvasContextMock';
+import { CanvasMock } from '../mocking/canvasMock';
 import { SingleCallMock } from '../mocking/mock';
-import { Line } from '../../ts/tanks/utility/line';
+import { mockDOM } from '../testutility';
+
 
 
 describe('Movement - Game State', () => {
@@ -89,7 +87,7 @@ describe('Movement - Game State', () => {
         const mouseEvent = new MouseEvent("woah", {
             button: 1 // MMB
         });
-        // custom mouse position so that it will be overrides if mouse coordinates are updated
+        // custom mouse position so that it will be overriden if mouse coordinates are updated
         (<any>mouseEvent).offsetX = 100;
         (<any>mouseEvent).offsetY = 100;
         // button 1 is pressed so nothing should happen
@@ -109,7 +107,7 @@ describe('Movement - Game State', () => {
         const mouseEvent = new MouseEvent("woah", {
             button: 0 // LMB
         });
-        // custom mouse position so that it will be overrides if mouse coordinates are updated
+        // custom mouse position so that it will be overriden if mouse coordinates are updated
         (<any>mouseEvent).offsetX = 100;
         (<any>mouseEvent).offsetY = 100;
 
@@ -140,7 +138,7 @@ describe('Movement - Game State', () => {
         const mouseEvent = new MouseEvent("woah", {
             button: 0 // LMB
         });
-        // custom mouse position so that it will be overrides if mouse coordinates are updated
+        // custom mouse position so that it will be overriden if mouse coordinates are updated
         (<any>mouseEvent).offsetX = 100;
         (<any>mouseEvent).offsetY = 100;
 
@@ -167,7 +165,7 @@ describe('Movement - Game State', () => {
         const mouseEvent = new MouseEvent("woah", {
             button: 0 // LMB
         });
-        // custom mouse position so that it will be overrides if mouse coordinates are updated
+        // custom mouse position so that it will be overriden if mouse coordinates are updated
         (<any>mouseEvent).offsetX = 100;
         (<any>mouseEvent).offsetY = 100;
 
@@ -201,7 +199,7 @@ describe('Movement - Game State', () => {
         const mouseEvent = new MouseEvent("woah", {
             button: 0 // LMB
         });
-        // custom mouse position so that it will be overrides if mouse coordinates are updated
+        // custom mouse position so that it will be overriden if mouse coordinates are updated
         (<any>mouseEvent).offsetX = 100;
         (<any>mouseEvent).offsetY = 100;
 
