@@ -131,7 +131,7 @@ export class Draw {
     * @param context The canvas context that we're drawing on
     * @param updateLast Whether to update the last position of the mouse
     */
-    mouseLine(context: CanvasRenderingContext2D, width: number, color: string, updateLast: boolean = true) {
+    mouseLine(context: CanvasRenderingContext2D, width: number, color: string) {
         // If lastX is not set, set lastX and lastY to the current position 
         if (this.last.x == -1) {
             this.last.x = this.mouse.x;
@@ -160,11 +160,9 @@ export class Draw {
 
         context.closePath();
 
-        if (updateLast) {
-            // Update the last position to reference the current position
-            this.last.x = this.mouse.x;
-            this.last.y = this.mouse.y;
-        }
+        // Update the last position to reference the current position
+        this.last.x = this.mouse.x;
+        this.last.y = this.mouse.y;
     }
 
     updatePosition(e: MouseEvent | TouchEvent) {

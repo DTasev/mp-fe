@@ -68,7 +68,7 @@ describe('Drawing', () => {
         expect(mock_context.strokeStyle).to.not.be.empty;
     });
     it('should draw a line, and update the last position of the mouse', () => {
-        draw.mouseLine(mock_context as any, expected_width, color, true);
+        draw.mouseLine(mock_context as any, expected_width, color);
 
         expect(mock_context.strokeStyle).to.not.be.empty;
         expect(mock_context.lineCap).to.not.be.empty;
@@ -88,7 +88,7 @@ describe('Drawing', () => {
         (mock_event as any).offsetX = new_X;
         (mock_event as any).offsetY = new_Y;
         draw.updatePosition(mock_event);
-        draw.mouseLine(mock_context as any, expected_width, color, true);
+        draw.mouseLine(mock_context as any, expected_width, color);
 
         // tests mouse coords
         expect(draw.last.x).to.equal(draw.mouse.x);
@@ -96,25 +96,7 @@ describe('Drawing', () => {
         expect(draw.last.y).to.equal(draw.mouse.y);
         expect(draw.last.y).to.equal(new_Y);
     });
-    it('should be able to not update the last position of the mouse when drawing a line', () => {
-        const mock_event = new MouseEvent("");
-        const new_X = 42, new_Y = 55;
 
-        // as any disables typescript "can't be assigned" error
-        (mock_event as any).offsetX = new_X;
-        (mock_event as any).offsetY = new_Y;
-        draw.updatePosition(mock_event);
-        // this is necessary, otherwise last coords will also be updated, as they have never been set
-        draw.last.x = 1;
-        // drawing a line with update_last = false
-        draw.mouseLine(mock_context as any, expected_width, color, false);
-
-        // tests mouse coords
-        expect(draw.last.x).to.not.equal(draw.mouse.x);
-        expect(draw.last.x).to.equal(1);
-        expect(draw.last.y).to.not.equal(draw.mouse.y);
-        expect(draw.last.y).to.equal(-1);
-    });
     it('should update the last position of the mouse if there is no previous position, even if we have said to not update', () => {
         const mock_event = new MouseEvent("");
         const new_X = 42, new_Y = 55;
@@ -125,7 +107,7 @@ describe('Drawing', () => {
         draw.updatePosition(mock_event);
         // drawing a line with update_last = false, but the last coords have never been set before
         // so they will be updated anyway
-        draw.mouseLine(mock_context as any, expected_width, color, false);
+        draw.mouseLine(mock_context as any, expected_width, color);
 
         // tests mouse coords
         expect(draw.last.x).to.equal(draw.mouse.x);
