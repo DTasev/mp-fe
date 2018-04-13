@@ -4,7 +4,7 @@ import { TanksMap } from "../../ts/tanks/gameMap/tanksMap";
 import { Remote } from "../../ts/tanks/utility/remote";
 import { TanksCache } from "../../ts/tanks/utility/tanksCache";
 import { LocalStorageMock } from "../mocking/localStorageMock";
-import { IMapListData } from "../../ts/tanks/gameMap/dataInterfaces";
+import { IMapListData, IMapDetailData } from "../../ts/tanks/gameMap/dataInterfaces";
 
 
 describe('Tanks API integration', () => {
@@ -34,8 +34,14 @@ describe('Tanks API integration', () => {
         });
     });
     it('retrieve all maps', function () {
-        Remote.mapList((remoteMapData: IMapListData[]) => {
+        return Remote.mapList((remoteMapData: IMapListData[]) => {
             expect(remoteMapData.length).to.be.greaterThan(0);
+        })
+    });
+    it('retrieve map detail', () => {
+        return Remote.mapDetail("1", (remoteMapData: IMapDetailData) => {
+            expect(remoteMapData.name.length).to.be.greaterThan(0);
+            expect(remoteMapData.id).to.eq(1);
         })
     });
 });
