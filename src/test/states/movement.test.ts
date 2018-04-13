@@ -40,22 +40,22 @@ describe('Movement - Game State', () => {
         const player = Player.premadePlayer();
 
         const m = new MovingState(controller, mock_context as any, ui, player);
-        mock_canvas.onmousedown = null;
-        mock_canvas.onmousemove = null;
-        mock_canvas.onmouseup = null;
+        mock_canvas.nullify();
+
         m.addEventListeners(mock_canvas as any);
+
         expect(mock_canvas.onmousedown).to.not.be.null;
         expect(mock_canvas.onmousemove).to.not.be.null;
         expect(mock_canvas.onmouseup).to.not.be.null;
 
         (<any>Settings)["IS_MOBILE"] = true;
-        mock_canvas.ontouchstart = null;
-        mock_canvas.ontouchmove = null;
-        mock_canvas.ontouchend = null;
+
         m.addEventListeners(mock_canvas as any);
+
         expect(mock_canvas.ontouchstart).to.not.be.null;
         expect(mock_canvas.ontouchmove).to.not.be.null;
         expect(mock_canvas.ontouchend).to.not.be.null;
+
         (<any>Settings)["IS_MOBILE"] = false;
     });
     it('add keyboard shortcuts', () => {
