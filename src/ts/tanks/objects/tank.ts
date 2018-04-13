@@ -182,7 +182,7 @@ export class Tank {
     }
 
     active() {
-        return this.actionState !== TankActState.SHOT;
+        return this.healthState !== TankHealthState.DEAD && this.actionState !== TankActState.SHOT;
     }
 
     nextState(): GameState {
