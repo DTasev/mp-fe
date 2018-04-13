@@ -2,13 +2,13 @@ import { GameController } from "../controller";
 import { Draw } from "../drawing/draw";
 import { Viewport } from "../gameMap/viewport";
 import { Player } from "../objects/player";
-import { Tank, TankHealthState, TankActState } from "../objects/tank";
+import { Tank, TankActState, TankHealthState } from "../objects/tank";
 import { Settings } from '../settings';
 import { ITheme } from "../themes/iTheme";
 import { Ui } from "../ui/ui";
+import { KeyboardKeys } from "../utility/keyboardKeys";
 import { TanksMath } from "../utility/tanksMath";
 import { IPlayState } from "./iActionState";
-import { KeyboardKeys } from "../utility/keyboardKeys";
 
 
 export class SelectionState implements IPlayState {
@@ -18,7 +18,7 @@ export class SelectionState implements IPlayState {
     draw: Draw;
     ui: Ui;
 
-    currentActiveTank: Tank;
+    currentActiveTank: Tank = null;
 
     constructor(controller: GameController, context: CanvasRenderingContext2D, ui: Ui, player: Player) {
         this.controller = controller;
@@ -28,6 +28,13 @@ export class SelectionState implements IPlayState {
         this.ui = ui;
     }
 
+    /**
+     * Add event listeners for mouse or touch controls. Additionally, if the player already
+     * has an active tank, then the selection state is skipped, and the next state is triggered.
+     * This happens when the player skips the movement turn.
+     * 
+     * @param canvas The canvas onto which the events will be added.
+     */
     addEventListeners(canvas: HTMLCanvasElement) {
         // keep the current active tank, then switch to the next state
         if (this.player.activeTank.available()) {
@@ -37,16 +44,16 @@ export class SelectionState implements IPlayState {
             this.mouseUp();
         } else {
             if (Settings.IS_MOBILE) {
-                // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
                 canvas.ontouchstart = this.selectTank;
                 // Scrolling for Mobile: this is added here so that the touchmove event triggers the ui adjusting event
-                // normal computers trigger window.onscroll, and that is handled in the controller
+                // PC browsers implement position: fixed correctly, and there is no need to manually move the UI
                 window.ontouchmove = (e: Event) => {
                     this.ui.mobileMoveToFitView(e);
                 }
                 window.ontouchend = this.mouseUp;
             } else {
                 canvas.onmousedown = this.selectTank;
+                // NOTE: mouseup is on the whole window, so that even if the cursor exits the canvas, the event will trigger
                 window.onmouseup = this.mouseUp;
             }
         }
@@ -100,7 +107,6 @@ export class SelectionState implements IPlayState {
         }
 
         this.draw.updatePosition(e);
-        console.log('In selection mousedown');
 
         // Check if the user has clicked any tank.
         for (const tank of this.player.tanks) {
@@ -108,8 +114,7 @@ export class SelectionState implements IPlayState {
             // - dead tanks
             // - tanks that have acted
             // - tanks that the mouse click does not collide with
-            if (tank.healthState !== TankHealthState.DEAD &&
-                tank.active() &&
+            if (tank.active() &&
                 TanksMath.point.collideCircle(this.draw.mouse, tank.position, Tank.WIDTH)) {
                 // highlight the selected tank
                 this.successfulSelection(tank);
@@ -131,14 +136,14 @@ export class SelectionState implements IPlayState {
      * @param tank The tank object to be checked
      */
     private selectTankKeyboard(tank: Tank): void {
-        if (tank.healthState !== TankHealthState.DEAD && tank.active()) {
+        if (tank.active()) {
             this.successfulSelection(tank);
             this.mouseUp();
         }
     }
 
     mouseUp = () => {
-        // if the use has clicked a valid tank on mouseDown then go to the appropriate next state
+        // if the user has clicked a valid tank on mouseDown then go to the appropriate next state
         // based on the tanks' own state, i.e. tank that has moved will go into shooting
         if (this.player.activeTank.available()) {
             this.controller.changeGameState(this.currentActiveTank.nextState());
