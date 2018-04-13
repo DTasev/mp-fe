@@ -6,7 +6,6 @@ export class CanvasMock {
     onmouseup() { }
     onmousemove() { }
     onkeyup() { }
-
     ontouchstart() { }
     ontouchmove() { }
     ontouchend() { }
@@ -33,5 +32,14 @@ export class CanvasMock {
     }
     getContext() {
         return new CanvasContextMock();
+    }
+    nullify() {
+        this.onmousedown = null;
+        this.onmouseup = null;
+        this.onmousemove = null;
+        this.onkeyup = null;
+        this.ontouchstart = null;
+        this.ontouchmove = null;
+        this.ontouchend = null;
     }
 }
