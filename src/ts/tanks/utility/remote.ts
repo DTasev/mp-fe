@@ -1,7 +1,13 @@
 import { Settings } from '../settings';
-import { IMapListData } from '../gameMap/dataInterfaces';
+import { IMapListData, IMapDetailData } from '../gameMap/dataInterfaces';
 import { getCookie } from "../utility/cookies";
 
+interface MapListSuccessCallback {
+    (remoteMapData: IMapListData[]): any;
+}
+interface MapDetailSuccessCallback {
+    (remoteMapData: IMapDetailData): any;
+}
 export class Remote {
     static async available(): Promise<boolean> {
         const request = new XMLHttpRequest();
@@ -23,7 +29,7 @@ export class Remote {
             request.send(null);
         });
     }
-    static mapList(successCallback: Function): Promise<XMLHttpRequest> {
+    static mapList(successCallback: MapListSuccessCallback): Promise<boolean> {
         const request = new XMLHttpRequest();
         request.open("GET", Settings.REMOTE_URL, true);
         return new Promise((resolve, reject) => {
@@ -31,7 +37,7 @@ export class Remote {
                 if (request.readyState === XMLHttpRequest.DONE) {
                     if (request.status === 200) { // 200 OK
                         successCallback(JSON.parse(request.responseText));
-                        resolve();
+                        resolve(true);
                     }
                 }
             };
@@ -39,7 +45,7 @@ export class Remote {
         });
     }
 
-    static mapDetail(id: string, successCallback: Function): Promise<XMLHttpRequest> {
+    static mapDetail(id: string, successCallback: MapDetailSuccessCallback): Promise<boolean> {
         const request = new XMLHttpRequest();
         request.open("GET", Settings.REMOTE_URL + id, true);
         return new Promise((resolve, reject) => {
@@ -47,7 +53,7 @@ export class Remote {
                 if (request.readyState === XMLHttpRequest.DONE) {
                     if (request.status === 200) { // 200 OK
                         successCallback(JSON.parse(request.responseText));
-                        resolve();
+                        resolve(true);
                     }
                 }
             };

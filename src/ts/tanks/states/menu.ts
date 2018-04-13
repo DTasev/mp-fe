@@ -410,7 +410,7 @@ export class MainMenu implements IActionState {
     private readonly canvas: HTMLCanvasElement;
 
     private mapsList: IMapListData[] = [];
-    private mapsListRequest: Promise<XMLHttpRequest>;
+    private mapsListRequest: Promise<boolean>;
 
     constructor(ui: Ui, canvas: HTMLCanvasElement) {
         this.mapsListRequest = Remote.mapList(

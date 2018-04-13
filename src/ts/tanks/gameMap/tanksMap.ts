@@ -7,7 +7,7 @@ import { Settings } from '../settings';
 
 
 export class TanksMap {
-    ready: Promise<XMLHttpRequest>;
+    ready: Promise<boolean>;
 
     terrain: Obstacle[];
     id: string;
@@ -36,7 +36,7 @@ export class TanksMap {
         // checks that there is a cached version of the map, that has not expired
         if (cachedMap && Date.now() - cachedMap.cached < Settings.CACHE_DURATION) {
             console.log("Loading map from cache.");
-            this.ready = new Promise((resolve, reject) => { this.loadMapDetails(cachedMap); resolve(); });
+            this.ready = new Promise((resolve, reject) => { this.loadMapDetails(cachedMap); resolve(true); });
         } else {
             console.log("Downloading map from remote.");
             // cache is not present, download from remote
