@@ -115,7 +115,7 @@ export class ShootingState implements IPlayState {
         this.draw.updatePosition(e);
 
         // draw the movement line if the mouse button is currently being pressed
-        if (this.draw.state == DrawState.DRAWING) {
+        if (this.draw.state === DrawState.DRAWING) {
             // if the player is just moving about on the tank's space
             if (this.tankRoamingLength.in(this.active.position, this.draw.mouse)) {
                 this.validRange(this.active.color);
@@ -139,6 +139,8 @@ export class ShootingState implements IPlayState {
                 this.draw.state = DrawState.STOPPED;
             }
         }
+
+        // prevent scrolling of the page while shooting
         if (e instanceof TouchEvent) {
             e.preventDefault();
         }
