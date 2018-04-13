@@ -3,21 +3,22 @@ import { IMapListData } from '../gameMap/dataInterfaces';
 import { getCookie } from "../utility/cookies";
 
 export class Remote {
-
-    static available(): Promise<XMLHttpRequest> {
+    static async available(): Promise<boolean> {
         const request = new XMLHttpRequest();
-        request.timeout = 200;
+        request.timeout = 400;
         request.open("GET", Settings.REMOTE_URL, true);
-        return new Promise((resolve, reject) => {
+        return new Promise<boolean>((resolve, reject) => {
             request.onreadystatechange = () => {
                 if (request.readyState === XMLHttpRequest.DONE) {
                     if (request.status === 200) { // 200 OK
-                        resolve();
+                        resolve(true);
+                    } else {
+                        resolve(false);
                     }
                 }
             };
             request.onerror = () => {
-                reject(Settings.REMOTE_URL + " can't be reached.");
+                reject(false);
             }
             request.send(null);
         });
