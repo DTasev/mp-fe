@@ -61,7 +61,7 @@ export class ShootingState implements IPlayState {
             canvas.ontouchstart = this.startShooting;
             canvas.ontouchmove = this.continueShooting;
             // the mouseup is only on the canvas, otherwise none of the UI buttons can be clicked
-            canvas.ontouchend = this.stopShooting;
+            window.ontouchend = this.stopShooting;
         } else {
             canvas.onmousedown = this.startShooting;
             canvas.onmousemove = this.continueShooting;
@@ -69,13 +69,11 @@ export class ShootingState implements IPlayState {
         }
     }
     addKeyboardShortcuts(canvas: HTMLCanvasElement) {
-        if (!Settings.IS_MOBILE) {
-            window.onkeyup = (e: KeyboardEvent) => {
-                if (e.keyCode === KeyboardKeys.KEY_Q) {
-                    this.skipTurn();
-                }
-            };
-        }
+        window.onkeyup = (e: KeyboardEvent) => {
+            if (e.keyCode === KeyboardKeys.KEY_Q) {
+                this.skipTurn();
+            }
+        };
     }
 
     view(viewport: Viewport) { }
@@ -87,8 +85,7 @@ export class ShootingState implements IPlayState {
         ui.heading.right.add(button_skipTurn);
     }
 
-    private startShooting = (e: MouseEvent | TouchEvent) => {
-        console.log('Starting shooting');
+    startShooting = (e: MouseEvent | TouchEvent) => {
         // if the button clicked is not the left button, do nothing
         if (e instanceof MouseEvent && e.button != 0) {
             return;
@@ -114,7 +111,7 @@ export class ShootingState implements IPlayState {
         this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, tankColors.shootingLine);
     }
 
-    private continueShooting = (e: MouseEvent | TouchEvent) => {
+    continueShooting = (e: MouseEvent | TouchEvent) => {
         this.draw.updatePosition(e);
 
         // draw the movement line if the mouse button is currently being pressed
@@ -147,7 +144,7 @@ export class ShootingState implements IPlayState {
         }
     }
 
-    private stopShooting = (e: MouseEvent | TouchEvent) => {
+    stopShooting = (e: MouseEvent | TouchEvent) => {
         // if the button clicked is not the left button, do nothing
         if (e instanceof MouseEvent && e.button != 0) {
             return;
@@ -225,8 +222,8 @@ export class ShootingState implements IPlayState {
         }
         this.controller.cacheLine(this.shotPath);
     }
-    private skipTurn = () => {
-        console.log('skip turn');
+
+    skipTurn = () => {
         // reset the current player's tank act states
         this.player.resetTanksActStates();
         // change to the next player when the state is next changed
