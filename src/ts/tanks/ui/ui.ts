@@ -81,7 +81,6 @@ export class Ui {
      * Hides the canvas with the Ui element
      */
     hideCanvas() {
-        this.container.style.position = "";
         this.setHeight(this.canvasHeight);
     }
 
