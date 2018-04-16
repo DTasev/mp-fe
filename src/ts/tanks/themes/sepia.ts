@@ -92,7 +92,7 @@ class SepiaGameColors implements IThemeGameColors {
 }
 class SepiaMapColors implements IThemeMapColors {
     solid(): Color {
-        return new Color(191, 128, 64);
+        return new Color(19, 13, 6);
     }
     water(): Color {
         return new Color(77, 158, 179);
