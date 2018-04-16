@@ -41,8 +41,10 @@ export class TankColor {
     readonly shootingLine: string;
     /** Color for the tank's movement line */
     readonly movementLine: string;
+    readonly explosion: string;
+    readonly smoke: string;
 
-    constructor(active: string, activeOutline: string, label: string, alive: string, disabled: string, dead: string, shootingLine: string, movementLine: string) {
+    constructor(active: string, activeOutline: string, label: string, alive: string, disabled: string, dead: string, shootingLine: string, movementLine: string, explosion: string, smoke: string) {
         this.active = active;
         this.activeOutline = activeOutline;
 
@@ -54,6 +56,9 @@ export class TankColor {
 
         this.shootingLine = shootingLine;
         this.movementLine = movementLine;
+
+        this.explosion = explosion;
+        this.smoke = smoke;
     }
 }
 
@@ -128,7 +133,9 @@ export class Tank {
             this.player.color.rgba(this.DISABLED_OPACITY),
             theme.game.tankDead().rgba(),
             theme.game.tankShootingLine().rgba(),
-            theme.game.tankMovementLine().rgba()
+            theme.game.tankMovementLine().rgba(),
+            theme.game.tankExplosion().rgba(),
+            theme.game.tankSmoke().rgba()
         );
     }
 

@@ -81,6 +81,12 @@ class LightGameColors implements IThemeGameColors {
     tankShootingLine(): Color {
         return Color.black();
     }
+    tankSmoke(): Color {
+        return Color.black();
+    }
+    tankExplosion(): Color {
+        return new Color(255, 69, 0);
+    }
     oldLinesColor(): Color {
         return Color.gray();
     }

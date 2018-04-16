@@ -189,7 +189,6 @@ input.player-color[type="color"]::-webkit-color-swatch {
 }
 
 .tanks-explosion-particle {
-    background-color: orangered;
     border-radius: 12px;
     display: block;
     z-index: -1;

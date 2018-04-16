@@ -80,6 +80,12 @@ class DarkGameColors implements IThemeGameColors {
     tankShootingLine(): Color {
         return new Color(182, 182, 150);
     }
+    tankSmoke(): Color {
+        return Color.white();
+    }
+    tankExplosion(): Color {
+        return new Color(255, 69, 0);
+    }
     oldLinesColor(): Color {
         return Color.gray();
     }

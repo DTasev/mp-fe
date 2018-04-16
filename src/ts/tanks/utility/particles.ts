@@ -1,4 +1,5 @@
 import { Tank } from "../objects/tank";
+import { ITheme } from "../themes/iTheme";
 
 export class Particles {
     private static getRandomInt = (min, max) => {
@@ -21,12 +22,15 @@ export class Particles {
         // NOTE: position MUST be set after the top & left coordinates are set, otherwise the element is not on the correct place!
         particleContainer.style.position = "absolute";
 
+        const color = tank.color.explosion;
+
         // create all the particles, each one 
         for (let i = 0; i < numParticles; ++i) {
             // add N child elements which are the particles
             // add the correct animation to each child
             const particle = document.createElement("div");
             particle.classList.add("tanks-explosion-particle");
+            particle.style.backgroundColor = color;
 
             particle.animate([
                 { // from
@@ -67,6 +71,7 @@ export class Particles {
         particle.style.fontSize = "36px";
         particle.style.opacity = "0";
         particle.style.zIndex = "-1";
+        particle.style.color = tank.color.smoke;
         particle.textContent = "O";
         particle.animate([
             {

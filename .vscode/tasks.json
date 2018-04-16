@@ -80,7 +80,8 @@
             "type": "gulp",
             "task": "watch:full",
             "problemMatcher": [
-                "$gulp-tsc"
+                "$gulp-tsc",
+                "$tsc-watch"
             ]
         },
         {

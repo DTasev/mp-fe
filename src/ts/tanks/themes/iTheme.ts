@@ -31,6 +31,8 @@ export interface IThemeGameColors {
     tankMovementLine(): Color;
     tankMovementArea(): Color;
     tankShootingLine(): Color;
+    tankSmoke(): Color;
+    tankExplosion(): Color;
     oldLinesColor(): Color;
 }
 
