@@ -46,11 +46,11 @@ export class Obstacle {
         const length = this.points.length;
         const [fill, fillStyle] = this.getFill(theme);
         Draw.closedShape(context, this.points, 1, theme.map.solid().rgba(), fill, fillStyle);
-        if (Settings.DEBUG) {
-            context.fillStyle = Color.black().rgba();
-            context.font = "16px Calibri";
-            context.fillText(this.id + "", this.center.x, this.center.y);
-        }
+        // if (Settings.DEBUG) {
+        //     context.fillStyle = Color.black().rgba();
+        //     context.font = "16px Calibri";
+        //     context.fillText(this.id + "", this.center.x, this.center.y);
+        // }
     }
 
     /**
