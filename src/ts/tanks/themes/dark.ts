@@ -93,7 +93,7 @@ class DarkGameColors implements IThemeGameColors {
 }
 class DarkMapColors implements IThemeMapColors {
     solid(): Color {
-        return new Color(150, 150, 105);
+        return new Color(75, 75, 52);
     }
     water(): Color {
         return new Color(56, 57, 82);

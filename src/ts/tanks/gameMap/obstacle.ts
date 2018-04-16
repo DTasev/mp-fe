@@ -47,7 +47,7 @@ export class Obstacle {
         const [fill, fillStyle] = this.getFill(theme);
         Draw.closedShape(context, this.points, 1, theme.map.solid().rgba(), fill, fillStyle);
         if (Settings.DEBUG) {
-            context.fillStyle = theme.map.solid().rgba(0.5);
+            context.fillStyle = Color.black().rgba();
             context.font = "16px Calibri";
             context.fillText(this.id + "", this.center.x, this.center.y);
         }
@@ -62,7 +62,7 @@ export class Obstacle {
     private getFill(theme: ITheme): [boolean, string] {
         switch (this.type) {
             case ObstacleType.SOLID:
-                return [false, null];
+                return [true, theme.map.solid().rgba()];
             case ObstacleType.WATER:
                 return [true, theme.map.water().rgba()];
             case ObstacleType.WOOD:
