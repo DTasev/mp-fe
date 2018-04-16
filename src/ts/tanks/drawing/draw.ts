@@ -97,6 +97,7 @@ export class Draw {
 
         context.closePath();
     }
+
     static closedShape(context: CanvasRenderingContext2D, points: Point[], width: number, color: string, fill = false, fillStyle: string = null) {
         // Select a fill style
         context.strokeStyle = color;
@@ -107,7 +108,7 @@ export class Draw {
 
         // Draw a filled line
         context.beginPath();
-        // First, move to the old (previous) position
+
         context.moveTo(points[0].x, points[0].y);
 
         for (const point of points) {
@@ -126,6 +127,43 @@ export class Draw {
         }
         context.closePath();
     }
+    static closedShapes(context: CanvasRenderingContext2D, points: Point[][], width: number, colors: string[], fill = false) {
+        if (points.length !== colors.length) {
+            throw new Error(`Not enough colors to draw all shades of obstacle! #points: ${points.length}, #colors: ${colors.length}`);
+        }
+        for (const [i, p] of points.entries()) {
+
+            // Select a fill style
+            context.strokeStyle = colors[i];
+
+            // Set the line "cap" style to round, so lines at different angles can join into each other
+            context.lineCap = "round";
+            context.lineJoin = "round";
+
+            // Draw a filled line
+            context.beginPath();
+
+            context.moveTo(p[0].x, p[0].y);
+
+            for (const point of p) {
+                // Now draw a line to the current touch/pointer position
+                context.lineTo(point.x, point.y);
+            }
+            // close the lines my moving to the beginning
+            context.lineTo(p[0].x, p[0].y);
+
+            context.lineWidth = width;
+            context.stroke();
+
+            if (fill) {
+                context.fillStyle = colors[i];
+                context.fill();
+            }
+            context.closePath();
+        }
+
+    }
+
     /**
     * Draw a line between the last known position of the mouse, and the current position.
     * @param context The canvas context that we're drawing on

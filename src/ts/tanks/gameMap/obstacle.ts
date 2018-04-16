@@ -21,6 +21,8 @@ export class Obstacle {
     center: Point;
     type: ObstacleType;
 
+    private scaledPoints: Point[][] = null;
+
     constructor(id: number, type: string, center: Point, points: Point[]) {
         this.id = id;
         this.type = Obstacle.typeFromString(type)
@@ -45,7 +47,24 @@ export class Obstacle {
     draw(context: CanvasRenderingContext2D, theme: ITheme): void {
         const length = this.points.length;
         const [fill, fillStyle] = this.getFill(theme);
-        Draw.closedShape(context, this.points, 1, theme.map.solid().rgba(), fill, fillStyle);
+
+        if (!this.scaledPoints) {
+            this.scaledPoints = [];
+            for (let scale = 0.9; scale > 0.1; scale -= 0.05) {
+                const newPoints: Point[] = [];
+                for (const point of this.points) {
+                    const np = new Point();
+                    np.x = ((point.x - this.center.x) * scale) + this.center.x;
+                    np.y = ((point.y - this.center.y) * scale) + this.center.y;
+                    newPoints.push(np);
+                }
+                this.scaledPoints.push(newPoints);
+            }
+        }
+
+        Draw.closedShapes(context, [this.points].concat(this.scaledPoints), 1, fillStyle, fill);
+        // Draw.closedShape(context, this.points, 1, theme.map.solid().rgba(), fill, fillStyle);
+
         // if (Settings.DEBUG) {
         //     context.fillStyle = Color.black().rgba();
         //     context.font = "16px Calibri";
@@ -59,14 +78,14 @@ export class Obstacle {
      * @returns `boolean` - whether the obstacle should be filled with the color
      *          `string` - the RGBA string of the color
      */
-    private getFill(theme: ITheme): [boolean, string] {
+    private getFill(theme: ITheme): [boolean, string[]] {
         switch (this.type) {
             case ObstacleType.SOLID:
-                return [true, theme.map.solid().rgba()];
+                return [true, theme.map.solid()];
             case ObstacleType.WATER:
-                return [true, theme.map.water().rgba()];
+                return [true, theme.map.water()];
             case ObstacleType.WOOD:
-                return [true, theme.map.wood().rgba()];
+                return [true, theme.map.wood()];
             default:
                 throw new Error("Obstacle type not supported. Error type: " + this.type);
 

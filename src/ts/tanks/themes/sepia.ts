@@ -1,4 +1,4 @@
-import { Color } from "../drawing/color";
+import { Color, HSLColor } from "../drawing/color";
 import { ITheme, IThemeEndGame, IThemeGameColors, IThemeGameUi, IThemeMapColors, IThemeMenu } from "./iTheme";
 
 class SepiaMenu implements IThemeMenu {
@@ -91,14 +91,26 @@ class SepiaGameColors implements IThemeGameColors {
     }
 }
 class SepiaMapColors implements IThemeMapColors {
-    solid(): Color {
-        return new Color(191, 128, 64);
+    solid(): string[] {
+        const all = Array<string>();
+        for (let i = 0; i < 17; i++) {
+            all.push(`hsl(0, 0%, ${5 + i}%)`)
+        }
+        return all;
     }
-    water(): Color {
-        return new Color(77, 158, 179);
+    water(): string[] {
+        const all = Array<string>();
+        for (let i = 0; i < 17; i++) {
+            all.push(`hsl(192, 40%, ${40 - i}%)`)
+        }
+        return all;
     }
-    wood(): Color {
-        return Color.woodbrown();
+    wood(): string[] {
+        const all = Array<string>();
+        for (let i = 0; i < 17; i++) {
+            all.push(`hsl(30, 55%, ${20 + i}%)`)
+        }
+        return all;
     }
 }
 export class SepiaTheme implements ITheme {

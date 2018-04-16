@@ -37,9 +37,9 @@ export interface IThemeGameColors {
 }
 
 export interface IThemeMapColors {
-    solid(): Color;
-    water(): Color;
-    wood(): Color;
+    solid(): string[];
+    water(): string[];
+    wood(): string[];
 }
 export interface ITheme {
     name: string;

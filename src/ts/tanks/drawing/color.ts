@@ -12,7 +12,7 @@ export class Color {
     }
 
     rgba(alpha = this.alpha): string {
-        return `rgba(${this.red},${this.green},${this.blue},${alpha})`;
+        return `rgba(${this.red}, ${this.green}, ${this.blue}, ${alpha}) `;
     }
 
     private componentToHex(c) {
