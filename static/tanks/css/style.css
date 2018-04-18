@@ -64,8 +64,19 @@ h6 {
     height: 15px;
     width: 15px;
     padding: 0;
-    margin: 0 2px;
-    margin-top: 6px;
+    margin: 6px 2px 0;
+}
+
+.tanks-explosion-particle {
+    border-radius: 12px;
+    display: block;
+    z-index: -1;
+    position: absolute;
+}
+.tanks-login-form-container{
+    /* Take up the whole page */
+    height:100vh;
+    width:100vw;
 }
 
 .tanks-ui-menu-title-padding {
@@ -186,11 +197,4 @@ input.player-color[type="color"]::-webkit-color-swatch {
 
 .mc-button {
     margin: 0 2px;
-}
-
-.tanks-explosion-particle {
-    border-radius: 12px;
-    display: block;
-    z-index: -1;
-    position: absolute;
 }
