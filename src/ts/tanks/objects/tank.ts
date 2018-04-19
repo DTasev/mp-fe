@@ -160,7 +160,7 @@ export class Tank {
                 label += "🚀";
                 break;
             case TankActState.MOVED:
-                label += "⚓";
+                label += "📌";
                 break;
         }
         switch (this.healthState) {
@@ -169,7 +169,7 @@ export class Tank {
                 break;
             case TankHealthState.DISABLED:
                 color = this.colors.disabled;
-                label += "♿";
+                label += "⚓";
                 break;
             case TankHealthState.DEAD:
                 color = this.colors.dead;
