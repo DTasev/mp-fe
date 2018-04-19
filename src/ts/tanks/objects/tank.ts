@@ -24,7 +24,7 @@ export enum TankHealthState {
 }
 
 /** Provides grouping for all the Tank's colors */
-export class TankColor {
+export class TankColors {
     /** Color for when the tank is active/selected */
     readonly active: string;
     /** Color for the outline that shows the action(movement) range */
@@ -100,7 +100,7 @@ export class Tank {
     /** How many pixels to offset the label so that it appears in the center of the tank */
     private readonly LABEL_OFFSET = 10.5;
 
-    readonly color: TankColor;
+    readonly colors: TankColors;
 
     readonly id: number;
     readonly player: Player;
@@ -125,7 +125,7 @@ export class Tank {
         this.effects = [];
 
         // initialise colors for each of the tank's states
-        this.color = new TankColor(
+        this.colors = new TankColors(
             theme.game.tankActive().rgba(),
             theme.game.tankActiveOutline().rgba(),
             theme.game.tankLabel().rgba(this.LABEL_OPACITY),
@@ -146,7 +146,7 @@ export class Tank {
     }
 
     private showStatus(context: CanvasRenderingContext2D, label: string) {
-        context.fillStyle = this.color.label;
+        context.fillStyle = this.colors.label;
         context.font = "16px Calibri";
         // put the text in the middle of the tank
         context.fillText(label, this.position.x - this.LABEL_OFFSET, this.position.y + 5);
@@ -165,14 +165,14 @@ export class Tank {
         }
         switch (this.healthState) {
             case TankHealthState.ALIVE:
-                color = this.color.alive;
+                color = this.colors.alive;
                 break;
             case TankHealthState.DISABLED:
-                color = this.color.disabled;
+                color = this.colors.disabled;
                 label += "♿";
                 break;
             case TankHealthState.DEAD:
-                color = this.color.dead;
+                color = this.colors.dead;
                 label += "💀";
                 break;
         }
@@ -180,9 +180,9 @@ export class Tank {
     }
 
     highlight(context: CanvasRenderingContext2D, drawRange = true): any {
-        Draw.dot(context, this.position, Tank.WIDTH + 1, this.color.active);
+        Draw.dot(context, this.position, Tank.WIDTH + 1, this.colors.active);
         if (drawRange) {
-            Draw.circle(context, this.position, this.movementRange, Tank.LINE_WIDTH, this.color.activeOutline);
+            Draw.circle(context, this.position, this.movementRange, Tank.LINE_WIDTH, this.colors.activeOutline);
         }
         let [label, color] = this.uiElements();
         this.showStatus(context, label);

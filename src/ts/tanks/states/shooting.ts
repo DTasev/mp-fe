@@ -4,17 +4,17 @@ import { ObstacleType } from "../gameMap/obstacle";
 import { Viewport } from "../gameMap/viewport";
 import * as Limit from "../limiters/index";
 import { Player } from "../objects/player";
-import { Tank, TankColor, TankActState } from "../objects/tank";
+import { Tank, TankActState } from "../objects/tank";
 import { Settings } from '../settings';
-import { ITheme } from "../themes/iTheme";
 import { ShootingUi } from "../tanksUi/shooting";
+import { ITheme } from "../themes/iTheme";
 import { Ui } from "../ui/ui";
+import { KeyboardKeys } from "../utility/keyboardKeys";
 import { Line } from "../utility/line";
+import { Particles } from "../utility/particles";
 import { Point } from "../utility/point";
 import { TanksMath } from "../utility/tanksMath";
 import { IPlayState } from "./iActionState";
-import { KeyboardKeys } from "../utility/keyboardKeys";
-import { Particles } from "../utility/particles";
 
 
 
@@ -102,13 +102,13 @@ export class ShootingState implements IPlayState {
                 // shot collision starts from the centre of the tank
                 this.shotPath.points.push(this.active.position.copy());
                 this.draw.state = DrawState.DRAWING;
-                this.validRange(this.active.color);
+                this.validRange(this.active.colors.shootingLine);
             }
         }
     }
 
-    private validRange(tankColors: TankColor): void {
-        this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, tankColors.shootingLine);
+    private validRange(color: string): void {
+        this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, color);
     }
 
     continueShooting = (e: MouseEvent | TouchEvent) => {
@@ -118,10 +118,10 @@ export class ShootingState implements IPlayState {
 
             // if the player is just moving about on the tank's space
             if (this.tankRoamingLength.in(this.active.position, this.draw.mouse)) {
-                this.validRange(this.active.color);
+                this.validRange(this.active.colors.shootingLine);
             } // if the player has shot far away start drawing the line
             else if (this.shotSpeed.enough(this.active.position, this.draw.mouse)) {
-                this.validRange(this.active.color);
+                this.validRange(this.active.colors.shootingLine);
 
                 // only add to the shot path if the shot was successful
                 this.shotPath.points.push(this.draw.mouse.copy());

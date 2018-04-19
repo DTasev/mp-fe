@@ -3,14 +3,14 @@ import { Draw, DrawState } from "../drawing/draw";
 import { Viewport } from "../gameMap/viewport";
 import * as Limit from "../limiters/index";
 import { Player } from "../objects/player";
-import { Tank, TankColor, TankHealthState, TankActState } from "../objects/tank";
+import { Tank, TankActState, TankHealthState } from "../objects/tank";
 import { Settings } from '../settings';
-import { ITheme } from "../themes/iTheme";
 import { MovementUi } from "../tanksUi/movement";
+import { ITheme } from "../themes/iTheme";
 import { Ui } from "../ui/ui";
+import { KeyboardKeys } from "../utility/keyboardKeys";
 import { Point } from "../utility/point";
 import { IPlayState } from "./iActionState";
-import { KeyboardKeys } from "../utility/keyboardKeys";
 
 
 export class MovingState implements IPlayState {
@@ -78,16 +78,16 @@ export class MovingState implements IPlayState {
         // limit the length of the line to the maximum allowed tank movement, and disabled tanks can't be moved
         if (this.line.in(this.active.position, this.draw.mouse) && this.active.healthState !== TankHealthState.DISABLED) {
             this.draw.state = DrawState.DRAWING;
-            this.drawMovement(this.active.color);
+            this.drawMovement(this.active.colors.movementLine);
         }
         if (e instanceof TouchEvent) {
             e.preventDefault();
         }
     }
 
-    private drawMovement(tankColors: TankColor) {
+    private drawMovement(color: string) {
         this.tankMovementInRange = true;
-        this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, tankColors.movementLine);
+        this.draw.mouseLine(this.context, Tank.MOVEMENT_LINE_WIDTH, color);
     }
 
     endMovement = (e: MouseEvent | TouchEvent) => {
@@ -156,7 +156,7 @@ export class MovingState implements IPlayState {
         if (this.draw.state == DrawState.DRAWING) {
             this.draw.updatePosition(e);
             if (this.line.in(this.active.position, this.draw.mouse)) {
-                this.drawMovement(this.active.color);
+                this.drawMovement(this.active.colors.movementLine);
             } else {
                 this.tankMovementInRange = false;
             }

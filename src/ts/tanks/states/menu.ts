@@ -163,6 +163,7 @@ class MenuStartGame {
                                 id: MainMenu.ID_MAP_DOT_CHOICE,
                                 className: "w3-center",
                                 children: (function () {
+                                    // create the number of dots dynamically
                                     const childList = [];
                                     for (let i = 0; i < MenuStartGame.mapsList.length; ++i) {
                                         const span = {
@@ -463,21 +464,17 @@ export class MainMenu implements IActionState {
         button_quickStart.textContent = "Start 2P";
         button_quickStart.onclick = this.quickStart
 
-        // const button_options = <HTMLButtonElement>button_startGame.cloneNode();
-        // button_options.textContent = "Options";
-        // button_options.onclick = this.showOptions
+        const button_mapCreator = <HTMLButtonElement>button_startGame.cloneNode();
+        button_mapCreator.textContent = "Map Creator";
+        button_mapCreator.onclick = () => { window.location.assign("mc.html"); }
 
         const button_account = <HTMLButtonElement>button_startGame.cloneNode();
         button_account.textContent = "Account";
         button_account.onclick = Controls.w3_open;
 
-        const button_mapCreator = <HTMLButtonElement>button_startGame.cloneNode();
-        button_account.textContent = "Map Creator";
-        button_account.onclick = () => { window.location.assign("mc.html"); }
-
         middle.appendChild(button_startGame);
         middle.appendChild(button_quickStart);
-        // middle.appendChild(button_options);
+        middle.appendChild(button_mapCreator);
         middle.appendChild(button_account);
 
         this.ui.body.htmlElement.appendChild(left);

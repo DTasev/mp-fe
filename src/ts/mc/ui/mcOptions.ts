@@ -36,9 +36,17 @@ export class MCOptions {
         export_btn.textContent = "Export all";
         export_btn.onclick = this.exportObstacles;
 
+        const home_btn = <HTMLButtonElement>edit_btn.cloneNode();
+        home_btn.textContent = "Back to Game";
+        // on click redirect to main page
+        home_btn.onclick = () => { window.location.href = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1) };
+
         ui.heading.right.style.paddingTop = "16px";
         ui.heading.right.add(edit_btn);
         ui.heading.right.add(export_btn);
+
+        ui.heading.left.style.padding = "16px 0 0 16px";
+        ui.heading.left.add(home_btn);
     }
 
     exportObstacles = () => {

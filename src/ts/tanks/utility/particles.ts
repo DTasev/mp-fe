@@ -22,7 +22,7 @@ export class Particles {
         // NOTE: position MUST be set after the top & left coordinates are set, otherwise the element is not on the correct place!
         particleContainer.style.position = "absolute";
 
-        const color = tank.color.explosion;
+        const color = tank.colors.explosion;
 
         // create all the particles, each one 
         for (let i = 0; i < numParticles; ++i) {
@@ -71,7 +71,7 @@ export class Particles {
         particle.style.fontSize = "36px";
         particle.style.opacity = "0";
         particle.style.zIndex = "-1";
-        particle.style.color = tank.color.smoke;
+        particle.style.color = tank.colors.smoke;
         particle.textContent = "O";
         particle.animate([
             {
