@@ -15,8 +15,9 @@ export class Color {
         return `rgba(${this.red},${this.green},${this.blue},${alpha})`;
     }
 
-    private componentToHex(c) {
-        var hex = c.toString(16);
+    private componentToHex(val: number) {
+        var hex = val.toString(16);
+        // append a 0 at the start for small values
         return hex.length == 1 ? "0" + hex : hex;
     }
 
@@ -24,11 +25,14 @@ export class Color {
         return "#" + this.componentToHex(this.red) + this.componentToHex(this.green) + this.componentToHex(this.blue);
     }
 
+    static fromHex(hex: string, alpha = 1.0): Color {
+        return new Color(parseInt(hex.substr(1, 2), 16), parseInt(hex.substr(3, 2), 16), parseInt(hex.substr(5), 16), alpha);
+    }
+
     static red(alpha = 1.0): Color {
         return new Color(255, 0, 0, alpha);
     }
     static green(alpha = 1.0): Color {
-
         return new Color(0, 255, 0, alpha);
     }
     static blue(alpha = 1.0): Color {
@@ -85,8 +89,4 @@ export class Color {
     static transparent(): Color {
         return new Color(0, 0, 0, 0);
     }
-    static fromHex(hex: string, alpha = 1.0): Color {
-        return new Color(parseInt(hex.substr(1, 2), 16), parseInt(hex.substr(3, 2), 16), parseInt(hex.substr(5), 16), alpha);
-    }
-
 }

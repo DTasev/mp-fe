@@ -7,7 +7,7 @@ import { Viewport } from "./gameMap/viewport";
 import { Player } from './objects/player';
 import { Settings } from './settings';
 import { GameEndState } from "./states/gameEnd";
-import { MovingState } from "./states/movement";
+import { MovementState } from "./states/movement";
 import { PlacingState } from "./states/placement";
 import { SelectionState } from "./states/selection";
 import { ShootingState } from "./states/shooting";
@@ -168,7 +168,7 @@ export class GameController {
                 if (itWasNextTurn) {
                     console.log("Initialising TANK MOVEMENT");
                 }
-                this.action = new MovingState(this, this.context, this.ui, player);
+                this.action = new MovementState(this, this.context, this.ui, player);
                 break;
             case GameState.TANK_SHOOTING:
                 if (itWasNextTurn) {

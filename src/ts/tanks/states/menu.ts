@@ -381,7 +381,7 @@ class MenuStartGame {
         document.getElementById(MainMenu.ID_TANKS_SLIDER_DISPLAY).innerHTML = "Tanks: " + getSliderValue(MainMenu.ID_TANKS_SLIDER);
     }
 }
-export class MainMenu implements IActionState {
+export class MainMenu {
     static readonly ELEMENT_PADDING = Settings.IS_MOBILE ? "" : " w3-padding-32";
     static readonly CLASS_MENU_BUTTON = "w3-button tanks-ui-menu-button" + MainMenu.ELEMENT_PADDING;
     static readonly CLASS_MENU_TITLE = "tanks-ui-menu-title" + MainMenu.ELEMENT_PADDING;
@@ -426,10 +426,6 @@ export class MainMenu implements IActionState {
         // set the background color of the page so that it is the same as the theme
         document.body.style.backgroundColor = this.theme.game.canvasBackground().rgba();
     }
-
-    addEventListeners(canvas: HTMLCanvasElement) { }
-    addKeyboardShortcuts(canvas: HTMLCanvasElement) { }
-    view(viewport: Viewport) { }
 
     setUpUi = () => {
         this.ui.hideCanvas();

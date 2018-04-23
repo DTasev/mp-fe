@@ -8,7 +8,7 @@ import { Viewport } from '../../ts/tanks/gameMap/viewport';
 import { Player } from '../../ts/tanks/objects/player';
 import { Tank, TankActState } from '../../ts/tanks/objects/tank';
 import { Settings } from '../../ts/tanks/settings';
-import { MovingState } from '../../ts/tanks/states/movement';
+import { MovementState } from '../../ts/tanks/states/movement';
 import { SepiaTheme } from '../../ts/tanks/themes/sepia';
 import { Ui } from '../../ts/tanks/ui/ui';
 import { Point } from '../../ts/tanks/utility/point';
@@ -39,7 +39,7 @@ describe('Movement - Game State', () => {
     it('add event listeners', () => {
         const player = Player.premadePlayer();
 
-        const m = new MovingState(controller, mock_context as any, ui, player);
+        const m = new MovementState(controller, mock_context as any, ui, player);
         mock_canvas.nullify();
 
         m.addEventListeners(mock_canvas as any);
@@ -60,7 +60,7 @@ describe('Movement - Game State', () => {
     });
     it('add keyboard shortcuts', () => {
         const player = Player.premadePlayer();
-        const m = new MovingState(controller, mock_context as any, ui, player);
+        const m = new MovementState(controller, mock_context as any, ui, player);
 
         (<any>Settings)["IS_MOBILE"] = true;
         window.onkeyup = null;
@@ -73,7 +73,7 @@ describe('Movement - Game State', () => {
     });
     it('set up UI', () => {
         const player = Player.premadePlayer();
-        const m = new MovingState(controller, mock_context as any, ui, player);
+        const m = new MovementState(controller, mock_context as any, ui, player);
         m.setUpUi(ui, new Viewport(100, 100), new SepiaTheme());
 
         // skip button has been added
@@ -81,7 +81,7 @@ describe('Movement - Game State', () => {
     });
     it('start movement - ignore MMB and RMB', () => {
         const player = Player.premadePlayer();
-        const m = new MovingState(controller, mock_context as any, ui, player);
+        const m = new MovementState(controller, mock_context as any, ui, player);
         m.draw.mouse = new Point(23423423, 423424);
         const startingMousePos = m.draw.mouse.copy();
         const mouseEvent = new MouseEvent("woah", {
@@ -102,7 +102,7 @@ describe('Movement - Game State', () => {
 
         const startMovementContext = mock_canvas.getContext();
 
-        const m = new MovingState(controller, startMovementContext as any, ui, player);
+        const m = new MovementState(controller, startMovementContext as any, ui, player);
         const startingMousePos = m.draw.mouse.copy();
         const mouseEvent = new MouseEvent("woah", {
             button: 0 // LMB
@@ -133,7 +133,7 @@ describe('Movement - Game State', () => {
 
         const startMovementContext = mock_canvas.getContext();
 
-        const m = new MovingState(controller, startMovementContext as any, ui, player);
+        const m = new MovementState(controller, startMovementContext as any, ui, player);
         m.draw.state = DrawState.DRAWING;
         const mouseEvent = new MouseEvent("woah", {
             button: 0 // LMB
@@ -160,7 +160,7 @@ describe('Movement - Game State', () => {
         const mock_redraw = new SingleCallMock(controller, controller.redrawCanvas);
         const mock_changeGameState = new SingleCallMock(controller, controller.changeGameState);
 
-        const m = new MovingState(controller, mock_context as any, ui, player);
+        const m = new MovementState(controller, mock_context as any, ui, player);
         m.draw.state = DrawState.DRAWING;
         const mouseEvent = new MouseEvent("woah", {
             button: 0 // LMB
@@ -194,7 +194,7 @@ describe('Movement - Game State', () => {
         const mock_redraw = new SingleCallMock(controller, controller.redrawCanvas);
         const mock_changeGameState = new SingleCallMock(controller, controller.changeGameState);
 
-        const m = new MovingState(controller, mock_context as any, ui, player);
+        const m = new MovementState(controller, mock_context as any, ui, player);
         m.draw.state = DrawState.DRAWING;
         const mouseEvent = new MouseEvent("woah", {
             button: 0 // LMB
@@ -227,7 +227,7 @@ describe('Movement - Game State', () => {
         const mock_redraw = new SingleCallMock(controller, controller.redrawCanvas);
         const mock_changeGameState = new SingleCallMock(controller, controller.changeGameState);
 
-        const m = new MovingState(controller, mock_context as any, ui, player);
+        const m = new MovementState(controller, mock_context as any, ui, player);
         m.draw.state = DrawState.DRAWING;
 
         m.endTurn();
@@ -238,7 +238,7 @@ describe('Movement - Game State', () => {
     });
     it('go to shooting - skip movement', () => {
         const player = Player.premadePlayer();
-        const m = new MovingState(controller, mock_context as any, ui, player);
+        const m = new MovementState(controller, mock_context as any, ui, player);
         const mock_redraw = new SingleCallMock(controller, controller.redrawCanvas);
         const mock_changeGameState = new SingleCallMock(controller, controller.changeGameState);
 

@@ -165,6 +165,10 @@ export class Draw {
         this.last.y = this.mouse.y;
     }
 
+    /**
+     * Update the position for the event. MouseEvents are handled differently from TouchEvents
+     * @param e The event that has been triggered
+     */
     updatePosition(e: MouseEvent | TouchEvent) {
         if (e instanceof MouseEvent) {
             this.updateMousePosition(e);
@@ -192,11 +196,11 @@ export class Draw {
         if (e.touches) {
             // Only deal with one finger
             if (e.touches.length == 1) {
-                // Get the information for finger #1
+                // Get the information for finger #1, other fingers are not used
                 const touch: Touch = e.touches[0];
-                // the 'target' will be the canvas element
-                this.mouse.x = touch.pageX - (<HTMLCanvasElement>touch.target).offsetLeft;
-                this.mouse.y = touch.pageY - (<HTMLCanvasElement>touch.target).offsetTop;
+                // the 'target' will be a HTML DOM element otherwise the event will not be triggered
+                this.mouse.x = touch.pageX - (<HTMLElement>touch.target).offsetLeft;
+                this.mouse.y = touch.pageY - (<HTMLElement>touch.target).offsetTop;
             }
         }
     }

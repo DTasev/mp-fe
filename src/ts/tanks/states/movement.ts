@@ -13,7 +13,7 @@ import { Point } from "../utility/point";
 import { IPlayState } from "./iActionState";
 
 
-export class MovingState implements IPlayState {
+export class MovementState implements IPlayState {
     context: CanvasRenderingContext2D;
     controller: GameController;
     player: Player;
