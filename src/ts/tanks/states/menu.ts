@@ -585,7 +585,7 @@ export class MainMenu {
             document.body.style.backgroundColor = gameTheme.game.canvasBackground().rgba();
 
             const controller = new GameController(this.canvas, this.canvas.getContext("2d"), this.ui, gameTheme, map, players, numTanks, friendlyFire);
-            controller.changeGameState(GameState.TANK_PLACEMENT);
+            controller.changeGameState(GameState.TANK_PLACEMENT, false);
         });
     }
 }

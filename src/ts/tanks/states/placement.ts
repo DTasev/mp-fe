@@ -88,14 +88,13 @@ export class PlacingState implements IPlayState {
             // if we've placed as many objects as allowed, then go to next state
             if (this.tanksPlaced.over()) {
                 PlacingState.playersTankPlacement.take();
-                this.controller.nextPlayer = true;
                 // all of the players have placed their tanks, go to moving state
                 if (PlacingState.playersTankPlacement.over()) {
-                    this.controller.changeGameState(GameState.TANK_SELECTION);
+                    this.controller.changeGameState(GameState.TANK_SELECTION, true);
                     // clear the variable, this will allow it to be garbage collected
                     PlacingState.playersTankPlacement = null;
                 } else {
-                    this.controller.changeGameState(GameState.TANK_PLACEMENT);
+                    this.controller.changeGameState(GameState.TANK_PLACEMENT, true);
                 }
             }
         }

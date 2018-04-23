@@ -154,7 +154,7 @@ export class ShootingState implements IPlayState {
 
         // set the player's viewport position to the last position they were looking at
         this.player.viewportPosition = Viewport.current();
-
+        let nextPlayer = false;
         // for the shot to be sucessful, it must be fast enough, and reached it's maximum allowed length
         if (this.successfulShot) {
             this.collideShot();
@@ -167,14 +167,14 @@ export class ShootingState implements IPlayState {
                 // reset the current player's tank act states
                 this.player.resetTanksActStates();
                 // change to the next player when the state is next changed
-                this.controller.nextPlayer = true;
+                nextPlayer = true;
             }
         }
 
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
         this.controller.redrawCanvas();
-        this.controller.changeGameState(GameState.TANK_SELECTION);
+        this.controller.changeGameState(GameState.TANK_SELECTION, nextPlayer);
     }
 
     private collideShot() {
@@ -227,14 +227,12 @@ export class ShootingState implements IPlayState {
     skipTurn = () => {
         // reset the current player's tank act states
         this.player.resetTanksActStates();
-        // change to the next player when the state is next changed
-        this.controller.nextPlayer = true;
         // if the player skips the turn, set the player's viewport position to the last position they were looking at
         this.player.viewportPosition = Viewport.current();
 
         this.draw.state = DrawState.STOPPED;
         // redraw canvas with all current tanks
         this.controller.redrawCanvas();
-        this.controller.changeGameState(GameState.TANK_SELECTION);
+        this.controller.changeGameState(GameState.TANK_SELECTION, true);
     }
 }

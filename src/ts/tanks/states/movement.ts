@@ -148,7 +148,7 @@ export class MovementState implements IPlayState {
         // redraw canvas with all current tanks
         this.controller.redrawCanvas();
         // go to tank selection state
-        this.controller.changeGameState(GameState.TANK_SELECTION);
+        this.controller.changeGameState(GameState.TANK_SELECTION, false);
     }
 
     private drawMoveLine = (e: MouseEvent | TouchEvent) => {

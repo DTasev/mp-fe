@@ -181,7 +181,6 @@ describe('Shooting - Game State', () => {
 
         // check that the lines has been cached correctly
         expect(controller.lineCache.lines.length).to.eq(1);
-        expect(controller.nextPlayer).to.be.true;
 
         mock_Particles_smoke.expect_called.once();
         expect(s.draw.state).to.eq(DrawState.STOPPED);
@@ -193,7 +192,6 @@ describe('Shooting - Game State', () => {
         const s = new ShootingState(controller, mock_context as any, ui, player);
         s.skipTurn();
         expect(player.tanks[0].actionState).to.eq(TankActState.NOT_ACTED);
-        expect(controller.nextPlayer).to.be.true;
         expect(s.draw.state).to.eq(DrawState.STOPPED);
         mock_changeGameState.expect_called.once();
     });
