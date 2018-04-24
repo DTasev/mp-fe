@@ -111,7 +111,7 @@ describe('Game Controller', () => {
 
         controller["players"].push(new Player(0, "P1", Color.black()));
         controller["players"].push(new Player(0, "P1", Color.black()));
-        controller.changeGameState(GameState.TANK_PLACEMENT);
+        controller.changeGameState(GameState.TANK_PLACEMENT, false);
 
         expect(controller.gameState()).to.eq(GameState.TANK_PLACEMENT);
     });

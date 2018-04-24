@@ -146,7 +146,7 @@ export class SelectionState implements IPlayState {
         // if the user has clicked a valid tank on mouseDown then go to the appropriate next state
         // based on the tanks' own state, i.e. tank that has moved will go into shooting
         if (this.player.activeTank.available()) {
-            this.controller.changeGameState(this.currentActiveTank.nextState());
+            this.controller.changeGameState(this.currentActiveTank.nextState(), false);
         }
     }
 
