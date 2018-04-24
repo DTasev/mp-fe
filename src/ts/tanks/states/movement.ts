@@ -126,7 +126,6 @@ export class MovementState implements IPlayState {
                 this.ui.message("Tank collides with obstacle!", this.controller.theme);
             }
 
-
             // set the player's viewport position to the last position they were looking at
             this.player.viewportPosition = Viewport.current();
         }

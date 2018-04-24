@@ -204,8 +204,7 @@ export class ShootingState implements IPlayState {
                     // handle the case where the last part of the shot has penetrated
                     const nextShot = i + 2 >= shotPathLength ? shotPathLength - 1 : i + 2;
                     shotTerrainCollisionPoint = this.shotPath.points[nextShot];
-                    // the trimIncrement needs to be incremented, so that the part that penetrated is visible
-                    // if this is not done, then the penetrating part of the shot is NOT rendered on the canvas
+                    // increase the increment so that more is left of the shot when shooting through wood
                     trimIncrement = 3;
                 }
                 // the NEW END is the collision point of the shot with the obstacle

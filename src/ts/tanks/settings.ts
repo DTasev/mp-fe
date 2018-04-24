@@ -17,4 +17,5 @@ export class Settings {
     static readonly DEFAULT_THEME = "sepia";
 
     static readonly DEFAULT_NUMBER_PARTICLES = Settings.IS_MOBILE ? 12 : 24;
+    static readonly SHOT_CACHE_SIZE = 10;
 }   
