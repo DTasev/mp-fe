@@ -86,6 +86,21 @@ export class SelectionState implements IPlayState {
                         this.selectTankKeyboard(this.player.tanks[4]);
                     }
                     break;
+                case KeyboardKeys.KEY_6:
+                    if (5 <= this.player.tanks.length) {
+                        this.selectTankKeyboard(this.player.tanks[5]);
+                    }
+                    break;
+                case KeyboardKeys.KEY_7:
+                    if (6 <= this.player.tanks.length) {
+                        this.selectTankKeyboard(this.player.tanks[6]);
+                    }
+                    break;
+                case KeyboardKeys.KEY_8:
+                    if (7 <= this.player.tanks.length) {
+                        this.selectTankKeyboard(this.player.tanks[7]);
+                    }
+                    break;
                 default:
                     break;
             }
