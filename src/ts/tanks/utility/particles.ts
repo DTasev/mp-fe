@@ -1,5 +1,6 @@
 import { Tank } from "../objects/tank";
 import { ITheme } from "../themes/iTheme";
+import { Settings } from "../settings";
 
 export class Particles {
     private static getRandomInt = (min, max) => {
@@ -13,7 +14,7 @@ export class Particles {
      * @param numParticles The number of particles in the explosion
      * @param maxDistance The maximum distance that the particles will travel
      */
-    static explosion(tank: Tank, duration = 800, numParticles = 24, maxDistance = 240) {
+    static explosion(tank: Tank, duration = 800, numParticles = Settings.DEFAULT_NUMBER_PARTICLES, maxDistance = 240) {
         // create a holder div element, with an ABSOLUTE position inside the body
         // the absolute position is (about) the center of the tank
         const particleContainer = document.createElement("div");
