@@ -7,8 +7,8 @@ import { J2H } from "../json2html";
  * on the canvas
  */
 export class UiBody {
-
     readonly htmlElement: HTMLDivElement;
+
     constructor(htmlElement: HTMLDivElement) {
         this.htmlElement = htmlElement;
     }
