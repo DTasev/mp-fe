@@ -60,7 +60,7 @@ class DarkGameColors implements IThemeGameColors {
         return Color.fromHex("#1c0f0b");
     }
     tankActive(): Color {
-        return Color.fromHex("#5d3707");
+        return Color.fromHex("#fa5300");
     }
     tankActiveOutline(): Color {
         return Color.fromHex("#a2d0d8");

@@ -26,6 +26,7 @@ export class TanksMap {
         id = id + "";
 
         // special case to stop the map from looking for data in the cache or from remote
+        // used for testing purposes
         if (id === "-1") {
             return;
         }

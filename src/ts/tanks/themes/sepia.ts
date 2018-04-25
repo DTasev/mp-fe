@@ -60,7 +60,7 @@ class SepiaGameColors implements IThemeGameColors {
         return Color.sand();
     }
     tankActive(): Color {
-        return Color.fromHex("#ab6e50");
+        return Color.fromHex("#00fa00");
     }
     tankActiveOutline(): Color {
         return Color.fromHex("#6c3513");
