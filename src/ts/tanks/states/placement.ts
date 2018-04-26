@@ -107,6 +107,10 @@ export class PlacingState implements IPlayState {
      * @param e Touch event triggered by the user tapping on a touch screen
      */
     doubleTap(e: TouchEvent): boolean {
+        // the user is using more than one finger, stop any action
+        if (e.touches.length > 1) {
+            return false;
+        }
         if (!this.lastTouch) {
             this.lastTouch = true;
             setTimeout(() => { this.lastTouch = null }, this.DBL_CLICK_TIMEOUT);
