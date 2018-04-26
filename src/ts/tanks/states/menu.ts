@@ -457,7 +457,7 @@ export class MainMenu {
         const button_startGame = J2H.parse(button_startGameDescription);
         const button_quickStart = <HTMLButtonElement>button_startGame.cloneNode();
         button_quickStart.id = MainMenu.ID_QUICK_START_BUTTON;
-        button_quickStart.textContent = "Start 2P";
+        button_quickStart.textContent = "Quick Start";
         button_quickStart.onclick = this.quickStart
 
         const button_mapCreator = <HTMLButtonElement>button_startGame.cloneNode();

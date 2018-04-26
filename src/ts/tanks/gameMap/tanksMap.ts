@@ -18,7 +18,6 @@ export class TanksMap {
     created: string;
     cached: number;
 
-
     /**
      * Loads the map, from cache, if present and up-to-date, else from remote
      */
