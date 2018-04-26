@@ -88,6 +88,12 @@ h6 {
     font-size: 1.5em;
 }
 
+.tanks-page-center {
+    position: absolute;
+    top: 35%;
+    width: 100%;
+}
+
 /* The slider itself */
 
 .slider {
