@@ -108,6 +108,7 @@ export class PlacingState implements IPlayState {
      * @param e Touch event triggered by the user tapping on a touch screen
      */
     doubleTap(e: TouchEvent): boolean {
+        this.ui.setPlayer(`${e.changedTouches.length}`, this.controller.theme);
         if (!this.lastTouch) {
             this.lastTouch = true;
             setTimeout(() => { this.lastTouch = null }, this.DBL_CLICK_TIMEOUT);
