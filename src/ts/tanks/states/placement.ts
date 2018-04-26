@@ -71,7 +71,8 @@ export class PlacingState implements IPlayState {
 
         // check for double tap ONLY ON touch screens. TouchEvent will NOT 
         // be fired when using a mouse.
-        if (e instanceof TouchEvent && !this.doubleTap(e)) {
+        // the user is using more than one finger, stop any action
+        if (e instanceof TouchEvent && e.touches.length === 1 && !this.doubleTap(e)) {
             return;
         }
 
@@ -107,10 +108,6 @@ export class PlacingState implements IPlayState {
      * @param e Touch event triggered by the user tapping on a touch screen
      */
     doubleTap(e: TouchEvent): boolean {
-        // the user is using more than one finger, stop any action
-        if (e.touches.length > 1) {
-            return false;
-        }
         if (!this.lastTouch) {
             this.lastTouch = true;
             setTimeout(() => { this.lastTouch = null }, this.DBL_CLICK_TIMEOUT);
