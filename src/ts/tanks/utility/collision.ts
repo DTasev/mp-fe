@@ -62,14 +62,12 @@ export class Collision {
      * @param obstacles 
      */
     static terrain(point: Point, radius: number, obstacles: Obstacle[]): Obstacle {
-        // TODO filter out irrelevant obstacles
         for (const obstacle of obstacles) {
-            // TODO filter out irrelevant points
             // find closest two points of obstacle to point
-            const [left, right] = TanksMath.line.closestTwo(point, obstacle.center, obstacle.points);
+            const [left, right, intersection] = TanksMath.line.closestTwo(point, obstacle.center, obstacle.points);
             // if there is no closest line points, then the tank is inside the obstacle
             // if there is closest line points, the line will be collided against the circle
-            if (!left || !right || TanksMath.line.collideCircle(left, right, point, radius)) {
+            if (!left || !right || TanksMath.point.collideCircle(intersection, point, radius)) {
                 return obstacle;
             }
         }

@@ -95,8 +95,6 @@ class LineMath {
      * @returns First Point is the left closest, second Point is the right closest, third Point is the intersection point
      */
     closestTwo(start: Point, end: Point, points: Point[]): [Point, Point, Point] {
-        // filter out ONLY the points that are between the center and the external point p
-        // const relevantPoints = points.filter(filterFunction);
         const length = points.length;
         let p1: Point, p2: Point;
 
