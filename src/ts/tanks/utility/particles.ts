@@ -8,6 +8,7 @@ export class Particles {
     }
 
     /**
+     * Show an explosion at the tank's position
      * 
      * @param tank The tank that WILL EXPLODE
      * @param duration The duration of the explosion animation
@@ -25,10 +26,12 @@ export class Particles {
 
         const color = tank.colors.explosion;
 
-        // create all the particles, each one 
+        const animationSettings = {
+            duration: duration,
+            easing: "cubic-bezier(.15,.87,.72,.9)",
+        };
+
         for (let i = 0; i < numParticles; ++i) {
-            // add N child elements which are the particles
-            // add the correct animation to each child
             const particle = document.createElement("div");
             particle.classList.add("tanks-explosion-particle");
             particle.style.backgroundColor = color;
@@ -46,10 +49,7 @@ export class Particles {
                     width: "8px",
                     height: "8px"
                 }
-            ], {
-                    duration: duration,
-                    easing: "cubic-bezier(.15,.87,.72,.9)",
-                });
+            ], animationSettings);
             particleContainer.appendChild(particle);
         }
         document.body.appendChild(particleContainer);
@@ -60,7 +60,7 @@ export class Particles {
         // elements are never removed from the DOM and are wasting memory
         setTimeout(() => {
             document.body.removeChild(particleContainer);
-        }, duration + 500);
+        }, duration + 100);
     }
 
     static smoke(tank: Tank, duration = 3000) {
@@ -89,6 +89,7 @@ export class Particles {
 
         document.body.appendChild(particle);
 
+        // remove the particle after the animation has ended
         setTimeout(() => {
             document.body.removeChild(particle);
         }, duration + 100);
