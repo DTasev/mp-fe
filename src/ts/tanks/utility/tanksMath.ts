@@ -92,6 +92,7 @@ class LineMath {
      * @param start Start point of line 
      * @param end End point of line
      * @param points List of points that form a convex shape
+     * @returns First Point is the left closest, second Point is the right closest, third Point is the intersection point
      */
     closestTwo(start: Point, end: Point, points: Point[]): [Point, Point, Point] {
         // filter out ONLY the points that are between the center and the external point p
