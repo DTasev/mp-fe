@@ -294,4 +294,11 @@ describe('Tanks Math - Line-Line Collision', () => {
             end2 = new Point(200, 100);
         expect(TanksMath.line.intersect(start1, end1, start2, end2)).to.be.true;
     });
+    it('return point from collision with another line', () => {
+        let start1 = new Point(100, 100),
+            end1 = new Point(200, 200),
+            start2 = new Point(100, 200),
+            end2 = new Point(200, 100);
+        expect(TanksMath.line.intersectPoint(start1, end1, start2, end2).equals(new Point(150, 150))).to.be.true;
+    });
 });
