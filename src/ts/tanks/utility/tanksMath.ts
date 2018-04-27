@@ -103,14 +103,14 @@ class LineMath {
         for (let i = 0, j: number; i < length; i++) {
             // this condition will set j to 0 on the last indice, so that the
             // line from the last to the first point is also checked
-            j = i == length - 1 ? 0 : i + 1;
+            j = i === length - 1 ? 0 : i + 1;
             // find the which obstacle line is intersected by the 
             // line from the centre point to the external point
             p1 = points[i];
             p2 = points[j];
             // make sure that the line does NOT go through the center
-            if (p1.x == p2.x && p1.x == end.x
-                || p1.y == p2.y && p1.y == end.y) {
+            if (p1.x === p2.x && p1.x === end.x
+                || p1.y === p2.y && p1.y === end.y) {
                 continue;
             }
             const intersection = TanksMath.line.intersectPoint(end, start, p1, p2)
