@@ -29,14 +29,13 @@ class PointMath {
     }
     /**
      * Check if the point is within the start and end of the line
+     * 
+     * Source: https://stackoverflow.com/a/328110/2823526
      * @param point Cooridnates of a point
      * @param start Start coordinates of a line
      * @param end End coordinates of a line
      */
     within(point: Point, start: Point, end: Point): boolean {
-        // Initial implementation: https://stackoverflow.com/a/328122/2823526
-        // Optimisation and correction: https://stackoverflow.com/a/328110/2823526
-
         // as the point is guaranteed to be on the line by Line::closestPoint, we just check if the point is within the line
         const within = (start: number, point: number, end: number) => (start <= point && point <= end) || (end <= point && point <= start);
         return start.x !== end.x ? within(start.x, point.x, end.x) : within(start.y, point.y, end.y);
@@ -48,6 +47,9 @@ class LineMath {
 
     /** 
      * Find the closest point on a line.
+     * 
+     * Source: http://ericleong.me/research/circle-line/
+     * 
      * @param start Start point of the line
      * @param end End point of the line
      * @param point Point for which the closest point on the line will be found.
@@ -76,7 +78,7 @@ class LineMath {
         return closestPoint;
     }
     /**
-     * Check if a line intersects the lines formed by every two poitns from the points list.
+     * Check if a line intersects the lines formed by every two points from the points list.
      * This is used to check if a tank intersects an obstacle during placement and movement.
      * 
      * The approach is to collide the line from the center of the obstacle to the tank, against each 
@@ -156,7 +158,12 @@ class LineMath {
     }
 
     /**
-     * Checks if the two lines described by their start/end points intersect
+     * Checks if the two lines described by their start/end points intersect.
+     * 
+     * Original source: https://stackoverflow.com/a/35457290/2823526
+     * 
+     * Modified to remove the usage of globals and to use the Tanks Point interface.
+     * 
      * @param start1 Start of the first line
      * @param end1 End of the first line
      * @param start2 Start of the second line
@@ -164,7 +171,6 @@ class LineMath {
      * @returns true if th lines intersect, false otherwise
      */
     intersect(start1: Point, end1: Point, start2: Point, end2: Point): boolean {
-        // https://stackoverflow.com/a/35457290/2823526
         const dx1 = end1.x - start1.x;
         const dy1 = end1.y - start1.y;
         const dx2 = end2.x - start2.x;
@@ -179,10 +185,6 @@ class LineMath {
                 const t = dx2 * dy3 - dx3 * dy2;
                 if ((t <= 0 && det < 0 && t > det) || (t >= 0 && det > 0 && t < det)) {
                     return true;
-                    // t = t / d;
-                    // collisionDetected = 1;
-                    // ix = p0x + t * dx1;
-                    // iy = p0y + t * dy1;
                 }
             }
         }
@@ -191,6 +193,11 @@ class LineMath {
 
     /**
      * Checks if the two lines described by their start/end points intersect
+     * 
+     * Original source: https://stackoverflow.com/a/35457290/2823526
+     * 
+     * Modified to remove the usage of globals and to use the Tanks Point interface.
+     * 
      * @param start1 Start of the first line
      * @param end1 End of the first line
      * @param start2 Start of the second line
