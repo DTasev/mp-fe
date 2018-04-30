@@ -29,7 +29,6 @@ export interface IThemeGameColors {
     tankLabel(): Color;
     tankDead(): Color;
     tankMovementLine(): Color;
-    tankMovementArea(): Color;
     tankShootingLine(): Color;
     tankSmoke(): Color;
     tankExplosion(): Color;
@@ -38,8 +37,11 @@ export interface IThemeGameColors {
 
 export interface IThemeMapColors {
     solid(): Color;
+    solidFill(): [boolean, string];
     water(): Color;
+    waterFill(): [boolean, string];
     wood(): Color;
+    woodFill(): [boolean, string];
 }
 export interface ITheme {
     name: string;

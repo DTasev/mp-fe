@@ -74,9 +74,6 @@ class DarkGameColors implements IThemeGameColors {
     tankMovementLine(): Color {
         return new Color(182, 182, 150);
     }
-    tankMovementArea(): Color {
-        throw new Error("Method not implemented.");
-    }
     tankShootingLine(): Color {
         return new Color(182, 182, 150);
     }
@@ -92,6 +89,15 @@ class DarkGameColors implements IThemeGameColors {
 
 }
 class DarkMapColors implements IThemeMapColors {
+    solidFill(): [boolean, string] {
+        return [true, this.solid().rgba()];
+    }
+    waterFill(): [boolean, string] {
+        return [true, this.water().rgba()];
+    }
+    woodFill(): [boolean, string] {
+        return [true, this.wood().rgba()];
+    }
     solid(): Color {
         return new Color(75, 75, 52);
     }

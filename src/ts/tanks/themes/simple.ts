@@ -1,7 +1,7 @@
 import { Color } from "../drawing/color";
 import { ITheme, IThemeEndGame, IThemeGameColors, IThemeGameUi, IThemeMapColors, IThemeMenu } from "./iTheme";
 
-class LightMenu implements IThemeMenu {
+class SimpleMenu implements IThemeMenu {
     background(): Color {
         return Color.white();
     }
@@ -12,7 +12,7 @@ class LightMenu implements IThemeMenu {
         return Color.black();
     }
 }
-class LightEndGame implements IThemeEndGame {
+class SimpleEndGame implements IThemeEndGame {
     scoreScreen(): Color {
         return Color.sand(0.9);
     }
@@ -26,7 +26,7 @@ class LightEndGame implements IThemeEndGame {
         return Color.black();
     }
 }
-class LightGameUi implements IThemeGameUi {
+class SimpleGameUi implements IThemeGameUi {
     homeButtonClass(): string {
         return "w3-dark-gray";
     }
@@ -43,7 +43,7 @@ class LightGameUi implements IThemeGameUi {
         return this.playerTurnTextClass();
     }
 }
-class LightGameColors implements IThemeGameColors {
+class SimpleGameColors implements IThemeGameColors {
     playerColors(): Color[] {
         return [
             Color.red(),
@@ -75,9 +75,6 @@ class LightGameColors implements IThemeGameColors {
     tankMovementLine(): Color {
         return Color.black();
     }
-    tankMovementArea(): Color {
-        throw new Error("Method not implemented.");
-    }
     tankShootingLine(): Color {
         return Color.black();
     }
@@ -91,19 +88,30 @@ class LightGameColors implements IThemeGameColors {
         return Color.gray();
     }
 }
-class LightMapColors implements IThemeMapColors {
+class SimpleMapColors implements IThemeMapColors {
+    solidFill(): [boolean, string] {
+        return [false, null];
+    }
+    waterFill(): [boolean, string] {
+        return [true, Color.lightblue().rgba()]
+    }
+    woodFill(): [boolean, string] {
+        return [true, Color.woodbrown().rgba()]
+    }
     solid(): Color {
         return Color.black();
     }
     water(): Color {
         return Color.lightblue();
+
     }
     wood(): Color {
         return Color.woodbrown();
     }
 }
-export class LightTheme implements ITheme {
-    name = "light";
+
+export class SimpleTheme implements ITheme {
+    name = "simple";
     menu: IThemeMenu;
     end: IThemeEndGame;
     ui: IThemeGameUi;
@@ -113,10 +121,10 @@ export class LightTheme implements ITheme {
     private currentColor = 0;
 
     constructor() {
-        this.menu = new LightMenu();
-        this.end = new LightEndGame();
-        this.ui = new LightGameUi();
-        this.game = new LightGameColors();
-        this.map = new LightMapColors();
+        this.menu = new SimpleMenu();
+        this.end = new SimpleEndGame();
+        this.ui = new SimpleGameUi();
+        this.game = new SimpleGameColors();
+        this.map = new SimpleMapColors();
     }
 }

@@ -44,8 +44,8 @@ export class Obstacle {
 
     draw(context: CanvasRenderingContext2D, theme: ITheme): void {
         const length = this.points.length;
-        const [fill, fillStyle] = this.getFill(theme);
-        Draw.closedShape(context, this.points, 1, theme.map.solid().rgba(), fill, fillStyle);
+        const colors = this.getFill(theme);
+        Draw.closedShape(context, this.points, 1, colors.outline, colors.fill, colors.fillStyle);
         // if (Settings.DEBUG) {
         //     context.fillStyle = Color.black().rgba();
         //     context.font = "16px Calibri";
@@ -59,14 +59,30 @@ export class Obstacle {
      * @returns `boolean` - whether the obstacle should be filled with the color
      *          `string` - the RGBA string of the color
      */
-    private getFill(theme: ITheme): [boolean, string] {
+    private getFill(theme: ITheme): { outline: string, fill: boolean, fillStyle: string } {
+        let fill: boolean, fillStyle: string;
         switch (this.type) {
             case ObstacleType.SOLID:
-                return [true, theme.map.solid().rgba()];
+                [fill, fillStyle] = theme.map.solidFill();
+                return {
+                    outline: theme.map.solid().rgba(),
+                    fill: fill,
+                    fillStyle: fillStyle
+                };
             case ObstacleType.WATER:
-                return [true, theme.map.water().rgba()];
+                [fill, fillStyle] = theme.map.waterFill();
+                return {
+                    outline: theme.map.water().rgba(),
+                    fill: fill,
+                    fillStyle: fillStyle
+                };
             case ObstacleType.WOOD:
-                return [true, theme.map.wood().rgba()];
+                [fill, fillStyle] = theme.map.woodFill();
+                return {
+                    outline: theme.map.wood().rgba(),
+                    fill: fill,
+                    fillStyle: fillStyle
+                };
             default:
                 throw new Error("Obstacle type not supported. Error type: " + this.type);
 

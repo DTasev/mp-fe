@@ -74,9 +74,6 @@ class SepiaGameColors implements IThemeGameColors {
     tankMovementLine(): Color {
         return Color.black();
     }
-    tankMovementArea(): Color {
-        throw new Error("Method not implemented.");
-    }
     tankShootingLine(): Color {
         return Color.black();
     }
@@ -91,8 +88,17 @@ class SepiaGameColors implements IThemeGameColors {
     }
 }
 class SepiaMapColors implements IThemeMapColors {
+    solidFill(): [boolean, string] {
+        return [true, this.solid().rgba()];
+    }
+    waterFill(): [boolean, string] {
+        return [true, this.water().rgba()];
+    }
+    woodFill(): [boolean, string] {
+        return [true, this.wood().rgba()];
+    }
     solid(): Color {
-        return new Color(19, 13, 6);
+        return Color.fromHex("#24292e");
     }
     water(): Color {
         return new Color(77, 158, 179);

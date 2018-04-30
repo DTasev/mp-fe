@@ -102,7 +102,7 @@ class MenuStartGame {
                 }, {
                     div: {
                         className: commonClasses,
-                        textContent: "Light",
+                        textContent: "Simple",
                         onclick: 'PublicMenuStartGame.toggleTheme(this, "' + activeClass + '")'
                     }
                 }]
