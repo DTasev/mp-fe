@@ -7,7 +7,6 @@ notes/
 build/
 npm-debug.log
 logs/
-package-lock.json
 src/ts/gameMap/exampleMap.json
 src/ts/tanks/gameMap/maps/*
 static/tanks/js/bundle.js
