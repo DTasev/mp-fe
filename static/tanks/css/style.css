@@ -94,6 +94,11 @@ h6 {
     width: 100%;
 }
 
+.tanks-full-width {
+    width: 100%;
+    margin-bottom: -1px;
+}
+
 /* The slider itself */
 
 .slider {
