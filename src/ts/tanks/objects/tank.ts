@@ -74,7 +74,7 @@ export class Tank {
     static readonly LINE_WIDTH = 1;
 
     /** How far can the tank move */
-    static readonly DEFAULT_MOVEMENT_RANGE = 100;
+    static readonly DEFAULT_MOVEMENT_RANGE = 120;
 
     /** The width of the movement line */
     static readonly MOVEMENT_LINE_WIDTH = 3;
@@ -163,6 +163,7 @@ export class Tank {
                 label += "📌";
                 break;
         }
+
         switch (this.healthState) {
             case TankHealthState.ALIVE:
                 color = this.colors.alive;
@@ -180,9 +181,11 @@ export class Tank {
     }
 
     highlight(context: CanvasRenderingContext2D, drawRange = true): any {
+        // draw the dot a bit larger than the actual tank's width, this will cover the outline of the tank with the highlight
         Draw.dot(context, this.position, Tank.WIDTH + 1, this.colors.active);
         if (drawRange) {
-            Draw.circle(context, this.position, this.movementRange, Tank.LINE_WIDTH, this.colors.activeOutline);
+            // draw the circle a bit smaller than the actual movement, this allows the user to click right on the edge and still move
+            Draw.circle(context, this.position, this.movementRange - 5, Tank.LINE_WIDTH, this.colors.activeOutline);
         }
         let [label, color] = this.uiElements();
         this.showStatus(context, label);
