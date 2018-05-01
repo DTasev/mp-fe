@@ -107,6 +107,10 @@ export class PlacingState implements IPlayState {
      * @param e Touch event triggered by the user tapping on a touch screen
      */
     doubleTap(e: TouchEvent): boolean {
+        // if the user puts two fingers on the mobile screen, do not place any tanks!
+        if (e.touches.length > 1) {
+            return false;
+        }
         if (!this.lastTouch) {
             this.lastTouch = true;
             setTimeout(() => { this.lastTouch = null }, this.DBL_CLICK_TIMEOUT);
