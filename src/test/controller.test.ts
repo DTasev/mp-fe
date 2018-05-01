@@ -18,6 +18,7 @@ import { DarkTheme } from '../ts/tanks/themes/dark';
 import { Player } from '../ts/tanks/objects/player';
 import { TanksMap } from '../ts/tanks/gameMap/tanksMap';
 import { mockDOM } from './testutility';
+import { ShootingStatistics } from '../ts/tanks/states/shooting';
 
 describe('Game Controller', () => {
     mockDOM();
@@ -34,7 +35,7 @@ describe('Game Controller', () => {
     });
     it('should construct', () => {
         const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1, false);
-        expect(controller["currentPlayer"]).to.eq(0);
+        expect(controller["currentPlayerId"]).to.eq(0);
         mock_canvas.mock_onmousedown.called.never();
         mock_canvas.mock_onmouseup.called.never();
         mock_canvas.mock_onmousemove.called.never();
@@ -47,7 +48,7 @@ describe('Game Controller', () => {
         mock_context.mock_clearRect.expect_called.twice();
         mock_context.mock_fillRect.expect_called.never();
 
-        expect(controller["currentPlayer"]).to.eq(0);
+        expect(controller["currentPlayerId"]).to.eq(0);
         mock_canvas.mock_onmousedown.expect_called.never();
         mock_canvas.mock_onmouseup.expect_called.never();
         mock_canvas.mock_onmousemove.expect_called.never();
@@ -67,10 +68,13 @@ describe('Game Controller', () => {
         line.points.push(new Point(40, 40));
         line.points.push(new Point(60, 60));
 
+        let shotStats: ShootingStatistics;
         for (let i = 0; i < line.length; i++) {
             const start = line.points[i];
             const end = line.points[i + 1];
-            controller.collide(start, end);
+            shotStats = controller.collide(start, end);
+            expect(shotStats.tanksKilled).to.eq(1);
+            expect(shotStats.tanksDisabled).to.eq(0);
         }
 
         mock_collision.expect_called.quadrice();
@@ -83,11 +87,11 @@ describe('Game Controller', () => {
         controller["players"][0].tanks.push(new Tank(0, controller["players"][0], 10, 10, theme));
         controller["players"][1].tanks.push(new Tank(0, controller["players"][1], 10, 10, theme));
 
-        expect(controller["currentPlayer"]).to.eq(0);
+        expect(controller["currentPlayerId"]).to.eq(0);
         controller.nextActivePlayer();
-        expect(controller["currentPlayer"]).to.eq(1);
+        expect(controller["currentPlayerId"]).to.eq(1);
         controller.nextActivePlayer();
-        expect(controller["currentPlayer"]).to.eq(0);
+        expect(controller["currentPlayerId"]).to.eq(0);
     });
     it('should redraw the tanks on the canvas', () => {
         const controller = new GameController(mock_canvas as any, mock_context as any, ui, theme, TanksMap.premadeMap(), [new Player(0, "P1", Color.black()), new Player(0, "P1", Color.black())], 1, false);

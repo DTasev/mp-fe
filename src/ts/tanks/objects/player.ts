@@ -4,6 +4,7 @@ import { Point } from "../utility/point";
 import { SingleAccess } from "../utility/singleAccess";
 import { Tank, TankHealthState, TankActState } from "./tank";
 import { Statistics } from "../stats";
+import { ShootingStatistics } from "../states/shooting";
 
 
 export class Player {
@@ -48,6 +49,12 @@ export class Player {
     setViewportPosition(viewportPosition: Point): void {
         this.viewportPosition = viewportPosition;
     }
+
+    addStatistics(shotStats: ShootingStatistics): void {
+        this.stats.tanksKilled += shotStats.tanksKilled;
+        this.stats.tanksDisabled += shotStats.tanksDisabled;
+    }
+
     static premadePlayer(): Player {
         const p = new Player(0, "Test", Color.red())
         p.tanks.push(Tank.premadeTank(0, 0, p));

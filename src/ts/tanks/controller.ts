@@ -10,7 +10,7 @@ import { GameEndState } from "./states/gameEnd";
 import { MovementState } from "./states/movement";
 import { PlacingState } from "./states/placement";
 import { SelectionState } from "./states/selection";
-import { ShootingState } from "./states/shooting";
+import { ShootingState, ShootingStatistics } from "./states/shooting";
 import { ITheme } from "./themes/iTheme";
 import { Ui } from "./ui/ui";
 import { Collision } from "./utility/collision";
@@ -50,7 +50,7 @@ export class GameController {
     /** The current event that carries out the actions for the state */
     private action: IActionState;
     /** The position of the current player in the players array */
-    private currentPlayer: number;
+    private currentPlayerId: number;
     /** All the players in the game */
     private readonly players: Player[] = [];
 
@@ -77,7 +77,7 @@ export class GameController {
         this.lineCache = new LineCache();
         this.friendlyFire = friendlyFire;
 
-        this.currentPlayer = 0;
+        this.currentPlayerId = 0;
         this.numPlayers = players.length;
         this.numTanks = numTanks;
 
@@ -138,7 +138,7 @@ export class GameController {
         }
 
         // select either the winner or the current player
-        const player = <Player>winner || this.players[this.currentPlayer];
+        const player = <Player>winner || this.players[this.currentPlayerId];
 
         if (this.state !== GameState.GAME_END) {
             this.ui.setPlayer(player.name, this.theme);
@@ -244,14 +244,15 @@ export class GameController {
      * @param line The line of the shot for collision
      * @param friendlyFire Whether the player's own tanks can be collided with
      */
-    collide(start: Point, end: Point) {
-        const currentTurnPlayer = this.players[this.currentPlayer];
-        const playersForCollision = this.friendlyFire ? this.players : this.players.filter((p) => p.id !== this.currentPlayer);
+    collide(start: Point, end: Point): ShootingStatistics {
+        let tanksDisabled = 0, tanksKilled = 0;
+        const playersForCollision = this.friendlyFire ? this.players : this.players.filter((p) => p.id !== this.currentPlayerId);
         for (const player of playersForCollision) {
-            const [tanksDisabled, tanksKilled] = Collision.shooting(start, end, player.tanks);
-            currentTurnPlayer.stats.tanksDisabled += tanksDisabled;
-            currentTurnPlayer.stats.tanksKilled += tanksKilled;
+            const [td, tk] = Collision.shooting(start, end, player.tanks);
+            tanksDisabled += td;
+            tanksKilled += tk;
         }
+        return { tanksDisabled: tanksDisabled, tanksKilled: tanksKilled }
     }
 
     cacheLine(path: Line) {
@@ -264,12 +265,12 @@ export class GameController {
      */
     nextActivePlayer(): void {
         if (this.state === GameState.TANK_PLACEMENT) {
-            this.currentPlayer += 1;
+            this.currentPlayerId += 1;
         } else {
             do {
                 // if this is the last player, it will revert back to zero, otherwise just increment
-                this.currentPlayer = this.currentPlayer === this.numPlayers - 1 ? 0 : this.currentPlayer + 1;
-            } while (this.players[this.currentPlayer].aliveTanks().length === 0);
+                this.currentPlayerId = this.currentPlayerId === this.numPlayers - 1 ? 0 : this.currentPlayerId + 1;
+            } while (this.players[this.currentPlayerId].aliveTanks().length === 0);
         }
     }
 

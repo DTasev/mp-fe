@@ -129,8 +129,6 @@ export class ShootingState implements IPlayState {
                 // if the shot has reached the max allowed limit we stop the drawing, this is an artificial
                 // limitation to stop a shot that goes along the whole screen
                 if (!this.shotLength.add(this.active.position, this.draw.mouse)) {
-                    this.ui.message("Successful shot!", this.controller.theme);
-
                     this.successfulShot = true;
                     this.draw.state = DrawState.STOPPED;
                 }
@@ -186,7 +184,7 @@ export class ShootingState implements IPlayState {
         const shotPathLength = this.shotPath.points.length;
         // this variable is used after the for loop in order to trim segments of the shot that are
         // inside obstacles, or removed due to shooting through wood
-        let i: number;
+        let i: number, shotStats: ShootingStatistics;
         let trimIncrement = 2;
         for (i = 0; i < shotPathLength - 1; i++) {
             const start = this.shotPath.points[i];
@@ -208,13 +206,24 @@ export class ShootingState implements IPlayState {
                     trimIncrement = 3;
                 }
                 // the NEW END is the collision point of the shot with the obstacle
-                this.controller.collide(start, shotTerrainCollisionPoint);
+                shotStats = this.controller.collide(start, shotTerrainCollisionPoint);
                 // this is also the last collision, any further shot segments will be INSIDE the obstacle
                 break;
             } else {
                 // the shot DOES NOT collide with an obstacle
-                this.controller.collide(start, end);
+                shotStats = this.controller.collide(start, end);
             }
+
+            this.player.addStatistics(shotStats);
+            let message = "You missed!";
+            if (shotStats.tanksDisabled > 0) {
+                message = "You disabled a tank!";
+            }
+            if (shotStats.tanksKilled) {
+                message = "You killed a tank!";
+            }
+
+            this.ui.message(message, this.controller.theme);
         }
 
         // slicing past the length of the array simply returns the whole array
@@ -234,4 +243,9 @@ export class ShootingState implements IPlayState {
         this.controller.redrawCanvas();
         this.controller.changeGameState(GameState.TANK_SELECTION, true);
     }
+}
+
+export interface ShootingStatistics {
+    tanksDisabled: number;
+    tanksKilled: number;
 }
