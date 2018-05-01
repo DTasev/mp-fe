@@ -20,6 +20,11 @@ function init() {
         console.log(Settings.IS_MOBILE ? 'Running on mobile' : 'Running on PC');
     }
 
+    // declare an empty TouchEvent so that Firefox and Edge don't fail when it's needed for an instanceof check
+    if (typeof TouchEvent === 'undefined') {
+        window["TouchEvent"] = function TouchEvent() { }
+    }
+
     // subtracting the scrollbar width prevents unlimited X scrolling to the right
     // Don't subtract scrollbar from mobile
     const viewportWidth = Settings.IS_MOBILE ? window.innerWidth : window.innerWidth - Settings.SCROLLBAR_WIDTH;
