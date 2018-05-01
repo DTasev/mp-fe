@@ -222,7 +222,6 @@ export class ShootingState implements IPlayState {
         }
         this.player.addStatistics(totalShotStats);
         let message = "You missed!";
-        debugger
         if (totalShotStats.tanksDisabled > 0) {
             message = "You disabled a tank!";
         }
