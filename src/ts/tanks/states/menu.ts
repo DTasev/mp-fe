@@ -450,7 +450,7 @@ export class MainMenu {
                 id: MainMenu.ID_START_GAME_BUTTON,
                 className: MainMenu.CLASS_MENU_BUTTON,
                 textContent: "Start Game",
-                onclick: this.startGameOptions
+                onclick: (e) => this.waitMapLoad(e, MainMenu.ID_START_GAME_BUTTON, this.startGameOptions)
             }
         };
 
@@ -458,7 +458,7 @@ export class MainMenu {
         const button_quickStart = <HTMLButtonElement>button_startGame.cloneNode();
         button_quickStart.id = MainMenu.ID_QUICK_START_BUTTON;
         button_quickStart.textContent = "Quick Start";
-        button_quickStart.onclick = this.quickStart
+        button_quickStart.onclick = (e) => this.waitMapLoad(e, MainMenu.ID_QUICK_START_BUTTON, this.quickStart);
 
         const button_mapCreator = <HTMLButtonElement>button_startGame.cloneNode();
         button_mapCreator.textContent = "Map Creator";
@@ -489,14 +489,13 @@ export class MainMenu {
      * @param elementId Id of the element that will show the loading text
      * @param callback Callback function to go back to after the loading is complete
      */
-    private waitMapLoad(e: MouseEvent, elementId: string) {
+    private waitMapLoad(e: MouseEvent, elementId: string, callback: Function) {
         // Make sure the maps are loaded! Show a loading icon and
         // set an interval to repeatedly check if the maps are loaded
         this.showStartGameLoadingIcon(elementId);
-        this.mapsListRequest.then(() => this.removeStartGameLoadingIcon(elementId));
+        this.mapsListRequest.then(() => { this.removeStartGameLoadingIcon(elementId); callback(e) });
     }
     private quickStart = (e: MouseEvent) => {
-        this.waitMapLoad(e, MainMenu.ID_QUICK_START_BUTTON)
         let map = new TanksMap(this.mapsList[0].id);
         let players: Player[] = MenuStartGame.createPlayers(Settings.DEFAULT_NUMBER_PLAYERS, this.theme.game.playerColors());
         this.startGame(map, players, Settings.DEFAULT_NUMBER_TANKS, false, e);
@@ -517,8 +516,10 @@ export class MainMenu {
         }
     }
     private startGameOptions = (e: MouseEvent) => {
-        this.waitMapLoad(e, MainMenu.ID_START_GAME_BUTTON)
-
+        if (!this.mapsList) {
+            this.waitMapLoad(e, MainMenu.ID_START_GAME_BUTTON, this.startGameOptions);
+            return;
+        }
         this.ui.body.clear();
         const [left, middle, right] = this.ui.body.addColumns();
 
