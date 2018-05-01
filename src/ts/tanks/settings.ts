@@ -4,7 +4,7 @@ export class Settings {
     // default number of players, used for the default value of the slider and quick start
     static readonly DEFAULT_NUMBER_PLAYERS = 2;
     // default number of players, used for the default value of the slider and quick start
-    static readonly DEFAULT_NUMBER_TANKS = 5;
+    static readonly DEFAULT_NUMBER_TANKS = 2;
     static readonly IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? true : false;
     // the maximum number of tanks allowed by the tank slider
     static readonly MAX_TANKS = 8;

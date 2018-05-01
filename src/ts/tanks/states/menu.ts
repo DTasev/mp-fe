@@ -382,7 +382,7 @@ class MenuStartGame {
     }
 }
 export class MainMenu {
-    static readonly ELEMENT_PADDING = Settings.IS_MOBILE ? "" : " w3-padding-32";
+    static readonly ELEMENT_PADDING = " w3-padding-32";
     static readonly CLASS_MENU_BUTTON = "w3-button tanks-ui-menu-button" + MainMenu.ELEMENT_PADDING;
     static readonly CLASS_MENU_TITLE = "tanks-ui-menu-title" + MainMenu.ELEMENT_PADDING;
 
@@ -462,7 +462,11 @@ export class MainMenu {
 
         const button_mapCreator = <HTMLButtonElement>button_startGame.cloneNode();
         button_mapCreator.textContent = "Map Creator";
-        button_mapCreator.onclick = () => { window.location.assign("mc.html"); }
+        if (Settings.IS_MOBILE) {
+            button_mapCreator.onclick = () => { alert("The map creator is not supported on Mobile. Please use the desktop version.") }
+        } else {
+            button_mapCreator.onclick = () => { window.location.assign("mc.html"); }
+        }
 
         const button_account = <HTMLButtonElement>button_startGame.cloneNode();
         button_account.textContent = "Account";
