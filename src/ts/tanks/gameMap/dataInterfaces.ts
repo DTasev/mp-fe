@@ -18,7 +18,7 @@ export interface IObstacleData {
 
 
 /**
- * Data interface exported when quering for all available maps.
+ * Data interface exported when querying for all available maps.
  */
 export abstract class IMapListData {
     id: string;
