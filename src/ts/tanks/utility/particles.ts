@@ -24,6 +24,11 @@ export class Particles {
         // NOTE: position MUST be set after the top & left coordinates are set, otherwise the element is not on the correct place!
         particleContainer.style.position = "absolute";
 
+        // the browser currently running the application DOES not support CSS animations, do not execute them
+        if (!particleContainer.animate) {
+            return;
+        }
+
         const color = tank.colors.explosion;
 
         const animationSettings = {
@@ -74,6 +79,13 @@ export class Particles {
         particle.style.zIndex = "-1";
         particle.style.color = tank.colors.smoke;
         particle.textContent = "O";
+
+        // the browser currently running the application DOES not support CSS animations, do not execute them
+        // currently (01/05/2018) Microsoft Edge 41.16299.371.0/Microsoft EdgeHTML 16.16299 does not support them
+        if (!particle.animate) {
+            return;
+        }
+
         particle.animate([
             {
                 transform: `rotate(0deg) translateY(0px)`,
