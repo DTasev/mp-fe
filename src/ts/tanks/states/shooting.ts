@@ -15,6 +15,7 @@ import { Particles } from "../utility/particles";
 import { Point } from "../utility/point";
 import { TanksMath } from "../utility/tanksMath";
 import { IPlayState } from "./iActionState";
+import { Statistics } from "../stats";
 
 
 
@@ -184,7 +185,10 @@ export class ShootingState implements IPlayState {
         const shotPathLength = this.shotPath.points.length;
         // this variable is used after the for loop in order to trim segments of the shot that are
         // inside obstacles, or removed due to shooting through wood
-        let i: number, shotStats: ShootingStatistics;
+        let i: number, currentShotStats: ShootingStatistics;
+        let totalShotStats = new Statistics();
+
+        totalShotStats.tanksKilled = 0;
         let trimIncrement = 2;
         for (i = 0; i < shotPathLength - 1; i++) {
             const start = this.shotPath.points[i];
@@ -206,25 +210,27 @@ export class ShootingState implements IPlayState {
                     trimIncrement = 3;
                 }
                 // the NEW END is the collision point of the shot with the obstacle
-                shotStats = this.controller.collide(start, shotTerrainCollisionPoint);
+                currentShotStats = this.controller.collide(start, shotTerrainCollisionPoint);
                 // this is also the last collision, any further shot segments will be INSIDE the obstacle
                 break;
             } else {
                 // the shot DOES NOT collide with an obstacle
-                shotStats = this.controller.collide(start, end);
+                currentShotStats = this.controller.collide(start, end);
             }
-
-            this.player.addStatistics(shotStats);
-            let message = "You missed!";
-            if (shotStats.tanksDisabled > 0) {
-                message = "You disabled a tank!";
-            }
-            if (shotStats.tanksKilled) {
-                message = "You killed a tank!";
-            }
-
-            this.ui.message(message, this.controller.theme);
+            totalShotStats.tanksDisabled += currentShotStats.tanksDisabled;
+            totalShotStats.tanksKilled += currentShotStats.tanksKilled;
         }
+        this.player.addStatistics(totalShotStats);
+        let message = "You missed!";
+        debugger
+        if (totalShotStats.tanksDisabled > 0) {
+            message = "You disabled a tank!";
+        }
+        if (totalShotStats.tanksKilled > 0) {
+            message = "You killed a tank!";
+        }
+
+        this.ui.message(message, this.controller.theme);
 
         // slicing past the length of the array simply returns the whole array
         // therefore we do not need to worry about the length of trimIncrement
