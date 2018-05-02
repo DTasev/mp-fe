@@ -79,8 +79,10 @@ export class Tank {
     /** The width of the movement line */
     static readonly MOVEMENT_LINE_WIDTH = 3;
 
-    /** How far can the shot line reach */
+    /** How far can the shot line reach on Desktop */
     static readonly SHOOTING_RANGE = 409;
+    /** How far can the shot line reach on Mobile */
+    static readonly SHOOTING_RANGE_MOBILE = 209;
 
     /** How fast must the player move for a valid shot */
     static readonly SHOOTING_SPEED = 15;

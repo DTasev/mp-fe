@@ -26,7 +26,6 @@ export class Length {
      */
     add(start: Point, end: Point): boolean {
         this.current += TanksMath.point.dist(start, end);
-        console.log("Shot total distance: ", this.current);
         return this.current <= this.limit;
     }
 

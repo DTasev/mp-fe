@@ -51,7 +51,11 @@ export class ShootingState implements IPlayState {
 
         this.draw = new Draw();
         this.tankRoamingLength = new Limit.Length(Tank.SHOOTING_DEADZONE);
-        this.shotLength = new Limit.Length(Tank.SHOOTING_RANGE);
+        if (Settings.IS_MOBILE) {
+            this.shotLength = new Limit.Length(Tank.SHOOTING_RANGE_MOBILE);
+        } else {
+            this.shotLength = new Limit.Length(Tank.SHOOTING_RANGE);
+        }
         this.shotSpeed = new Limit.Speed(Tank.SHOOTING_SPEED);
 
         this.active = this.player.activeTank.get();
@@ -117,12 +121,11 @@ export class ShootingState implements IPlayState {
         // draw the movement line if the mouse button is currently being pressed
         if (this.draw.state === DrawState.DRAWING) {
             this.draw.updatePosition(e);
-
             // if the player is just moving about on the tank's space
             if (this.tankRoamingLength.in(this.active.position, this.draw.mouse)) {
                 this.validRange(this.active.colors.shootingLine);
             } // if the player has shot far away start drawing the line
-            else if (Settings.IS_MOBILE || this.shotSpeed.enough(this.active.position, this.draw.mouse)) {
+            else if (this.shotSpeed.enough(this.active.position, this.draw.mouse)) {
                 this.validRange(this.active.colors.shootingLine);
 
                 // only add to the shot path if the shot was successful
@@ -130,6 +133,9 @@ export class ShootingState implements IPlayState {
 
                 // if the shot has reached the max allowed limit we stop the drawing, this is an artificial
                 // limitation to stop a shot that goes along the whole screen
+
+                // The issue is the successfulShot flag never gets set to true as the shot is not long enough
+                // and on end shot the shot is simply deleted
                 if (!this.shotLength.add(this.active.position, this.draw.mouse)) {
                     this.successfulShot = true;
                     this.draw.state = DrawState.STOPPED;
