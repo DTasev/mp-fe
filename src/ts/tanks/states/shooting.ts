@@ -83,6 +83,7 @@ export class ShootingState implements IPlayState {
         ui.heading.addHome(viewport, this.player, theme);
         const button_skipTurn = ShootingUi.button_skipTurn(theme);
         button_skipTurn.onmousedown = this.skipTurn;
+        button_skipTurn.ontouchend = this.skipTurn;
         ui.heading.right.add(button_skipTurn);
     }
 
@@ -121,7 +122,7 @@ export class ShootingState implements IPlayState {
             if (this.tankRoamingLength.in(this.active.position, this.draw.mouse)) {
                 this.validRange(this.active.colors.shootingLine);
             } // if the player has shot far away start drawing the line
-            else if (this.shotSpeed.enough(this.active.position, this.draw.mouse)) {
+            else if (Settings.IS_MOBILE || this.shotSpeed.enough(this.active.position, this.draw.mouse)) {
                 this.validRange(this.active.colors.shootingLine);
 
                 // only add to the shot path if the shot was successful
