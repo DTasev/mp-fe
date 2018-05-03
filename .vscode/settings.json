@@ -11,5 +11,5 @@
     },
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "C_Cpp.clang_format_fallbackStyle": "LLVM",
-    "workbench.colorTheme": "Default Light+"
+    "workbench.colorTheme": "Dark Atom Dark Green Cursor"
 }
