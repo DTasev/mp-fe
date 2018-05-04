@@ -1,6 +1,10 @@
 [![Build Status](https://travis-ci.com/DTasev/mp-fe.svg?token=tVHLx7YCXjQgH7CKoqd6&branch=master)](https://travis-ci.com/DTasev/mp-fe)
 
 # Tanks Front-end - Major Project
+This repository was archived on 04/05/2018. 
+
+--------
+
 
 # Setup
 1. Clone repository 
